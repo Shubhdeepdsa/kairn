@@ -271,3 +271,7 @@ raw-HTML omission and exact reader-fragment compatibility without a database.
 persistence, incremental section replacement, pruning, private permissions, schema
 rebuild, offline corruption, competing connections, rollback and a 250-document
 index/query timing sample. The same test runs in the existing three-OS CI matrix.
+
+`search-query.test.ts` fixes title/heading/path/body/code ranking order, long-body
+competition, best-section grouping, duplicate names/IDs across scopes, seven
+technical queries, hostile FTS expressions and query/result bounds.

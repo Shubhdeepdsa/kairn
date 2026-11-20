@@ -147,3 +147,6 @@ clipboard dependency, final design system or additional polling lifecycle.
 - `core/search-index.ts`: lazy private FTS5 schema, atomic changed-document section
   replacement, approval pruning, project pruning, schema/corrupt recovery and close.
   Reads no target files itself; receives approved content/metadata from its caller.
+
+- `core/search-query.ts`: validated literal/prefix MATCH terms, one scoped ranking
+  engine, document grouping and bounded plain snippets; no HTTP/DOM dependencies.

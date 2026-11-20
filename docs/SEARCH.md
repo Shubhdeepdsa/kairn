@@ -78,3 +78,20 @@ Unsupported versions rebuild derived tables transactionally. Offline corrupt mai
 files are quarantined under unique names; exclusive recovery locks are never stolen.
 Do not damage a database while any process has it open. Concurrent hostile file
 replacement and network filesystems are outside the supported local-user boundary.
+
+## Implemented query semantics and ranking
+
+Queries become at most 16 unique normalized Unicode alphanumeric/underscore words.
+Whole identifiers and camel-case aliases are indexed. Punctuation splits tokens;
+all words use quoted prefix matching joined by AND. No Boolean/phrase language.
+For example node:sqlite matches node AND sqlite; --no-open matches no AND open;
+createDocumentService retains its whole token and aliases create/document/service.
+Empty or punctuation-only input returns no results; malformed FTS syntax is literal.
+
+One shared engine filters eligible project IDs, retrieves at most 2,000 candidate
+sections using weighted BM25 (title 10, heading 6, path 4, body 2, code 1), then ranks
+by exact title, all-term title, heading, path, body, code. BM25 breaks ties within
+these evidence-tested tiers; stable project/document IDs resolve remaining ties.
+One best section per document is returned with original path/title/fragment and a
+plain snippet capped at 232 characters. The 2,000-candidate cap is a bounded V1
+recall tradeoff for very common queries across a large Library.
