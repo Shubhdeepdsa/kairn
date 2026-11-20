@@ -1,6 +1,6 @@
 # Phase 3 configuration design
 
-Status: PLANNED. No appearance, Git or cloud settings.
+Status: IMPLEMENTED; local acceptance recorded in TESTING.md. No appearance, Git or cloud settings.
 
 Library schema v1 stores UUID/name/canonical absolute project root and personal
 source/exclusion overrides. Stable IDs survive renaming. Duplicate canonical
@@ -44,3 +44,56 @@ zero or more directories (or all remaining components at the end). No negation,
 braces, character classes or backslashes. Any matching rule excludes the document.
 Overlapping declared roots are reported by `sourceOverlaps`; engine deduplication
 is canonical-file based, with primary source then declaration order winning.
+
+## Shared schema v1 example
+
+```json
+{
+  "schemaVersion": 1,
+  "name": "My project",
+  "documentation": {
+    "sources": [
+      { "path": "docs", "primary": true },
+      { "path": "README.md" },
+      { "path": ".github/DEPLOYMENT.md" }
+    ],
+    "exclude": ["**/AGENTS.md", "**/drafts/**"]
+  }
+}
+```
+
+## Personal Library schema v1 example
+
+```json
+{
+  "schemaVersion": 1,
+  "revision": 1,
+  "projects": [
+    {
+      "id": "0a471615-4601-444c-8fa7-99f50e11862a",
+      "name": "My project",
+      "root": "/home/example/my-project",
+      "overrides": {
+        "additionalSources": [],
+        "disabledSources": [],
+        "excludeAdd": [],
+        "excludeRemove": []
+      }
+    }
+  ]
+}
+```
+
+Personal `primary` optionally names an effective source path. disabledSources
+removes exact declared paths without modifying shared config. Additional aliases
+for the same canonical source collapse to the first declaration. If no primary
+remains, the first source becomes primary. Multiple primary declarations fail
+unless a personal primary explicitly resolves the conflict. Missing sources are
+reported; source remove can disable/remove a missing path to repair configuration.
+
+Unknown keys fail. Config reads and Library files are capped at 1 MiB, Library
+projects at 1000, effective sources at 32 and exclusion arrays at 100 entries.
+Writes use private file modes where supported. Directory rename durability depends
+on OS/filesystem behavior: the temp file is synced, not the parent directory.
+A crash may leave a lock/temp file; never silently delete or migrate unknown data.
+Config changes require restarting run; file-tree refresh continues across sources.

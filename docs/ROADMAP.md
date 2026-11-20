@@ -64,7 +64,22 @@ Feature branch: `feat/local-documentation-viewer`; [PR #1](https://github.com/Sh
 was merged into main. The [feature CI run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44716122814)
 passed Linux, macOS and Windows at `3633546`. No automatic merge or npm publication.
 
-## Phase 3 — IN PROGRESS
+## Phase 3 — locally VERIFIED; PR pending
 
 A: architecture; B: schemas/persistence; C: Library; D: resolver; E: discovery/ignore;
 F: multi-source engine; G: CLI integration; H: acceptance and personal feature PR.
+
+| Stage | Commit            | Verified outcome                                         |
+| ----- | ----------------- | -------------------------------------------------------- |
+| 3A    | `e5b82f7`         | Architecture and instructions                            |
+| 3B    | `b829e0a`         | Schemas and safe JSON storage                            |
+| 3C    | `ea633c1`         | Persistent project Library                               |
+| 3D    | `02ef680`         | Portable/shared/personal resolution                      |
+| 3E    | `2c4656a`         | Source discovery, overlap and limited exclusions         |
+| 3F    | `6c54e17`         | Multi-source document composition                        |
+| 3G    | `e2579dc`         | Project CLI and run integration                          |
+| 3H    | Acceptance commit | 79 tests, clean install and installed-package acceptance |
+
+Phase 3 defers the final React/settings UI, themes, search, Git history, cloud,
+AI and npm publication. Next smallest milestone: source-configuration reload
+without restarting the viewer, preserving the same validation boundaries.

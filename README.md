@@ -54,7 +54,7 @@ Run `npm run typecheck`, `npm run lint`, `npm run format:check`, `npm test`,
 See [documentation](docs/README.md), [contributing](CONTRIBUTING.md) and
 [security](SECURITY.md). Licensed under [MIT](LICENSE).
 
-The final React UI, project registry, Git history, editing, search, AI and cloud
+The final React UI, Git history, editing, search, AI and cloud
 services are outside this milestone. No telemetry or external runtime requests.
 
 ## Remember projects and add documentation sources

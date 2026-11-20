@@ -111,9 +111,9 @@ export async function resolveProjectConfig(
   const seen = new Set<string>();
   for (const source of declarations) {
     const absolute = resolve(canonical, source.path);
-    await assertRealPath(absolute);
     let info;
     try {
+      await assertRealPath(absolute);
       info = await lstat(absolute);
     } catch {
       throw new ConfigError(

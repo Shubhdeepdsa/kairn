@@ -140,7 +140,7 @@ export async function runProjectCommand(
     if (name === null) return 2;
     if (!(await approve(`Rename ${project.name} to ${name}; ID stays ${id}.`)))
       return 2;
-    message(JSON.stringify(await library.rename(id, name)));
+    message(JSON.stringify(await library.rename(id, name, project)));
     return 0;
   }
   if (group === "remove") {
@@ -150,7 +150,7 @@ export async function runProjectCommand(
       ))
     )
       return 2;
-    await library.unregister(id);
+    await library.unregister(id, project);
     message("Project unregistered. Source files preserved.");
     return 0;
   }

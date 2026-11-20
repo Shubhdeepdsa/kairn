@@ -98,3 +98,35 @@ it("uses isolated explicit app data and OS conventions", () => {
     applicationDataDirectory({ KAIRN_DATA_DIR: "relative" }),
   ).toThrow("absolute");
 });
+
+it("detects a real competing process holding the exclusive writer lock", async () => {
+  const { spawn } = await import("node:child_process");
+  const { once } = await import("node:events");
+  const file = await fixture();
+  await updateJson(file, librarySchema, () => empty);
+  const child = spawn(
+    process.execPath,
+    [
+      "--input-type=module",
+      "-e",
+      `import {open} from 'node:fs/promises'; const handle=await open(process.argv[1],'wx'); console.log('locked'); process.stdin.resume(); process.stdin.on('end',async()=>{await handle.close();});`,
+      file + ".lock",
+    ],
+    { stdio: ["pipe", "pipe", "pipe"] },
+  );
+  try {
+    await new Promise<void>((resolve, reject) => {
+      child.stdout.once("data", () => resolve());
+      child.once("error", reject);
+      child.once("exit", () => reject(new Error("writer exited early")));
+    });
+    await expect(
+      updateJson(file, librarySchema, () => ({ ...empty, revision: 1 })),
+    ).rejects.toThrow("locked");
+    expect(await readJson(file, librarySchema)).toEqual(empty);
+  } finally {
+    const exited = once(child, "exit");
+    child.stdin.end();
+    await exited;
+  }
+});

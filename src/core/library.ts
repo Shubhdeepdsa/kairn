@@ -80,21 +80,29 @@ export class ProjectLibrary {
     });
     return project;
   }
-  async rename(id: string, name: string): Promise<Project> {
+  async rename(id: string, name: string, expected?: Project): Promise<Project> {
     const before = await this.snapshot();
     const project = before.projects.find((p) => p.id === id);
     if (!project)
       throw new ConfigError("MISSING", "Project ID not registered.");
+    if (expected && JSON.stringify(expected) !== JSON.stringify(project))
+      throw new ConfigError("CONFLICT", "Project changed since preview.");
     await this.change(before, (data) => {
       data.projects.find((p) => p.id === id)!.name = name;
     });
     return this.get(id);
   }
   /** Removes only registration metadata; source and shared config bytes are untouched. */
-  async unregister(id: string): Promise<void> {
+  async unregister(id: string, expected?: Project): Promise<void> {
     const before = await this.snapshot();
     if (!before.projects.some((p) => p.id === id))
       throw new ConfigError("MISSING", "Project ID not registered.");
+    if (
+      expected &&
+      JSON.stringify(expected) !==
+        JSON.stringify(before.projects.find((p) => p.id === id))
+    )
+      throw new ConfigError("CONFLICT", "Project changed since preview.");
     await this.change(before, (data) => {
       data.projects = data.projects.filter((p) => p.id !== id);
     });

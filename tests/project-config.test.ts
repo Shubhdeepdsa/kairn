@@ -83,3 +83,25 @@ it("keeps invalid/missing source configs intact", async () => {
     2,
   );
 });
+
+it("rejects shared configuration symlinks and duplicate source declarations", async () => {
+  const root = await fixture();
+  const outside = await fixture();
+  const { symlink } = await import("node:fs/promises");
+  await mkdir(join(outside, ".kairn"));
+  await writeFile(
+    join(outside, ".kairn", "config.json"),
+    JSON.stringify(config),
+  );
+  await symlink(join(outside, ".kairn"), join(root, ".kairn"), "junction");
+  await expect(loadProjectConfig(root)).rejects.toThrow("Symlink");
+  await expect(
+    resolveProjectConfig(outside, {
+      ...config,
+      documentation: {
+        ...config.documentation,
+        sources: [{ path: "docs" }, { path: "docs" }],
+      },
+    }),
+  ).rejects.toThrow("Duplicate");
+});

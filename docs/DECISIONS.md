@@ -81,7 +81,7 @@ Future decisions should record meaningful alternatives and trade-offs rather tha
 
 ## ADR-009 — Layered versioned configuration and cooperating JSON writers
 
-- **Status:** Accepted for Phase 3; implementation planned.
+- **Status:** Accepted and implemented in Phase 3.
 - **Decision:** Strict Zod v1 schemas, machine Library with personal overrides,
   optional portable project config, explicit field-specific resolution. See
   [configuration](CONFIGURATION.md) for ownership, paths and precedence.

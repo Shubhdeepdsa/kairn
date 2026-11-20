@@ -133,3 +133,29 @@ it("supports fresh-process Library, sources, overrides, portable config and safe
     "# Project",
   );
 }, 20000);
+
+it("lets a user remove a missing personal source rather than trapping invalid configuration", async () => {
+  const f = await fixture();
+  const library = new ProjectLibrary(f.data);
+  const project = await library.register(f.project);
+  await writeFile(join(f.project, "extra.md"), "extra");
+  const silent = () => {};
+  await runProjectCommand(
+    ["sources", "add", project.id, "--path", "extra.md", "--yes"],
+    library,
+    false,
+    undefined,
+    silent,
+  );
+  await rm(join(f.project, "extra.md"));
+  await runProjectCommand(
+    ["sources", "remove", project.id, "--path", "extra.md", "--yes"],
+    library,
+    false,
+    undefined,
+    silent,
+  );
+  expect((await library.get(project.id)).overrides.additionalSources).toEqual(
+    [],
+  );
+});
