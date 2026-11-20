@@ -99,7 +99,8 @@ export async function mountViewer(
         item.append(details);
       } else {
         files.set(node.id, node);
-        byPath.set(node.path, node);
+        byPath.set(`${node.sourceId ?? ""}:${node.path}`, node);
+        if (node.projectPath) byPath.set(`project:${node.projectPath}`, node);
         const link = document.createElement("a");
         link.href = `#${node.id}`;
         link.dataset.document = node.id;
@@ -141,7 +142,16 @@ export async function mountViewer(
     try {
       const base = `http://kairn.invalid/${selected.path.split("/").map(encodeURIComponent).join("/")}`;
       const target = new URL(href, base);
-      const entry = byPath.get(decodeURIComponent(target.pathname.slice(1)));
+      let entry = byPath.get(
+        `${selected.sourceId ?? ""}:${decodeURIComponent(target.pathname.slice(1))}`,
+      );
+      if (!entry && selected.projectPath) {
+        const projectBase = `http://kairn.invalid/${selected.projectPath.split("/").map(encodeURIComponent).join("/")}`;
+        const projectTarget = new URL(href, projectBase);
+        entry = byPath.get(
+          `project:${decodeURIComponent(projectTarget.pathname.slice(1))}`,
+        );
+      }
       if (target.origin === "http://kairn.invalid" && entry)
         void show(entry.id, target.hash);
       else
@@ -212,7 +222,7 @@ export async function mountViewer(
           return;
         }
         const bookmark = initial ? window!.location.hash.slice(1) : undefined;
-        const first = byPath.get("README.md") ?? files.values().next().value;
+        const first = byPath.get(":README.md") ?? files.values().next().value;
         await show(bookmark || first!.id);
       } catch (error) {
         if (!disposed)

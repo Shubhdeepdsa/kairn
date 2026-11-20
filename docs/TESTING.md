@@ -173,3 +173,7 @@ selection and missing-source diagnosis without rewriting configuration.
 
 Source tests cover AGENTS/drafts/generated globs, zero-directory **, case behavior,
 unsupported syntax and overlap reports. Discovery/config tests remain read-only.
+
+Multi-document tests verify primary unwrapping, multiple roots, identical titles,
+explicit hidden-directory files, canonical deduplication, external sources, ignore
+deltas, stable refresh IDs and missing-file removal without absolute-path leakage.

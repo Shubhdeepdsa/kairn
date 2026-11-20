@@ -89,3 +89,10 @@ merge semantics; see CONFIGURATION.md. Source candidates require approval to sav
 syntax; `sourceOverlaps` reports root overlap without modifying declarations.
 `discoverSourceCandidates` only suggests direct docs and root README. Explicit
 files in hidden directories are approved sources, not recursive discovery.
+
+`core/documents.ts`: `createProjectDocumentService(ResolvedProject)` reuses the
+existing scanner/read safeguards for directory and individual-file sources.
+`DocumentEntry.sourceId/projectPath` preserve source and project provenance while
+canonical paths stay internal. Aggregate scan/document limits span sources;
+primary-first deduplication uses canonical file paths. Refresh retains IDs and
+skips disappeared sources without deleting configuration.
