@@ -90,3 +90,8 @@ The [push run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726328194) a
 [PR run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726417025) at `f0570f0`
 passed all Linux/macOS/Windows jobs. `b7208ee` adds a focused Windows cross-drive
 overlap correction; latest-head checks are visible on the PR.
+
+## Phase 4 — IN PROGRESS
+
+A contracts; B content freshness; C configuration reload; D core links; E bounded
+diagnostics; F URL/history; G outline/accessibility; acceptance and feature PR.

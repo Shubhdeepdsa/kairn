@@ -16,3 +16,5 @@
 - Phase 2: add a read-only nested Markdown service with stable IDs, canonical identities, explicit errors and bounded scans/reads. Reject symlinks; HTTP and UI consume contracts, not filesystem algorithms.
 
 - Phase 3: preserve existing behavior; keep Library/config/source contracts reusable. Isolate persistence tests, validate before writes, and never expose absolute machine paths over HTTP.
+
+- Phase 4: test independent tree/content/config changes, core-only link decisions, atomic recovery, browser history and stale response protection. Browser tests use fake clocks; persistence always stays isolated.
