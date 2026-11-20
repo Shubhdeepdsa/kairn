@@ -78,3 +78,9 @@ Storage is explicit and injectable; no singleton or browser access.
 setOverrides and availability. Constructor accepts an explicit data directory.
 UUID identity survives rename; unavailable roots remain registered. Mutations
 use locked revision-checked JSON storage; unregister never deletes project files.
+
+`core/config/project.ts`: `loadProjectConfig`, approved create-only
+`createProjectConfig`, direct `discoverSourceCandidates`, and write-free
+`resolveProjectConfig` return `ResolvedProject`/`ResolvedSource`. Relative portable
+paths remain separate from canonical internal paths. Personal fields have explicit
+merge semantics; see CONFIGURATION.md. Source candidates require approval to save.

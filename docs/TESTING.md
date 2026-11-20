@@ -166,3 +166,7 @@ lock conflicts and failed-validation cleanup. No test touches real application d
 Library tests use independent service instances over temporary data to verify
 persistence, duplicate registration, rename identity, safe unregister, unavailable
 roots, invalid roots/names and stale override previews.
+
+Project-config fixtures cover absent defaults, candidate discovery, decline,
+create-only conflicts, portable copied roots, explicit override deltas, primary
+selection and missing-source diagnosis without rewriting configuration.
