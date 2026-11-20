@@ -85,3 +85,7 @@ See [reading contracts](docs/READING.md) for behavior, API and limits.
 
 Phase 5 adds project-aware document destinations and local search APIs to `kairn run`;
 see [search contracts](docs/SEARCH.md) for phased implementation and limits.
+
+Press Cmd/Ctrl+K in the viewer to search. Remove the project chip for global search;
+use `@project` to select a scope while preserving your query. Results open their
+project/document/section through the same local reader.

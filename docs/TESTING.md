@@ -288,3 +288,8 @@ strict search parameters and removed/invalid project refusal without a palette.
 `search-palette.test.ts` uses fake timers to verify contextual/global opening,
 composition-safe Backspace, cursor-aware selector removal, query preservation,
 duplicate names, Escape precedence, debounce, scope changes and stale replies.
+
+`search-palette-dom.test.ts` verifies real DOM keyboard events, contextual/global
+scope, composition, @ completion and query preservation, safe result text, accessible
+selection, focus restoration, partial/error states, refresh and aborted cleanup.
+These are DOM tests; they are not claims of human browser acceptance.

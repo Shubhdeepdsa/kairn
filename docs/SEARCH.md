@@ -1,6 +1,6 @@
 # Local search design
 
-Status: Phase 5 contracts and Markdown extraction IMPLEMENTED; indexing, queries and palette PLANNED.
+Status: Phase 5 core indexing, queries, navigation, controller and vanilla palette IMPLEMENTED; final acceptance in progress.
 
 ## Identity and ownership
 
@@ -141,3 +141,13 @@ selection movement, Escape precedence and composition/selection-safe Backspace.
 Queries debounce by 200 ms; generations discard replies after text/scope/close
 changes. Coverage is visible, error/empty states are distinct, explicit refresh
 continues bounded indexing without another polling loop. Disposal cancels timers.
+
+## Implemented minimal viewer adapter
+
+The existing vanilla viewer now has Search and Cmd/Ctrl+K. Its accessible dialog
+uses combobox/listbox semantics, active-descendant selection, a focus trap, inert
+background and focus restoration. Project/global chips, @ suggestions, keyboard
+selection, status/coverage, refresh and error/empty states compose the controller.
+Result labels/snippets use textContent only. Requests are abortable; stale replies
+are ignored. The result callback invokes the shared project-aware reader navigator.
+No React, final design system, settings screen or extra polling loop is introduced.

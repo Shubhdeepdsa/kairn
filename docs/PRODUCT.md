@@ -44,3 +44,12 @@ Active content and valid shared/personal source/ignore settings update without
 restarting. Core-resolved cross-source links, bounded broken-link diagnostics,
 shareable heading URLs, browser history and a simple document outline strengthen
 the existing vanilla reader. The final React/design system remains deferred.
+
+## Phase 5: local scoped search
+
+A reusable local FTS5 engine searches approved titles, headings, paths, body and
+code. Project scope includes an active unregistered session without registering it;
+global scope includes explicitly registered projects. The minimal command palette
+composes search and independent project-aware navigation. Scope chips, @ selection,
+keyboard navigation, best-section results and honest index coverage are provided.
+Derived search data stays machine-local. No telemetry, cloud/AI or final React UI.

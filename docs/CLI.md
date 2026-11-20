@@ -128,3 +128,10 @@ HTTP/HTTPS/mailto links keep safe external-link behavior; remote URLs are not cr
 Phase 5 run composition enables a lazy local search worker and project-aware reader
 endpoints. It keeps the same server/flags, never registers an unregistered project,
 and closes search resources with the server. See [search API](SEARCH.md).
+
+Inside `kairn run`, press Cmd+K (macOS) or Ctrl+K to search the active project.
+Remove the chip (or Backspace with empty input) for registered-project global search.
+Type `authentication @mark` in global mode and select a project to retain the query.
+Arrow keys/Enter select; Escape closes suggestions before the palette. Incomplete
+index coverage is explicit; Refresh search continues bounded work. Search never
+edits Markdown or shared settings. See [search behavior](SEARCH.md).

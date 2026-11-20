@@ -163,3 +163,6 @@ clipboard dependency, final design system or additional polling lifecycle.
 
 - `core/search-palette.ts`: framework-independent search/scope/picker/selection state,
   debounce, request generations, partial/error status and disposal. No DOM or SQLite.
+
+- `viewer/search-palette.ts`: minimal accessible DOM adapter over SearchPalette,
+  abortable HTTP search, focus/keyboard lifecycle and injected destination callback.

@@ -1,3 +1,4 @@
+import { mountSearchPalette } from "./search-palette.js";
 import type {
   SearchProject,
   DocumentDestination,
@@ -506,7 +507,9 @@ export async function mountViewer(
   }
   window.addEventListener("popstate", restoreLocation);
   window.addEventListener("hashchange", restoreLocation);
+  let disposeSearch = (): void => {};
   function dispose(): void {
+    disposeSearch();
     disposed = true;
     linkNumber++;
     requestNumber++;
@@ -548,6 +551,12 @@ export async function mountViewer(
       "none",
     );
   else await refresh(true);
+  disposeSearch = mountSearchPalette(
+    document,
+    fetcher,
+    () => activeProject,
+    (destination) => navigate(destination),
+  );
   schedule();
   return dispose;
 }
