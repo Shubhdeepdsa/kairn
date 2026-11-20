@@ -280,3 +280,7 @@ technical queries, hostile FTS expressions and query/result bounds.
 scope, duplicate names, live edits/deletions, source/primary/ignore changes,
 unavailable roots, unregister preservation and transient isolation. A compiled-worker
 integration verifies coalescing and clean close independently of HTTP and the UI.
+
+`project-navigation.test.ts` verifies approved cross-project identities, duplicate
+labels, heading validation, old/new bookmarks, real scoped HTTP reads, redaction,
+strict search parameters and removed/invalid project refusal without a palette.

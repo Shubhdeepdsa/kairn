@@ -47,3 +47,15 @@ unchecked link path or fetches remote URLs. Diagnostics check at most 32 parsed
 links from the active document, under the existing bounded source/read limits.
 The extra encoded link route is GET-only under the same Host/Origin/CSP restrictions.
 See [reading contracts](docs/READING.md) for exact API and freshness limitations.
+
+## Local search cache
+
+Phase 5 stores derived searchable text in private machine-local SQLite data, never
+inside projects. Explicit registered projects are eligible for global search; an
+unregistered active session is separate. Treat cache/quarantine files as private
+document content. No telemetry, remote requests or browser SQLite. Project routes
+resolve approved IDs through current Library/configuration; query text becomes
+bounded quoted FTS terms with SQL parameter binding. Same-origin protections remain.
+Offline corrupt cache recovery never resets Library/configuration. Inspect recovery
+locks rather than stealing them; hostile concurrent filesystem mutation remains out
+of scope. Bounded jobs report incomplete coverage explicitly.

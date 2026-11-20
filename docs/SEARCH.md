@@ -116,3 +116,18 @@ Transient sessions use a separate generated cache subdirectory and are excluded
 from global search. Orderly shutdown drains jobs and closes handles; after 1.5 seconds
 it terminates the worker, allowing SQLite rollback. Forced termination can leave
 rebuildable transient cache bytes; it never unregisters or rewrites project data.
+
+## Implemented project-aware navigation and HTTP
+
+`ProjectNavigator` validates registration/configuration and reads approved IDs,
+independent of search. At most two inactive services are cached; each request checks
+current configuration and refreshes the selected service. No new server per project.
+Project-aware bookmarks use #p/project-id/document-id/encoded-fragment; old `#id` and
+`#id/fragment` continue to resolve in the originally opened context.
+
+Same-origin GET endpoints: /api/context returns the initial ID/name; /api/projects
+returns registered ID/name suggestions only; /api/search accepts query, optional
+project and limit (no duplicates/unknown parameters). /api/projects/project-id/tree,
+/documents/id and /links/id/encoded-target reuse the existing safe reader adapters.
+All original Host/Origin/Fetch Metadata/CSP/size/method limits apply before dispatch.
+Project and search responses contain IDs/relative metadata, never canonical paths.

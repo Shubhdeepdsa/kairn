@@ -178,3 +178,7 @@ Canonical refresh, identity, link and API details: [reading contracts](READING.m
 Search has independent extraction/index/query/coordinator layers. Navigation and the
 palette compose these contracts; see [search design](SEARCH.md). Implementation is
 phased; contracts do not imply indexed search is already available.
+
+Phase 5 composition adds a lazy search job worker and a project-aware navigator to
+the same loopback server. Scoped reader routes resolve registered IDs and validate
+approvals independently of search. See [search contracts](SEARCH.md).

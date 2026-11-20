@@ -3,7 +3,7 @@ import type { ViewerPresentation } from "../server/http.js";
 import { renderMarkdown } from "./markdown.js";
 
 const page = `<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en" data-kairn-application="true"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kairn · Documentation</title><link rel="stylesheet" href="/viewer.css"><script type="module" src="/viewer.js"></script></head>
 <body><a class="skip" href="#document">Skip to document</a><header><strong>◇ Kairn</strong><span>Local documentation</span></header>
 <div class="layout"><aside><h2>Documents</h2><nav id="navigation" aria-label="Documentation"></nav></aside>

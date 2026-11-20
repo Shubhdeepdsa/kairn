@@ -1,3 +1,5 @@
+import { searchRoute, projectRoute } from "./search-routes.js";
+import type { SearchApplication } from "./search-routes.js";
 import { analyzeMarkdown } from "../core/markdown.js";
 import { diagnoseDocumentLinks } from "../core/link-diagnostics.js";
 import type { DocumentResponse } from "./contracts.js";
@@ -14,12 +16,14 @@ export interface ViewerPresentation {
   readonly script: string;
   readonly style: string;
   readonly navigationScript?: string;
+  readonly searchScripts?: Readonly<Record<string, string>>;
   renderMarkdown(markdown: string): string;
 }
 
 /** IPv4 loopback only. Port 0 requests an ephemeral port for tests. */
 export interface ServerOptions {
   readonly port?: number;
+  readonly application?: SearchApplication;
   readonly viewer?: ViewerPresentation;
 }
 
@@ -132,7 +136,14 @@ export async function startDocumentationServer(
       }
       if (
         (!/^\/[A-Za-z0-9/._-]*$/.test(target) &&
-          !/^\/api\/links\/[a-f0-9]{64}\/[^/]+$/.test(target)) ||
+          !/^\/api\/links\/[a-f0-9]{64}\/[^/]+$/.test(target) &&
+          !(
+            options.application &&
+            (/^\/api\/search(?:\?[^#]*)?$/.test(target) ||
+              /^\/api\/projects\/[A-Za-z0-9-]+\/links\/[a-f0-9]{64}\/[^/]+$/.test(
+                target,
+              ))
+          )) ||
         target.split("/").includes("..") ||
         target.split("/").includes(".")
       ) {
@@ -156,18 +167,29 @@ export async function startDocumentationServer(
       active++;
       void (async () => {
         try {
-          if (target === "/api/health") json(response, 200, { status: "ok" });
-          else if (target === "/api/tree")
+          if (
+            options.application &&
+            (target === "/api/context" ||
+              target === "/api/projects" ||
+              /^\/api\/search(?:\?|$)/.test(target))
+          ) {
+            json(response, 200, await searchRoute(target, options.application));
+            return;
+          }
+          const scoped =
+            options.application && target.startsWith("/api/projects/")
+              ? await projectRoute(target, options.application)
+              : { target, documents };
+          const route = scoped.target;
+          const reader = scoped.documents;
+          if (route === "/api/health") json(response, 200, { status: "ok" });
+          else if (route === "/api/tree")
             json(response, 200, {
-              tree: documents.refresh
-                ? await documents.refresh()
-                : documents.tree,
-              ...(documents.warning ? { warning: documents.warning } : {}),
+              tree: reader.refresh ? await reader.refresh() : reader.tree,
+              ...(reader.warning ? { warning: reader.warning } : {}),
             });
-          else if (target.startsWith("/api/links/")) {
-            const match = /^\/api\/links\/([a-f0-9]{64})\/([^/]+)$/.exec(
-              target,
-            );
+          else if (route.startsWith("/api/links/")) {
+            const match = /^\/api\/links\/([a-f0-9]{64})\/([^/]+)$/.exec(route);
             if (!match) {
               failure(
                 response,
@@ -193,17 +215,17 @@ export async function startDocumentationServer(
               response,
               200,
               await resolveDocumentLink(
-                documents as DocumentService,
+                reader as DocumentService,
                 match[1]!,
                 href,
               ),
             );
-          } else if (target.startsWith("/api/documents/")) {
-            const id = target.slice("/api/documents/".length);
-            const content = await documents.read(id);
+          } else if (route.startsWith("/api/documents/")) {
+            const id = route.slice("/api/documents/".length);
+            const content = await reader.read(id);
             const { path, title, markdown } = content;
             const revision = documentRevision(
-              markdown + "\0" + JSON.stringify(documents.tree),
+              markdown + "\0" + JSON.stringify(reader.tree),
             );
             const etag = `"${revision}"`;
             response.setHeader("ETag", etag);
@@ -213,9 +235,9 @@ export async function startDocumentationServer(
               return;
             }
             const analysis = analyzeMarkdown(markdown);
-            const diagnostics = documents.linkTargets
+            const diagnostics = reader.linkTargets
               ? await diagnoseDocumentLinks(
-                  documents as DocumentService,
+                  reader as DocumentService,
                   id,
                   markdown,
                 )
@@ -234,20 +256,28 @@ export async function startDocumentationServer(
             };
             json(response, 200, body);
           } else if (
+            options.viewer?.searchScripts &&
+            Object.hasOwn(options.viewer.searchScripts, route)
+          ) {
+            response.writeHead(200, {
+              "Content-Type": "text/javascript; charset=utf-8",
+            });
+            response.end(options.viewer.searchScripts[route]);
+          } else if (
             options.viewer &&
             [
               "/",
               "/viewer.js",
               "/viewer.css",
               ...(options.viewer.navigationScript ? ["/navigation.js"] : []),
-            ].includes(target)
+            ].includes(route)
           ) {
             const [body, contentType] =
-              target === "/"
+              route === "/"
                 ? [options.viewer.page, "text/html"]
-                : target === "/navigation.js"
+                : route === "/navigation.js"
                   ? [options.viewer.navigationScript!, "text/javascript"]
-                  : target === "/viewer.js"
+                  : route === "/viewer.js"
                     ? [options.viewer.script, "text/javascript"]
                     : [options.viewer.style, "text/css"];
             response.writeHead(200, {

@@ -82,3 +82,6 @@ correction. Local links resolve only to approved documents and show diagnostics
 for missing/excluded destinations or headings. Document/heading bookmarks,
 Back/Forward and a simple heading outline support longer reading sessions.
 See [reading contracts](docs/READING.md) for behavior, API and limits.
+
+Phase 5 adds project-aware document destinations and local search APIs to `kairn run`;
+see [search contracts](docs/SEARCH.md) for phased implementation and limits.

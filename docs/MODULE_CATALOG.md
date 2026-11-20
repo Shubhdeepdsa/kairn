@@ -155,3 +155,8 @@ clipboard dependency, final design system or additional polling lifecycle.
   hashes, source/ignore pruning, bounded progress and honest coverage.
 - `core/search-service.ts` / `search-worker.ts`: lazy worker facade, duplicate-job
   coalescing, queue bound, redacted failures and bounded resource cleanup.
+
+- `core/project-navigation.ts`: independent ID-based project/destination resolver,
+  approval validation and bounded service cache.
+- `server/search-routes.ts`: narrow read-only search/context/projects decoder and
+  project-scoped mapping into the existing reader adapter; no filesystem routing.

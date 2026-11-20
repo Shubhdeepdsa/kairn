@@ -124,3 +124,7 @@ and heading selection. Missing bookmarks show a message instead of guessing a fi
 Local Markdown links are resolved by core against approved, nonexcluded sources;
 missing/unregistered/excluded targets and missing headings show useful diagnostics.
 HTTP/HTTPS/mailto links keep safe external-link behavior; remote URLs are not crawled.
+
+Phase 5 run composition enables a lazy local search worker and project-aware reader
+endpoints. It keeps the same server/flags, never registers an unregistered project,
+and closes search resources with the server. See [search API](SEARCH.md).
