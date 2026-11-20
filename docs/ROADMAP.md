@@ -120,3 +120,9 @@ repository. [PR #3](https://github.com/Shubhdeepdsa/kairn/pull/3) is open, unmer
 The [push CI run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44732707496)
 at `82ff53e` passed Linux, macOS and Windows; latest-head/integration checks are
 visible on the PR. Browser verification remains API/DOM-only as documented.
+
+## Phase 5 — local scoped search
+
+IN PROGRESS: contracts → Markdown extraction → FTS5 index → ranked queries → global
+coordination → project-aware navigation → palette controller → vanilla integration
+→ acceptance. Preserve Phase 1–4. See SEARCH.md.

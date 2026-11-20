@@ -172,3 +172,9 @@ Path-based IDs survive source reorder/primary changes but change on rename; same
 path recreation regains identity. No title-based identity or browser filesystem logic.
 
 Canonical refresh, identity, link and API details: [reading contracts](READING.md).
+
+## Phase 5 search contracts
+
+Search has independent extraction/index/query/coordinator layers. Navigation and the
+palette compose these contracts; see [search design](SEARCH.md). Implementation is
+phased; contracts do not imply indexed search is already available.

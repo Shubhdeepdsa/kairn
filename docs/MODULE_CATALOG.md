@@ -134,3 +134,7 @@ The reader presents the reusable `Heading` outline as keyboard-accessible links
 with shareable heading URLs. Code blocks/tables stay horizontally scrollable
 within the article; inline code is visually distinct. No syntax highlighter,
 clipboard dependency, final design system or additional polling lifecycle.
+
+## Phase 5 contracts
+
+- `core/search-contracts.ts`: typed scope, request, destination, result and per-project coverage; opaque project-ID validation. No persistence or UI.

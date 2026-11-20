@@ -18,3 +18,5 @@ Repository policies: [contributing](../CONTRIBUTING.md),
 - [Configuration ownership and resolution](CONFIGURATION.md)
 
 - [Live reading, navigation and API contracts](READING.md)
+
+- [Local scoped search design](SEARCH.md)

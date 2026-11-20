@@ -1,7 +1,7 @@
 # AGENTS.md — Kairn engineering instructions
 
 > **Scope:** entire Kairn repository. More specific `AGENTS.md` files apply in their directories.
-> **Product:** local-first Markdown documentation and Git-history explorer. **Current milestone:** Phase 4: live content/configuration, reusable link resolution/diagnostics and reading/navigation improvements; preserve Phases 1–3.
+> **Product:** local-first Markdown documentation and Git-history explorer. **Current milestone:** Phase 5: local scoped search, rebuildable SQLite index, project-aware navigation and reusable palette; preserve Phases 1–4.
 > **Priority:** small, verifiable, modular work; documentation is maintained with code, not reconstructed afterwards.
 
 ## 1. Preflight and source of truth
@@ -21,7 +21,7 @@
 - `src/server/`: loopback HTTP adapter over document contracts; no filesystem discovery algorithms.
 - `src/viewer/`: minimal browser assets and safe Markdown rendering, no React.
 - Dependency direction: CLI composes server/core; HTTP consumes core contracts; core imports neither adapter. Shared types belong with the owning core module. Avoid circular dependencies.
-- Only loopback HTTP is permitted at runtime. No telemetry, remote services, database, React, GitHub API integration or AI.
+- Only loopback HTTP is permitted at runtime. No telemetry, remote services, React, GitHub API integration or AI. Phase 5 permits a derived SQLite search index only.
 - CLI must work with projects written in any language; never assume the target has Node/npm packages or a Git repository.
 
 ## 3. TypeScript and public API quality
@@ -70,9 +70,9 @@ Update the smallest relevant docs **in the same commit as behavior changes**:
 
 ## 7. Scope restraint
 
-**Build now:** dependable document reading, live content/configuration refresh, core link diagnostics and lightweight vanilla reader improvements, tests/docs/CI. Preserve help/version/init. Push a phased feature branch to the existing personal remote and open a PR; do not merge automatically.
+**Build now:** local scoped search, incremental SQLite FTS5 indexing, project-aware navigation and a reusable command palette, tests/docs/CI. Preserve help/version/init. Push a phased feature branch to the existing personal remote and open a PR; do not merge automatically.
 
-**Do not build now:** final React UI/design system, Git timeline, editing, search, agent automation, MCP, AI, cloud services, or SQLite. Do not create another repository or publish to npm.
+**Do not build now:** final React UI/design system, Git timeline, editing, agent automation, MCP, AI or cloud services. Do not create another repository or publish to npm.
 
 ## 8. Completion report
 

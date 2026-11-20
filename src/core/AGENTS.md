@@ -18,3 +18,5 @@
 - Phase 3: preserve existing behavior; keep Library/config/source contracts reusable. Isolate persistence tests, validate before writes, and never expose absolute machine paths over HTTP.
 
 - Phase 4: test independent tree/content/config changes, core-only link decisions, atomic recovery, browser history and stale response protection. Browser tests use fake clocks; persistence always stays isolated.
+
+- Phase 5: separate extraction, index, queries, coordination, navigation and palette. Use isolated derived storage; validate current approvals before releasing search results.
