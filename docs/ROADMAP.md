@@ -64,7 +64,7 @@ Feature branch: `feat/local-documentation-viewer`; [PR #1](https://github.com/Sh
 was merged into main. The [feature CI run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44716122814)
 passed Linux, macOS and Windows at `3633546`. No automatic merge or npm publication.
 
-## Phase 3 — locally VERIFIED; PR pending
+## Phase 3 — VERIFIED; PR review pending
 
 A: architecture; B: schemas/persistence; C: Library; D: resolver; E: discovery/ignore;
 F: multi-source engine; G: CLI integration; H: acceptance and personal feature PR.
@@ -83,3 +83,10 @@ F: multi-source engine; G: CLI integration; H: acceptance and personal feature P
 Phase 3 defers the final React/settings UI, themes, search, Git history, cloud,
 AI and npm publication. Next smallest milestone: source-configuration reload
 without restarting the viewer, preserving the same validation boundaries.
+
+Phase 3 feature branch: `feat/project-library-config`;
+[PR #2](https://github.com/Shubhdeepdsa/kairn/pull/2) is open against main, unmerged.
+The [push run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726328194) and
+[PR run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726417025) at `f0570f0`
+passed all Linux/macOS/Windows jobs. `b7208ee` adds a focused Windows cross-drive
+overlap correction; latest-head checks are visible on the PR.

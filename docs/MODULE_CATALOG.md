@@ -1,6 +1,6 @@
 # Reusable module catalog
 
-All core exports live in `src/core/initialization.ts` and are tested in
+Initialization exports live in `src/core/initialization.ts` and are tested in
 `tests/core.test.ts`.
 
 | Export                      | Contract                                                              |

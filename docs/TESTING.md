@@ -202,3 +202,8 @@ from the feature PR, not inferred from local execution.
 
 Windows overlap checks also distinguish sources on separate drive letters; a
 cross-drive absolute relative() result cannot imply directory containment.
+
+Phase 3 [push CI](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726328194)
+and [PR CI](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726417025) passed
+Linux, macOS and Windows at `f0570f0`. PR #2 remains open; see latest checks for
+follow-up commits. No npm publication or automatic merge.
