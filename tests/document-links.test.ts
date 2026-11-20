@@ -93,3 +93,24 @@ it("diagnoses excluded, missing, unregistered, malformed and unsafe links withou
       "external",
     );
 });
+
+it("bounds and deduplicates current-document diagnostics without checking remote URLs", async () => {
+  const { diagnoseDocumentLinks } =
+    await import("../src/core/link-diagnostics.js");
+  const { service, docs } = await fixture();
+  const id = docs[0]!.id;
+  const diagnostics = await diagnoseDocumentLinks(
+    service,
+    id,
+    "[Missing](missing.md) [Again](missing.md) [Web](https://example.com)",
+  );
+  expect(diagnostics).toHaveLength(1);
+  expect(diagnostics[0]?.code).toBe("MISSING");
+  const many = Array.from(
+    { length: 40 },
+    (_, index) => `[${index}](absent-${index}.md)`,
+  ).join("\n");
+  const bounded = await diagnoseDocumentLinks(service, id, many);
+  expect(bounded).toHaveLength(33);
+  expect(bounded[32]?.code).toBe("LIMIT_EXCEEDED");
+});

@@ -1,3 +1,6 @@
+import { analyzeMarkdown } from "../core/markdown.js";
+import { diagnoseDocumentLinks } from "../core/link-diagnostics.js";
+import type { DocumentResponse } from "./contracts.js";
 import { resolveDocumentLink } from "../core/document-links.js";
 import { documentRevision } from "../core/freshness.js";
 import { createServer } from "node:http";
@@ -198,7 +201,9 @@ export async function startDocumentationServer(
             const id = target.slice("/api/documents/".length);
             const content = await documents.read(id);
             const { path, title, markdown } = content;
-            const revision = documentRevision(markdown);
+            const revision = documentRevision(
+              markdown + "\0" + JSON.stringify(documents.tree),
+            );
             const etag = `"${revision}"`;
             response.setHeader("ETag", etag);
             if (request.headers["if-none-match"] === etag) {
@@ -206,7 +211,17 @@ export async function startDocumentationServer(
               response.end();
               return;
             }
-            json(response, 200, {
+            const analysis = analyzeMarkdown(markdown);
+            const diagnostics = documents.linkTargets
+              ? await diagnoseDocumentLinks(
+                  documents as DocumentService,
+                  id,
+                  markdown,
+                )
+              : [];
+            const body: DocumentResponse = {
+              headings: analysis.headings,
+              diagnostics,
               id: content.id,
               path,
               title,
@@ -215,7 +230,8 @@ export async function startDocumentationServer(
               ...(options.viewer
                 ? { html: options.viewer.renderMarkdown(markdown) }
                 : {}),
-            });
+            };
+            json(response, 200, body);
           } else if (
             options.viewer &&
             ["/", "/viewer.js", "/viewer.css"].includes(target)

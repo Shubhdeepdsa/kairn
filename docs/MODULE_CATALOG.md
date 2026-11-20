@@ -118,3 +118,8 @@ viewer module re-exports rendering for compatibility. `core/document-links.ts`
 exports `resolveDocumentLink` and browser-safe typed results/diagnostics. Internal
 `DocumentService.linkTargets/classifyLinkTarget` expose canonical authority only
 to core; HTTP never serializes those paths. Resolution checks only effective IDs.
+
+`core/link-diagnostics.ts`: `diagnoseDocumentLinks` checks at most 32 unique parsed
+links for the active document, with an explicit cap diagnostic and no remote
+requests. `server/contracts.ts` defines browser-safe `DocumentResponse` including
+revision, headings and diagnostics. The POC shows concise current-document warnings.

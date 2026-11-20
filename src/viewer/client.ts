@@ -1,3 +1,4 @@
+import type { LinkDiagnostic } from "../core/document-links.js";
 import type { DocumentEntry, NavigationEntry } from "../core/documents.js";
 
 /** Mount and automatically refresh navigation every two seconds while visible. Returns cleanup for timers/listeners; fetch is injectable. */
@@ -96,6 +97,7 @@ export async function mountViewer(
       const data = (await response.json()) as {
         html: string;
         revision?: string;
+        diagnostics?: readonly LinkDiagnostic[];
         error?: { message: string };
       };
       if (!response.ok)
@@ -103,13 +105,19 @@ export async function mountViewer(
       if (current !== requestNumber) return;
       // HTML comes only from the server's restricted Markdown renderer, never source HTML.
       const scroll = window!.scrollY;
-      const changed =
-        !background ||
-        (data.revision
-          ? data.revision !== contentRevision
-          : article!.innerHTML !== data.html);
+      const changed = !background || article!.innerHTML !== data.html;
       if (changed) article!.innerHTML = data.html;
       contentRevision = data.revision;
+      const warnings = document.getElementById("diagnostics");
+      if (warnings) {
+        warnings.replaceChildren();
+        for (const diagnostic of data.diagnostics ?? []) {
+          const line = document.createElement("p");
+          line.textContent = `${diagnostic.message}${diagnostic.target ? ` (${diagnostic.target})` : ""}`;
+          warnings.append(line);
+        }
+        warnings.hidden = !warnings.childNodes.length;
+      }
       status!.textContent = configurationWarning ?? "";
       document.title = `${file.title} · Kairn`;
       if (!background) {

@@ -218,3 +218,6 @@ registration loss retaining the last valid reader with a redacted warning.
 Core link fixtures verify same/cross-source links, explicit hidden-directory files,
 encoded spaces/Unicode, repeated headings, missing fragments, exclusions, missing/
 unregistered destinations and unsafe formats. No external URLs are fetched.
+
+Diagnostics tests verify deduplication, missing targets, external URLs left alone,
+and the explicit 32-link bound. HTTP never serializes internal canonical identity.
