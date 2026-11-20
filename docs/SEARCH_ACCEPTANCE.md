@@ -1,8 +1,8 @@
 # Phase 5 acceptance
 
-Status: local automated/installed-package/CLI/API checks performed; human browser
-verification is not claimed. Final quality/remote CI evidence belongs in TESTING.md
-and the feature PR. Do not infer Phase 5 browser success from Phase 4 acceptance.
+Status: local automated/installed-package/CLI/API and three-OS CI checks passed;
+human browser verification is not claimed. See [verification evidence](TESTING.md)
+and [PR #4](https://github.com/Shubhdeepdsa/kairn/pull/4). Do not infer Phase 5 browser success from Phase 4 acceptance.
 
 ## Evidence boundaries
 

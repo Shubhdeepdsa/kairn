@@ -332,3 +332,14 @@ timeout, not a performance assertion. No product assertions or safety checks wer
 A partial-coverage regression verifies that a 513-section fixture is omitted and
 reports zero indexed out of one total document, rather than counting attempted
 reads as successful indexing. Final suite includes this additional coverage case.
+
+## Phase 5 remote verification
+
+At `bb0c260`, [PR Quality run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44794623663)
+passed all Linux, macOS and Windows jobs, including clean install, typecheck,
+lint/TSDoc, formatting, real SQLite/process/installed-package tests, build and
+Markdown lint. Final local suite: 118 passed across 28 files. Windows: 115 passed
+and three existing platform-specific permission/symlink skips (no new search skips).
+This verifies built-in FTS5, locking, rollback, recovery and installed navigation
+on all three OS runners. It does not establish identical OS performance or human
+browser acceptance. PR #4 remains open and unmerged.

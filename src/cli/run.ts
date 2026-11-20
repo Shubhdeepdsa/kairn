@@ -37,7 +37,7 @@ export interface RunContext {
 
 /**
  * Discover existing docs, serve them until aborted, then close all HTTP connections.
- * No files are created; only a missing docs root may trigger an interactive prompt.
+ * No project files are created; only a missing docs root may trigger an interactive prompt.
  * @returns 0 after clean shutdown, or 2 when directory selection is canceled.
  * @throws For discovery/read/listen errors. Browser-open failures only produce guidance.
  */

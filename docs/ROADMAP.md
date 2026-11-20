@@ -123,7 +123,9 @@ visible on the PR. Browser verification remains API/DOM-only as documented.
 
 ## Phase 5 — local scoped search
 
-IMPLEMENTED; final acceptance/CI evidence in progress. Preserve Phases 1–4.
+IMPLEMENTED; local and three-OS automated checks VERIFIED. Real browser acceptance
+remains unverified; [PR #4](https://github.com/Shubhdeepdsa/kairn/pull/4) is open.
+Preserve Phases 1–4.
 See [search design](SEARCH.md) and [manual acceptance](SEARCH_ACCEPTANCE.md).
 
 | Stage | Commit    | Outcome                                                      |
@@ -140,3 +142,8 @@ See [search design](SEARCH.md) and [manual acceptance](SEARCH_ACCEPTANCE.md).
 Phase 4 PR #3 merged as `c76f1b5`; Phase 5 starts from that main commit.
 Phase 4 manual browser checks were confirmed by the user before this phase.
 Phase 5 manual browser checks remain separate; do not infer them from that confirmation.
+
+Acceptance follow-ups: `a220807` makes the offline installed-package fixture
+reproducible on clean CI caches; `bb0c260` reports persisted-document coverage
+accurately. [Three-OS verification](https://github.com/Shubhdeepdsa/kairn/actions/runs/44794623663)
+passed at `bb0c260`. No automatic merge or npm publication.

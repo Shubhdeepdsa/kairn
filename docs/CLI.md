@@ -135,3 +135,6 @@ Type `authentication @mark` in global mode and select a project to retain the qu
 Arrow keys/Enter select; Escape closes suggestions before the palette. Incomplete
 index coverage is explicit; Refresh search continues bounded work. Search never
 edits Markdown or shared settings. See [search behavior](SEARCH.md).
+
+Read-only viewing preserves project files/configuration. Search may lazily create
+derived machine-local cache data; it does not write an index into the viewed project.
