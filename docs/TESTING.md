@@ -55,3 +55,20 @@ keyboard sentinel, declined confirmation, confirmation sentinel, non-TTY and
 explicit-yes tests. Built-binary subprocesses verify help/version, errors,
 first/repeated init and plain NO_COLOR output. Real terminal rendering is not
 asserted by unit tests; Clack owns keyboard input and terminal styling.
+
+## Continuous integration
+
+`.github/workflows/ci.yml` runs all required checks with Node 26 on Linux, macOS
+and Windows for pushes and pull requests. Permissions are read-only. Official
+checkout/setup-node v5 actions are pinned to commit SHAs resolved from their
+upstream tags; review release notes and resolve a new upstream SHA when updating.
+No publishing, deployment or secrets are involved.
+
+## Dependency audit limitation
+
+The current npm audit reports eight development-tool advisories (four low, four
+moderate) through TSDoc linting's nested minimatch and Markdown linting's KaTeX.
+No runtime dependency advisories are reported by `npm audit --omit=dev`.
+Suggested force fixes downgrade direct tooling; they have not been applied.
+Review upstream compatible fixes when updating the lockfile. These tools process
+repository source during development, not user projects at runtime.
