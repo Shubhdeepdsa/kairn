@@ -17,3 +17,48 @@ CLI boundary exports: `runInit`, `InitContext`, and `InitPrompts` in
 `src/cli/init.ts`; `clackPrompts` in `src/cli/prompts.ts`. These are terminal
 adapters, not core APIs. `tests/cli.test.ts` verifies consent and cancellation
 with fake prompts plus built-binary subprocess checks.
+
+## Read-only documents
+
+`src/core/documents.ts`: `createDocumentService(directory, limits?)` returns a
+`DocumentService` with canonical `root`, immutable `tree` snapshots, `read(id)`,
+and coalesced `refresh()` that atomically updates navigation and IDs. Failed
+rescans preserve the last valid snapshot; the original root identity is pinned.
+`DocumentEntry`, `DirectoryEntry`, `NavigationEntry`, and `DocumentContent` define
+navigation/content. Absolute `canonicalPath` stays local; adapters must omit it.
+`DocumentError`/`DocumentErrorCode` expose stable failures. `DocumentLimits` and
+`documentLimits` define hard caps; callers can lower them. Covered by
+`tests/documents.test.ts`: nesting, ordering, identities, read-only behavior,
+fresh reads, paths, symlinks, permissions and limits.
+
+## HTTP adapter
+
+`src/server/http.ts`: `startDocumentationServer` consumes `tree/read` and optional `refresh` from
+`DocumentService`, returning `RunningServer` (`url`, idempotent `close`).
+`ServerOptions` permits port 0 for tests and optional `ViewerPresentation` static
+assets/rendering. It never resolves request paths against the filesystem.
+`tests/server.test.ts` covers protocol, isolation, lifecycle and port conflicts.
+
+## Minimal viewer
+
+- `src/viewer/markdown.ts`: `renderMarkdown` uses markdown-it (native types),
+  escapes raw HTML, permits only relative/http/https/mailto links, and replaces
+  images with text. Headings receive deterministic fragment IDs.
+- `src/viewer/client.ts`: `mountViewer` renders navigation from the API, selects
+  documents by opaque ID, handles relative Markdown links within the root and
+  shows loading/error/empty states. Navigation polls every two seconds while
+  visible; the returned cleanup function stops timers/listeners. Fetch is
+  injectable for DOM tests.
+- `src/viewer/assets.ts`: `loadViewerPresentation` loads the packaged compiled
+  client and provides the shell, responsive CSS and renderer for HTTP composition.
+
+`tests/viewer.test.ts` covers parser safety/features, DOM navigation/state and
+actual served assets/API HTML. No framework or browser build pipeline is needed.
+
+## Run workflow
+
+`src/cli/run.ts`: `runDocumentation(RunContext)` composes existing docs discovery,
+the document service and HTTP adapter. `RunContext` injects prompts, browser open,
+presentation, logging and abort lifetime. It does not own filesystem algorithms.
+`src/index.ts` owns argument validation, Clack adaptation, browser eligibility,
+packaged viewer loading and SIGINT/SIGTERM listener cleanup.

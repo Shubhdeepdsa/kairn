@@ -12,3 +12,5 @@
 - Use meaningful discriminated unions for results and typed errors only when needed to express a stable contract.
 - Export minimal public entry points. TSDoc on exported contracts with meaningful invariants. No generic `utils.ts` dumping ground.
 - Document concrete exported behavior in `docs/MODULE_CATALOG.md` once implemented.
+
+- Phase 2: add a read-only nested Markdown service with stable IDs, canonical identities, explicit errors and bounded scans/reads. Reject symlinks; HTTP and UI consume contracts, not filesystem algorithms.

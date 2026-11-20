@@ -1,20 +1,16 @@
 # Kairn architecture
 
-**Status: CLI/core boundary IMPLEMENTED and tested. Future viewer is PLANNED.**
+**Status: Phase 1 and Phase 2 CLI/core/HTTP/minimal-viewer boundaries IMPLEMENTED.**
 
 ## Boundary diagram
 
 ```text
-Command line / @clack/prompts
-         │
-         ▼
-   src/cli/ (adapter)
-         │ calls typed interfaces
-         ▼
-   src/core/ (filesystem discovery, planning, safe apply)
-         │
-         ▼
- Node.js filesystem APIs
+CLI (arguments, prompts, lifecycle) ──┬──> core document service
+                                    └──> HTTP adapter ──> core contracts
+                                              │
+                                  static viewer + Markdown renderer
+                                              │
+                                     browser same-origin API
 ```
 
 **Dependency rule:** CLI imports core, never the reverse. Tests may import both. No external services are required.
@@ -24,7 +20,9 @@ Command line / @clack/prompts
 ```text
 src/
   cli/       command parsing, prompts, human-readable output
-  core/      discovered docs root, non-destructive initialization
+  core/      safe initialization and bounded read-only document service
+  server/    loopback HTTP adapter
+  viewer/    vanilla browser module, static shell and Markdown rendering
   index.ts   CLI executable entrypoint or equivalent
 
 tests/      temporary-filesystem and CLI adapter tests
@@ -33,11 +31,11 @@ docs/       living project documentation
 
 Do not create empty layers/packages simply to mirror this diagram. Choose filenames according to real responsibilities when building. Keep types next to their owners; avoid dependency injection frameworks for one small CLI.
 
-## Future, not part of v0 CLI milestone
+## Future, beyond the minimal viewer
 
-- One local Node.js HTTP process and static React app.
+- Full React app replacing the minimal vanilla viewer.
 - Local project registry and multiple documentation sources per project.
-- Source-aware hybrid document navigation and Markdown rendering.
+- Full source-aware hybrid navigation and richer Markdown features.
 - Local Git commit/diff history, with Git itself as the source of truth.
 
 Those future modules must not be stubbed into the initial implementation just to look comprehensive.
@@ -61,3 +59,73 @@ applying. Non-recursive mkdir fails rather than replacing concurrent entries.
 Node path APIs cannot make ancestor replacement atomic across validation and
 mkdir. Operate only in directories controlled by the user, not trees concurrently
 modified by hostile processes. No claim of an adversarial filesystem sandbox.
+
+## Phase 2 design — IMPLEMENTED
+
+CLI composes the document engine and HTTP adapter. Both CLI and HTTP depend on
+core contracts; core knows neither prompts nor HTTP. Reuse
+`discoverDocumentationRoot` for project `docs/` detection without changing init.
+
+- Core document service: one explicitly selected canonical root, immutable
+  navigation snapshot, opaque stable document IDs, bounded fresh reads.
+- Server: built-in Node HTTP on IPv4 loopback only; consumes tree/read contracts.
+- Viewer: vanilla browser module and CSS; Markdown rendering is a separate module
+  using a maintained parser. No React, persistence, registry or filesystem watcher.
+
+Limits are explicit. Symlinks are rejected for selected roots, descendants and
+reads. Hidden entries are excluded. Canonical file identities remain internal;
+HTTP exposes only relative paths and IDs. Bounded rescans discover added files.
+
+Security boundary: user-controlled trees, not hostile concurrent filesystem
+mutation. HTTP validates exact Host/Origin, rejects cross-site fetches and
+non-GET/body-bearing requests, bounds request sizes, and returns structured errors.
+No CORS, remote assets, raw HTML, arbitrary filesystem routes or shell execution.
+Loopback is not authentication against other processes running as the same user.
+
+### Implemented document engine
+
+`createDocumentService` now scans .md/.markdown files, directory-first and sorted
+by source-relative path using deterministic codepoint ordering. Hard caps: 10,000
+entries (including ignored ones), 2,000 documents, 32 directory levels, 1 MiB per
+Markdown file. Root and descendant symlinks/special files are rejected; hidden
+entries are skipped. Reads validate known IDs, root identity, every path component,
+canonical identity and the opened regular file, then read at most the byte cap + 1.
+Concurrent hostile ancestor mutation remains outside the security guarantee.
+
+### Implemented HTTP adapter
+
+`src/server/http.ts` binds only 127.0.0.1. GET `/api/health`, `/api/tree`, and
+`/api/documents/<id>` return JSON. Expected errors map to 400/403/404/409/413;
+unexpected failures return generic 500 messages without local paths. Exact Host
+(including actual port), Origin and Fetch Metadata checks reject untrusted browser
+requests. No CORS. Raw/encoded path traversal and query strings are rejected.
+GET bodies are forbidden; headers cap at 8 KiB, URLs at 2 KiB, active requests at
+16, request/socket timeouts at 5 seconds. Close drains requests for at most one
+second before closing connections. Optional viewer assets are exact static routes.
+Loopback restricts network reachability, not other local users/processes.
+
+### Implemented viewer
+
+Vanilla browser TypeScript is compiled by the existing tsc build. Its only imports
+are types, so `/viewer.js` has no browser package resolution or bundler requirement.
+The server receives `ViewerPresentation` at composition time; exact asset routes
+serve package content only. Document JSON includes safe `html` alongside source
+Markdown when a presentation is supplied. The core has no rendering dependency.
+Navigation labels use textContent; only restricted-parser output enters article
+HTML. Remote images are replaced with alt text, external links suppress referrers,
+and unknown local attachments are not fetched. No syntax highlighting or filesystem watcher.
+
+## Automatic navigation refresh
+
+`DocumentService.refresh()` reuses the bounded scanner and atomically replaces the
+navigation snapshot and document-ID mapping. Concurrent refresh calls share one
+scan; failed scans retain the last valid snapshot. The original root identity is
+checked before and after scanning: a replaced root requires a restart. All existing
+symlink, hidden-entry and resource-limit rules still apply.
+
+GET `/api/tree` asks the service to refresh; HTTP owns no discovery logic. The
+browser polls this endpoint two seconds after the previous request completes,
+pauses when hidden, refreshes on visibility return and removes timers/listeners
+on page exit. No overlapping browser polls or persistent server watchers. Sidebar
+DOM is rebuilt only when the tree changes; current content, selection and folder
+expansion are preserved. Deleted selections fall back to another document.

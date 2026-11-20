@@ -1,7 +1,7 @@
 # Kairn CLI contract
 
 Implemented: `kairn --help` (`-h`), `--version` (`-v`), and
-`kairn init [--cwd <directory>] [--yes]`. No other commands are supported.
+`kairn init [--cwd <directory>] [--yes]`, and `kairn run`.
 
 ## Initialization
 
@@ -36,3 +36,38 @@ kairn init --cwd ./my-project --yes
 
 `init` never registers projects, contacts a service, changes Git, installs packages,
 or starts a server. Add Markdown files yourself after initialization.
+
+## Local viewer
+
+```sh
+kairn run
+kairn run --cwd ./my-project
+kairn run --port 4173
+kairn run --no-open
+```
+
+Run prefers the selected project's existing direct `docs/`. It never calls init
+or creates files. When docs are missing, an interactive terminal may supply an
+existing documentation directory (relative to the project, or absolute) or cancel
+with code 2. Noninteractive use fails with guidance; invalid/symlink docs fail.
+
+The server binds only `127.0.0.1`, default port 4173. `--port` accepts integers
+0–65535; 0 chooses an available port. Port conflicts suggest choosing another
+port. `--port`/`--no-open` are run-only; `--yes` is init-only. Help/version remain
+available. Errors exit 1; clean SIGINT/SIGTERM shutdown exits 0.
+
+The URL is always printed. Interactive desktop sessions open the default browser
+unless `--no-open` is set. CI/non-TTY and Linux sessions without DISPLAY or
+WAYLAND_DISPLAY skip browser launch with guidance. Browser-open failure leaves
+the viewer available and prints a manual-open instruction. Ctrl+C stops the server.
+
+Navigation refreshes automatically about every two seconds while the tab is
+visible, and immediately when returning to the tab. Added/renamed/deleted Markdown
+files update the sidebar without restarting or reloading. Existing content is
+reread when selected; the active document is not automatically re-rendered. Hidden files, symlinks, attachments and remote
+images are not served. The viewer has no editing, search, Git history or registry.
+
+The current selection and collapsed folders survive sidebar updates. If the active
+file disappears, the viewer selects README.md or the first remaining document;
+an empty tree displays guidance and continues checking for files. Refresh errors
+are shown and retried, keeping the last valid sidebar. Dotfiles remain excluded.

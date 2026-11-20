@@ -1,7 +1,7 @@
 # Kairn
 
-Local-first Markdown documentation CLI. The initial milestone implements safe
-interactive initialization; the document viewer and Git explorer are planned.
+Local-first Markdown documentation CLI. Includes safe interactive initialization and a read-only localhost Markdown
+viewer. Git history and the final React interface remain planned.
 
 ## Install from source
 
@@ -26,6 +26,26 @@ kairn init --cwd ./my-project --yes
 Use `--yes` for explicit noninteractive approval. Without it, non-TTY/CI use fails
 without prompting. See [command contracts and exit codes](docs/CLI.md).
 
+## Read documentation
+
+```sh
+kairn run
+kairn run --cwd ./my-project --port 4173 --no-open
+```
+
+Run reads the project's existing `docs/`, including nested Markdown, and prints
+its `http://127.0.0.1` URL. The browser opens in interactive desktop sessions;
+`--no-open` and headless sessions leave opening it to you. Ctrl+C stops the server.
+Run never creates documentation. If docs are missing, a terminal can prompt for
+another existing root. See [CLI behavior](docs/CLI.md) and
+[security assumptions](docs/ARCHITECTURE.md).
+
+The prototype supports headings, tables, lists, code blocks and document links.
+Raw HTML is escaped and images are shown as text; no remote assets are loaded.
+The sidebar picks up new, renamed and deleted Markdown files automatically
+about every two seconds while the tab is visible. Existing content is reread on
+selection. Dotfiles and hidden directories remain excluded.
+
 ## Development
 
 Run `npm run typecheck`, `npm run lint`, `npm run format:check`, `npm test`,
@@ -34,5 +54,5 @@ Run `npm run typecheck`, `npm run lint`, `npm run format:check`, `npm test`,
 See [documentation](docs/README.md), [contributing](CONTRIBUTING.md) and
 [security](SECURITY.md). Licensed under [MIT](LICENSE).
 
-`kairn run`, a browser UI, project registry, Git history, AI and network services
-are outside this milestone. No telemetry or runtime network access.
+The final React UI, project registry, Git history, editing, search, AI and cloud
+services are outside this milestone. No telemetry or external runtime requests.

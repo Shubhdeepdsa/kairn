@@ -6,4 +6,4 @@ behavior, and update the owning documentation in the same commit.
 
 Run the quality commands listed in [testing](docs/TESTING.md) before submitting.
 Use Conventional Commits. Do not include generated output, credentials, or private
-project material. This milestone covers the CLI foundation and safe init only.
+project material. This milestone adds a read-only localhost viewer while preserving safe init.

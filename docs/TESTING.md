@@ -89,3 +89,70 @@ The first remote run passed Linux/macOS but failed Windows Prettier because Git
 checked out CRLF while the formatter requires LF. `.gitattributes` now enforces
 LF for text on every platform, including executable shebangs. The format gate is
 unchanged. Subsequent remote runs verify the correction.
+
+## Phase 2 document engine
+
+`tests/documents.test.ts` uses temporary roots for nested discovery, stable IDs,
+canonical paths, empty roots, fresh edits/deletes, ignored hidden/non-Markdown
+entries, traversal/unknown IDs, invalid roots, root/descendant symlinks and parent
+replacement. Lower limits exercise entry/count/depth/read caps. POSIX-only
+permission tests skip Windows and root, matching existing init tests.
+
+## Phase 2 HTTP coverage
+
+Ephemeral loopback tests cover health/tree/read, missing/invalid IDs, raw and
+encoded traversal, absolute paths, hostile Host/Origin/Fetch Metadata, GET-only
+and body rejection, header/URL bounds, port conflicts, generic internal errors,
+and idempotent/bounded shutdown. Every fixture closes its server in cleanup.
+
+## Phase 2 viewer coverage
+
+DOM tests with jsdom verify nested navigation, relative document links, current
+selection, root README preference, empty/error states and stale bookmarks.
+Parser tests cover headings/lists/tables/fences/links, HTML escaping, script/data/
+file/protocol-relative URL rejection and image suppression. Local HTTP tests
+verify compiled assets, CSP and HTML generated from actual Markdown source.
+
+## Phase 2 CLI coverage
+
+`tests/run.test.ts` covers read-only startup/abort, browser suppression and failure,
+missing docs/non-TTY guidance, root-selection cancellation, alternate roots,
+pre-aborted startup and command flags. Built subprocess tests read nested Markdown
+through the real API and terminate without a remaining listener. POSIX signals
+verify graceful exit; Windows process termination is verified as forced cleanup
+because Node's child.kill does not deliver a catchable SIGINT there. Existing
+init tests remain unchanged except replacing run as the unknown-command fixture.
+
+## Phase 2 final acceptance — 2026-11-20
+
+On Node 26.13.0/macOS: clean npm ci and all six quality scripts passed; final
+regression suite has 51 tests. Added checks cover selected-root replacement,
+file-symlink replacement, pending loading state and hostile filename labels.
+Windows skips POSIX permission/file-symlink tests; directory junction and HTTP/DOM
+coverage still run. GitHub Actions retains the existing three-platform matrix.
+
+The packed CLI installed into a clean temporary global prefix and passed help,
+version and self-documentation viewing. Port 4173 was occupied, so the exact
+`kairn run --no-open` invocation verified the conflict error; `--port 0` then
+served the repository's real docs. A real browser verified sidebar selection,
+headings and table rendering. Ctrl+C exited 0, the listener closed, and hashes
+of all nine source docs matched the pre-run snapshot. No browser auto-launch
+occurs in tests and no Kairn listener remains. Runtime npm audit reports zero
+advisories; the eight previously documented development-tool advisories remain.
+
+### Remote verification
+
+The [feature-branch CI run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44716122814)
+at `3633546` passed all required gates on Linux, macOS and Windows. The separate
+[PR checks](https://github.com/Shubhdeepdsa/kairn/pull/1/checks) track integration
+with main. PR #1 remains unmerged for review.
+
+## Automatic navigation refresh
+
+The local suite passes 57 tests. New temporary-filesystem/API tests verify live
+additions, nested paths, stable IDs, rename/deletion, excluded dotfiles, shared
+concurrent scans, rejection of replacement roots, retained snapshots on unsafe/
+oversized rescans and recovery. Fake-clock DOM tests verify automatic sidebar
+updates, unchanged active content, preserved selection/collapsed folders, empty
+root recovery, deleted selection fallback, retry, hidden-tab pause and cleanup.
+No arbitrary delays or operating-system watcher dependency are used.

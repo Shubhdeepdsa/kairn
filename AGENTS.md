@@ -1,7 +1,7 @@
 # AGENTS.md — Kairn engineering instructions
 
 > **Scope:** entire Kairn repository. More specific `AGENTS.md` files apply in their directories.
-> **Product:** local-first Markdown documentation and Git-history explorer. **Current milestone:** TypeScript CLI foundation and `kairn init` only.
+> **Product:** local-first Markdown documentation and Git-history explorer. **Current milestone:** Phase 2: read-only localhost documentation viewer and `kairn run`; preserve Phase 1.
 > **Priority:** small, verifiable, modular work; documentation is maintained with code, not reconstructed afterwards.
 
 ## 1. Preflight and source of truth
@@ -9,7 +9,7 @@
 1. Read `docs/README.md`, `docs/PRODUCT.md`, `docs/ARCHITECTURE.md`, `docs/CLI.md`, `docs/MODULE_CATALOG.md`, `docs/DECISIONS.md`, `docs/ROADMAP.md` and `docs/TESTING.md` **as applicable** before a substantial change. Do not dump the whole repository into context for small tasks.
 2. Inspect the actual `package.json`, lockfile, TS/tool configs and tests before editing. **Verified source and tests prevail over older documentation**; reconcile discrepancies in the same change.
 3. Search for existing code and public APIs before creating a module. Prefer **reuse → extend → compose → extract common code → new module**. Do not introduce abstraction layers for one trivial use case.
-4. The locked product direction is Kairn: local-first, CLI-powered, Markdown-first, multiple paths per project, Git read-only history later. The visual identity is Kairn Mineral; it is **not** an instruction to build a UI in this milestone.
+4. The locked product direction is Kairn: local-first, CLI-powered, Markdown-first, multiple paths per project, Git read-only history later. The visual identity is Kairn Mineral; Phase 2 permits a minimal vanilla browser viewer, not the final React interface.
 5. Do not assert that planned features work. Mark proposed, implemented and verified states distinctly.
 
 ## 2. Architecture boundaries
@@ -18,8 +18,10 @@
 - `src/cli/`: argument parsing, Clack prompts, status/error presentation; calls core APIs, never owns filesystem algorithms.
 - `tests/`: focused unit and integration tests with temporary fixture directories.
 - `docs/`: reader-friendly behavior, architecture, decisions and change documentation.
-- Dependency direction: `CLI → core`; core does **not** import CLI. Shared types belong with the owning core module. Avoid circular dependencies.
-- No runtime network access or telemetry. No database, server, React, GitHub API integration or AI functionality in the first implementation milestone.
+- `src/server/`: loopback HTTP adapter over document contracts; no filesystem discovery algorithms.
+- `src/viewer/`: minimal browser assets and safe Markdown rendering, no React.
+- Dependency direction: CLI composes server/core; HTTP consumes core contracts; core imports neither adapter. Shared types belong with the owning core module. Avoid circular dependencies.
+- Only loopback HTTP is permitted at runtime. No telemetry, remote services, database, React, GitHub API integration or AI.
 - CLI must work with projects written in any language; never assume the target has Node/npm packages or a Git repository.
 
 ## 3. TypeScript and public API quality
@@ -68,9 +70,9 @@ Update the smallest relevant docs **in the same commit as behavior changes**:
 
 ## 7. Scope restraint
 
-**Build now:** package scaffold, `kairn --help`, `kairn --version`, core docs detection, safe `kairn init` TUI, tests, documentation, CI, personal GitHub publication.
+**Build now:** read-only nested Markdown engine, secure loopback HTTP, minimal vanilla viewer, `kairn run`, tests/docs/CI. Preserve help/version/init. Push a phased feature branch to the existing personal remote and open a PR; do not merge automatically.
 
-**Do not build now:** `kairn run`, persistent Kairn web server, React UI, Markdown renderer, global project registry, multi-root configuration engine, Git timeline, agent automation, MCP, AI generation, browser filesystem picker, or SQLite.
+**Do not build now:** final React UI/design system, global registry, multi-root configuration, Git timeline, editing, search, agent automation, MCP, AI, cloud services, or SQLite. Do not create another repository or publish to npm.
 
 ## 8. Completion report
 
