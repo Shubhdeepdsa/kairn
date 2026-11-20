@@ -229,3 +229,27 @@ preservation and clickable core diagnostics without replacing the active article
 Reader tests cover the accessible outline, deterministic heading order and
 shareable outline links. CSS limits code/table width and preserves visible focus.
 Copy-code and syntax highlighting remain deferred rather than adding dependencies.
+
+## Phase 4 final local acceptance — 2026-11-20
+
+Node 26.13.0/macOS: clean npm ci, typecheck, lint, format check, 95 tests, build
+and Markdown lint passed. Existing Phase 1–3 init/project/persistence/source/ignore/
+HTTP/Markdown/refresh/cancellation/signal regressions remain covered.
+
+`reader-acceptance.test.ts` starts the actual compiled run command, mounts the DOM
+reader against its real HTTP API, and edits files/settings using separate CLI
+processes. It verifies live content without page reload or selection change,
+source additions, cross-source heading links, ignore add/remove, invalid shared
+JSON retaining valid content, recovery and clean shutdown. Focus, scroll/anchor,
+actual Back/Forward events and stale-request protection have separate DOM tests.
+
+A clean temporary-prefix install of the packed executable passed help/version,
+conditional 304, external content edits, live CLI source/ignore changes, core
+heading resolution, invalid config preservation/recovery and packaged navigation
+module serving. All acceptance listeners/processes were closed; no real Library or
+unrelated project data was used. Runtime audit reports zero advisories; existing
+eight development-tool advisories remain.
+
+Browser inventory reports local browser use disabled in Work settings. These are
+API/DOM and installed-binary checks, not manual real-browser verification. Remote
+Linux/macOS/Windows results must be reported from the feature PR checks.

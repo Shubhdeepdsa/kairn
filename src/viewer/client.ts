@@ -403,7 +403,12 @@ export async function mountViewer(
   outline?.addEventListener("click", onOutline);
   function restoreLocation(): void {
     const location = parseReaderLocation(window!.location.hash);
-    if (location) void show(location.id, location.fragment, false, "none");
+    if (location) {
+      if (selected?.id === location.id && article!.childNodes.length) {
+        activeFragment = location.fragment;
+        showFragment(activeFragment);
+      } else void show(location.id, location.fragment, false, "none");
+    }
   }
   window.addEventListener("popstate", restoreLocation);
   window.addEventListener("hashchange", restoreLocation);

@@ -73,3 +73,12 @@ Use the ID printed by add/list. The machine-local Library remembers projects;
 [CLI commands](docs/CLI.md) cover rename/unregister, source management and basic
 ignore rules. [Configuration](docs/CONFIGURATION.md) defines precedence and JSON.
 No project configuration is created just by running the viewer.
+
+## Live reading
+
+Source/ignore configuration and active Markdown content reload while the viewer
+runs. Invalid settings retain the last valid view with a warning and recover after
+correction. Local links resolve only to approved documents and show diagnostics
+for missing/excluded destinations or headings. Document/heading bookmarks,
+Back/Forward and a simple heading outline support longer reading sessions.
+See [reading contracts](docs/READING.md) for behavior, API and limits.

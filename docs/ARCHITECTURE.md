@@ -146,7 +146,7 @@ titles and cross-source links. External provenance uses opaque IDs and safe labe
 absolute paths remain core/CLI only. Unavailable sources stay declared, and refresh
 removes disappeared documents from the view without altering config.
 
-## Phase 4 design — PLANNED
+## Phase 4 design — IMPLEMENTED
 
 One visible-tab polling cycle refreshes navigation/configuration then conditionally
 reads only the active document. Content revisions are SHA-256 of bounded source;
@@ -170,3 +170,5 @@ remain valid. User navigation pushes history; fallback/initial normalization
 replaces. Back/Forward restores selection/fragment without pushing another entry.
 Path-based IDs survive source reorder/primary changes but change on rename; same
 path recreation regains identity. No title-based identity or browser filesystem logic.
+
+Canonical refresh, identity, link and API details: [reading contracts](READING.md).

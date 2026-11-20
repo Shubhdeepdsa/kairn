@@ -222,3 +222,24 @@ it("conditionally reads active content by revision and notices external saves", 
   expect(changed.headers.etag).not.toBe(etag);
   expect(JSON.parse(changed.body).markdown).toContain("Edited");
 });
+
+it("resolves encoded links only against the effective document service under the same security headers", async () => {
+  const { server, id } = await fixture();
+  const target = `/api/links/${id}/${encodeURIComponent("#hello")}`;
+  const valid = await raw(server.url, target);
+  expect(valid.status).toBe(200);
+  expect(JSON.parse(valid.body)).toEqual({
+    kind: "document",
+    id,
+    fragment: "hello",
+  });
+  const unsafe = await raw(
+    server.url,
+    `/api/links/${id}/${encodeURIComponent("file:///etc/passwd")}`,
+  );
+  expect(JSON.parse(unsafe.body).diagnostic.code).toBe("INVALID");
+  expect(
+    (await raw(server.url, target, { Origin: "https://evil.test" })).status,
+  ).toBe(403);
+  expect((await raw(server.url, `/api/links/${id}/%zz`)).status).toBe(400);
+});

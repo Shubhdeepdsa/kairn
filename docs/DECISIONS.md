@@ -92,7 +92,7 @@ Future decisions should record meaningful alternatives and trade-offs rather tha
 
 ## ADR-010 — Unified reader refresh and core link authority
 
-- **Status:** Accepted for Phase 4; implementation planned.
+- **Status:** Accepted and implemented in Phase 4.
 - **Decision:** Reuse visible-tab polling, active-document content hashes/ETags,
   application-level atomic config reload, core canonical-path link resolution and
   bounded current-document diagnostics. Reuse the established heading slug rules.

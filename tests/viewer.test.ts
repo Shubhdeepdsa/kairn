@@ -589,3 +589,36 @@ it("presents an accessible heading outline with shareable heading URLs", async (
   expect(value.window.location.hash).toBe(`#${rootId}/details`);
   expect(document.querySelector("h2")?.textContent).toBe("Details");
 });
+
+it("uses actual Back and Forward without pushing extra history entries", async () => {
+  const value = dom();
+  const document = value.window.document;
+  await mountViewer(document, fakeFetch());
+  (
+    document.querySelector(`[data-document="${nestedId}"]`) as HTMLAnchorElement
+  ).click();
+  await until(
+    document,
+    () => document.querySelector("h1")?.textContent === "Nested",
+  );
+  const length = value.window.history.length;
+  const back = new Promise<void>((resolve) =>
+    value.window.addEventListener("popstate", () => resolve(), { once: true }),
+  );
+  value.window.history.back();
+  await back;
+  await until(
+    document,
+    () => document.querySelector("h1")?.textContent === "Home",
+  );
+  const forward = new Promise<void>((resolve) =>
+    value.window.addEventListener("popstate", () => resolve(), { once: true }),
+  );
+  value.window.history.forward();
+  await forward;
+  await until(
+    document,
+    () => document.querySelector("h1")?.textContent === "Nested",
+  );
+  expect(value.window.history.length).toBe(length);
+});

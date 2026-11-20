@@ -80,3 +80,38 @@ it("atomically reloads personal sources, exclusions, primary and shared config w
   expect(service.tree).toBe(final);
   expect(service.warning).toContain("registration");
 });
+
+it("removes a deleted individual source from navigation while preserving its configuration for repair", async () => {
+  const root = await fixture();
+  const library = new ProjectLibrary(join(root, "data"));
+  const project = await library.register(root);
+  await library.setOverrides(project.id, {
+    ...project.overrides,
+    additionalSources: [{ path: "README.md" }],
+  });
+  const load = async () =>
+    resolveProjectConfig(
+      root,
+      await loadProjectConfig(root),
+      (await library.get(project.id)).overrides,
+    );
+  const initial = await load();
+  const service = await createReloadingDocumentService(
+    await createProjectDocumentService(initial),
+    root,
+    initial,
+    load,
+  );
+  expect(JSON.stringify(service.tree)).toContain("README");
+  await rm(join(root, "README.md"));
+  await service.refresh();
+  expect(JSON.stringify(service.tree)).not.toContain("README");
+  expect(service.warning).toContain("last valid");
+  expect(
+    (await library.get(project.id)).overrides.additionalSources,
+  ).toHaveLength(1);
+  await writeFile(join(root, "README.md"), "# Restored");
+  await service.refresh();
+  expect(JSON.stringify(service.tree)).toContain("README");
+  expect(service.warning).toBeUndefined();
+});

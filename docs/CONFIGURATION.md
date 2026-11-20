@@ -97,3 +97,6 @@ Writes use private file modes where supported. Directory rename durability depen
 on OS/filesystem behavior: the temp file is synced, not the parent directory.
 A crash may leave a lock/temp file; never silently delete or migrate unknown data.
 Valid configuration changes reload automatically; file-tree refresh continues across sources.
+
+Live invalid-config recovery and registration-loss behavior are defined in
+[reading contracts](READING.md). No reload operation persists discovered paths.

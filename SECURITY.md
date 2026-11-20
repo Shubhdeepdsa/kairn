@@ -36,3 +36,14 @@ files and rename; no stale-lock stealing. Inspect crash leftovers manually. This
 is not a guarantee against malicious concurrent processes or network filesystem
 locking anomalies. Use trusted application-data and project parent directories.
 No automatic migrations, global singleton, or browser-accessible metadata writes.
+
+## Live reader and links
+
+Reload uses the same strict configuration/source validation, with atomic service
+replacement and redacted warnings. Recoverable errors retain the last valid
+approved configuration; this is not a new authorization mechanism. Core link
+resolution uses only known effective document identities. It never serves an
+unchecked link path or fetches remote URLs. Diagnostics check at most 32 parsed
+links from the active document, under the existing bounded source/read limits.
+The extra encoded link route is GET-only under the same Host/Origin/CSP restrictions.
+See [reading contracts](docs/READING.md) for exact API and freshness limitations.
