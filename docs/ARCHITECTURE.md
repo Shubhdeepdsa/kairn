@@ -1,6 +1,6 @@
 # Kairn architecture
 
-**Status: CLI/core boundary IMPLEMENTED and tested. Future viewer is PLANNED.**
+**Status: Phase 1 and Phase 2 CLI/core/HTTP/minimal-viewer boundaries IMPLEMENTED.**
 
 ## Boundary diagram
 
@@ -33,11 +33,11 @@ docs/       living project documentation
 
 Do not create empty layers/packages simply to mirror this diagram. Choose filenames according to real responsibilities when building. Keep types next to their owners; avoid dependency injection frameworks for one small CLI.
 
-## Future, not part of v0 CLI milestone
+## Future, beyond the minimal viewer
 
-- One local Node.js HTTP process and static React app.
+- Full React app replacing the minimal vanilla viewer.
 - Local project registry and multiple documentation sources per project.
-- Source-aware hybrid document navigation and Markdown rendering.
+- Full source-aware hybrid navigation and richer Markdown features.
 - Local Git commit/diff history, with Git itself as the source of truth.
 
 Those future modules must not be stubbed into the initial implementation just to look comprehensive.
@@ -62,7 +62,7 @@ Node path APIs cannot make ancestor replacement atomic across validation and
 mkdir. Operate only in directories controlled by the user, not trees concurrently
 modified by hostile processes. No claim of an adversarial filesystem sandbox.
 
-## Phase 2 design — PLANNED
+## Phase 2 design — IMPLEMENTED
 
 CLI composes the document engine and HTTP adapter. Both CLI and HTTP depend on
 core contracts; core knows neither prompts nor HTTP. Reuse
@@ -74,13 +74,13 @@ core contracts; core knows neither prompts nor HTTP. Reuse
 - Viewer: vanilla browser module and CSS; Markdown rendering is a separate module
   using a maintained parser. No React, persistence, registry or live watcher.
 
-Limits will be explicit. Symlinks are rejected for selected roots, descendants and
+Limits are explicit. Symlinks are rejected for selected roots, descendants and
 reads. Hidden entries are excluded. Canonical file identities remain internal;
 HTTP exposes only relative paths and IDs. Restart to discover added files.
 
 Security boundary: user-controlled trees, not hostile concurrent filesystem
-mutation. HTTP will validate exact Host/Origin, reject cross-site fetches and
-non-GET/body-bearing requests, bound request sizes, and return structured errors.
+mutation. HTTP validates exact Host/Origin, rejects cross-site fetches and
+non-GET/body-bearing requests, bounds request sizes, and returns structured errors.
 No CORS, remote assets, raw HTML, arbitrary filesystem routes or shell execution.
 Loopback is not authentication against other processes running as the same user.
 

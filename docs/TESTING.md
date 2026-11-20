@@ -112,3 +112,13 @@ selection, root README preference, empty/error states and stale bookmarks.
 Parser tests cover headings/lists/tables/fences/links, HTML escaping, script/data/
 file/protocol-relative URL rejection and image suppression. Local HTTP tests
 verify compiled assets, CSP and HTML generated from actual Markdown source.
+
+## Phase 2 CLI coverage
+
+`tests/run.test.ts` covers read-only startup/abort, browser suppression and failure,
+missing docs/non-TTY guidance, root-selection cancellation, alternate roots,
+pre-aborted startup and command flags. Built subprocess tests read nested Markdown
+through the real API and terminate without a remaining listener. POSIX signals
+verify graceful exit; Windows process termination is verified as forced cleanup
+because Node's child.kill does not deliver a catchable SIGINT there. Existing
+init tests remain unchanged except replacing run as the unknown-command fixture.

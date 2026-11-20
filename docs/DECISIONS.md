@@ -46,7 +46,7 @@ Future decisions should record meaningful alternatives and trade-offs rather tha
 
 ## ADR-006 — Snapshot document service and loopback adapters
 
-- **Status:** Accepted for Phase 2; implementation planned.
+- **Status:** Accepted and implemented in Phase 2.
 - **Context:** A working viewer needs bounded file access without coupling HTTP to discovery.
 - **Decision:** One in-memory root snapshot, stable opaque IDs, typed read API;
   built-in HTTP adapter on 127.0.0.1; minimal vanilla browser client.
@@ -57,7 +57,7 @@ Future decisions should record meaningful alternatives and trade-offs rather tha
 
 ## ADR-007 — Untrusted Markdown rendering
 
-- **Status:** Accepted for Phase 2; implementation planned.
+- **Status:** Accepted and implemented in Phase 2.
 - **Context:** Documentation can contain executable HTML or remote tracking assets.
 - **Decision:** Use maintained markdown-it with raw HTML disabled, restrictive link
   schemes, disabled image loading, and a restrictive HTTP content security policy.

@@ -134,7 +134,7 @@ describe("built package executable", () => {
   it("fails unsupported commands, flags and noninteractive init", async () => {
     const directory = await fixture();
     for (const args of [
-      ["run"],
+      ["unknown-command"],
       ["--bogus"],
       ["--yes"],
       ["init", "--cwd", directory],

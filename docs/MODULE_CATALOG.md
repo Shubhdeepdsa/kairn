@@ -50,3 +50,11 @@ assets/rendering. It never resolves request paths against the filesystem.
 
 `tests/viewer.test.ts` covers parser safety/features, DOM navigation/state and
 actual served assets/API HTML. No framework or browser build pipeline is needed.
+
+## Run workflow
+
+`src/cli/run.ts`: `runDocumentation(RunContext)` composes existing docs discovery,
+the document service and HTTP adapter. `RunContext` injects prompts, browser open,
+presentation, logging and abort lifetime. It does not own filesystem algorithms.
+`src/index.ts` owns argument validation, Clack adaptation, browser eligibility,
+packaged viewer loading and SIGINT/SIGTERM listener cleanup.
