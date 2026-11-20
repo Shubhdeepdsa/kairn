@@ -33,7 +33,7 @@ Publication is authorized only to the verified personal user account, after revi
 Initial remote CI exposed Windows CRLF checkout drift. The follow-up enforces LF
 with `.gitattributes`; formatter behavior and check strictness are unchanged.
 
-## Phase 2 — locally VERIFIED; feature PR pending
+## Phase 2 — VERIFIED; PR review pending
 
 A. Update milestone instructions, architecture, contracts and security decisions.
 B. Read-only nested document engine with bounded scanning and safe reads.
@@ -42,14 +42,14 @@ D. Minimal vanilla viewer and safe Markdown rendering.
 E. `kairn run` CLI, browser opening and signal lifecycle.
 F. Clean-package acceptance, documentation and cross-platform CI; feature PR.
 
-| Phase          | Commit                   | Verification                                                     |
-| -------------- | ------------------------ | ---------------------------------------------------------------- |
-| A — planning   | `73a08fb`                | Documentation formatting/lint and staged review                  |
-| B — core       | `f1c7c61`                | Quality gates; 27 tests                                          |
-| C — server     | `c821dae`                | Quality gates; 35 tests                                          |
-| D — viewer     | `a96d4ea`                | Quality gates; 41 tests                                          |
-| E — CLI        | `b7cafc9`                | Quality gates; 48 tests                                          |
-| F — acceptance | Final integration commit | Clean install, all gates, 51 tests and real-browser self-viewing |
+| Phase          | Commit    | Verification                                                     |
+| -------------- | --------- | ---------------------------------------------------------------- |
+| A — planning   | `73a08fb` | Documentation formatting/lint and staged review                  |
+| B — core       | `f1c7c61` | Quality gates; 27 tests                                          |
+| C — server     | `c821dae` | Quality gates; 35 tests                                          |
+| D — viewer     | `a96d4ea` | Quality gates; 41 tests                                          |
+| E — CLI        | `b7cafc9` | Quality gates; 48 tests                                          |
+| F — acceptance | `3633546` | Clean install, all gates, 51 tests and real-browser self-viewing |
 
 The installed package served Kairn's own docs without modifying their hashes.
 The default port was occupied and correctly reported a conflict; self-viewing
@@ -58,3 +58,7 @@ were verified. Cross-platform results are reported by the feature PR's CI.
 
 Next smallest milestone: explicit refresh/rescan for newly added documents,
 without introducing a registry, persistence or the final React UI.
+
+Feature branch: `feat/local-documentation-viewer`; [PR #1](https://github.com/Shubhdeepdsa/kairn/pull/1)
+is open against main. The [feature CI run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44716122814)
+passed Linux, macOS and Windows at `3633546`. No automatic merge or npm publication.

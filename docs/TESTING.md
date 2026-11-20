@@ -139,3 +139,10 @@ headings and table rendering. Ctrl+C exited 0, the listener closed, and hashes
 of all nine source docs matched the pre-run snapshot. No browser auto-launch
 occurs in tests and no Kairn listener remains. Runtime npm audit reports zero
 advisories; the eight previously documented development-tool advisories remain.
+
+### Remote verification
+
+The [feature-branch CI run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44716122814)
+at `3633546` passed all required gates on Linux, macOS and Windows. The separate
+[PR checks](https://github.com/Shubhdeepdsa/kairn/pull/1/checks) track integration
+with main. PR #1 remains unmerged for review.
