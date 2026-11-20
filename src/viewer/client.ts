@@ -1,4 +1,5 @@
 import { parseReaderLocation, readerHash } from "./navigation.js";
+import type { Heading } from "../core/markdown.js";
 import type { LinkResolution } from "../core/document-links.js";
 import type { LinkDiagnostic } from "../core/document-links.js";
 import type { DocumentEntry, NavigationEntry } from "../core/documents.js";
@@ -20,6 +21,7 @@ export async function mountViewer(
   let requestNumber = 0;
   let linkNumber = 0;
   let activeFragment = "";
+  let outlineSignature = "";
   let configurationWarning: string | undefined;
   let contentRevision: string | undefined;
   let disposed = false;
@@ -79,7 +81,7 @@ export async function mountViewer(
       article!.replaceChildren();
     }
     selected = file;
-    source!.textContent = file.path;
+    source!.textContent = file.projectPath ?? file.path;
     for (const link of navigation!.querySelectorAll<HTMLAnchorElement>(
       "a[data-document]",
     )) {
@@ -119,6 +121,7 @@ export async function mountViewer(
         html: string;
         revision?: string;
         diagnostics?: readonly LinkDiagnostic[];
+        headings?: readonly Heading[];
         error?: { message: string };
       };
       if (!response.ok)
@@ -129,6 +132,25 @@ export async function mountViewer(
       const changed = !background || article!.innerHTML !== data.html;
       if (changed) article!.innerHTML = data.html;
       contentRevision = data.revision;
+      const outline = document.getElementById("outline");
+      const headingSignature = JSON.stringify([id, data.headings]);
+      if (outline && headingSignature !== outlineSignature) {
+        const list = document.createElement("ul");
+        for (const heading of data.headings ?? []) {
+          const item = document.createElement("li");
+          const link = document.createElement("a");
+          link.textContent = heading.title;
+          link.href = readerHash(id, heading.fragment);
+          link.dataset.heading = heading.fragment;
+          link.className = `level-${heading.level}`;
+          item.append(link);
+          list.append(item);
+        }
+        outline.replaceChildren(list);
+        outlineSignature = headingSignature;
+        const details = document.getElementById("document-outline");
+        if (details) details.hidden = !data.headings?.length;
+      }
       const warnings = document.getElementById("diagnostics");
       if (warnings) {
         warnings.replaceChildren();
@@ -302,6 +324,7 @@ export async function mountViewer(
             status!.textContent = "";
           return;
         }
+        const removed = selected !== undefined;
         requestNumber++;
         selected = undefined;
         article!.replaceChildren();
@@ -322,6 +345,9 @@ export async function mountViewer(
           false,
           "replace",
         );
+        if (removed)
+          status!.textContent =
+            "The previous document was removed or excluded; showing another available document.";
       } catch (error) {
         if (!disposed)
           status!.textContent = `Could not refresh documentation: ${error instanceof Error ? error.message : "Request failed."}`;
@@ -351,6 +377,30 @@ export async function mountViewer(
         .then(() => (selected ? show(selected.id, "", true) : undefined))
         .finally(schedule);
   }
+  const outline = document.getElementById("outline");
+  const onOutline = (event: MouseEvent): void => {
+    const link = (event.target as Element | null)?.closest<HTMLAnchorElement>(
+      "a[data-heading]",
+    );
+    if (
+      !link ||
+      !selected ||
+      event.ctrlKey ||
+      event.metaKey ||
+      event.shiftKey ||
+      event.altKey
+    )
+      return;
+    event.preventDefault();
+    activeFragment = link.dataset.heading ?? "";
+    window!.history.pushState(
+      null,
+      "",
+      readerHash(selected.id, activeFragment),
+    );
+    showFragment(activeFragment);
+  };
+  outline?.addEventListener("click", onOutline);
   function restoreLocation(): void {
     const location = parseReaderLocation(window!.location.hash);
     if (location) void show(location.id, location.fragment, false, "none");
@@ -364,6 +414,7 @@ export async function mountViewer(
     if (timer !== undefined) window!.clearTimeout(timer);
     navigation!.removeEventListener("click", onNavigation);
     article!.removeEventListener("click", onArticle);
+    outline?.removeEventListener("click", onOutline);
     document.removeEventListener("visibilitychange", visibilityChanged);
     window!.removeEventListener("pagehide", dispose);
     window!.removeEventListener("popstate", restoreLocation);

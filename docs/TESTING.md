@@ -225,3 +225,7 @@ and the explicit 32-link bound. HTTP never serializes internal canonical identit
 Navigation tests cover deep-link round trips/Unicode/malformed fragments, URL
 restoration and history events, out-of-order reads, background anchor/scroll
 preservation and clickable core diagnostics without replacing the active article.
+
+Reader tests cover the accessible outline, deterministic heading order and
+shareable outline links. CSS limits code/table width and preserves visible focus.
+Copy-code and syntax highlighting remain deferred rather than adding dependencies.

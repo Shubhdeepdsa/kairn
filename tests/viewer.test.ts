@@ -563,3 +563,29 @@ describe("browser navigation", () => {
     ).toContain('<h1 id="actual-markdown">Actual Markdown</h1>');
   });
 });
+
+it("presents an accessible heading outline with shareable heading URLs", async () => {
+  const value = dom();
+  const document = value.window.document;
+  const outline = document.createElement("nav");
+  outline.id = "outline";
+  outline.setAttribute("aria-label", "Document outline");
+  document.body.append(outline);
+  const fetcher: typeof fetch = async (input) =>
+    String(input) === "/api/tree"
+      ? fakeFetch()(input)
+      : Response.json({
+          html: renderMarkdown("# Home\n\n## Details"),
+          headings: [
+            { level: 1, title: "Home", fragment: "home" },
+            { level: 2, title: "Details", fragment: "details" },
+          ],
+        });
+  await mountViewer(document, fetcher);
+  const links = outline.querySelectorAll("a");
+  expect(links).toHaveLength(2);
+  expect(links[1]?.textContent).toBe("Details");
+  (links[1] as HTMLAnchorElement).click();
+  expect(value.window.location.hash).toBe(`#${rootId}/details`);
+  expect(document.querySelector("h2")?.textContent).toBe("Details");
+});
