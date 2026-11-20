@@ -266,3 +266,8 @@ unique-link analysis budget and hide later broken targets. Final suite: 96 tests
 `search-contracts.test.ts` validates opaque scope identities. Search extraction tests
 exercise repeated Unicode headings, lists/tables/code, technical identifiers,
 raw-HTML omission and exact reader-fragment compatibility without a database.
+
+`search-index.test.ts` uses real temporary SQLite databases: technical tokens,
+persistence, incremental section replacement, pruning, private permissions, schema
+rebuild, offline corruption, competing connections, rollback and a 250-document
+index/query timing sample. The same test runs in the existing three-OS CI matrix.

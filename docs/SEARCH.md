@@ -58,3 +58,23 @@ cross-platform support is claimed. See [testing](TESTING.md).
 Extraction preserves whole identifiers and adds camel-case components. Punctuation
 uses Unicode token boundaries; raw HTML paragraphs and image metadata are omitted
 conservatively, while literal fenced code remains searchable.
+
+## SQLite compatibility and storage implementation
+
+The Node 26.13.0/macOS spike verified built-in `node:sqlite` FTS5, unicode61,
+weighted bm25 and snippets on SQLite 3.54.1. `DatabaseSync` remains the compatible
+Node 26 type/API (newer runtimes also export Database). No native dependency.
+Official API: <https://nodejs.org/api/sqlite.html>. Operations are synchronous;
+substantial work must run in a job worker. Three-platform CI runs the same real
+FTS5 and locking tests; local macOS success is not cross-platform evidence.
+
+`search-index.ts` stores schema v1: documents keyed by project/document with content
+revision and source/path metadata; derived FTS sections retain original title,
+heading/fragment/position/body/code alongside separately weighted searchable fields.
+Private data directory/files use 0700/0600 where supported. DELETE journaling and
+FULL synchronous transactions keep cooperating process writes coherent, with a
+250 ms lock timeout. Busy errors are recoverable; incomplete transactions roll back.
+Unsupported versions rebuild derived tables transactionally. Offline corrupt main
+files are quarantined under unique names; exclusive recovery locks are never stolen.
+Do not damage a database while any process has it open. Concurrent hostile file
+replacement and network filesystems are outside the supported local-user boundary.

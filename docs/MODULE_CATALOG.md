@@ -143,3 +143,7 @@ clipboard dependency, final design system or additional polling lifecycle.
 - `core/search-extraction.ts`: pure section/body/code/title extraction plus technical
   identifier normalization, independent of storage. Reuses reader heading fragments;
   conservatively omits raw-HTML paragraphs and images, retains fenced code.
+
+- `core/search-index.ts`: lazy private FTS5 schema, atomic changed-document section
+  replacement, approval pruning, project pruning, schema/corrupt recovery and close.
+  Reads no target files itself; receives approved content/metadata from its caller.
