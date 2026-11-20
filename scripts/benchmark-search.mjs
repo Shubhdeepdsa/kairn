@@ -50,13 +50,26 @@ try {
       clearInterval(pulse);
       await service.close();
     }
+    if (response.coverage.some((p) => p.status !== "ready"))
+      throw new Error("Benchmark did not reach complete fixture coverage.");
     const indexMs = performance.now() - started;
     const index = await SearchIndex.open(join(data, "search"));
+    const approvedProjects = projects.map((p) => ({
+      id: p.id,
+      name: p.name,
+      configuration: String(
+        index.database
+          .prepare(
+            "SELECT configuration FROM documents WHERE project=? LIMIT 1",
+          )
+          .get(p.id).configuration,
+      ),
+    }));
     const times = [];
     try {
       for (let i = 0; i < 100; i++) {
         const start = performance.now();
-        querySearchIndex(index, request, projects);
+        querySearchIndex(index, request, approvedProjects);
         times.push(performance.now() - start);
       }
     } finally {

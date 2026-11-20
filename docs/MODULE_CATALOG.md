@@ -169,3 +169,6 @@ clipboard dependency, final design system or additional polling lifecycle.
 
 SearchIndex.documentCount reports persisted document coverage independently of
 section count and attempted reconciliation reads.
+
+SearchIndexProject supplies the internal current-configuration query fence; schema-v2
+documents retain that hash so late obsolete writers cannot bypass newer ignore rules.

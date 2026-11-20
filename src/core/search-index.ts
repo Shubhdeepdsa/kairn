@@ -14,6 +14,8 @@ export interface IndexDocument {
   readonly title: string;
   readonly revision: string;
   readonly markdown: string;
+  /** Effective approval/configuration hash; never a browser-facing filesystem path. */
+  readonly configuration?: string;
 }
 /** Rebuildable derived FTS storage. Methods are synchronous and belong in a job worker, not the HTTP thread. */
 export class SearchIndex {
@@ -83,11 +85,11 @@ export class SearchIndex {
         const version = Number(
           db.prepare("PRAGMA user_version").get()!["user_version"],
         );
-        if (version !== 1) {
+        if (version !== 2) {
           db.exec(`DROP TABLE IF EXISTS sections; DROP TABLE IF EXISTS documents;
-            CREATE TABLE documents(project TEXT NOT NULL, document TEXT NOT NULL, revision TEXT NOT NULL, metadata TEXT NOT NULL, PRIMARY KEY(project, document));
+            CREATE TABLE documents(project TEXT NOT NULL, document TEXT NOT NULL, revision TEXT NOT NULL, metadata TEXT NOT NULL, configuration TEXT NOT NULL, PRIMARY KEY(project, document));
             CREATE VIRTUAL TABLE sections USING fts5(project UNINDEXED, document UNINDEXED, position UNINDEXED, fragment UNINDEXED, label UNINDEXED, document_title UNINDEXED, original_body UNINDEXED, original_code UNINDEXED, title, heading, path, body, code, tokenize='unicode61 remove_diacritics 2');
-            PRAGMA user_version=1;`);
+            PRAGMA user_version=2;`);
         }
         db.exec("COMMIT");
       } catch (error) {
@@ -110,11 +112,18 @@ export class SearchIndex {
     });
     const previous = this.database
       .prepare(
-        "SELECT revision, metadata FROM documents WHERE project=? AND document=?",
+        "SELECT revision, metadata, configuration FROM documents WHERE project=? AND document=?",
       )
       .get(d.projectId, d.documentId);
-    if (previous?.revision === d.revision && previous.metadata === metadata)
+    if (previous?.revision === d.revision && previous.metadata === metadata) {
+      if (previous.configuration !== (d.configuration ?? ""))
+        this.database
+          .prepare(
+            "UPDATE documents SET configuration=? WHERE project=? AND document=?",
+          )
+          .run(d.configuration ?? "", d.projectId, d.documentId);
       return false;
+    }
     const extracted = extractSearchText(d.markdown, d.title);
     if (
       extracted.sections.length > 512 ||
@@ -154,11 +163,12 @@ export class SearchIndex {
           searchableText(s.body),
           searchableText(s.code),
         );
-      db.prepare("INSERT OR REPLACE INTO documents VALUES (?, ?, ?, ?)").run(
+      db.prepare("INSERT OR REPLACE INTO documents VALUES (?, ?, ?, ?, ?)").run(
         d.projectId,
         d.documentId,
         d.revision,
         metadata,
+        d.configuration ?? "",
       );
       db.exec("COMMIT");
     } catch (error) {
@@ -199,12 +209,18 @@ export class SearchIndex {
         this.prune(String(row.project), new Set());
   }
   /** Count persisted documents, not attempted reads or derived sections, for honest partial coverage. */
-  documentCount(projectId: string): number {
-    return Number(
-      this.database
-        .prepare("SELECT count(*) AS count FROM documents WHERE project=?")
-        .get(projectId)!.count,
-    );
+  documentCount(projectId: string, configuration?: string): number {
+    const row =
+      configuration === undefined
+        ? this.database
+            .prepare("SELECT count(*) AS count FROM documents WHERE project=?")
+            .get(projectId)
+        : this.database
+            .prepare(
+              "SELECT count(*) AS count FROM documents WHERE project=? AND configuration=?",
+            )
+            .get(projectId, configuration);
+    return Number(row!.count);
   }
   /** Close every SQLite handle before worker/process shutdown. */
   close(): void {

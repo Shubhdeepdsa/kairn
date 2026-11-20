@@ -123,7 +123,8 @@ visible on the PR. Browser verification remains API/DOM-only as documented.
 
 ## Phase 5 — local scoped search
 
-IMPLEMENTED; local and three-OS automated checks VERIFIED. Real browser acceptance
+IMPLEMENTED; local checks VERIFIED; three-OS evidence is recorded below and latest
+head checks are tracked on PR #4. Real browser acceptance
 remains unverified; [PR #4](https://github.com/Shubhdeepdsa/kairn/pull/4) is open.
 Preserve Phases 1–4.
 See [search design](SEARCH.md) and [manual acceptance](SEARCH_ACCEPTANCE.md).
@@ -147,3 +148,7 @@ Acceptance follow-ups: `a220807` makes the offline installed-package fixture
 reproducible on clean CI caches; `bb0c260` reports persisted-document coverage
 accurately. [Three-OS verification](https://github.com/Shubhdeepdsa/kairn/actions/runs/44794623663)
 passed at `bb0c260`. No automatic merge or npm publication.
+
+`e2c0f14` resumes bounded global jobs without restarting completed projects. Schema-v2
+approval fences prevent stale cooperating writers from bypassing newer source/ignore
+rules. Final local suite: 120 tests. Human browser acceptance remains outstanding.

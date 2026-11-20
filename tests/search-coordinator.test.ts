@@ -226,3 +226,87 @@ it("continues a forced global pass across bounded jobs without restarting comple
     await rm(root, { recursive: true, force: true });
   }
 });
+
+it("fences cached results against a late writer using an obsolete ignore configuration", async () => {
+  const { SearchIndex } = await import("../src/core/search-index.js");
+  const root = await mkdtemp(join(tmpdir(), "kairn-approval-"));
+  const data = join(root, "data");
+  await mkdir(join(root, "docs"));
+  await writeFile(
+    join(root, "docs", "private.md"),
+    "# Private\n\nobsoleteapprovaltoken",
+  );
+  await writeFile(join(root, "docs", "public.md"), "# Public");
+  const library = new ProjectLibrary(data);
+  const project = await library.register(root, "Project");
+  const before = new SearchCoordinator({
+    dataDirectory: data,
+    reconcileIntervalMs: 60000,
+  });
+  const after = new SearchCoordinator({
+    dataDirectory: data,
+    reconcileIntervalMs: 60000,
+  });
+  let oldWriter: Awaited<ReturnType<typeof SearchIndex.open>> | undefined;
+  try {
+    const request = {
+      query: "obsoleteapprovaltoken",
+      scope: { type: "project" as const, projectId: project.id },
+      limit: 20,
+    };
+    const oldResult = (await before.search(request)).results[0]!;
+    oldWriter = await SearchIndex.open(join(data, "search"));
+    const oldConfiguration = String(
+      oldWriter.database
+        .prepare(
+          "SELECT configuration FROM documents WHERE project=? AND document=?",
+        )
+        .get(project.id, oldResult.documentId)!.configuration,
+    );
+    await library.setOverrides(
+      project.id,
+      overridesSchema.parse({ excludeAdd: ["**/private.md"] }),
+    );
+    expect((await after.search(request)).results).toEqual([]);
+    // Model a cooperating writer that read approved bytes before the ignore changed,
+    // but commits them after the newer coordinator has pruned the old row.
+    oldWriter.put({
+      projectId: project.id,
+      documentId: oldResult.documentId,
+      sourceId: "docs",
+      path: "docs/private.md",
+      title: "Private",
+      revision: "late-old-read",
+      configuration: oldConfiguration,
+      markdown: "# Private\n\nobsoleteapprovaltoken",
+    });
+    expect((await after.search(request)).results).toEqual([]);
+    const publicRow = oldWriter.database
+      .prepare("SELECT * FROM documents WHERE project=? AND document<>?")
+      .get(project.id, oldResult.documentId)!;
+    const metadata = JSON.parse(String(publicRow.metadata)) as {
+      sourceId: string;
+      path: string;
+      title: string;
+    };
+    oldWriter.put({
+      projectId: project.id,
+      documentId: String(publicRow.document),
+      sourceId: metadata.sourceId,
+      path: metadata.path,
+      title: metadata.title,
+      revision: String(publicRow.revision),
+      configuration: oldConfiguration,
+      markdown: "# Public",
+    });
+    expect(
+      (await after.search({ ...request, query: "public" })).results,
+    ).toHaveLength(1);
+    expect((await before.search(request)).results).toEqual([]);
+  } finally {
+    oldWriter?.close();
+    await before.close();
+    await after.close();
+    await rm(root, { recursive: true, force: true });
+  }
+});

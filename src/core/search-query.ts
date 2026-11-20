@@ -6,6 +6,10 @@ import type {
   SearchProject,
 } from "./search-contracts.js";
 import type { SearchIndex } from "./search-index.js";
+/** Internal current-approval fence; browser contracts do not expose this derived hash. */
+export interface SearchIndexProject extends SearchProject {
+  readonly configuration?: string;
+}
 /** Adapter-safe query failure: no SQLite errors or local paths. */
 export class SearchQueryError extends Error {}
 /** Validate plain input independently of MATCH; punctuation/operators cannot become FTS grammar. */
@@ -49,7 +53,7 @@ function snippet(text: string, terms: readonly string[]): string {
 export function querySearchIndex(
   index: SearchIndex,
   request: SearchRequest,
-  projects: readonly SearchProject[],
+  projects: readonly SearchIndexProject[],
 ): readonly SearchResult[] {
   const terms = searchTerms(request);
   if (!terms.length) return [];
@@ -60,7 +64,16 @@ export function querySearchIndex(
   if (!eligible.length) return [];
   const names = new Map(eligible.map((p) => [p.id, p.name]));
   const match = terms.map((t) => `"${t}"*`).join(" AND ");
-  const ids = eligible.map((p) => p.id);
+  const scopes = eligible
+    .map((p) =>
+      p.configuration === undefined
+        ? "sections.project=?"
+        : "(sections.project=? AND documents.configuration=?)",
+    )
+    .join(" OR ");
+  const bindings = eligible.flatMap((p) =>
+    p.configuration === undefined ? [p.id] : [p.id, p.configuration],
+  );
   // Keep full body/code columns inside SQLite: never materialize 2,000 MiB-sized sections.
   const bodyMatch = terms
     .map(() => "instr(sections.body, ?) > 0")
@@ -74,9 +87,9 @@ export function querySearchIndex(
     (${bodyMatch}) AS body_match,
     bm25(sections,0,0,0,0,0,0,0,0,10,6,4,2,1) relevance
     FROM sections JOIN documents ON documents.project=sections.project AND documents.document=sections.document
-    WHERE sections MATCH ? AND sections.project IN (${ids.map(() => "?").join(",")}) ORDER BY relevance LIMIT 2000`,
+    WHERE sections MATCH ? AND (${scopes}) ORDER BY relevance LIMIT 2000`,
     )
-    .all(terms[0]!, terms[0]!, ...terms, match, ...ids);
+    .all(terms[0]!, terms[0]!, ...terms, match, ...bindings);
   const grouped = new Map<string, SearchResult>();
   for (const r of rows) {
     const all = (value: unknown): boolean =>

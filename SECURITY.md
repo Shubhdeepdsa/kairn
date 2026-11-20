@@ -11,8 +11,9 @@ No supported release or response-time guarantee is currently offered.
 
 The viewer binds only to 127.0.0.1 and validates Host, Origin and browser fetch
 metadata. This is not authentication: other local users/processes can read the
-selected documentation. Select only roots whose Markdown you intend to expose
-locally. Run in user-controlled trees; Node path validation cannot guarantee
+selected documentation and approved documentation from registered projects through
+project navigation/search. Register only projects whose approved Markdown you intend
+to expose to this same local-process boundary. Run in user-controlled trees; Node path validation cannot guarantee
 atomic containment against hostile concurrent ancestor replacement. Symlinks,
 hidden entries and arbitrary file routes are rejected or excluded.
 
@@ -59,3 +60,7 @@ bounded quoted FTS terms with SQL parameter binding. Same-origin protections rem
 Offline corrupt cache recovery never resets Library/configuration. Inspect recovery
 locks rather than stealing them; hostile concurrent filesystem mutation remains out
 of scope. Bounded jobs report incomplete coverage explicitly.
+
+Search queries bind the currently validated effective-configuration hash to indexed
+documents. An obsolete cooperating writer cannot reintroduce ignored-source hits
+into a newer scope. Shared-cache approval drift invalidates coverage reuse.

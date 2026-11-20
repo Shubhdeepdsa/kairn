@@ -68,8 +68,8 @@ Official API: <https://nodejs.org/api/sqlite.html>. Operations are synchronous;
 substantial work must run in a job worker. Three-platform CI runs the same real
 FTS5 and locking tests; local macOS success is not cross-platform evidence.
 
-`search-index.ts` stores schema v1: documents keyed by project/document with content
-revision and source/path metadata; derived FTS sections retain original title,
+`search-index.ts` stores schema v2: documents keyed by project/document with content
+revision, approval/configuration hash and source/path metadata; derived FTS sections retain original title,
 heading/fragment/position/body/code alongside separately weighted searchable fields.
 Private data directory/files use 0700/0600 where supported. DELETE journaling and
 FULL synchronous transactions keep cooperating process writes coherent, with a
@@ -170,3 +170,13 @@ unfinished projects rather than restarting completed work. Fresh completed proje
 still validate current configuration before reuse, even after the indexing budget
 is exhausted. The cursor advances past actual work, avoiding starvation. The optional
 core documentBudget only lowers the hard 200-document cap for embedders/tests.
+
+Schema v2 fences each persisted document with the effective configuration hash.
+Queries bind the currently validated hash as well as project ID, including cached
+coverage reuse. A late writer with obsolete ignore/source approvals cannot reintroduce
+results into the newer scope. Updating only this fence does not reparse unchanged
+Markdown. Unsupported v1 derived tables rebuild transactionally; Library/config bytes
+are untouched. Unregistered project scheduling caches are also released.
+
+Coverage reuse also checks the persisted current-scope document count, so a competing
+writer that evicts a newer-scope row triggers reconciliation instead of false emptiness.

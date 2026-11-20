@@ -354,3 +354,13 @@ plus crash rollback. The unchanged 250-document FULL-sync benchmark has a 90-sec
 safety timeout because runner storage varied beyond 30 seconds; timings remain
 observations, not latency assertions. No corpus, result, durability or rollback
 assertion was removed.
+
+A two-coordinator regression models a late obsolete writer after an ignore change.
+Schema-v2 approval hashes keep that row out of the newer coordinator's cached results,
+then the older coordinator reconciles current rules. This verifies scope safety
+across processes independently of query freshness and content revision.
+
+After bounded-resume and approval-fence corrections, the final local suite passes
+120 tests across 28 files. Latest-head remote evidence is tracked on
+[PR #4 checks](https://github.com/Shubhdeepdsa/kairn/pull/4/checks); the earlier
+118-test run at bb0c260 above is historical evidence, not a substitute for that check.

@@ -13,6 +13,7 @@ import type {
 } from "./documents.js";
 import { documentRevision } from "./freshness.js";
 import { SearchIndex } from "./search-index.js";
+import type { SearchIndexProject } from "./search-query.js";
 import { querySearchIndex, searchTerms } from "./search-query.js";
 import type {
   SearchProject,
@@ -72,6 +73,12 @@ export class SearchCoordinator {
   private async run(request: SearchRequest): Promise<SearchResponse> {
     const library = new ProjectLibrary(this.options.dataDirectory);
     const registered = await library.list();
+    const currentIds = new Set([
+      ...registered.map((p) => p.id),
+      ...(this.options.session ? [this.options.session.id] : []),
+    ]);
+    for (const cache of [this.offsets, this.recent, this.forced])
+      for (const id of cache.keys()) if (!currentIds.has(id)) cache.delete(id);
     const transient =
       request.scope.type === "project" &&
       request.scope.projectId === this.options.session?.id;
@@ -106,7 +113,7 @@ export class SearchCoordinator {
         ],
       };
     const coverage: ProjectCoverage[] = [];
-    const eligible: SearchProject[] = [];
+    const eligible: SearchIndexProject[] = [];
     if (request.refresh) {
       if (
         scope.type === "project" ||
@@ -169,11 +176,12 @@ export class SearchCoordinator {
             await loadProjectConfig(root),
             registeredProject?.overrides,
           );
-          configSignature = JSON.stringify(resolved);
+          configSignature = documentRevision(JSON.stringify(resolved));
           const recent = this.recent.get(p.id);
           if (
             !this.forced.has(p.id) &&
             recent?.signature === configSignature &&
+            index.documentCount(p.id, configSignature) === recent.count &&
             performance.now() - recent.at <
               (this.options.reconcileIntervalMs ?? 1500)
           ) {
@@ -184,7 +192,11 @@ export class SearchCoordinator {
               indexed: recent.count,
               total: recent.count,
             });
-            eligible.push({ id: p.id, name: p.name });
+            eligible.push({
+              id: p.id,
+              name: p.name,
+              configuration: configSignature,
+            });
             continue;
           }
           if (!canWork()) {
@@ -221,6 +233,7 @@ export class SearchCoordinator {
               path: e.projectPath ?? e.path,
               title: e.title,
               revision: documentRevision(content.markdown),
+              configuration: configSignature,
               markdown: content.markdown,
             });
           } catch {
@@ -250,7 +263,7 @@ export class SearchCoordinator {
           id: p.id,
           name: p.name,
           status: failed ? "partial" : complete ? "ready" : "indexing",
-          indexed: index.documentCount(p.id),
+          indexed: index.documentCount(p.id, configSignature),
           total: entries.length,
           ...(!complete || failed
             ? {
@@ -259,7 +272,11 @@ export class SearchCoordinator {
               }
             : {}),
         });
-        eligible.push({ id: p.id, name: p.name });
+        eligible.push({
+          id: p.id,
+          name: p.name,
+          configuration: configSignature,
+        });
       } catch {
         this.forced.delete(p.id);
         this.recent.delete(p.id);

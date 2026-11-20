@@ -27,14 +27,15 @@ Node 26.13.0/macOS, 100 warm engine queries per dataset:
 
 | Dataset              | Source size   | Initial index/reconcile | Jobs | Query median | Query p95 |
 | -------------------- | ------------- | ----------------------- | ---- | ------------ | --------- |
-| 30 docs, 1 project   | 48,740 bytes  | 83.71 ms                | 1    | 0.317 ms     | 0.405 ms  |
-| 300 docs, 1 project  | 487,690 bytes | 377.99 ms               | 2    | 2.177 ms     | 3.675 ms  |
-| 300 docs, 3 projects | 487,470 bytes | 524.29 ms               | 2    | 2.309 ms     | 3.524 ms  |
+| 30 docs, 1 project   | 48,740 bytes  | 73.87 ms                | 1    | 0.343 ms     | 0.441 ms  |
+| 300 docs, 1 project  | 487,690 bytes | 341.51 ms               | 2    | 2.236 ms     | 2.905 ms  |
+| 300 docs, 3 projects | 487,470 bytes | 334.59 ms               | 2    | 2.208 ms     | 2.65 ms   |
 
-All jobs reached ready coverage. Initial time includes worker start, approved-file
+All jobs reached ready coverage. These final samples include schema-v2 approval
+fences in indexing and warm queries. Initial time includes worker start, approved-file
 reads and reconciliation, not source fixture creation. Warm query times exclude
 filesystem reconciliation/HTTP/DOM. Main-thread 1 ms timer callbacks continued during
-worker work (72/335/455 samples); this demonstrates off-thread work, not a browser
+worker work (57/276/273 samples); this demonstrates off-thread work, not a browser
 latency guarantee. No performance threshold is promised. CI timing can differ.
 
 ## Manual setup
