@@ -156,3 +156,9 @@ oversized rescans and recovery. Fake-clock DOM tests verify automatic sidebar
 updates, unchanged active content, preserved selection/collapsed folders, empty
 root recovery, deleted selection fallback, retry, hidden-tab pause and cleanup.
 No arbitrary delays or operating-system watcher dependency are used.
+
+## Phase 3 persistence
+
+`config-storage.test.ts` exercises schemas, traversal/version failures, corrupt
+file preservation, isolated OS paths, repeated/concurrent saves, stale values,
+lock conflicts and failed-validation cleanup. No test touches real application data.

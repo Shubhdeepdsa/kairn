@@ -62,3 +62,11 @@ the document service and HTTP adapter. `RunContext` injects prompts, browser ope
 presentation, logging and abort lifetime. It does not own filesystem algorithms.
 `src/index.ts` owns argument validation, Clack adaptation, browser eligibility,
 packaged viewer loading and SIGINT/SIGTERM listener cleanup.
+
+## Versioned configuration storage
+
+`core/config/schema.ts`: strict `projectSchema`, `librarySchema`,
+`overridesSchema`, `relativePathSchema`, inferred domain types, `ConfigError` and
+`validateConfig`. `core/config/storage.ts`: `applicationDataDirectory`,
+`assertRealPath`, `isMissing`, bounded `readJson` and serialized/locked `updateJson`.
+Storage is explicit and injectable; no singleton or browser access.
