@@ -95,3 +95,24 @@ these evidence-tested tiers; stable project/document IDs resolve remaining ties.
 One best section per document is returned with original path/title/fragment and a
 plain snippet capped at 232 characters. The 2,000-candidate cap is a bounded V1
 recall tradeoff for very common queries across a large Library.
+
+## Implemented indexing coordinator
+
+Search lazily starts one local worker and opens the derived cache there. Equal
+requests coalesce; at most eight jobs may be pending. Worker jobs serialize SQLite
+and reuse the document engine/config resolver. Each job checks at most 200 documents,
+8 MiB of source, 32 projects and approximately 250 ms of between-document work (a
+single bounded scan/read/transaction can exceed that time). Coverage reports projects
+not reached as indexing; repeat search to continue. There is no daemon or extra
+polling loop. Complete unchanged configuration reuses content coverage for at most
+1.5 seconds to avoid full rescans on every keystroke; configuration itself is checked
+on each request. A fresh reconciliation hashes approved bytes and reextracts only
+changed content. Ignored/unregistered/deleted documents are pruned before querying.
+Unavailable projects return no old results. Partial/indexing results are explicitly
+incomplete, not a claim that unchecked files are current. Large Libraries may need
+several requests; progress does not imply an unbounded background scan.
+
+Transient sessions use a separate generated cache subdirectory and are excluded
+from global search. Orderly shutdown drains jobs and closes handles; after 1.5 seconds
+it terminates the worker, allowing SQLite rollback. Forced termination can leave
+rebuildable transient cache bytes; it never unregisters or rewrites project data.

@@ -275,3 +275,8 @@ index/query timing sample. The same test runs in the existing three-OS CI matrix
 `search-query.test.ts` fixes title/heading/path/body/code ranking order, long-body
 competition, best-section grouping, duplicate names/IDs across scopes, seven
 technical queries, hostile FTS expressions and query/result bounds.
+
+`search-coordinator.test.ts` uses real registered projects to verify global/current
+scope, duplicate names, live edits/deletions, source/primary/ignore changes,
+unavailable roots, unregister preservation and transient isolation. A compiled-worker
+integration verifies coalescing and clean close independently of HTTP and the UI.

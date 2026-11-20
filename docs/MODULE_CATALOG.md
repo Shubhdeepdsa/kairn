@@ -150,3 +150,8 @@ clipboard dependency, final design system or additional polling lifecycle.
 
 - `core/search-query.ts`: validated literal/prefix MATCH terms, one scoped ranking
   engine, document grouping and bounded plain snippets; no HTTP/DOM dependencies.
+
+- `core/search-coordinator.ts`: approved Library/session reconciliation, content
+  hashes, source/ignore pruning, bounded progress and honest coverage.
+- `core/search-service.ts` / `search-worker.ts`: lazy worker facade, duplicate-job
+  coalescing, queue bound, redacted failures and bounded resource cleanup.
