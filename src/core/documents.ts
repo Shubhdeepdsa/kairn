@@ -44,11 +44,13 @@ export interface DocumentContent {
   readonly markdown: string;
 }
 
-/** HTTP-independent read-only contract. Snapshot navigation; restart to find added files. */
+/** HTTP-independent read-only service with atomically replaceable navigation snapshots. */
 export interface DocumentService {
   readonly root: string;
   readonly tree: readonly NavigationEntry[];
   read(id: string): Promise<DocumentContent>;
+  /** Rescan the original root within the same limits; concurrent calls share one scan. Failed scans retain the last valid snapshot. */
+  refresh(): Promise<readonly NavigationEntry[]>;
 }
 
 /** Optional lower limits, primarily for embedders and deterministic tests. */
@@ -83,18 +85,11 @@ function translated(error: unknown): never {
   fail("INVALID_PATH", "Documentation path cannot be read safely.");
 }
 
-/**
- * Scan one existing root without writes. Accept .md/.markdown, ignoring hidden entries.
- * Reject visible symlinks and special files, excessive scans, and oversized Markdown.
- * @param directory - Explicitly selected directory; a direct symlink or filesystem root is invalid.
- * @param limits - Positive lower bounds, capped by documentLimits.
- * @returns Immutable navigation and a reader accepting only known SHA-256 identifiers.
- * @throws DocumentError for invalid/inaccessible roots, conflicts, stale identities or limits.
- */
-export async function createDocumentService(
+/** Build one bounded snapshot, shared by initial discovery and refresh. */
+async function scanDocuments(
   directory: string,
-  limits: Partial<DocumentLimits> = {},
-): Promise<DocumentService> {
+  limits: Partial<DocumentLimits>,
+): Promise<Omit<DocumentService, "refresh">> {
   const bounds = { ...documentLimits, ...limits };
   for (const key of Object.keys(bounds) as (keyof DocumentLimits)[]) {
     if (
@@ -278,6 +273,65 @@ export async function createDocumentService(
       }
     }
     return Object.freeze({ root, tree, read });
+  } catch (error) {
+    return translated(error);
+  }
+}
+
+/**
+ * Discover one read-only root and expose bounded refreshes with stable path-based IDs.
+ * Hidden entries remain excluded; symlinks and special files are rejected.
+ * @param directory - Existing documentation directory, never a symlink or filesystem root.
+ * @param limits - Optional positive lower limits capped by documentLimits.
+ * @returns A service whose tree and ID mapping are swapped together after successful refresh.
+ * @throws DocumentError for inaccessible/invalid paths or scan limits. Refresh never adopts a replacement root.
+ */
+export async function createDocumentService(
+  directory: string,
+  limits: Partial<DocumentLimits> = {},
+): Promise<DocumentService> {
+  try {
+    const bounds = { ...limits };
+    const identity = await lstat(resolve(directory));
+    let snapshot = await scanDocuments(directory, bounds);
+    const root = snapshot.root;
+    async function validateIdentity(): Promise<void> {
+      const current = await lstat(root);
+      if (
+        !current.isDirectory() ||
+        current.isSymbolicLink() ||
+        current.dev !== identity.dev ||
+        current.ino !== identity.ino
+      )
+        fail("CHANGED", "Documentation root changed. Restart the viewer.");
+    }
+    await validateIdentity();
+    let pending: Promise<readonly NavigationEntry[]> | undefined;
+    return Object.freeze({
+      root,
+      get tree() {
+        return snapshot.tree;
+      },
+      read(id: string) {
+        return snapshot.read(id);
+      },
+      refresh() {
+        pending ??= (async () => {
+          try {
+            await validateIdentity();
+            const next = await scanDocuments(root, bounds);
+            await validateIdentity();
+            snapshot = next;
+            return snapshot.tree;
+          } catch (error) {
+            return translated(error);
+          }
+        })().finally(() => {
+          pending = undefined;
+        });
+        return pending;
+      },
+    });
   } catch (error) {
     return translated(error);
   }

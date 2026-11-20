@@ -21,7 +21,9 @@ with fake prompts plus built-binary subprocess checks.
 ## Read-only documents
 
 `src/core/documents.ts`: `createDocumentService(directory, limits?)` returns a
-`DocumentService` with canonical `root`, immutable `tree`, and `read(id)`.
+`DocumentService` with canonical `root`, immutable `tree` snapshots, `read(id)`,
+and coalesced `refresh()` that atomically updates navigation and IDs. Failed
+rescans preserve the last valid snapshot; the original root identity is pinned.
 `DocumentEntry`, `DirectoryEntry`, `NavigationEntry`, and `DocumentContent` define
 navigation/content. Absolute `canonicalPath` stays local; adapters must omit it.
 `DocumentError`/`DocumentErrorCode` expose stable failures. `DocumentLimits` and
@@ -31,7 +33,7 @@ fresh reads, paths, symlinks, permissions and limits.
 
 ## HTTP adapter
 
-`src/server/http.ts`: `startDocumentationServer` consumes only `tree/read` from
+`src/server/http.ts`: `startDocumentationServer` consumes `tree/read` and optional `refresh` from
 `DocumentService`, returning `RunningServer` (`url`, idempotent `close`).
 `ServerOptions` permits port 0 for tests and optional `ViewerPresentation` static
 assets/rendering. It never resolves request paths against the filesystem.
@@ -44,7 +46,9 @@ assets/rendering. It never resolves request paths against the filesystem.
   images with text. Headings receive deterministic fragment IDs.
 - `src/viewer/client.ts`: `mountViewer` renders navigation from the API, selects
   documents by opaque ID, handles relative Markdown links within the root and
-  shows loading/error/empty states. Fetch is injectable for DOM tests.
+  shows loading/error/empty states. Navigation polls every two seconds while
+  visible; the returned cleanup function stops timers/listeners. Fetch is
+  injectable for DOM tests.
 - `src/viewer/assets.ts`: `loadViewerPresentation` loads the packaged compiled
   client and provides the shell, responsive CSS and renderer for HTTP composition.
 

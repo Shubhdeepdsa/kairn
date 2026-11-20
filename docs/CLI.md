@@ -61,6 +61,13 @@ unless `--no-open` is set. CI/non-TTY and Linux sessions without DISPLAY or
 WAYLAND_DISPLAY skip browser launch with guidance. Browser-open failure leaves
 the viewer available and prints a manual-open instruction. Ctrl+C stops the server.
 
-Navigation is a startup snapshot; restart to discover added/renamed files. Existing
-files are reread when selected. Hidden files, symlinks, attachments and remote
+Navigation refreshes automatically about every two seconds while the tab is
+visible, and immediately when returning to the tab. Added/renamed/deleted Markdown
+files update the sidebar without restarting or reloading. Existing content is
+reread when selected; the active document is not automatically re-rendered. Hidden files, symlinks, attachments and remote
 images are not served. The viewer has no editing, search, Git history or registry.
+
+The current selection and collapsed folders survive sidebar updates. If the active
+file disappears, the viewer selects README.md or the first remaining document;
+an empty tree displays guidance and continues checking for files. Refresh errors
+are shown and retried, keeping the last valid sidebar. Dotfiles remain excluded.

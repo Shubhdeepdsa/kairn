@@ -1,6 +1,6 @@
 import { request } from "node:http";
 import { connect } from "node:net";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
@@ -15,7 +15,11 @@ afterEach(async () => {
     roots.splice(0).map((root) => rm(root, { recursive: true, force: true })),
   );
 });
-async function fixture(): Promise<{ server: RunningServer; id: string }> {
+async function fixture(): Promise<{
+  server: RunningServer;
+  id: string;
+  root: string;
+}> {
   const root = await mkdtemp(join(tmpdir(), "kairn-http-"));
   roots.push(root);
   await writeFile(join(root, "README.md"), "# Hello");
@@ -24,7 +28,7 @@ async function fixture(): Promise<{ server: RunningServer; id: string }> {
   if (node?.kind !== "document") throw new Error("fixture");
   const server = await startDocumentationServer(documents, { port: 0 });
   servers.push(server);
-  return { server, id: node.id };
+  return { server, id: node.id, root };
 }
 function raw(
   url: string,
@@ -78,6 +82,22 @@ describe("localhost API", () => {
     await server.close();
     await server.close();
     await expect(raw(server.url, "/api/health")).rejects.toThrow();
+  });
+  it("discovers new documents through the running API and removes deleted IDs", async () => {
+    const { server, root, id } = await fixture();
+    await mkdir(join(root, "nested"));
+    await writeFile(join(root, "nested", "new.md"), "# New");
+    const response = await raw(server.url, "/api/tree");
+    expect(response.status).toBe(200);
+    const added = JSON.parse(response.body).tree[0].children[0];
+    expect(added.path).toBe("nested/new.md");
+    expect(
+      JSON.parse((await raw(server.url, `/api/documents/${added.id}`)).body)
+        .markdown,
+    ).toBe("# New");
+    await rm(join(root, "README.md"));
+    await raw(server.url, "/api/tree");
+    expect((await raw(server.url, `/api/documents/${id}`)).status).toBe(404);
   });
   it("maps missing/invalid IDs and unsupported routes to structured errors", async () => {
     const { server } = await fixture();

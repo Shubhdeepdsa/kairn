@@ -70,11 +70,11 @@ core contracts; core knows neither prompts nor HTTP. Reuse
   navigation snapshot, opaque stable document IDs, bounded fresh reads.
 - Server: built-in Node HTTP on IPv4 loopback only; consumes tree/read contracts.
 - Viewer: vanilla browser module and CSS; Markdown rendering is a separate module
-  using a maintained parser. No React, persistence, registry or live watcher.
+  using a maintained parser. No React, persistence, registry or filesystem watcher.
 
 Limits are explicit. Symlinks are rejected for selected roots, descendants and
 reads. Hidden entries are excluded. Canonical file identities remain internal;
-HTTP exposes only relative paths and IDs. Restart to discover added files.
+HTTP exposes only relative paths and IDs. Bounded rescans discover added files.
 
 Security boundary: user-controlled trees, not hostile concurrent filesystem
 mutation. HTTP validates exact Host/Origin, rejects cross-site fetches and
@@ -113,4 +113,19 @@ serve package content only. Document JSON includes safe `html` alongside source
 Markdown when a presentation is supplied. The core has no rendering dependency.
 Navigation labels use textContent; only restricted-parser output enters article
 HTML. Remote images are replaced with alt text, external links suppress referrers,
-and unknown local attachments are not fetched. No syntax highlighting or watcher.
+and unknown local attachments are not fetched. No syntax highlighting or filesystem watcher.
+
+## Automatic navigation refresh
+
+`DocumentService.refresh()` reuses the bounded scanner and atomically replaces the
+navigation snapshot and document-ID mapping. Concurrent refresh calls share one
+scan; failed scans retain the last valid snapshot. The original root identity is
+checked before and after scanning: a replaced root requires a restart. All existing
+symlink, hidden-entry and resource-limit rules still apply.
+
+GET `/api/tree` asks the service to refresh; HTTP owns no discovery logic. The
+browser polls this endpoint two seconds after the previous request completes,
+pauses when hidden, refreshes on visibility return and removes timers/listeners
+on page exit. No overlapping browser polls or persistent server watchers. Sidebar
+DOM is rebuilt only when the tree changes; current content, selection and folder
+expansion are preserved. Deleted selections fall back to another document.

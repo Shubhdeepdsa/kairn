@@ -56,8 +56,9 @@ The default port was occupied and correctly reported a conflict; self-viewing
 used `--port 0`. Real browser navigation/headings/tables and real Ctrl+C shutdown
 were verified. Cross-platform results are reported by the feature PR's CI.
 
-Next smallest milestone: explicit refresh/rescan for newly added documents,
-without introducing a registry, persistence or the final React UI.
+Automatic bounded navigation refresh is now implemented: new, renamed and
+deleted Markdown files appear without restarting. No registry or persistence.
+Next smallest milestone: refresh the current document after source content edits.
 
 Feature branch: `feat/local-documentation-viewer`; [PR #1](https://github.com/Shubhdeepdsa/kairn/pull/1)
 is open against main. The [feature CI run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44716122814)

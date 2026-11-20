@@ -1,10 +1,10 @@
 import type { DocumentEntry, NavigationEntry } from "../core/documents.js";
 
-/** Mount a viewer against its same-origin API; injected fetch enables deterministic DOM tests. */
+/** Mount and automatically refresh navigation every two seconds while visible. Returns cleanup for timers/listeners; fetch is injectable. */
 export async function mountViewer(
   document: Document,
   fetcher: typeof fetch = fetch,
-): Promise<void> {
+): Promise<() => void> {
   const navigation = document.getElementById("navigation");
   const article = document.getElementById("document");
   const status = document.getElementById("status");
@@ -15,6 +15,12 @@ export async function mountViewer(
   const byPath = new Map<string, DocumentEntry>();
   let selected: DocumentEntry | undefined;
   let requestNumber = 0;
+  let disposed = false;
+  let signature: string | undefined;
+  let timer: number | undefined;
+  let refreshing: Promise<void> | undefined;
+  const window = document.defaultView;
+  if (!window) throw new Error("Viewer needs a browser window.");
   async function api(path: string): Promise<unknown> {
     const response = await fetcher(path, {
       credentials: "same-origin",
@@ -41,6 +47,7 @@ export async function mountViewer(
     if (heading && article?.contains(heading)) heading.scrollIntoView?.();
   }
   async function show(id: string, fragment = ""): Promise<void> {
+    if (disposed) return;
     const file = files.get(id);
     if (!file) {
       status!.textContent =
@@ -85,6 +92,7 @@ export async function mountViewer(
       if (node.kind === "directory") {
         const details = document.createElement("details");
         details.open = true;
+        details.dataset.path = node.path;
         const summary = document.createElement("summary");
         summary.textContent = node.title;
         details.append(summary, build(node.children));
@@ -103,7 +111,7 @@ export async function mountViewer(
     }
     return list;
   }
-  navigation.addEventListener("click", (event) => {
+  const onNavigation = (event: MouseEvent): void => {
     const target = event.target as Element | null;
     const link = target?.closest<HTMLAnchorElement>("a[data-document]");
     if (
@@ -117,8 +125,8 @@ export async function mountViewer(
       return;
     event.preventDefault();
     void show(link.dataset.document ?? "");
-  });
-  article.addEventListener("click", (event) => {
+  };
+  const onArticle = (event: MouseEvent): void => {
     const link = (event.target as Element | null)?.closest<HTMLAnchorElement>(
       "a",
     );
@@ -142,23 +150,109 @@ export async function mountViewer(
     } catch {
       status.textContent = "This documentation link is invalid.";
     }
-  });
-  status.textContent = "Loading documentation…";
-  try {
-    const data = (await api("/api/tree")) as { tree: NavigationEntry[] };
-    navigation.replaceChildren(build(data.tree));
-    if (!files.size) {
-      status.textContent =
-        "No Markdown documents found. Add .md files and restart Kairn.";
-      return;
-    }
-    const initial = document.defaultView?.location.hash.slice(1);
-    const first = byPath.get("README.md") ?? files.values().next().value;
-    await show(initial || first!.id);
-  } catch (error) {
-    status.textContent =
-      error instanceof Error ? error.message : "Could not load documentation.";
+  };
+  navigation.addEventListener("click", onNavigation);
+  article.addEventListener("click", onArticle);
+  function refresh(initial = false): Promise<void> {
+    refreshing ??= (async () => {
+      try {
+        const data = (await api("/api/tree")) as { tree: NavigationEntry[] };
+        if (disposed) return;
+        const nextSignature = JSON.stringify(data.tree);
+        if (nextSignature === signature) {
+          if (
+            status!.textContent?.startsWith("Could not refresh documentation:")
+          )
+            status!.textContent = "";
+          return;
+        }
+        const expanded = new Map(
+          Array.from(
+            navigation!.querySelectorAll<HTMLDetailsElement>(
+              "details[data-path]",
+            ),
+            (folder) => [folder.dataset.path, folder.open],
+          ),
+        );
+        const focused = (document.activeElement as HTMLElement | null)?.dataset
+          .document;
+        files.clear();
+        byPath.clear();
+        const list = build(data.tree);
+        for (const folder of list.querySelectorAll<HTMLDetailsElement>(
+          "details[data-path]",
+        ))
+          folder.open = expanded.get(folder.dataset.path) ?? true;
+        navigation!.replaceChildren(list);
+        signature = nextSignature;
+        if (selected && files.has(selected.id)) {
+          selected = files.get(selected.id);
+          for (const link of navigation!.querySelectorAll<HTMLAnchorElement>(
+            "a[data-document]",
+          )) {
+            if (link.dataset.document === selected?.id)
+              link.setAttribute("aria-current", "page");
+            if (link.dataset.document === focused)
+              link.focus({ preventScroll: true });
+          }
+          if (
+            status!.textContent?.startsWith("Could not refresh documentation:")
+          )
+            status!.textContent = "";
+          return;
+        }
+        requestNumber++;
+        selected = undefined;
+        article!.replaceChildren();
+        article!.removeAttribute("aria-busy");
+        source!.textContent = "";
+        if (!files.size) {
+          status!.textContent =
+            "No Markdown documents found. Add .md files; the sidebar updates automatically.";
+          return;
+        }
+        const bookmark = initial ? window!.location.hash.slice(1) : undefined;
+        const first = byPath.get("README.md") ?? files.values().next().value;
+        await show(bookmark || first!.id);
+      } catch (error) {
+        if (!disposed)
+          status!.textContent = `Could not refresh documentation: ${error instanceof Error ? error.message : "Request failed."}`;
+      }
+    })().finally(() => {
+      refreshing = undefined;
+    });
+    return refreshing;
   }
+  function schedule(): void {
+    if (disposed || document.hidden) return;
+    if (timer !== undefined) window!.clearTimeout(timer);
+    timer = window!.setTimeout(() => {
+      timer = undefined;
+      void refresh().finally(schedule);
+    }, 2000);
+  }
+  function visibilityChanged(): void {
+    if (timer !== undefined) {
+      window!.clearTimeout(timer);
+      timer = undefined;
+    }
+    if (!document.hidden && !disposed) void refresh().finally(schedule);
+  }
+  function dispose(): void {
+    disposed = true;
+    requestNumber++;
+    if (timer !== undefined) window!.clearTimeout(timer);
+    navigation!.removeEventListener("click", onNavigation);
+    article!.removeEventListener("click", onArticle);
+    document.removeEventListener("visibilitychange", visibilityChanged);
+    window!.removeEventListener("pagehide", dispose);
+  }
+  document.addEventListener("visibilitychange", visibilityChanged);
+  window.addEventListener("pagehide", dispose);
+  status.textContent = "Loading documentation…";
+  await refresh(true);
+  schedule();
+  return dispose;
 }
 
 if (typeof document !== "undefined" && document.getElementById("navigation"))

@@ -134,6 +134,7 @@ describe("document service", () => {
     await mkdir(root);
     await writeFile(join(root, "note.md"), "replacement");
     await expect(service.read(id)).rejects.toMatchObject({ code: "CHANGED" });
+    await expect(service.refresh()).rejects.toMatchObject({ code: "CHANGED" });
   });
   it.skipIf(process.platform === "win32")(
     "rejects a file symlink added after discovery",
@@ -151,6 +152,60 @@ describe("document service", () => {
       });
     },
   );
+  it("refreshes additions, nested paths, renames and removals without changing stable IDs", async () => {
+    const root = await fixture();
+    await writeFile(join(root, "old.md"), "old");
+    const service = await createDocumentService(root);
+    const oldId = documents(service.tree)[0]!.id;
+    await mkdir(join(root, "guide"));
+    await writeFile(join(root, "guide", "new.md"), "new");
+    await writeFile(join(root, ".hidden.md"), "hidden");
+    const first = service.refresh();
+    const shared = service.refresh();
+    expect(shared).toBe(first);
+    const refreshed = documents(await first);
+    expect(refreshed.map((entry) => entry.path)).toEqual([
+      "guide/new.md",
+      "old.md",
+    ]);
+    expect(refreshed.find((entry) => entry.path === "old.md")!.id).toBe(oldId);
+    expect((await service.read(refreshed[0]!.id)).markdown).toBe("new");
+    const { rename } = await import("node:fs/promises");
+    await rename(
+      join(root, "guide", "new.md"),
+      join(root, "guide", "renamed.md"),
+    );
+    await rm(join(root, "old.md"));
+    expect(
+      documents(await service.refresh()).map((entry) => entry.path),
+    ).toEqual(["guide/renamed.md"]);
+    await expect(service.read(oldId)).rejects.toMatchObject({
+      code: "NOT_FOUND",
+    });
+  });
+  it("retains the valid snapshot after a rejected rescan and recovers on the next one", async () => {
+    const root = await fixture();
+    await writeFile(join(root, "safe.md"), "safe");
+    const service = await createDocumentService(root, { fileBytes: 4 });
+    const before = service.tree;
+    await writeFile(join(root, "large.md"), "too large");
+    await expect(service.refresh()).rejects.toMatchObject({
+      code: "LIMIT_EXCEEDED",
+    });
+    expect(service.tree).toBe(before);
+    expect((await service.read(documents(before)[0]!.id)).markdown).toBe(
+      "safe",
+    );
+    await rm(join(root, "large.md"));
+    const outside = await fixture();
+    await symlink(outside, join(root, "link"), "junction");
+    await expect(service.refresh()).rejects.toMatchObject({
+      code: "INVALID_PATH",
+    });
+    await rm(join(root, "link"), { recursive: true });
+    await writeFile(join(root, "new.md"), "new");
+    expect(documents(await service.refresh())).toHaveLength(2);
+  });
   it("bounds file size during discovery and fresh reads", async () => {
     const root = await fixture();
     await writeFile(join(root, "note.md"), "1234");

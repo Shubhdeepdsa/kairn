@@ -44,13 +44,14 @@ function failure(
  * Serve a read-only document contract, without accepting filesystem paths.
  * Enforces exact Host/Origin, same-origin browser metadata, GET-only requests,
  * body/header/URL limits, and a restrictive content security policy. No CORS.
- * @param documents - Already-discovered service; only tree/read are consumed.
+ * @param documents - Discovered service; tree requests refresh when supported, and reads use the updated ID map.
  * @param options - Port and optional static viewer presentation.
  * @returns URL and idempotent graceful close operation.
  * @throws For invalid ports or listen failures, including actionable port conflicts.
  */
 export async function startDocumentationServer(
-  documents: Pick<DocumentService, "tree" | "read">,
+  documents: Pick<DocumentService, "tree" | "read"> &
+    Partial<Pick<DocumentService, "refresh">>,
   options: ServerOptions = {},
 ): Promise<RunningServer> {
   const port = options.port ?? 4173;
@@ -145,7 +146,11 @@ export async function startDocumentationServer(
         try {
           if (target === "/api/health") json(response, 200, { status: "ok" });
           else if (target === "/api/tree")
-            json(response, 200, { tree: documents.tree });
+            json(response, 200, {
+              tree: documents.refresh
+                ? await documents.refresh()
+                : documents.tree,
+            });
           else if (target.startsWith("/api/documents/")) {
             const id = target.slice("/api/documents/".length);
             const content = await documents.read(id);

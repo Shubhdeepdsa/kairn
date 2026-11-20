@@ -52,7 +52,7 @@ Future decisions should record meaningful alternatives and trade-offs rather tha
   built-in HTTP adapter on 127.0.0.1; minimal vanilla browser client.
 - **Alternatives:** Database/global index, framework server, full React application.
 - **Rationale:** Small reusable contracts, no persistent state, narrow exposure.
-- **Consequences:** Restart for new files; edits are reread. No local-user authentication.
+- **Consequences:** Initial startup snapshots were extended by ADR-008; edits are reread. No local-user authentication.
   Reject symlinks and hidden entries; require trusted ownership of the source tree.
 
 ## ADR-007 — Untrusted Markdown rendering
@@ -64,3 +64,17 @@ Future decisions should record meaningful alternatives and trade-offs rather tha
 - **Alternatives:** Hand-written parser or arbitrary HTML plus sanitizer.
 - **Rationale:** Standard Markdown tables/code support with a smaller content surface.
 - **Consequences:** Embedded HTML/images are not rendered; no remote assets or scripts.
+
+## ADR-008 — Bounded polling for automatic navigation updates
+
+- **Status:** Implemented.
+- **Context:** New Markdown must appear without restarting run, across all supported OSes.
+- **Decision:** Reuse the bounded core scanner on tree requests; coalesce concurrent
+  scans and swap complete snapshots atomically. Browser polls every two seconds
+  while visible, preserving selection/content and collapsed directories.
+- **Alternatives:** Recursive filesystem watchers and SSE/WebSocket notifications.
+- **Rationale:** Avoid OS-specific watcher behavior, watcher limits, missed directory
+  events and persistent socket lifecycle for this small viewer.
+- **Consequences:** Bounded scan work while visible and approximately two-second
+  discovery latency, plus scan/request time. Hidden tabs pause. Scans that violate
+  safety limits fail without replacing valid state; UI reports/retries failures.

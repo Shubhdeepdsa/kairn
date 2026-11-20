@@ -25,3 +25,7 @@ Don't add authentication, telemetry, online accounts, analytics, cloud services,
 vanilla browser client displays nested navigation and safe Markdown. It is a
 functional prototype, not the final React/Kairn Mineral interface. No writes,
 registry, persistence, editing, search, Git history or remote services are added.
+
+The sidebar automatically discovers added, renamed and deleted Markdown files
+while running. The current document remains open through navigation changes;
+existing content updates on selection. Hidden files/directories remain excluded.

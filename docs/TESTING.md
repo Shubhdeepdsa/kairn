@@ -146,3 +146,13 @@ The [feature-branch CI run](https://github.com/Shubhdeepdsa/kairn/actions/runs/4
 at `3633546` passed all required gates on Linux, macOS and Windows. The separate
 [PR checks](https://github.com/Shubhdeepdsa/kairn/pull/1/checks) track integration
 with main. PR #1 remains unmerged for review.
+
+## Automatic navigation refresh
+
+The local suite passes 57 tests. New temporary-filesystem/API tests verify live
+additions, nested paths, stable IDs, rename/deletion, excluded dotfiles, shared
+concurrent scans, rejection of replacement roots, retained snapshots on unsafe/
+oversized rescans and recovery. Fake-clock DOM tests verify automatic sidebar
+updates, unchanged active content, preserved selection/collapsed folders, empty
+root recovery, deleted selection fallback, retry, hidden-tab pause and cleanup.
+No arbitrary delays or operating-system watcher dependency are used.

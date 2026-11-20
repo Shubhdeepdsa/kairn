@@ -1,5 +1,5 @@
 import { JSDOM } from "jsdom";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { renderMarkdown } from "../src/viewer/markdown.js";
 import { mountViewer } from "../src/viewer/client.js";
 import { startDocumentationServer } from "../src/server/http.js";
@@ -8,12 +8,13 @@ const doms: JSDOM[] = [];
 const servers: RunningServer[] = [];
 afterEach(async () => {
   doms.splice(0).forEach((dom) => dom.window.close());
+  vi.useRealTimers();
   await Promise.all(servers.splice(0).map((server) => server.close()));
 });
 function dom(): JSDOM {
   const value = new JSDOM(
     '<nav id="navigation"></nav><p id="source"></p><p id="status"></p><article id="document" tabindex="-1"></article>',
-    { url: "http://127.0.0.1:4173/" },
+    { url: "http://127.0.0.1:4173/", pretendToBeVisual: true },
   );
   doms.push(value);
   return value;
@@ -189,7 +190,7 @@ describe("browser navigation", () => {
     );
     const failed = dom().window.document;
     await mountViewer(failed, fakeFetch(true));
-    expect(failed.getElementById("status")?.textContent).toBe(
+    expect(failed.getElementById("status")?.textContent).toContain(
       "Could not read docs",
     );
     const stale = dom();
@@ -213,6 +214,119 @@ describe("browser navigation", () => {
       "Document vanished",
     );
     expect(document.getElementById("document")?.innerHTML).toBe("");
+  });
+  it("automatically adds nested documents while preserving the selection, content and collapsed folders", async () => {
+    vi.useFakeTimers();
+    const document = dom().window.document;
+    const extra = {
+      kind: "document",
+      id: "c".repeat(64),
+      path: "guide/new.md",
+      title: "new",
+    };
+    let added = false;
+    const fetcher = vi.fn<typeof fetch>(async (input) => {
+      const response = await fakeFetch()(input);
+      if (String(input) !== "/api/tree") return response;
+      const data = await response.json();
+      if (added) data.tree[0].children.push(extra);
+      return Response.json(data);
+    });
+    const dispose = await mountViewer(document, fetcher);
+    const article = document.getElementById("document")!;
+    const content = article.firstChild;
+    (document.querySelector("details") as HTMLDetailsElement).open = false;
+    added = true;
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(
+      document.querySelector(`[data-document="${extra.id}"]`)?.textContent,
+    ).toBe("new");
+    expect(document.querySelector("[aria-current=page]")?.textContent).toBe(
+      "README",
+    );
+    expect(article.firstChild).toBe(content);
+    expect((document.querySelector("details") as HTMLDetailsElement).open).toBe(
+      false,
+    );
+    const count = fetcher.mock.calls.length;
+    dispose();
+    await vi.advanceTimersByTimeAsync(6000);
+    expect(fetcher.mock.calls.length).toBe(count);
+  });
+  it("updates an initially empty root and falls back safely when the selected document disappears", async () => {
+    vi.useFakeTimers();
+    const document = dom().window.document;
+    const entry = {
+      kind: "document",
+      id: rootId,
+      path: "README.md",
+      title: "README",
+    };
+    let tree: object[] = [];
+    const fetcher: typeof fetch = async (input) =>
+      String(input) === "/api/tree"
+        ? Response.json({ tree })
+        : fakeFetch()(input);
+    await mountViewer(document, fetcher);
+    tree = [entry];
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(document.querySelector("h1")?.textContent).toBe("Home");
+    tree = [
+      { ...entry, id: nestedId, path: "replacement.md", title: "replacement" },
+    ];
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(document.querySelector("[aria-current=page]")?.textContent).toBe(
+      "replacement",
+    );
+    tree = [];
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(document.querySelector("h1")).toBeNull();
+    expect(document.getElementById("status")?.textContent).toContain(
+      "No Markdown",
+    );
+  });
+  it("retries refresh failures and pauses while the page is hidden", async () => {
+    vi.useFakeTimers();
+    const value = dom();
+    const document = value.window.document;
+    let fail = false;
+    const fetcher = vi.fn<typeof fetch>(async (input) =>
+      fail
+        ? Response.json(
+            { error: { message: "temporarily unavailable" } },
+            { status: 503 },
+          )
+        : fakeFetch()(input),
+    );
+    await mountViewer(document, fetcher);
+    fail = true;
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(document.getElementById("status")?.textContent).toContain(
+      "temporarily unavailable",
+    );
+    expect(document.querySelector("h1")?.textContent).toBe("Home");
+    fail = false;
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(document.getElementById("status")?.textContent).toBe("");
+    Object.defineProperty(document, "hidden", {
+      configurable: true,
+      value: true,
+    });
+    document.dispatchEvent(new value.window.Event("visibilitychange"));
+    const count = fetcher.mock.calls.length;
+    await vi.advanceTimersByTimeAsync(6000);
+    expect(fetcher.mock.calls.length).toBe(count);
+    Object.defineProperty(document, "hidden", {
+      configurable: true,
+      value: false,
+    });
+    document.dispatchEvent(new value.window.Event("visibilitychange"));
+    await vi.advanceTimersByTimeAsync(0);
+    expect(fetcher.mock.calls.length).toBeGreaterThan(count);
+    value.window.dispatchEvent(new value.window.Event("pagehide"));
+    const closed = fetcher.mock.calls.length;
+    await vi.advanceTimersByTimeAsync(6000);
+    expect(fetcher.mock.calls.length).toBe(closed);
   });
   it("serves packaged viewer assets and rendered API content under CSP", async () => {
     // Source tests load the compiled module so asset resolution matches installed packages.

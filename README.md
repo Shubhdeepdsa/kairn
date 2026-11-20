@@ -42,7 +42,9 @@ another existing root. See [CLI behavior](docs/CLI.md) and
 
 The prototype supports headings, tables, lists, code blocks and document links.
 Raw HTML is escaped and images are shown as text; no remote assets are loaded.
-Restart after adding files. Existing content is reread on selection.
+The sidebar picks up new, renamed and deleted Markdown files automatically
+about every two seconds while the tab is visible. Existing content is reread on
+selection. Dotfiles and hidden directories remain excluded.
 
 ## Development
 
