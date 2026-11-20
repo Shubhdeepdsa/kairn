@@ -21,12 +21,10 @@ Publication is authorized only to the verified personal user account, after revi
 
 ## Later phases (not implemented)
 
-1. `kairn run` local server and simple Markdown view: implemented in Phase 2 below.
-2. Global library, project registry and multiple docs sources.
-3. Complete document engine, links/search and source-aware navigation.
-4. Local Git timeline and document-specific history.
-5. Polished Kairn Mineral React interface.
-6. Optional project information, integrations and other experiments.
+1. Richer document engine, search and source-aware navigation.
+2. Local Git timeline and document-specific history.
+3. Polished Kairn Mineral React interface.
+4. Optional project information, integrations and other experiments.
 
 ## Acceptance follow-up
 
@@ -64,28 +62,30 @@ Feature branch: `feat/local-documentation-viewer`; [PR #1](https://github.com/Sh
 was merged into main. The [feature CI run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44716122814)
 passed Linux, macOS and Windows at `3633546`. No automatic merge or npm publication.
 
-## Phase 3 — VERIFIED; PR review pending
+## Phase 3 — COMPLETE; VERIFIED and merged
 
 A: architecture; B: schemas/persistence; C: Library; D: resolver; E: discovery/ignore;
 F: multi-source engine; G: CLI integration; H: acceptance and personal feature PR.
 
-| Stage | Commit            | Verified outcome                                         |
-| ----- | ----------------- | -------------------------------------------------------- |
-| 3A    | `e5b82f7`         | Architecture and instructions                            |
-| 3B    | `b829e0a`         | Schemas and safe JSON storage                            |
-| 3C    | `ea633c1`         | Persistent project Library                               |
-| 3D    | `02ef680`         | Portable/shared/personal resolution                      |
-| 3E    | `2c4656a`         | Source discovery, overlap and limited exclusions         |
-| 3F    | `6c54e17`         | Multi-source document composition                        |
-| 3G    | `e2579dc`         | Project CLI and run integration                          |
-| 3H    | Acceptance commit | 79 tests, clean install and installed-package acceptance |
+| Stage | Commit    | Verified outcome                                         |
+| ----- | --------- | -------------------------------------------------------- |
+| 3A    | `e5b82f7` | Architecture and instructions                            |
+| 3B    | `b829e0a` | Schemas and safe JSON storage                            |
+| 3C    | `ea633c1` | Persistent project Library                               |
+| 3D    | `02ef680` | Portable/shared/personal resolution                      |
+| 3E    | `2c4656a` | Source discovery, overlap and limited exclusions         |
+| 3F    | `6c54e17` | Multi-source document composition                        |
+| 3G    | `e2579dc` | Project CLI and run integration                          |
+| 3H    | `f0570f0` | 79 tests, clean install and installed-package acceptance |
 
 Phase 3 defers the final React/settings UI, themes, search, Git history, cloud,
 AI and npm publication. Next smallest milestone: source-configuration reload
 without restarting the viewer, preserving the same validation boundaries.
 
 Phase 3 feature branch: `feat/project-library-config`;
-[PR #2](https://github.com/Shubhdeepdsa/kairn/pull/2) is open against main, unmerged.
+[PR #2](https://github.com/Shubhdeepdsa/kairn/pull/2) was merged into `main` on
+2026-11-20 using **Create a merge commit**. Merge commit `c03057e` preserves the
+full staged implementation history through `68986d5`.
 The [push run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726328194) and
 [PR run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726417025) at `f0570f0`
 passed all Linux/macOS/Windows jobs. `b7208ee` adds a focused Windows cross-drive
