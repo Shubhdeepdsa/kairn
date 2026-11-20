@@ -29,6 +29,9 @@ export async function createReloadingDocumentService(
     read(id) {
       return current.read(id);
     },
+    linkTargets: () => current.linkTargets?.() ?? [],
+    classifyLinkTarget: (path: string) =>
+      current.classifyLinkTarget?.(path) ?? "UNREGISTERED",
     refresh() {
       pending ??= (async () => {
         try {

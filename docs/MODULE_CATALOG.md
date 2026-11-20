@@ -111,3 +111,10 @@ unchanged article DOM/focus intact; failures retain content and retry next cycle
 resolver/scanner, fingerprints effective settings, coalesces refreshes and swaps
 only complete validated services. Optional `DocumentService.warning` surfaces a
 redacted reload warning while preserving last valid state. No settings are written.
+
+`core/markdown.ts` now owns the existing safe parser/slug algorithm and exports
+`analyzeMarkdown`, `MarkdownAnalysis`, `Heading`, and `renderMarkdown`; the old
+viewer module re-exports rendering for compatibility. `core/document-links.ts`
+exports `resolveDocumentLink` and browser-safe typed results/diagnostics. Internal
+`DocumentService.linkTargets/classifyLinkTarget` expose canonical authority only
+to core; HTTP never serializes those paths. Resolution checks only effective IDs.

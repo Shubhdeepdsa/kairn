@@ -214,3 +214,7 @@ unchanged DOM, focus preservation, retry and last-render retention on read failu
 Live-project fixtures verify personal source/ignore/primary edits, shared JSON
 failure and recovery/deletion, missing paths, concurrent refresh sharing and
 registration loss retaining the last valid reader with a redacted warning.
+
+Core link fixtures verify same/cross-source links, explicit hidden-directory files,
+encoded spaces/Unicode, repeated headings, missing fragments, exclusions, missing/
+unregistered destinations and unsafe formats. No external URLs are fetched.

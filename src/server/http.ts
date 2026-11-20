@@ -1,3 +1,4 @@
+import { resolveDocumentLink } from "../core/document-links.js";
 import { documentRevision } from "../core/freshness.js";
 import { createServer } from "node:http";
 import type { ServerResponse } from "node:http";
@@ -52,7 +53,12 @@ function failure(
  */
 export async function startDocumentationServer(
   documents: Pick<DocumentService, "tree" | "read"> &
-    Partial<Pick<DocumentService, "refresh" | "warning">>,
+    Partial<
+      Pick<
+        DocumentService,
+        "refresh" | "warning" | "linkTargets" | "classifyLinkTarget"
+      >
+    >,
   options: ServerOptions = {},
 ): Promise<RunningServer> {
   const port = options.port ?? 4173;
@@ -121,7 +127,8 @@ export async function startDocumentationServer(
         return;
       }
       if (
-        !/^\/[A-Za-z0-9/._-]*$/.test(target) ||
+        (!/^\/[A-Za-z0-9/._-]*$/.test(target) &&
+          !/^\/api\/links\/[a-f0-9]{64}\/[^/]+$/.test(target)) ||
         target.split("/").includes("..") ||
         target.split("/").includes(".")
       ) {
@@ -153,7 +160,41 @@ export async function startDocumentationServer(
                 : documents.tree,
               ...(documents.warning ? { warning: documents.warning } : {}),
             });
-          else if (target.startsWith("/api/documents/")) {
+          else if (target.startsWith("/api/links/")) {
+            const match = /^\/api\/links\/([a-f0-9]{64})\/([^/]+)$/.exec(
+              target,
+            );
+            if (!match) {
+              failure(
+                response,
+                400,
+                "INVALID_PATH",
+                "Invalid link resolution route.",
+              );
+              return;
+            }
+            let href: string;
+            try {
+              href = decodeURIComponent(match[2]!);
+            } catch {
+              failure(
+                response,
+                400,
+                "INVALID_PATH",
+                "Malformed target encoding.",
+              );
+              return;
+            }
+            json(
+              response,
+              200,
+              await resolveDocumentLink(
+                documents as DocumentService,
+                match[1]!,
+                href,
+              ),
+            );
+          } else if (target.startsWith("/api/documents/")) {
             const id = target.slice("/api/documents/".length);
             const content = await documents.read(id);
             const { path, title, markdown } = content;
