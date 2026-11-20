@@ -36,3 +36,17 @@ fresh reads, paths, symlinks, permissions and limits.
 `ServerOptions` permits port 0 for tests and optional `ViewerPresentation` static
 assets/rendering. It never resolves request paths against the filesystem.
 `tests/server.test.ts` covers protocol, isolation, lifecycle and port conflicts.
+
+## Minimal viewer
+
+- `src/viewer/markdown.ts`: `renderMarkdown` uses markdown-it (native types),
+  escapes raw HTML, permits only relative/http/https/mailto links, and replaces
+  images with text. Headings receive deterministic fragment IDs.
+- `src/viewer/client.ts`: `mountViewer` renders navigation from the API, selects
+  documents by opaque ID, handles relative Markdown links within the root and
+  shows loading/error/empty states. Fetch is injectable for DOM tests.
+- `src/viewer/assets.ts`: `loadViewerPresentation` loads the packaged compiled
+  client and provides the shell, responsive CSS and renderer for HTTP composition.
+
+`tests/viewer.test.ts` covers parser safety/features, DOM navigation/state and
+actual served assets/API HTML. No framework or browser build pipeline is needed.

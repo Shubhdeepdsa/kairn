@@ -104,3 +104,11 @@ Ephemeral loopback tests cover health/tree/read, missing/invalid IDs, raw and
 encoded traversal, absolute paths, hostile Host/Origin/Fetch Metadata, GET-only
 and body rejection, header/URL bounds, port conflicts, generic internal errors,
 and idempotent/bounded shutdown. Every fixture closes its server in cleanup.
+
+## Phase 2 viewer coverage
+
+DOM tests with jsdom verify nested navigation, relative document links, current
+selection, root README preference, empty/error states and stale bookmarks.
+Parser tests cover headings/lists/tables/fences/links, HTML escaping, script/data/
+file/protocol-relative URL rejection and image suppression. Local HTTP tests
+verify compiled assets, CSP and HTML generated from actual Markdown source.

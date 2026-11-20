@@ -105,3 +105,14 @@ GET bodies are forbidden; headers cap at 8 KiB, URLs at 2 KiB, active requests a
 16, request/socket timeouts at 5 seconds. Close drains requests for at most one
 second before closing connections. Optional viewer assets are exact static routes.
 Loopback restricts network reachability, not other local users/processes.
+
+### Implemented viewer
+
+Vanilla browser TypeScript is compiled by the existing tsc build. Its only imports
+are types, so `/viewer.js` has no browser package resolution or bundler requirement.
+The server receives `ViewerPresentation` at composition time; exact asset routes
+serve package content only. Document JSON includes safe `html` alongside source
+Markdown when a presentation is supplied. The core has no rendering dependency.
+Navigation labels use textContent; only restricted-parser output enters article
+HTML. Remote images are replaced with alt text, external links suppress referrers,
+and unknown local attachments are not fetched. No syntax highlighting or watcher.
