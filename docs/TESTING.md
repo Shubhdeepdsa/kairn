@@ -320,3 +320,11 @@ acceptance described above. Runtime audit: zero advisories; npm ci still reports
 eight existing development-tool advisories. Dependencies/lockfile were unchanged.
 Real human browser acceptance remains blocked by the browser tool setting. Remote
 Linux/macOS/Windows results are not inferred from the local run; see feature CI.
+
+The first Phase 5 remote run exposed test-harness assumptions: fresh npm-ci caches
+contain tarballs without registry packuments, and Windows FULL-sync benchmark writes
+exceeded Vitest's default five-second timeout. Clean-package acceptance now creates
+a temporary lock from the committed dependency graph plus the actual packed tarball
+and runs offline npm ci; it does not depend on cached registry metadata or alter the
+repository lock. The unchanged 250-document SQLite benchmark has an explicit 30-second
+timeout, not a performance assertion. No product assertions or safety checks were removed.
