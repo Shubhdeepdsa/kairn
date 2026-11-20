@@ -1,3 +1,5 @@
+import { parseReaderLocation, readerHash } from "./navigation.js";
+import type { LinkResolution } from "../core/document-links.js";
 import type { LinkDiagnostic } from "../core/document-links.js";
 import type { DocumentEntry, NavigationEntry } from "../core/documents.js";
 
@@ -16,6 +18,8 @@ export async function mountViewer(
   const byPath = new Map<string, DocumentEntry>();
   let selected: DocumentEntry | undefined;
   let requestNumber = 0;
+  let linkNumber = 0;
+  let activeFragment = "";
   let configurationWarning: string | undefined;
   let contentRevision: string | undefined;
   let disposed = false;
@@ -46,16 +50,22 @@ export async function mountViewer(
     } catch {
       return;
     }
-    const heading = document.getElementById(id);
+    const heading = Array.from(
+      article!.querySelectorAll<HTMLElement>("[id]"),
+    ).find((element) => element.id === id);
     if (heading && article?.contains(heading)) heading.scrollIntoView?.();
   }
   async function show(
     id: string,
     fragment = "",
     background = false,
+    history: "push" | "replace" | "none" = "push",
   ): Promise<void> {
     if (disposed) return;
-    const file = files.get(id);
+    const file =
+      files.get(id) ??
+      [...files.values()].find((entry) => entry.legacyId === id);
+    if (file) id = file.id;
     if (!file) {
       status!.textContent =
         "Document was not found in this documentation root.";
@@ -77,7 +87,18 @@ export async function mountViewer(
         link.setAttribute("aria-current", "page");
       else link.removeAttribute("aria-current");
     }
-    document.defaultView?.history.replaceState(null, "", `#${id}`);
+    if (!background) {
+      activeFragment = fragment;
+      if (history !== "none") {
+        const hash = readerHash(id, fragment);
+        if (window!.location.hash !== hash)
+          window!.history[history === "push" ? "pushState" : "replaceState"](
+            null,
+            "",
+            hash,
+          );
+      }
+    }
     try {
       const response = await fetcher(`/api/documents/${id}`, {
         credentials: "same-origin",
@@ -123,7 +144,11 @@ export async function mountViewer(
       if (!background) {
         article!.focus({ preventScroll: true });
         showFragment(fragment);
-      } else if (changed && scroll > 0) window!.scrollTo(0, scroll);
+      } else if (changed) {
+        if (activeFragment && document.getElementById(activeFragment))
+          showFragment(activeFragment);
+        else if (scroll > 0) window!.scrollTo(0, scroll);
+      }
     } catch (error) {
       if (current === requestNumber)
         status!.textContent =
@@ -183,31 +208,42 @@ export async function mountViewer(
     const href = link.getAttribute("href") ?? "";
     if (/^(https?:|mailto:)/i.test(href)) return;
     event.preventDefault();
-    if (href.startsWith("#")) {
-      showFragment(href);
-      return;
-    }
-    try {
-      const base = `http://kairn.invalid/${selected.path.split("/").map(encodeURIComponent).join("/")}`;
-      const target = new URL(href, base);
-      let entry = byPath.get(
-        `${selected.sourceId ?? ""}:${decodeURIComponent(target.pathname.slice(1))}`,
-      );
-      if (!entry && selected.projectPath) {
-        const projectBase = `http://kairn.invalid/${selected.projectPath.split("/").map(encodeURIComponent).join("/")}`;
-        const projectTarget = new URL(href, projectBase);
-        entry = byPath.get(
-          `project:${decodeURIComponent(projectTarget.pathname.slice(1))}`,
-        );
+    const originating = selected.id;
+    const currentLink = ++linkNumber;
+    void (async () => {
+      try {
+        const result = (await api(
+          `/api/links/${originating}/${encodeURIComponent(href)}`,
+        )) as LinkResolution;
+        if (
+          disposed ||
+          selected?.id !== originating ||
+          currentLink !== linkNumber
+        )
+          return;
+        if (result.kind === "diagnostic") {
+          status.textContent = result.diagnostic.message;
+          return;
+        }
+        if (result.kind === "document") {
+          if (result.id === selected.id) {
+            activeFragment = result.fragment;
+            window!.history.pushState(
+              null,
+              "",
+              readerHash(result.id, result.fragment),
+            );
+            showFragment(result.fragment);
+          } else await show(result.id, result.fragment);
+        }
+      } catch (error) {
+        if (!disposed && selected?.id === originating)
+          status.textContent =
+            error instanceof Error
+              ? error.message
+              : "Link could not be resolved.";
       }
-      if (target.origin === "http://kairn.invalid" && entry)
-        void show(entry.id, target.hash);
-      else
-        status.textContent =
-          "This link is not a Markdown document in the selected root.";
-    } catch {
-      status.textContent = "This documentation link is invalid.";
-    }
+    })();
   };
   navigation.addEventListener("click", onNavigation);
   article.addEventListener("click", onArticle);
@@ -276,9 +312,16 @@ export async function mountViewer(
             "No Markdown documents found. Add .md files; the sidebar updates automatically.";
           return;
         }
-        const bookmark = initial ? window!.location.hash.slice(1) : undefined;
+        const bookmark = initial
+          ? parseReaderLocation(window!.location.hash)
+          : null;
         const first = byPath.get(":README.md") ?? files.values().next().value;
-        await show(bookmark || first!.id);
+        await show(
+          bookmark?.id ?? first!.id,
+          bookmark?.fragment ?? "",
+          false,
+          "replace",
+        );
       } catch (error) {
         if (!disposed)
           status!.textContent = `Could not refresh documentation: ${error instanceof Error ? error.message : "Request failed."}`;
@@ -308,14 +351,23 @@ export async function mountViewer(
         .then(() => (selected ? show(selected.id, "", true) : undefined))
         .finally(schedule);
   }
+  function restoreLocation(): void {
+    const location = parseReaderLocation(window!.location.hash);
+    if (location) void show(location.id, location.fragment, false, "none");
+  }
+  window.addEventListener("popstate", restoreLocation);
+  window.addEventListener("hashchange", restoreLocation);
   function dispose(): void {
     disposed = true;
+    linkNumber++;
     requestNumber++;
     if (timer !== undefined) window!.clearTimeout(timer);
     navigation!.removeEventListener("click", onNavigation);
     article!.removeEventListener("click", onArticle);
     document.removeEventListener("visibilitychange", visibilityChanged);
     window!.removeEventListener("pagehide", dispose);
+    window!.removeEventListener("popstate", restoreLocation);
+    window!.removeEventListener("hashchange", restoreLocation);
   }
   document.addEventListener("visibilitychange", visibilityChanged);
   window.addEventListener("pagehide", dispose);

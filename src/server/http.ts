@@ -13,6 +13,7 @@ export interface ViewerPresentation {
   readonly page: string;
   readonly script: string;
   readonly style: string;
+  readonly navigationScript?: string;
   renderMarkdown(markdown: string): string;
 }
 
@@ -234,14 +235,21 @@ export async function startDocumentationServer(
             json(response, 200, body);
           } else if (
             options.viewer &&
-            ["/", "/viewer.js", "/viewer.css"].includes(target)
+            [
+              "/",
+              "/viewer.js",
+              "/viewer.css",
+              ...(options.viewer.navigationScript ? ["/navigation.js"] : []),
+            ].includes(target)
           ) {
             const [body, contentType] =
               target === "/"
                 ? [options.viewer.page, "text/html"]
-                : target === "/viewer.js"
-                  ? [options.viewer.script, "text/javascript"]
-                  : [options.viewer.style, "text/css"];
+                : target === "/navigation.js"
+                  ? [options.viewer.navigationScript!, "text/javascript"]
+                  : target === "/viewer.js"
+                    ? [options.viewer.script, "text/javascript"]
+                    : [options.viewer.style, "text/css"];
             response.writeHead(200, {
               "Content-Type": `${contentType}; charset=utf-8`,
             });

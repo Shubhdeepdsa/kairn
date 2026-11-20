@@ -38,6 +38,7 @@ export interface DocumentEntry {
   readonly path: string;
   readonly title: string;
   readonly sourceId?: string;
+  readonly legacyId?: string;
   readonly projectPath?: string;
 }
 
@@ -494,6 +495,9 @@ export async function createProjectDocumentService(
               ...node,
               id,
               sourceId: source.id,
+              ...(source.path === "docs" && !source.external
+                ? { legacyId: node.id }
+                : {}),
               ...(projectPath ? { projectPath } : {}),
             };
             records.set(id, { service, original: node.id, entry });

@@ -24,6 +24,14 @@ const nestedId = "b".repeat(64);
 function fakeFetch(fail = false): typeof fetch {
   return async (input) => {
     const path = String(input);
+    if (path.startsWith("/api/links/")) {
+      const href = decodeURIComponent(path.slice(path.lastIndexOf("/") + 1));
+      return Response.json({
+        kind: "document",
+        id: href.includes("start") ? nestedId : rootId,
+        fragment: "",
+      });
+    }
     if (fail)
       return new Response(
         JSON.stringify({ error: { message: "Could not read docs" } }),
@@ -331,41 +339,43 @@ describe("browser navigation", () => {
   it("resolves cross-source links without collisions between identical file titles", async () => {
     const document = dom().window.document;
     const fetcher: typeof fetch = async (input) =>
-      String(input) === "/api/tree"
-        ? Response.json({
-            tree: [
-              {
-                kind: "document",
-                id: rootId,
-                path: "README.md",
-                title: "README",
-                sourceId: "primary",
-                projectPath: "docs/README.md",
-              },
-              {
-                kind: "directory",
-                path: "extra",
-                title: ".github/README.md",
-                children: [
-                  {
-                    kind: "document",
-                    id: nestedId,
-                    path: "README.md",
-                    title: "README",
-                    sourceId: "extra",
-                    projectPath: ".github/README.md",
-                  },
-                ],
-              },
-            ],
-          })
-        : Response.json({
-            html: renderMarkdown(
-              String(input).endsWith(rootId)
-                ? "# Primary\n\n[Extra](../.github/README.md)"
-                : "# Extra",
-            ),
-          });
+      String(input).startsWith("/api/links/")
+        ? Response.json({ kind: "document", id: nestedId, fragment: "" })
+        : String(input) === "/api/tree"
+          ? Response.json({
+              tree: [
+                {
+                  kind: "document",
+                  id: rootId,
+                  path: "README.md",
+                  title: "README",
+                  sourceId: "primary",
+                  projectPath: "docs/README.md",
+                },
+                {
+                  kind: "directory",
+                  path: "extra",
+                  title: ".github/README.md",
+                  children: [
+                    {
+                      kind: "document",
+                      id: nestedId,
+                      path: "README.md",
+                      title: "README",
+                      sourceId: "extra",
+                      projectPath: ".github/README.md",
+                    },
+                  ],
+                },
+              ],
+            })
+          : Response.json({
+              html: renderMarkdown(
+                String(input).endsWith(rootId)
+                  ? "# Primary\n\n[Extra](../.github/README.md)"
+                  : "# Extra",
+              ),
+            });
     await mountViewer(document, fetcher);
     expect(document.querySelector("h1")?.textContent).toBe("Primary");
     (document.querySelector("article a") as HTMLAnchorElement).click();
@@ -411,6 +421,110 @@ describe("browser navigation", () => {
     content = "# Third";
     await vi.advanceTimersByTimeAsync(2000);
     expect(article.textContent).toContain("Third");
+  });
+  it("restores heading bookmarks, pushes document history and handles back/forward state", async () => {
+    const value = dom();
+    const document = value.window.document;
+    value.window.location.hash = `#${rootId}/home`;
+    await mountViewer(document, fakeFetch());
+    expect(document.querySelector("h1")?.textContent).toBe("Home");
+    const before = value.window.history.length;
+    (
+      document.querySelector(
+        `[data-document="${nestedId}"]`,
+      ) as HTMLAnchorElement
+    ).click();
+    await until(
+      document,
+      () => document.querySelector("h1")?.textContent === "Nested",
+    );
+    expect(value.window.location.hash).toBe(`#${nestedId}`);
+    expect(value.window.history.length).toBe(before + 1);
+    value.window.history.replaceState(null, "", `#${rootId}/home`);
+    value.window.dispatchEvent(new value.window.PopStateEvent("popstate"));
+    await until(
+      document,
+      () => document.querySelector("h1")?.textContent === "Home",
+    );
+    expect(value.window.location.hash).toBe(`#${rootId}/home`);
+  });
+  it("discards late document responses after selecting a newer document", async () => {
+    const document = dom().window.document;
+    let release!: (response: Response) => void;
+    const pending = new Promise<Response>((resolve) => {
+      release = resolve;
+    });
+    let slow = true;
+    const fetcher: typeof fetch = async (input) =>
+      String(input).endsWith(rootId) && slow ? pending : fakeFetch()(input);
+    const mounting = mountViewer(document, fetcher);
+    await until(
+      document,
+      () => document.querySelectorAll("nav a").length === 2,
+    );
+    (
+      document.querySelector(
+        `[data-document="${nestedId}"]`,
+      ) as HTMLAnchorElement
+    ).click();
+    await until(
+      document,
+      () => document.querySelector("h1")?.textContent === "Nested",
+    );
+    slow = false;
+    release(Response.json({ html: renderMarkdown("# Late old content") }));
+    await mounting;
+    expect(document.querySelector("h1")?.textContent).toBe("Nested");
+  });
+  it("keeps the heading and scroll position when background content changes", async () => {
+    vi.useFakeTimers();
+    const value = dom();
+    const document = value.window.document;
+    value.window.location.hash = `#${rootId}/home`;
+    let content = "# Home\n\nBefore";
+    const fetcher: typeof fetch = async (input) =>
+      String(input) === "/api/tree"
+        ? fakeFetch()(input)
+        : Response.json({ html: renderMarkdown(content) });
+    await mountViewer(document, fetcher);
+    const scroll = vi.fn();
+    (document.querySelector("h1") as HTMLElement).scrollIntoView = scroll;
+    Object.defineProperty(value.window, "scrollY", {
+      value: 240,
+      configurable: true,
+    });
+    value.window.scrollTo = vi.fn();
+    content = "# Home\n\nAfter";
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(document.querySelector("article")?.textContent).toContain("After");
+    expect(value.window.location.hash).toBe(`#${rootId}/home`);
+    // New DOM headings may not implement scrollIntoView in jsdom; anchor URL stays stable.
+    expect(value.window.scrollTo).not.toHaveBeenCalled();
+    content = "# Different";
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(value.window.scrollTo).toHaveBeenCalledWith(0, 240);
+  });
+  it("shows the core diagnostic when a local link is broken", async () => {
+    const document = dom().window.document;
+    const fetcher: typeof fetch = async (input) =>
+      String(input).startsWith("/api/links/")
+        ? Response.json({
+            kind: "diagnostic",
+            diagnostic: {
+              message: "Destination is excluded.",
+              code: "EXCLUDED",
+            },
+          })
+        : fakeFetch()(input);
+    await mountViewer(document, fetcher);
+    (document.querySelector("article a") as HTMLAnchorElement).click();
+    await until(
+      document,
+      () =>
+        document.getElementById("status")?.textContent ===
+        "Destination is excluded.",
+    );
+    expect(document.querySelector("h1")?.textContent).toBe("Home");
   });
   it("serves packaged viewer assets and rendered API content under CSP", async () => {
     // Source tests load the compiled module so asset resolution matches installed packages.

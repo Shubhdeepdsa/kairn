@@ -123,3 +123,9 @@ to core; HTTP never serializes those paths. Resolution checks only effective IDs
 links for the active document, with an explicit cap diagnostic and no remote
 requests. `server/contracts.ts` defines browser-safe `DocumentResponse` including
 revision, headings and diagnostics. The POC shows concise current-document warnings.
+
+`viewer/navigation.ts`: `ReaderLocation`, `parseReaderLocation`, and `readerHash`
+implement `#id[/encoded-heading]` URL state. User actions push history, initial/
+fallback choices replace it, and popstate/hashchange restore without pushing.
+Local link clicks call core resolution; no browser filesystem-path inference.
+Default docs entries retain legacy relative-path bookmark aliases when unambiguous.

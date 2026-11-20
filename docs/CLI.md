@@ -114,3 +114,13 @@ Invalid configuration reloads preserve the last valid view and show a warning;
 fixing JSON/source paths recovers automatically. Deleting shared config resolves
 defaults and personal overrides again. Removing a bound Library registration
 retains its last valid view with a warning; restart/select a registered project.
+
+## Reader URLs and local links
+
+Bookmarks use `#<document-id>` with optional `/<encoded-heading>`. Existing ID-only
+bookmarks remain valid; default docs entries also recognize their old relative-path
+IDs. User navigation pushes history; Back/Forward and page reload restore document
+and heading selection. Missing bookmarks show a message instead of guessing a file.
+Local Markdown links are resolved by core against approved, nonexcluded sources;
+missing/unregistered/excluded targets and missing headings show useful diagnostics.
+HTTP/HTTPS/mailto links keep safe external-link behavior; remote URLs are not crawled.

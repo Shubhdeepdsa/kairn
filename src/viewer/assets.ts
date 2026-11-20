@@ -16,5 +16,9 @@ export async function loadViewerPresentation(): Promise<ViewerPresentation> {
     new URL("./client.js", import.meta.url),
     "utf8",
   );
-  return { page, style, script, renderMarkdown };
+  const navigationScript = await readFile(
+    new URL("./navigation.js", import.meta.url),
+    "utf8",
+  );
+  return { page, style, script, navigationScript, renderMarkdown };
 }

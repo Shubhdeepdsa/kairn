@@ -221,3 +221,7 @@ unregistered destinations and unsafe formats. No external URLs are fetched.
 
 Diagnostics tests verify deduplication, missing targets, external URLs left alone,
 and the explicit 32-link bound. HTTP never serializes internal canonical identity.
+
+Navigation tests cover deep-link round trips/Unicode/malformed fragments, URL
+restoration and history events, out-of-order reads, background anchor/scroll
+preservation and clickable core diagnostics without replacing the active article.
