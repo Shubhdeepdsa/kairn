@@ -70,3 +70,11 @@ packaged viewer loading and SIGINT/SIGTERM listener cleanup.
 `validateConfig`. `core/config/storage.ts`: `applicationDataDirectory`,
 `assertRealPath`, `isMissing`, bounded `readJson` and serialized/locked `updateJson`.
 Storage is explicit and injectable; no singleton or browser access.
+
+## Project Library
+
+`core/library.ts`: `canonicalProjectRoot` validates canonical directory identity;
+`ProjectLibrary` offers snapshot/list/get/find/register/rename/unregister,
+setOverrides and availability. Constructor accepts an explicit data directory.
+UUID identity survives rename; unavailable roots remain registered. Mutations
+use locked revision-checked JSON storage; unregister never deletes project files.

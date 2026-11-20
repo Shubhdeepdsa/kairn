@@ -162,3 +162,7 @@ No arbitrary delays or operating-system watcher dependency are used.
 `config-storage.test.ts` exercises schemas, traversal/version failures, corrupt
 file preservation, isolated OS paths, repeated/concurrent saves, stale values,
 lock conflicts and failed-validation cleanup. No test touches real application data.
+
+Library tests use independent service instances over temporary data to verify
+persistence, duplicate registration, rename identity, safe unregister, unavailable
+roots, invalid roots/names and stale override previews.
