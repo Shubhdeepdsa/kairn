@@ -1,0 +1,10 @@
+# Test-specific engineering instructions
+
+> Inherits root `AGENTS.md`. Scope: `tests/`.
+
+- Prefer Vitest with Node file-system temp fixtures. Never create test docs inside the actual user repository or home directory.
+- Prioritize observable outcomes over internal implementation details: existing docs remain unchanged; new docs are created only with consent; repeated init is safe; cancel leaves disk unchanged; invalid paths have actionable errors.
+- Include at least one CLI integration test with prompts substituted by a deterministic adapter; avoid requiring real TTY interaction in CI.
+- Always clean up fixtures, including on assertion failure; ensure tests pass on macOS, Linux, and Windows where applicable.
+- No live GitHub interactions, network, real emails, or secret-bearing fixtures.
+- Do not assert unsupported functionality is implemented. Maintain `docs/TESTING.md` with actual test commands and coverage limitations.

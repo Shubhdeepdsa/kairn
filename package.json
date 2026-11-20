@@ -1,0 +1,13 @@
+{
+  "name": "kairn",
+  "version": "0.1.0",
+  "description": "Local-first Markdown documentation CLI",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "engines": { "node": ">=26 <27" },
+  "bin": { "kairn": "dist/index.js" },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": { "build": "tsc -p tsconfig.build.json", "typecheck": "tsc --noEmit" },
+  "devDependencies": { "typescript": "6.0.3", "@types/node": "26.6.6" }
+}
