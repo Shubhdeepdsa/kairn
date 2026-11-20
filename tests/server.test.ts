@@ -68,7 +68,7 @@ describe("localhost API", () => {
     expect(tree.status).toBe(200);
     expect(JSON.parse(tree.body).tree[0].id).toBe(id);
     const doc = await raw(server.url, `/api/documents/${id}`);
-    expect(JSON.parse(doc.body)).toEqual({
+    expect(JSON.parse(doc.body)).toMatchObject({
       id,
       path: "README.md",
       title: "README",
@@ -205,4 +205,41 @@ describe("localhost API", () => {
       socket.destroy();
     }
   });
+});
+
+it("conditionally reads active content by revision and notices external saves", async () => {
+  const { server, id, root } = await fixture();
+  const path = `/api/documents/${id}`;
+  const first = await raw(server.url, path);
+  const etag = String(first.headers.etag);
+  expect(etag).toMatch(/^"[a-f0-9]{64}"$/);
+  const unchanged = await raw(server.url, path, { "If-None-Match": etag });
+  expect(unchanged.status).toBe(304);
+  expect(unchanged.body).toBe("");
+  await writeFile(join(root, "README.md"), "# Edited externally");
+  const changed = await raw(server.url, path, { "If-None-Match": etag });
+  expect(changed.status).toBe(200);
+  expect(changed.headers.etag).not.toBe(etag);
+  expect(JSON.parse(changed.body).markdown).toContain("Edited");
+});
+
+it("resolves encoded links only against the effective document service under the same security headers", async () => {
+  const { server, id } = await fixture();
+  const target = `/api/links/${id}/${encodeURIComponent("#hello")}`;
+  const valid = await raw(server.url, target);
+  expect(valid.status).toBe(200);
+  expect(JSON.parse(valid.body)).toEqual({
+    kind: "document",
+    id,
+    fragment: "hello",
+  });
+  const unsafe = await raw(
+    server.url,
+    `/api/links/${id}/${encodeURIComponent("file:///etc/passwd")}`,
+  );
+  expect(JSON.parse(unsafe.body).diagnostic.code).toBe("INVALID");
+  expect(
+    (await raw(server.url, target, { Origin: "https://evil.test" })).status,
+  ).toBe(403);
+  expect((await raw(server.url, `/api/links/${id}/%zz`)).status).toBe(400);
 });

@@ -10,3 +10,5 @@
 - Do not assert unsupported functionality is implemented. Maintain `docs/TESTING.md` with actual test commands and coverage limitations.
 
 - Phase 3: preserve existing behavior; keep Library/config/source contracts reusable. Isolate persistence tests, validate before writes, and never expose absolute machine paths over HTTP.
+
+- Phase 4: test independent tree/content/config changes, core-only link decisions, atomic recovery, browser history and stale response protection. Browser tests use fake clocks; persistence always stays isolated.

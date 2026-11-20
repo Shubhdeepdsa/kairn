@@ -205,5 +205,58 @@ cross-drive absolute relative() result cannot imply directory containment.
 
 Phase 3 [push CI](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726328194)
 and [PR CI](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726417025) passed
-Linux, macOS and Windows at `f0570f0`. PR #2 remains open; see latest checks for
+Linux, macOS and Windows at `f0570f0`. PR #2 is merged; see latest checks for
 follow-up commits. No npm publication or automatic merge.
+
+Phase 4 content tests verify real external saves, conditional 304 responses,
+unchanged DOM, focus preservation, retry and last-render retention on read failure.
+
+Live-project fixtures verify personal source/ignore/primary edits, shared JSON
+failure and recovery/deletion, missing paths, concurrent refresh sharing and
+registration loss retaining the last valid reader with a redacted warning.
+
+Core link fixtures verify same/cross-source links, explicit hidden-directory files,
+encoded spaces/Unicode, repeated headings, missing fragments, exclusions, missing/
+unregistered destinations and unsafe formats. No external URLs are fetched.
+
+Diagnostics tests verify deduplication, missing targets, external URLs left alone,
+and the explicit 32-link bound. HTTP never serializes internal canonical identity.
+
+Navigation tests cover deep-link round trips/Unicode/malformed fragments, URL
+restoration and history events, out-of-order reads, background anchor/scroll
+preservation and clickable core diagnostics without replacing the active article.
+
+Reader tests cover the accessible outline, deterministic heading order and
+shareable outline links. CSS limits code/table width and preserves visible focus.
+Copy-code and syntax highlighting remain deferred rather than adding dependencies.
+
+## Phase 4 final local acceptance — 2026-11-20
+
+Node 26.13.0/macOS: clean npm ci, typecheck, lint, format check, 95 tests, build
+and Markdown lint passed. Existing Phase 1–3 init/project/persistence/source/ignore/
+HTTP/Markdown/refresh/cancellation/signal regressions remain covered.
+
+`reader-acceptance.test.ts` starts the actual compiled run command, mounts the DOM
+reader against its real HTTP API, and edits files/settings using separate CLI
+processes. It verifies live content without page reload or selection change,
+source additions, cross-source heading links, ignore add/remove, invalid shared
+JSON retaining valid content, recovery and clean shutdown. Focus, scroll/anchor,
+actual Back/Forward events and stale-request protection have separate DOM tests.
+
+A clean temporary-prefix install of the packed executable passed help/version,
+conditional 304, external content edits, live CLI source/ignore changes, core
+heading resolution, invalid config preservation/recovery and packaged navigation
+module serving. All acceptance listeners/processes were closed; no real Library or
+unrelated project data was used. Runtime audit reports zero advisories; existing
+eight development-tool advisories remain.
+
+Browser inventory reports local browser use disabled in Work settings. These are
+API/DOM and installed-binary checks, not manual real-browser verification. Remote
+Linux/macOS/Windows results must be reported from the feature PR checks.
+
+Phase 4 [push CI](https://github.com/Shubhdeepdsa/kairn/actions/runs/44732707496)
+passed all Linux/macOS/Windows jobs at `82ff53e`. [PR #3 checks](https://github.com/Shubhdeepdsa/kairn/pull/3/checks)
+track the integration/latest-head results. No manual browser check is inferred from CI.
+
+A final duplicate-link regression ensures repeated occurrences do not consume the
+unique-link analysis budget and hide later broken targets. Final suite: 96 tests.

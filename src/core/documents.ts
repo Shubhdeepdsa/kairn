@@ -1,8 +1,17 @@
 import { constants } from "node:fs";
 import { lstat, open, opendir, realpath } from "node:fs/promises";
 import { createHash } from "node:crypto";
-import { basename, dirname, join, parse, resolve } from "node:path";
+import {
+  basename,
+  dirname,
+  join,
+  parse,
+  resolve,
+  relative,
+  isAbsolute,
+} from "node:path";
 
+import type { DocumentTarget, LinkCode } from "./document-links.js";
 import type { ResolvedProject } from "./config/project.js";
 import { assertRealPath } from "./config/storage.js";
 import { compileExclusions } from "./sources.js";
@@ -29,6 +38,7 @@ export interface DocumentEntry {
   readonly path: string;
   readonly title: string;
   readonly sourceId?: string;
+  readonly legacyId?: string;
   readonly projectPath?: string;
 }
 
@@ -54,7 +64,13 @@ export interface DocumentContent {
 export interface DocumentService {
   readonly root: string;
   readonly tree: readonly NavigationEntry[];
+  readonly warning?: string | undefined;
   read(id: string): Promise<DocumentContent>;
+  /** Internal canonical index for core link resolution, never HTTP output. */
+  linkTargets?(): readonly DocumentTarget[];
+  classifyLinkTarget?(
+    path: string,
+  ): Extract<LinkCode, "MISSING" | "EXCLUDED" | "UNREGISTERED">;
   /** Rescan the original root within the same limits; concurrent calls share one scan. Failed scans retain the last valid snapshot. */
   refresh(): Promise<readonly NavigationEntry[]>;
 }
@@ -296,7 +312,32 @@ async function scanDocuments(
         return translated(error);
       }
     }
-    return Object.freeze({ root, tree, read });
+    return Object.freeze({
+      root,
+      tree,
+      read,
+      linkTargets: () =>
+        [...files.entries()].map(([id, record]) => ({
+          id,
+          canonicalPath: record.canonicalPath,
+        })),
+      classifyLinkTarget: (
+        path: string,
+      ): "MISSING" | "EXCLUDED" | "UNREGISTERED" => {
+        const local = relative(root, path);
+        if (
+          isAbsolute(local) ||
+          local === ".." ||
+          local.startsWith(".." + (process.platform === "win32" ? "\\" : "/"))
+        )
+          return "UNREGISTERED";
+        return local.split(/[\\/]/).some((part) => part.startsWith("."))
+          ? "EXCLUDED"
+          : /\.(md|markdown)$/i.test(local)
+            ? "MISSING"
+            : "UNREGISTERED";
+      },
+    });
   } catch (error) {
     return translated(error);
   }
@@ -339,6 +380,9 @@ export async function createDocumentService(
       read(id: string) {
         return snapshot.read(id);
       },
+      linkTargets: () => snapshot.linkTargets?.() ?? [],
+      classifyLinkTarget: (path: string) =>
+        snapshot.classifyLinkTarget?.(path) ?? "UNREGISTERED",
       refresh() {
         pending ??= (async () => {
           try {
@@ -451,6 +495,9 @@ export async function createProjectDocumentService(
               ...node,
               id,
               sourceId: source.id,
+              ...(source.path === "docs" && !source.external
+                ? { legacyId: node.id }
+                : {}),
               ...(projectPath ? { projectPath } : {}),
             };
             records.set(id, { service, original: node.id, entry });
@@ -483,6 +530,37 @@ export async function createProjectDocumentService(
     return {
       root: project.root,
       tree,
+      linkTargets: () =>
+        [...records.entries()].map(([id, record]) => ({
+          id,
+          canonicalPath: record.service.linkTargets!().find(
+            (target) => target.id === record.original,
+          )!.canonicalPath,
+        })),
+      classifyLinkTarget(path: string) {
+        for (const source of sources) {
+          const local =
+            source.kind === "file"
+              ? basename(path)
+              : relative(source.absolutePath, path);
+          const contained =
+            source.kind === "file"
+              ? path === source.absolutePath
+              : !isAbsolute(local) &&
+                local !== ".." &&
+                !local.startsWith("../") &&
+                !local.startsWith("..\\");
+          if (!contained) continue;
+          if (
+            excluded(local) ||
+            (source.kind === "directory" &&
+              local.split(/[\\/]/).some((part) => part.startsWith(".")))
+          )
+            return "EXCLUDED";
+          return /\.(md|markdown)$/i.test(path) ? "MISSING" : "UNREGISTERED";
+        }
+        return "UNREGISTERED";
+      },
       async read(id) {
         if (!/^[a-f0-9]{64}$/.test(id))
           fail("INVALID_PATH", "Invalid document identifier.");
@@ -503,6 +581,9 @@ export async function createProjectDocumentService(
     read(id) {
       return current.read(id);
     },
+    linkTargets: () => current.linkTargets?.() ?? [],
+    classifyLinkTarget: (path: string) =>
+      current.classifyLinkTarget?.(path) ?? "UNREGISTERED",
     refresh() {
       pending ??= snapshot(false)
         .then((next) => {

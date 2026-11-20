@@ -37,3 +37,10 @@ stable IDs. Optional portable JSON and personal overrides support multiple docs
 directories, individual Markdown files, primary-source selection and basic ignore
 patterns. Existing init and unregistered docs viewing remain supported. No final
 settings UI, React, persistence database, Git explorer or cloud integration.
+
+## Phase 4: dependable live reading
+
+Active content and valid shared/personal source/ignore settings update without
+restarting. Core-resolved cross-source links, bounded broken-link diagnostics,
+shareable heading URLs, browser history and a simple document outline strengthen
+the existing vanilla reader. The final React/design system remains deferred.

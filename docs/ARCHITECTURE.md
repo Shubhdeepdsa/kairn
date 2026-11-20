@@ -145,3 +145,30 @@ labeled sections. Source IDs and project-relative paths disambiguate duplicate
 titles and cross-source links. External provenance uses opaque IDs and safe labels;
 absolute paths remain core/CLI only. Unavailable sources stay declared, and refresh
 removes disappeared documents from the view without altering config.
+
+## Phase 4 design — IMPLEMENTED
+
+One visible-tab polling cycle refreshes navigation/configuration then conditionally
+reads only the active document. Content revisions are SHA-256 of bounded source;
+HTTP ETags suppress unchanged payload/rendering. Background refresh keeps article,
+focus and scroll position; stale responses are discarded by selection generation.
+
+Application composition reloads the active project's validated shared/personal
+settings, fingerprints effective sources/exclusions, and swaps a complete service
+only after successful discovery. Invalid config retains last valid state and a
+redacted diagnostic; removing a bound registration requires recovery/re-registration,
+not silent switching. Deleting shared config restores defaults/personal resolution.
+
+Core Markdown analysis shares the existing parser/heading algorithm with rendering.
+Core link resolution uses originating canonical path and the effective document
+set; it never reads arbitrary link paths. Missing/excluded/unregistered/invalid
+links and absent fragments have typed diagnostics. Only current-document links
+are checked, with an explicit cap; remote URLs are never fetched.
+
+URL contract: `#<document-id>/<percent-encoded-heading>`; legacy `#<id>` bookmarks
+remain valid. User navigation pushes history; fallback/initial normalization
+replaces. Back/Forward restores selection/fragment without pushing another entry.
+Path-based IDs survive source reorder/primary changes but change on rename; same
+path recreation regains identity. No title-based identity or browser filesystem logic.
+
+Canonical refresh, identity, link and API details: [reading contracts](READING.md).

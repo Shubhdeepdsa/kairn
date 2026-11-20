@@ -89,3 +89,15 @@ Future decisions should record meaningful alternatives and trade-offs rather tha
 - **Rationale:** Small inspectable storage, portable source declarations, reusable services.
 - **Consequences:** Lock/revision protection for cooperating writers; no speculative
   migrations. External paths remain personal. UI receives no absolute paths.
+
+## ADR-010 — Unified reader refresh and core link authority
+
+- **Status:** Accepted and implemented in Phase 4.
+- **Decision:** Reuse visible-tab polling, active-document content hashes/ETags,
+  application-level atomic config reload, core canonical-path link resolution and
+  bounded current-document diagnostics. Reuse the established heading slug rules.
+- **Alternatives:** Watchers/SSE, page reloads, browser path matching, full link index.
+- **Rationale:** Portable lifecycle, narrow filesystem trust boundary, stable reading.
+- **Consequences:** Approximately two-second latency plus scan/read time. Old content
+  stays visible on recoverable failures; no remote crawling or settings writes.
+  Deep links add an optional encoded heading after the document ID.

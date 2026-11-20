@@ -101,3 +101,36 @@ skips disappeared sources without deleting configuration.
 personal resolution without writes. `cli/project.ts`: `runProjectCommand`,
 `ProjectPrompts`, `projectPrompts` adapt preview/consent and scriptable arguments
 to core operations. No HTTP Library/settings mutation endpoints are introduced.
+
+`core/freshness.ts`: `documentRevision` hashes only the bounded active document.
+HTTP document responses expose revision/ETag and honor If-None-Match with 304.
+The viewer reuses its visible-tab loop for background content reads and leaves
+unchanged article DOM/focus intact; failures retain content and retry next cycle.
+
+`core/live-project.ts`: `createReloadingDocumentService` composes the existing
+resolver/scanner, fingerprints effective settings, coalesces refreshes and swaps
+only complete validated services. Optional `DocumentService.warning` surfaces a
+redacted reload warning while preserving last valid state. No settings are written.
+
+`core/markdown.ts` now owns the existing safe parser/slug algorithm and exports
+`analyzeMarkdown`, `MarkdownAnalysis`, `Heading`, and `renderMarkdown`; the old
+viewer module re-exports rendering for compatibility. `core/document-links.ts`
+exports `resolveDocumentLink` and browser-safe typed results/diagnostics. Internal
+`DocumentService.linkTargets/classifyLinkTarget` expose canonical authority only
+to core; HTTP never serializes those paths. Resolution checks only effective IDs.
+
+`core/link-diagnostics.ts`: `diagnoseDocumentLinks` checks at most 32 unique parsed
+links for the active document, with an explicit cap diagnostic and no remote
+requests. `server/contracts.ts` defines browser-safe `DocumentResponse` including
+revision, headings and diagnostics. The POC shows concise current-document warnings.
+
+`viewer/navigation.ts`: `ReaderLocation`, `parseReaderLocation`, and `readerHash`
+implement `#id[/encoded-heading]` URL state. User actions push history, initial/
+fallback choices replace it, and popstate/hashchange restore without pushing.
+Local link clicks call core resolution; no browser filesystem-path inference.
+Default docs entries retain legacy relative-path bookmark aliases when unambiguous.
+
+The reader presents the reusable `Heading` outline as keyboard-accessible links
+with shareable heading URLs. Code blocks/tables stay horizontally scrollable
+within the article; inline code is visually distinct. No syntax highlighter,
+clipboard dependency, final design system or additional polling lifecycle.

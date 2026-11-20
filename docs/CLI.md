@@ -64,7 +64,8 @@ the viewer available and prints a manual-open instruction. Ctrl+C stops the serv
 Navigation refreshes automatically about every two seconds while the tab is
 visible, and immediately when returning to the tab. Added/renamed/deleted Markdown
 files update the sidebar without restarting or reloading. Existing content is
-reread when selected; the active document is not automatically re-rendered. Hidden files, symlinks, attachments and remote
+checked during the same polling cycle; changed active content refreshes without
+reselection, while unchanged content keeps its DOM and focus. Hidden files, symlinks, attachments and remote
 images are not served. The viewer has no editing, search, Git history or registry.
 
 The current selection and collapsed folders survive sidebar updates. If the active
@@ -100,8 +101,7 @@ Cancel exits 2 without writing; invalid input/conflicts exit 1. List/show are
 machine-readable JSON; absolute paths there are CLI-only, never HTTP output.
 Remove unregisters metadata only. Config init is explicitly approved, create-only
 and refuses external paths. Personal source changes and ignore rules stay in the
-Library; shared configuration is not edited by these commands. Restart run after
-configuration changes; document files themselves still refresh automatically.
+Library; shared configuration is not edited by these commands. Valid configuration changes reload while running; document files themselves still refresh automatically.
 
 Run with no flags still works without registration. If the selected canonical
 root is registered, run resolves its shared config and personal overrides.
@@ -109,3 +109,18 @@ root is registered, run resolves its shared config and personal overrides.
 `--cwd`. Run never registers or writes configuration. See [configuration](CONFIGURATION.md)
 for schema, storage locations and precedence. Source discover returns candidates
 only; source add is the approval operation.
+
+Invalid configuration reloads preserve the last valid view and show a warning;
+fixing JSON/source paths recovers automatically. Deleting shared config resolves
+defaults and personal overrides again. Removing a bound Library registration
+retains its last valid view with a warning; restart/select a registered project.
+
+## Reader URLs and local links
+
+Bookmarks use `#<document-id>` with optional `/<encoded-heading>`. Existing ID-only
+bookmarks remain valid; default docs entries also recognize their old relative-path
+IDs. User navigation pushes history; Back/Forward and page reload restore document
+and heading selection. Missing bookmarks show a message instead of guessing a file.
+Local Markdown links are resolved by core against approved, nonexcluded sources;
+missing/unregistered/excluded targets and missing headings show useful diagnostics.
+HTTP/HTTPS/mailto links keep safe external-link behavior; remote URLs are not crawled.

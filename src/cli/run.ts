@@ -1,3 +1,4 @@
+import { createReloadingDocumentService } from "../core/live-project.js";
 import { resolve } from "node:path";
 import { discoverDocumentationRoot } from "../core/initialization.js";
 import {
@@ -13,6 +14,8 @@ import type { ResolvedProject } from "../core/config/project.js";
 export interface RunContext {
   readonly directory: string;
   readonly project?: ResolvedProject;
+  readonly reloadProject?: () => Promise<ResolvedProject | null>;
+  readonly projectRoot?: string;
   readonly port: number;
   readonly noOpen: boolean;
   readonly interactive: boolean;
@@ -50,9 +53,16 @@ export async function runDocumentation(context: RunContext): Promise<number> {
     }
     root = resolve(context.directory, chosen);
   }
-  const documents = context.project
+  let documents = context.project
     ? await createProjectDocumentService(context.project)
     : await createDocumentService(root);
+  if (context.reloadProject)
+    documents = await createReloadingDocumentService(
+      documents,
+      context.projectRoot ?? context.directory,
+      context.project ?? null,
+      context.reloadProject,
+    );
   if (context.signal.aborted) return 0;
   const server = await startDocumentationServer(documents, {
     port: context.port,
