@@ -28,3 +28,11 @@ navigation/content. Absolute `canonicalPath` stays local; adapters must omit it.
 `documentLimits` define hard caps; callers can lower them. Covered by
 `tests/documents.test.ts`: nesting, ordering, identities, read-only behavior,
 fresh reads, paths, symlinks, permissions and limits.
+
+## HTTP adapter
+
+`src/server/http.ts`: `startDocumentationServer` consumes only `tree/read` from
+`DocumentService`, returning `RunningServer` (`url`, idempotent `close`).
+`ServerOptions` permits port 0 for tests and optional `ViewerPresentation` static
+assets/rendering. It never resolves request paths against the filesystem.
+`tests/server.test.ts` covers protocol, isolation, lifecycle and port conflicts.

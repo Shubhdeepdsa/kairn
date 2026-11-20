@@ -97,3 +97,10 @@ canonical paths, empty roots, fresh edits/deletes, ignored hidden/non-Markdown
 entries, traversal/unknown IDs, invalid roots, root/descendant symlinks and parent
 replacement. Lower limits exercise entry/count/depth/read caps. POSIX-only
 permission tests skip Windows and root, matching existing init tests.
+
+## Phase 2 HTTP coverage
+
+Ephemeral loopback tests cover health/tree/read, missing/invalid IDs, raw and
+encoded traversal, absolute paths, hostile Host/Origin/Fetch Metadata, GET-only
+and body rejection, header/URL bounds, port conflicts, generic internal errors,
+and idempotent/bounded shutdown. Every fixture closes its server in cleanup.

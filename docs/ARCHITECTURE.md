@@ -93,3 +93,15 @@ Markdown file. Root and descendant symlinks/special files are rejected; hidden
 entries are skipped. Reads validate known IDs, root identity, every path component,
 canonical identity and the opened regular file, then read at most the byte cap + 1.
 Concurrent hostile ancestor mutation remains outside the security guarantee.
+
+### Implemented HTTP adapter
+
+`src/server/http.ts` binds only 127.0.0.1. GET `/api/health`, `/api/tree`, and
+`/api/documents/<id>` return JSON. Expected errors map to 400/403/404/409/413;
+unexpected failures return generic 500 messages without local paths. Exact Host
+(including actual port), Origin and Fetch Metadata checks reject untrusted browser
+requests. No CORS. Raw/encoded path traversal and query strings are rejected.
+GET bodies are forbidden; headers cap at 8 KiB, URLs at 2 KiB, active requests at
+16, request/socket timeouts at 5 seconds. Close drains requests for at most one
+second before closing connections. Optional viewer assets are exact static routes.
+Loopback restricts network reachability, not other local users/processes.
