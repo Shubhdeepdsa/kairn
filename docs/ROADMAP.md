@@ -27,3 +27,8 @@ Publication is authorized only to the verified personal user account, after revi
 4. Local Git timeline and document-specific history.
 5. Polished Kairn Mineral React interface.
 6. Optional project information, integrations and other experiments.
+
+## Acceptance follow-up
+
+Initial remote CI exposed Windows CRLF checkout drift. The follow-up enforces LF
+with `.gitattributes`; formatter behavior and check strictness are unchanged.

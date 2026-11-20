@@ -82,3 +82,10 @@ first init and repeated init. A real pseudo-terminal verified Ctrl+C exit 2 with
 no writes, and affirmative create confirmation with exit 0. NO_COLOR removed
 styling colors; interactive cursor controls remain necessary for Clack prompts.
 CI coverage on other operating systems must be judged from actual workflow runs.
+
+### Windows checkout correction
+
+The first remote run passed Linux/macOS but failed Windows Prettier because Git
+checked out CRLF while the formatter requires LF. `.gitattributes` now enforces
+LF for text on every platform, including executable shebangs. The format gate is
+unchanged. Subsequent remote runs verify the correction.
