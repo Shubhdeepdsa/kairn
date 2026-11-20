@@ -154,3 +154,35 @@ it("hosts SQLite and extraction off the reader thread with a bounded clean worke
     await rm(root, { recursive: true, force: true });
   }
 });
+
+it("reports omitted oversized documents as partial with an accurate persisted count", async () => {
+  const root = await mkdtemp(join(tmpdir(), "kairn-coverage-"));
+  const data = join(root, "data");
+  await mkdir(join(root, "docs"));
+  await writeFile(
+    join(root, "docs", "large.md"),
+    Array.from({ length: 513 }, (_, i) => `# Heading ${i}`).join("\n"),
+  );
+  const library = new ProjectLibrary(data);
+  const project = await library.register(root, "Large fixture");
+  const coordinator = new SearchCoordinator({ dataDirectory: data });
+  try {
+    const response = await coordinator.search({
+      query: "heading",
+      scope: { type: "project", projectId: project.id },
+      limit: 20,
+    });
+    expect(response.results).toEqual([]);
+    expect(response.coverage).toEqual([
+      expect.objectContaining({
+        id: project.id,
+        status: "partial",
+        indexed: 0,
+        total: 1,
+      }),
+    ]);
+  } finally {
+    await coordinator.close();
+    await rm(root, { recursive: true, force: true });
+  }
+});

@@ -161,3 +161,6 @@ apply. Query candidates retain full body/code inside SQLite; only bounded excerp
 are materialized in worker memory. Refresh search sends refresh=1 to bypass the
 1.5-second reuse window explicitly. Invalid queries return 400; temporary worker or
 cache failures return redacted 503, distinct from project-level unavailable coverage.
+
+Coverage indexed counts are persisted documents, not attempted reads or sections.
+An omitted oversized/unreadable document therefore does not inflate a partial count.

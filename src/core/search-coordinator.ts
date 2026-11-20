@@ -217,7 +217,7 @@ export class SearchCoordinator {
           id: p.id,
           name: p.name,
           status: failed ? "partial" : complete ? "ready" : "indexing",
-          indexed: end,
+          indexed: index.documentCount(p.id),
           total: entries.length,
           ...(!complete || failed
             ? {

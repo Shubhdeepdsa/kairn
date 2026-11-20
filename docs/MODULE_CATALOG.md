@@ -166,3 +166,6 @@ clipboard dependency, final design system or additional polling lifecycle.
 
 - `viewer/search-palette.ts`: minimal accessible DOM adapter over SearchPalette,
   abortable HTTP search, focus/keyboard lifecycle and injected destination callback.
+
+SearchIndex.documentCount reports persisted document coverage independently of
+section count and attempted reconciliation reads.

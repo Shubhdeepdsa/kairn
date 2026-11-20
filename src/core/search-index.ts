@@ -198,6 +198,14 @@ export class SearchIndex {
       if (!ids.has(String(row.project)))
         this.prune(String(row.project), new Set());
   }
+  /** Count persisted documents, not attempted reads or derived sections, for honest partial coverage. */
+  documentCount(projectId: string): number {
+    return Number(
+      this.database
+        .prepare("SELECT count(*) AS count FROM documents WHERE project=?")
+        .get(projectId)!.count,
+    );
+  }
   /** Close every SQLite handle before worker/process shutdown. */
   close(): void {
     this.database.close();

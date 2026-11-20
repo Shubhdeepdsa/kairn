@@ -328,3 +328,7 @@ a temporary lock from the committed dependency graph plus the actual packed tarb
 and runs offline npm ci; it does not depend on cached registry metadata or alter the
 repository lock. The unchanged 250-document SQLite benchmark has an explicit 30-second
 timeout, not a performance assertion. No product assertions or safety checks were removed.
+
+A partial-coverage regression verifies that a 513-section fixture is omitted and
+reports zero indexed out of one total document, rather than counting attempted
+reads as successful indexing. Final suite includes this additional coverage case.
