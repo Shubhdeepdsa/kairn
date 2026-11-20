@@ -170,3 +170,6 @@ roots, invalid roots/names and stale override previews.
 Project-config fixtures cover absent defaults, candidate discovery, decline,
 create-only conflicts, portable copied roots, explicit override deltas, primary
 selection and missing-source diagnosis without rewriting configuration.
+
+Source tests cover AGENTS/drafts/generated globs, zero-directory **, case behavior,
+unsupported syntax and overlap reports. Discovery/config tests remain read-only.

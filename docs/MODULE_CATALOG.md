@@ -84,3 +84,8 @@ use locked revision-checked JSON storage; unregister never deletes project files
 `resolveProjectConfig` return `ResolvedProject`/`ResolvedSource`. Relative portable
 paths remain separate from canonical internal paths. Personal fields have explicit
 merge semantics; see CONFIGURATION.md. Source candidates require approval to save.
+
+`core/sources.ts`: `compileExclusions` compiles the deliberately limited glob
+syntax; `sourceOverlaps` reports root overlap without modifying declarations.
+`discoverSourceCandidates` only suggests direct docs and root README. Explicit
+files in hidden directories are approved sources, not recursive discovery.

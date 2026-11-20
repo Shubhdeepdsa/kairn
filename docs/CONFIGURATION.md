@@ -35,3 +35,12 @@ identity/provenance, rejects symlinks and reports missing sources. Discovery onl
 suggests direct docs and root README; approving config/Library changes is explicit.
 Primary navigation is unwrapped; additional sources have labeled sections. The
 existing document scanner/reader and refresh lifecycle are extended, not replaced.
+
+## Implemented exclusion and overlap rules
+
+Patterns are case-sensitive and source-relative, independent of .gitignore.
+`*` matches within one component, `?` one character, and whole-component `**`
+zero or more directories (or all remaining components at the end). No negation,
+braces, character classes or backslashes. Any matching rule excludes the document.
+Overlapping declared roots are reported by `sourceOverlaps`; engine deduplication
+is canonical-file based, with primary source then declaration order winning.
