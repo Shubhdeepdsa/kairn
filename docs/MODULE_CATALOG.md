@@ -17,3 +17,14 @@ CLI boundary exports: `runInit`, `InitContext`, and `InitPrompts` in
 `src/cli/init.ts`; `clackPrompts` in `src/cli/prompts.ts`. These are terminal
 adapters, not core APIs. `tests/cli.test.ts` verifies consent and cancellation
 with fake prompts plus built-binary subprocess checks.
+
+## Read-only documents
+
+`src/core/documents.ts`: `createDocumentService(directory, limits?)` returns a
+`DocumentService` with canonical `root`, immutable `tree`, and `read(id)`.
+`DocumentEntry`, `DirectoryEntry`, `NavigationEntry`, and `DocumentContent` define
+navigation/content. Absolute `canonicalPath` stays local; adapters must omit it.
+`DocumentError`/`DocumentErrorCode` expose stable failures. `DocumentLimits` and
+`documentLimits` define hard caps; callers can lower them. Covered by
+`tests/documents.test.ts`: nesting, ordering, identities, read-only behavior,
+fresh reads, paths, symlinks, permissions and limits.

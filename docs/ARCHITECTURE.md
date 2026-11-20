@@ -83,3 +83,13 @@ mutation. HTTP will validate exact Host/Origin, reject cross-site fetches and
 non-GET/body-bearing requests, bound request sizes, and return structured errors.
 No CORS, remote assets, raw HTML, arbitrary filesystem routes or shell execution.
 Loopback is not authentication against other processes running as the same user.
+
+### Implemented document engine
+
+`createDocumentService` now scans .md/.markdown files, directory-first and sorted
+by source-relative path using deterministic codepoint ordering. Hard caps: 10,000
+entries (including ignored ones), 2,000 documents, 32 directory levels, 1 MiB per
+Markdown file. Root and descendant symlinks/special files are rejected; hidden
+entries are skipped. Reads validate known IDs, root identity, every path component,
+canonical identity and the opened regular file, then read at most the byte cap + 1.
+Concurrent hostile ancestor mutation remains outside the security guarantee.

@@ -89,3 +89,11 @@ The first remote run passed Linux/macOS but failed Windows Prettier because Git
 checked out CRLF while the formatter requires LF. `.gitattributes` now enforces
 LF for text on every platform, including executable shebangs. The format gate is
 unchanged. Subsequent remote runs verify the correction.
+
+## Phase 2 document engine
+
+`tests/documents.test.ts` uses temporary roots for nested discovery, stable IDs,
+canonical paths, empty roots, fresh edits/deletes, ignored hidden/non-Markdown
+entries, traversal/unknown IDs, invalid roots, root/descendant symlinks and parent
+replacement. Lower limits exercise entry/count/depth/read caps. POSIX-only
+permission tests skip Windows and root, matching existing init tests.
