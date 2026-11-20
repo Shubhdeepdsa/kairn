@@ -37,8 +37,13 @@ parser.renderer.rules.image = (tokens, index) =>
 parser.renderer.rules.link_open = (tokens, index, options, env, renderer) => {
   const token = tokens[index];
   if (token) {
-    if (Array.isArray(env?.links) && env.links.length < 129)
-      env.links.push(String(token.attrGet("href") ?? ""));
+    const href = String(token.attrGet("href") ?? "");
+    if (
+      Array.isArray(env?.links) &&
+      env.links.length < 129 &&
+      !env.links.includes(href)
+    )
+      env.links.push(href);
     token.attrSet("rel", "noopener noreferrer");
     token.attrSet("referrerpolicy", "no-referrer");
     if (/^(https?:|mailto:)/i.test(String(token.attrGet("href") ?? "")))

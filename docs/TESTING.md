@@ -257,3 +257,6 @@ Linux/macOS/Windows results must be reported from the feature PR checks.
 Phase 4 [push CI](https://github.com/Shubhdeepdsa/kairn/actions/runs/44732707496)
 passed all Linux/macOS/Windows jobs at `82ff53e`. [PR #3 checks](https://github.com/Shubhdeepdsa/kairn/pull/3/checks)
 track the integration/latest-head results. No manual browser check is inferred from CI.
+
+A final duplicate-link regression ensures repeated occurrences do not consume the
+unique-link analysis budget and hide later broken targets. Final suite: 96 tests.

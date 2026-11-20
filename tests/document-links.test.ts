@@ -114,3 +114,16 @@ it("bounds and deduplicates current-document diagnostics without checking remote
   expect(bounded).toHaveLength(33);
   expect(bounded[32]?.code).toBe("LIMIT_EXCEEDED");
 });
+
+it("does not let repeated links hide a later distinct broken target", async () => {
+  const { diagnoseDocumentLinks } =
+    await import("../src/core/link-diagnostics.js");
+  const { service, docs } = await fixture();
+  const id = docs[0]!.id;
+  const markdown =
+    Array.from({ length: 150 }, () => "[Web](https://example.com)").join(" ") +
+    " [Missing](missing.md)";
+  const diagnostics = await diagnoseDocumentLinks(service, id, markdown);
+  expect(diagnostics).toHaveLength(1);
+  expect(diagnostics[0]?.code).toBe("MISSING");
+});
