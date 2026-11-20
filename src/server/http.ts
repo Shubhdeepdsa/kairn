@@ -1,4 +1,8 @@
-import { searchRoute, projectRoute } from "./search-routes.js";
+import {
+  searchRoute,
+  projectRoute,
+  SearchUnavailableError,
+} from "./search-routes.js";
 import type { SearchApplication } from "./search-routes.js";
 import { analyzeMarkdown } from "../core/markdown.js";
 import { diagnoseDocumentLinks } from "../core/link-diagnostics.js";
@@ -286,7 +290,9 @@ export async function startDocumentationServer(
             response.end(body);
           } else failure(response, 404, "NOT_FOUND", "Route was not found.");
         } catch (error) {
-          if (error instanceof DocumentError) {
+          if (error instanceof SearchUnavailableError)
+            failure(response, 503, "SEARCH_UNAVAILABLE", error.message);
+          else if (error instanceof DocumentError) {
             const status = {
               INVALID_PATH: 400,
               NOT_FOUND: 404,

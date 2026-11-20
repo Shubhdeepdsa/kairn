@@ -432,9 +432,15 @@ export async function mountViewer(
     const number = ++navigationNumber;
     await refreshing;
     if (number !== navigationNumber || disposed) return;
-    const projects = (await api("/api/projects")) as {
-      projects: SearchProject[];
-    };
+    let projects: { projects: SearchProject[] };
+    try {
+      projects = (await api("/api/projects")) as { projects: SearchProject[] };
+    } catch {
+      if (number === navigationNumber && !disposed)
+        status!.textContent =
+          "Project list is unavailable. Check the Library and retry.";
+      return;
+    }
     if (number !== navigationNumber || disposed) return;
     const project =
       destination.projectId === initialProject.id
@@ -447,10 +453,9 @@ export async function mountViewer(
     const prior = activeProject;
     try {
       // Validate before changing visible context; project routes never accept filesystem paths.
-      const prefix =
-        project.id === initialProject.id
-          ? "/api"
-          : `/api/projects/${project.id}`;
+      const prefix = project.id.startsWith("session-")
+        ? "/api"
+        : `/api/projects/${project.id}`;
       const response = await fetcher(
         `${prefix}/documents/${destination.documentId}`,
         { credentials: "same-origin" },
@@ -481,6 +486,7 @@ export async function mountViewer(
       const label = document.getElementById("project-context");
       if (label) label.textContent = project.name;
     } catch (error) {
+      if (number !== navigationNumber || disposed) return;
       activeProject = prior;
       status!.textContent =
         error instanceof Error
@@ -551,12 +557,13 @@ export async function mountViewer(
       "none",
     );
   else await refresh(true);
-  disposeSearch = mountSearchPalette(
-    document,
-    fetcher,
-    () => activeProject,
-    (destination) => navigate(destination),
-  );
+  if (!disposed)
+    disposeSearch = mountSearchPalette(
+      document,
+      fetcher,
+      () => activeProject,
+      (destination) => navigate(destination),
+    );
   schedule();
   return dispose;
 }

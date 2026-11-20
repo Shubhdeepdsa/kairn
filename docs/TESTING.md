@@ -293,3 +293,30 @@ duplicate names, Escape precedence, debounce, scope changes and stale replies.
 scope, composition, @ completion and query preservation, safe result text, accessible
 selection, focus restoration, partial/error states, refresh and aborted cleanup.
 These are DOM tests; they are not claims of human browser acceptance.
+
+## Phase 5 acceptance
+
+`search-acceptance.test.ts` packs the actual executable, installs offline into a
+clean temporary prefix and starts it with isolated Library/projects. It verifies
+three-project scopes, technical terms, actual API plus DOM palette selection,
+cross-project Back/Forward/deep links, explicit fresh indexing, ignore/source
+changes, unavailable/unregistered projects, offline cache-corruption restart and
+unregistered local search. It preserves original bytes except deliberate fixture
+edits and shuts down all processes. No real Library/project is used.
+
+`search-processes.test.ts` verifies independent process writers and recovery after
+a process exits during an uncommitted transaction. Section/heading and materialized
+query payload bounds are additional acceptance safeguards. Run performance samples
+with `npm run build` then `node scripts/benchmark-search.mjs`; it creates/removes
+its own isolated fixtures. See SEARCH_ACCEPTANCE.md for actual local measurements
+and the separate human-browser checklist.
+
+## Phase 5 local verification — 2026-11-20
+
+Node 26.13.0/macOS: clean npm ci, typecheck, lint/TSDoc, format check, build,
+Markdown lint and 117 tests across 28 files passed. This includes the clean-installed
+package, real process/SQLite rollback/concurrency, actual HTTP and DOM navigation
+acceptance described above. Runtime audit: zero advisories; npm ci still reports
+eight existing development-tool advisories. Dependencies/lockfile were unchanged.
+Real human browser acceptance remains blocked by the browser tool setting. Remote
+Linux/macOS/Windows results are not inferred from the local run; see feature CI.

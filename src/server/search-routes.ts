@@ -1,8 +1,11 @@
+import { SearchQueryError } from "../core/search-query.js";
 import { DocumentError } from "../core/documents.js";
 import type { DocumentService } from "../core/documents.js";
 import type { ProjectNavigator } from "../core/project-navigation.js";
 import type { SearchService } from "../core/search-service.js";
 import { isProjectId } from "../core/search-contracts.js";
+/** Redacted temporary search/storage failure, distinct from invalid user query input. */
+export class SearchUnavailableError extends Error {}
 /** Optional application capabilities, injected by CLI composition; no filesystem algorithms in HTTP. */
 export interface SearchApplication {
   readonly navigator: ProjectNavigator;
@@ -27,13 +30,18 @@ export async function searchRoute(
   const params = url.searchParams;
   if (
     [...params.keys()].some(
-      (k) => !["query", "project", "limit"].includes(k),
+      (k) => !["query", "project", "limit", "refresh"].includes(k),
     ) ||
     [...new Set(params.keys())].some((k) => params.getAll(k).length !== 1)
   )
     throw new DocumentError(
       "INVALID_PATH",
-      "Use query, optional project and limit only.",
+      "Use query, optional project, limit and refresh=1 only.",
+    );
+  if (params.has("refresh") && params.get("refresh") !== "1")
+    throw new DocumentError(
+      "INVALID_PATH",
+      "Use refresh=1 for an explicit reconciliation.",
     );
   const projectId = params.get("project");
   if (projectId !== null && !isProjectId(projectId))
@@ -41,16 +49,18 @@ export async function searchRoute(
   try {
     return await application.search.search({
       query: params.get("query") ?? "",
+      ...(params.has("refresh") ? { refresh: true } : {}),
       limit: Number(params.get("limit") ?? 20),
       scope:
         projectId === null
           ? { type: "global" }
           : { type: "project", projectId },
     });
-  } catch {
-    throw new DocumentError(
-      "INVALID_PATH",
-      "Search could not complete. Check query limits, cache availability and project configuration.",
+  } catch (error) {
+    if (error instanceof SearchQueryError)
+      throw new DocumentError("INVALID_PATH", error.message);
+    throw new SearchUnavailableError(
+      "Search is temporarily unavailable. Check cache availability and retry.",
     );
   }
 }

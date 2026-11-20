@@ -19,12 +19,12 @@ Real pseudo-terminal checks verified create confirmation and Ctrl+C cancellation
 Remote CI results are separate from local verification; see GitHub Actions.
 Publication is authorized only to the verified personal user account, after review.
 
-## Later phases (not implemented)
+## Later phases
 
-1. Richer document engine, search and source-aware navigation.
-2. Local Git timeline and document-specific history.
-3. Polished Kairn Mineral React interface.
-4. Optional project information, integrations and other experiments.
+1. Local scoped search: Phase 5 implementation below.
+2. Local Git timeline and document-specific history: PLANNED.
+3. Polished Kairn Mineral React interface: PLANNED.
+4. Optional project information and integrations: DEFERRED.
 
 ## Acceptance follow-up
 
@@ -91,7 +91,7 @@ The [push run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726328194) a
 passed all Linux/macOS/Windows jobs. `b7208ee` adds a focused Windows cross-drive
 overlap correction; latest-head checks are visible on the PR.
 
-## Phase 4 — VERIFIED; PR review pending
+## Phase 4 — COMPLETE; VERIFIED and merged
 
 A contracts; B content freshness; C configuration reload; D core links; E bounded
 diagnostics; F URL/history; G outline/accessibility; acceptance and feature PR.
@@ -123,6 +123,20 @@ visible on the PR. Browser verification remains API/DOM-only as documented.
 
 ## Phase 5 — local scoped search
 
-IN PROGRESS: contracts → Markdown extraction → FTS5 index → ranked queries → global
-coordination → project-aware navigation → palette controller → vanilla integration
-→ acceptance. Preserve Phase 1–4. See SEARCH.md.
+IMPLEMENTED; final acceptance/CI evidence in progress. Preserve Phases 1–4.
+See [search design](SEARCH.md) and [manual acceptance](SEARCH_ACCEPTANCE.md).
+
+| Stage | Commit    | Outcome                                                      |
+| ----- | --------- | ------------------------------------------------------------ |
+| 5A    | `5d7cd5d` | Scope/result/coverage/destination contracts and architecture |
+| 5B    | `0dd316b` | Shared-parser section extraction                             |
+| 5C    | `96e6e46` | Private incremental rebuildable FTS5 cache                   |
+| 5D    | `d0f880b` | Scoped literal queries, ranking, grouping and snippets       |
+| 5E    | `2c5f64f` | Bounded global/session coordinator and lazy worker           |
+| 5F    | `4bfb9d1` | Independent project navigation and scoped reader/history     |
+| 5G    | `f32a7ac` | Framework-independent palette controller                     |
+| 5H    | `9422620` | Minimal accessible vanilla palette                           |
+
+Phase 4 PR #3 merged as `c76f1b5`; Phase 5 starts from that main commit.
+Phase 4 manual browser checks were confirmed by the user before this phase.
+Phase 5 manual browser checks remain separate; do not infer them from that confirmation.

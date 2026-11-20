@@ -188,6 +188,7 @@ export function mountSearchPalette(
         query: search.query,
         limit: String(search.limit),
       });
+      if (search.refresh) params.set("refresh", "1");
       if (search.scope.type === "project")
         params.set("project", search.scope.projectId);
       const response = await fetcher("/api/search?" + params, {

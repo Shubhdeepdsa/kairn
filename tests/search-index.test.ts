@@ -126,3 +126,20 @@ it("measures a bounded real FTS5 dataset with weighted rank and plain snippets",
   );
   expect(result).toHaveLength(20);
 });
+
+it("bounds derived sections before replacing a valid document", async () => {
+  const { index } = await open();
+  index.put(document);
+  expect(() =>
+    index.put({
+      ...document,
+      revision: "huge",
+      markdown: Array.from({ length: 513 }, (_, i) => `# Heading ${i}`).join(
+        "\n",
+      ),
+    }),
+  ).toThrow("section");
+  expect(
+    index.database.prepare("SELECT revision FROM documents").get()!.revision,
+  ).toBe("one");
+});

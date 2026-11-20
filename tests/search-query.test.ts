@@ -106,3 +106,49 @@ it("ranks exact title over heading, path, body repetition and code; groups secti
     await rm(root, { recursive: true, force: true });
   }
 });
+
+it("returns bounded relevant context near the end of a large Unicode section", async () => {
+  const root = await mkdtemp(join(tmpdir(), "kairn-query-large-"));
+  const index = await SearchIndex.open(root);
+  try {
+    index.put({
+      projectId: a,
+      documentId: "large",
+      sourceId: "docs",
+      path: "docs/日本語.md",
+      title: "Large",
+      revision: "1",
+      markdown:
+        "# Large\n\n## 日本語\n\n" +
+        "ordinary text ".repeat(35000) +
+        "\nuniquematchingtoken 日本語説明",
+    });
+    const results = querySearchIndex(
+      index,
+      {
+        query: "uniquematchingtoken",
+        scope: { type: "project", projectId: a },
+        limit: 20,
+      },
+      [{ id: a, name: "日本語" }],
+    );
+    expect(results).toHaveLength(1);
+    expect(results[0]!.snippet).toContain("uniquematchingtoken");
+    expect(results[0]!.snippet.length).toBeLessThanOrEqual(232);
+    expect(results[0]!.fragment).toBe("日本語");
+    expect(
+      querySearchIndex(
+        index,
+        {
+          query: "日本語説明",
+          scope: { type: "project", projectId: a },
+          limit: 20,
+        },
+        [{ id: a, name: "日本語" }],
+      ),
+    ).toHaveLength(1);
+  } finally {
+    index.close();
+    await rm(root, { recursive: true, force: true });
+  }
+});

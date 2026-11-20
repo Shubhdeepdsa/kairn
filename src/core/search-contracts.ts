@@ -13,6 +13,8 @@ export interface SearchRequest {
   readonly query: string;
   readonly scope: SearchScope;
   readonly limit: number;
+  /** Bypass the short content coverage reuse window for an explicit user refresh. */
+  readonly refresh?: boolean;
 }
 /** Browser-safe project identity; names may be duplicated. */
 export interface SearchProject {

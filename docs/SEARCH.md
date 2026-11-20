@@ -127,7 +127,7 @@ Project-aware bookmarks use #p/project-id/document-id/encoded-fragment; old `#id
 
 Same-origin GET endpoints: /api/context returns the initial ID/name; /api/projects
 returns registered ID/name suggestions only; /api/search accepts query, optional
-project and limit (no duplicates/unknown parameters). /api/projects/project-id/tree,
+project, limit and refresh=1 (no duplicates/unknown parameters). /api/projects/project-id/tree,
 /documents/id and /links/id/encoded-target reuse the existing safe reader adapters.
 All original Host/Origin/Fetch Metadata/CSP/size/method limits apply before dispatch.
 Project and search responses contain IDs/relative metadata, never canonical paths.
@@ -151,3 +151,13 @@ selection, status/coverage, refresh and error/empty states compose the controlle
 Result labels/snippets use textContent only. Requests are abortable; stale replies
 are ignored. The result callback invokes the shared project-aware reader navigator.
 No React, final design system, settings screen or extra polling loop is introduced.
+
+## Acceptance hardening bounds
+
+A document with more than 512 derived sections or a title/heading/fragment longer
+than 512 characters is omitted with partial coverage, rather than performing an
+unbounded single-document indexing transaction. Existing safe document limits still
+apply. Query candidates retain full body/code inside SQLite; only bounded excerpts
+are materialized in worker memory. Refresh search sends refresh=1 to bypass the
+1.5-second reuse window explicitly. Invalid queries return 400; temporary worker or
+cache failures return redacted 503, distinct from project-level unavailable coverage.

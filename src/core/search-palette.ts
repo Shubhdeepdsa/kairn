@@ -33,6 +33,7 @@ export class SearchPalette {
   private projects: readonly SearchProject[] = [];
   private timer: ReturnType<typeof setTimeout> | undefined;
   private generation = 0;
+  private force = false;
   private value: PaletteState = {
     open: false,
     scope: { type: "global" },
@@ -180,6 +181,7 @@ export class SearchPalette {
   }
   /** Explicit refresh continues bounded indexing without a second polling loop. */
   refresh(): void {
+    this.force = true;
     this.invalidate();
     this.schedule();
   }
@@ -210,7 +212,9 @@ export class SearchPalette {
         query: this.value.query,
         scope: this.value.scope,
         limit: 20,
+        ...(this.force ? { refresh: true } : {}),
       };
+      this.force = false;
       void this.capabilities
         .search(request)
         .then((response) => {

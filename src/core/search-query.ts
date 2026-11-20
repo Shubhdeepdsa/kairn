@@ -11,6 +11,7 @@ export class SearchQueryError extends Error {}
 /** Validate plain input independently of MATCH; punctuation/operators cannot become FTS grammar. */
 export function searchTerms(request: SearchRequest): readonly string[] {
   if (
+    (request.refresh !== undefined && typeof request.refresh !== "boolean") ||
     typeof request.query !== "string" ||
     request.query.length > 256 ||
     /[\u0000-\u001f\u007f]/.test(request.query) ||
@@ -60,11 +61,22 @@ export function querySearchIndex(
   const names = new Map(eligible.map((p) => [p.id, p.name]));
   const match = terms.map((t) => `"${t}"*`).join(" AND ");
   const ids = eligible.map((p) => p.id);
+  // Keep full body/code columns inside SQLite: never materialize 2,000 MiB-sized sections.
+  const bodyMatch = terms
+    .map(() => "instr(sections.body, ?) > 0")
+    .join(" AND ");
+  const excerpt = (column: string): string =>
+    `substr(${column},max(1,instr(lower(${column}),?)-65),230)`;
   const rows = index.database
     .prepare(
-      `SELECT sections.*, documents.metadata, bm25(sections,0,0,0,0,0,0,0,0,10,6,4,2,1) relevance FROM sections JOIN documents ON documents.project=sections.project AND documents.document=sections.document WHERE sections MATCH ? AND sections.project IN (${ids.map(() => "?").join(",")}) ORDER BY relevance LIMIT 2000`,
+      `SELECT sections.project,sections.document,sections.fragment,sections.label,sections.document_title,sections.title,sections.heading,sections.path,documents.metadata,
+    ${excerpt("original_body")} AS original_body,${excerpt("original_code")} AS original_code,
+    (${bodyMatch}) AS body_match,
+    bm25(sections,0,0,0,0,0,0,0,0,10,6,4,2,1) relevance
+    FROM sections JOIN documents ON documents.project=sections.project AND documents.document=sections.document
+    WHERE sections MATCH ? AND sections.project IN (${ids.map(() => "?").join(",")}) ORDER BY relevance LIMIT 2000`,
     )
-    .all(match, ...ids);
+    .all(terms[0]!, terms[0]!, ...terms, match, ...ids);
   const grouped = new Map<string, SearchResult>();
   for (const r of rows) {
     const all = (value: unknown): boolean =>
@@ -80,7 +92,7 @@ export function querySearchIndex(
             ? 4
             : all(r.path)
               ? 3
-              : all(r.body)
+              : Boolean(r.body_match)
                 ? 2
                 : 1;
     const relevance = Math.max(0, -Number(r.relevance));

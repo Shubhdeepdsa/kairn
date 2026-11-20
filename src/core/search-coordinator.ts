@@ -146,6 +146,7 @@ export class SearchCoordinator {
           configSignature = JSON.stringify(resolved);
           const recent = this.recent.get(p.id);
           if (
+            !request.refresh &&
             recent?.signature === configSignature &&
             performance.now() - recent.at <
               (this.options.reconcileIntervalMs ?? 1500)

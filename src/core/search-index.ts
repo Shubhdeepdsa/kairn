@@ -116,6 +116,14 @@ export class SearchIndex {
     if (previous?.revision === d.revision && previous.metadata === metadata)
       return false;
     const extracted = extractSearchText(d.markdown, d.title);
+    if (
+      extracted.sections.length > 512 ||
+      extracted.title.length > 512 ||
+      extracted.sections.some(
+        (s) => s.heading.length > 512 || s.fragment.length > 512,
+      )
+    )
+      throw new Error("Search document exceeds section or heading limits.");
     this.replace(d, metadata, extracted);
     return true;
   }
