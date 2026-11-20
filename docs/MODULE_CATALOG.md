@@ -1,13 +1,14 @@
 # Reusable module catalog
 
-**Status: EMPTY / UNVERIFIED STARTER.** This catalog must list only **actual exported APIs proven to exist in source**.
+All core exports live in `src/core/initialization.ts` and are tested in
+`tests/core.test.ts`.
 
-| Symbol / import  | Module | Responsibility | Reuse guidance | Tests | Verification |
-| ---------------- | ------ | -------------- | -------------- | ----- | ------------ |
-| _No modules yet_ | —      | —              | —              | —     | —            |
+| Export                      | Contract                                                              |
+| --------------------------- | --------------------------------------------------------------------- |
+| `discoverDocumentationRoot` | Read-only direct-child discovery; null if absent; rejects links/files |
+| `planInitialization`        | Read-only canonical root, identity and create/reuse snapshot          |
+| `applyInitializationPlan`   | Explicit approval; revalidate snapshot; mkdir only; never overwrite   |
+| `InitializationPlan`        | Readonly root/action/device/inode snapshot                            |
+| `InitializationResult`      | Actual created/reused/declined outcome                                |
 
-## Rules
-
-- Each exported nontrivial interface should have a TSDoc comment when a reader needs to know its contract or edge cases.
-- Prefer one canonical implementation for docs-path discovery and safe file creation. Record real paths and tests.
-- Do not invent utility functions or list intended future APIs as already available.
+CLI adapters consume this module; it has no prompts, process exits or network.

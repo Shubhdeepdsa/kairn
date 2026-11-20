@@ -39,3 +39,11 @@ subprocess help/version checks; tests use Node's native TypeScript support.
 ESLint validates TypeScript and TSDoc syntax. Prettier and markdownlint check
 repository documentation as well as source. Line length and table alignment
 Markdown rules are disabled to permit readable prose and Prettier tables.
+
+## Core coverage
+
+Temporary fixtures verify read-only plans, consent/decline, creation without Git,
+byte-preserving reuse, repeat runs, direct-child-only detection, missing roots,
+file conflicts, root/docs symlinks, stale plans and unreadable roots. Permission
+checks skip on Windows and privileged users, where POSIX mode bits are unreliable.
+Concurrent hostile ancestor replacement is outside the supported threat model.

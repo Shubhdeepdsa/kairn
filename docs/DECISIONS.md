@@ -34,3 +34,12 @@
 - **Consequences:** Future UI may hide a redundant `docs/` wrapper, but must retain source provenance and Git path fidelity.
 
 Future decisions should record meaningful alternatives and trade-offs rather than every implementation detail.
+
+## ADR-005 — Directory-only initialization
+
+- **Status:** Accepted and implemented.
+- **Context:** Initial setup needs a docs root, not generated content or metadata.
+- **Decision:** Create only an empty direct `docs/` directory after consent.
+- **Alternative:** Write README and multiple starter files.
+- **Rationale:** Avoid partial scaffolds, content assumptions and overwrite risk.
+- **Consequences:** Users add their own Markdown; no persistent Kairn configuration.

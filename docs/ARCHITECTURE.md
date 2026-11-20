@@ -48,3 +48,16 @@ Those future modules must not be stubbed into the initial implementation just to
 - File operations only with explicit chosen directory; no generated files in a different repository.
 - No network dependency or telemetry at runtime for `init`.
 - No hidden writes during discovery. Plan and preview before applying changes.
+
+## Implemented core safety
+
+`src/core/initialization.ts` owns direct-child discovery, read-only planning and
+explicitly approved application. Init creates only an empty `docs/`; no starter
+file is necessary, avoiding partial multi-file scaffolds. Existing docs are reused.
+Root symlinks, filesystem roots, docs symlinks and file conflicts are rejected.
+Ancestors are canonicalized; plans record root device/inode and revalidate before
+applying. Non-recursive mkdir fails rather than replacing concurrent entries.
+
+Node path APIs cannot make ancestor replacement atomic across validation and
+mkdir. Operate only in directories controlled by the user, not trees concurrently
+modified by hostile processes. No claim of an adversarial filesystem sandbox.
