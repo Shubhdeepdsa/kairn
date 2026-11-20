@@ -14,3 +14,5 @@
 - Document concrete exported behavior in `docs/MODULE_CATALOG.md` once implemented.
 
 - Phase 2: add a read-only nested Markdown service with stable IDs, canonical identities, explicit errors and bounded scans/reads. Reject symlinks; HTTP and UI consume contracts, not filesystem algorithms.
+
+- Phase 3: preserve existing behavior; keep Library/config/source contracts reusable. Isolate persistence tests, validate before writes, and never expose absolute machine paths over HTTP.

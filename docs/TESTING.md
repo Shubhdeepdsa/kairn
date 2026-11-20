@@ -145,7 +145,7 @@ advisories; the eight previously documented development-tool advisories remain.
 The [feature-branch CI run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44716122814)
 at `3633546` passed all required gates on Linux, macOS and Windows. The separate
 [PR checks](https://github.com/Shubhdeepdsa/kairn/pull/1/checks) track integration
-with main. PR #1 remains unmerged for review.
+with main. PR #1 has been merged.
 
 ## Automatic navigation refresh
 

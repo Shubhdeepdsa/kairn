@@ -129,3 +129,10 @@ pauses when hidden, refreshes on visibility return and removes timers/listeners
 on page exit. No overlapping browser polls or persistent server watchers. Sidebar
 DOM is rebuilt only when the tree changes; current content, selection and folder
 expansion are preserved. Deleted selections fall back to another document.
+
+## Phase 3 planned composition
+
+CLI → Library / project resolver → resolved sources → existing document engine.
+JSON storage owns parsing and transactional replacement; Library owns project
+identity. HTTP remains read-only and consumes the same tree/read/refresh contract.
+See [configuration design](CONFIGURATION.md). No singleton, database or React work.

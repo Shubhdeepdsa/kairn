@@ -33,7 +33,7 @@ Publication is authorized only to the verified personal user account, after revi
 Initial remote CI exposed Windows CRLF checkout drift. The follow-up enforces LF
 with `.gitattributes`; formatter behavior and check strictness are unchanged.
 
-## Phase 2 — VERIFIED; PR review pending
+## Phase 2 — VERIFIED; merged
 
 A. Update milestone instructions, architecture, contracts and security decisions.
 B. Read-only nested document engine with bounded scanning and safe reads.
@@ -61,5 +61,10 @@ deleted Markdown files appear without restarting. No registry or persistence.
 Next smallest milestone: refresh the current document after source content edits.
 
 Feature branch: `feat/local-documentation-viewer`; [PR #1](https://github.com/Shubhdeepdsa/kairn/pull/1)
-is open against main. The [feature CI run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44716122814)
+was merged into main. The [feature CI run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44716122814)
 passed Linux, macOS and Windows at `3633546`. No automatic merge or npm publication.
+
+## Phase 3 — IN PROGRESS
+
+A: architecture; B: schemas/persistence; C: Library; D: resolver; E: discovery/ignore;
+F: multi-source engine; G: CLI integration; H: acceptance and personal feature PR.

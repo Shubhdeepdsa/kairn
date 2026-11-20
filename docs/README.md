@@ -14,3 +14,5 @@ Source files and tests are authoritative for implemented behavior; update these 
 
 Repository policies: [contributing](../CONTRIBUTING.md),
 [security](../SECURITY.md), [conduct](../CODE_OF_CONDUCT.md), and [MIT license](../LICENSE).
+
+- [Configuration ownership and resolution](CONFIGURATION.md)
