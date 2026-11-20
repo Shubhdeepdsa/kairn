@@ -72,3 +72,13 @@ No runtime dependency advisories are reported by `npm audit --omit=dev`.
 Suggested force fixes downgrade direct tooling; they have not been applied.
 Review upstream compatible fixes when updating the lockfile. These tools process
 repository source during development, not user projects at runtime.
+
+## Final local acceptance — 2026-11-20
+
+On Node 26.13.0/macOS: clean `npm ci`, typecheck, ESLint/TSDoc, Prettier check,
+19 Vitest tests, build and Markdown lint all passed. The packed tarball installed
+into an isolated temporary prefix; its actual `kairn` bin passed help, version,
+first init and repeated init. A real pseudo-terminal verified Ctrl+C exit 2 with
+no writes, and affirmative create confirmation with exit 0. NO_COLOR removed
+styling colors; interactive cursor controls remain necessary for Clack prompts.
+CI coverage on other operating systems must be judged from actual workflow runs.

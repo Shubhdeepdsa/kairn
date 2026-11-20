@@ -9,12 +9,7 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "outDir": "dist",
-    "types": [
-      "node"
-    ]
+    "types": ["node"]
   },
-  "include": [
-    "src/**/*.ts",
-    "tests/**/*.ts"
-  ]
+  "include": ["src/**/*.ts", "tests/**/*.ts"]
 }
