@@ -2,9 +2,9 @@
 
 **Status: EMPTY / UNVERIFIED STARTER.** This catalog must list only **actual exported APIs proven to exist in source**.
 
-| Symbol / import | Module | Responsibility | Reuse guidance | Tests | Verification |
-| --- | --- | --- | --- | --- | --- |
-| _No modules yet_ | — | — | — | — | — |
+| Symbol / import  | Module | Responsibility | Reuse guidance | Tests | Verification |
+| ---------------- | ------ | -------------- | -------------- | ----- | ------------ |
+| _No modules yet_ | —      | —              | —              | —     | —            |
 
 ## Rules
 

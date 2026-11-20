@@ -26,7 +26,7 @@
 
 - Node.js 26 LTS baseline; use current stable versions compatible with Node 26 after checking official manifests. TypeScript in `strict` mode; use explicit types at public boundaries, no unjustified `any`, no suppressed compiler errors.
 - Prefer standard Node built-ins; introduce a dependency only for a clear reason. Use a single npm lockfile and reproducible `npm ci`.
-- Use **TSDoc-compatible `/** ... */` comments** on exported functions, types and interfaces where their contract, edge cases or safety behavior are not self-evident. Include `@param`, `@returns`, `@throws` when useful. Document *why*, not obvious syntax; no comment spam.
+- Use **TSDoc-compatible `/** ... */` comments** on exported functions, types and interfaces where their contract, edge cases or safety behavior are not self-evident. Include `@param`, `@returns`, `@throws` when useful. Document _why_, not obvious syntax; no comment spam.
 - Keep a clean public API and stable exit codes. Never call `process.exit()` from reusable core code.
 - Avoid unsafe shell invocation, path traversal, unbounded scans, unnecessary file rewriting, hidden side effects, or dependency on user secrets.
 - Preserve existing user files; default to no overwrites. Operations must be idempotent or report a clear, actionable conflict.
@@ -35,14 +35,14 @@
 
 Update the smallest relevant docs **in the same commit as behavior changes**:
 
-| Change | Update |
-| --- | --- |
-| New module / exported reusable API | `docs/MODULE_CATALOG.md` and TSDoc for nontrivial public contracts |
-| CLI flags, user prompts, output or exit behavior | `docs/CLI.md` and usage in root `README.md` |
+| Change                                                        | Update                                                               |
+| ------------------------------------------------------------- | -------------------------------------------------------------------- |
+| New module / exported reusable API                            | `docs/MODULE_CATALOG.md` and TSDoc for nontrivial public contracts   |
+| CLI flags, user prompts, output or exit behavior              | `docs/CLI.md` and usage in root `README.md`                          |
 | Cross-module boundary, persistence or architectural trade-off | `docs/ARCHITECTURE.md`; significant rationale in `docs/DECISIONS.md` |
-| Tests, scripts and quality gates | `docs/TESTING.md` |
-| Completed milestone or deferred feature | `docs/ROADMAP.md` |
-| User-facing behavior or scope | `docs/PRODUCT.md` if materially changed |
+| Tests, scripts and quality gates                              | `docs/TESTING.md`                                                    |
+| Completed milestone or deferred feature                       | `docs/ROADMAP.md`                                                    |
+| User-facing behavior or scope                                 | `docs/PRODUCT.md` if materially changed                              |
 
 - Never mark a command, module or quality gate **verified** until its checks have actually run.
 - Do not duplicate long descriptions across several documents. Prefer concise indexes and links to canonical owners.
@@ -59,7 +59,7 @@ Update the smallest relevant docs **in the same commit as behavior changes**:
 ## 6. Git and GitHub safety — mandatory
 
 - Make **small, topical, meaningful Conventional Commits**, by phase; never collapse project setup and features into one giant initial commit. A feature and its tests/docs can be in one coherent commit.
-- Before *each* commit: review `git diff --check`, staged diff, relevant checks, and changed docs. Commit only intended files. Never use `git add -A` blindly in an unrelated working tree.
+- Before _each_ commit: review `git diff --check`, staged diff, relevant checks, and changed docs. Commit only intended files. Never use `git add -A` blindly in an unrelated working tree.
 - Do not rewrite history, force-push, use `--no-verify`, delete user branches or alter unrelated files.
 - GitHub publication must target the **user's personal GitHub account**, never a company or organization. Verify `gh auth status`, `gh api user --jq .login`, user account ownership and target remote before creating or pushing. If personal identity cannot be distinguished confidently, ask for confirmation **before remote creation or push**.
 - Create `PERSONAL_LOGIN/kairn` as **public** only after inspecting all staged/committed files for passwords, API keys, internal/company names, local paths and other sensitive information. Never publish company code or private project documentation.

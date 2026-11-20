@@ -22,38 +22,38 @@ Kairn will eventually be a local-first Markdown documentation and Git-history ex
 
 ## Step 1 — Build in phases; commit each phase independently
 
-**Phase A — Baseline package and runnable executable**
+### Phase A — Baseline package and runnable executable
 
 - Initialize Git on `main` only if needed; do not overwrite an existing git history.
 - Create `package.json` with `bin` pointing to compiled executable, `type: module` if suitable, `engines.node`, scripts and `private`/publish settings appropriate to an unpublished OSS CLI.
 - Set up strict TypeScript compilation and a real `kairn` entrypoint providing verified `--help` and `--version`. Ensure the built package can be executed via a local package link or equivalent smoke test.
 - Use a focused commit such as `chore: bootstrap TypeScript CLI package`.
 
-**Phase B — Open-source governance and documentation baseline**
+### Phase B — Open-source governance and documentation baseline
 
 - Keep the supplied root and scoped `AGENTS.md` instructions, improving them only if they conflict with the actual structure.
 - Create an accurate root `README.md` (working vs planned features clearly separated), `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md` if appropriate, MIT `LICENSE` (ensure correct copyright attribution rather than inventing a real person), `.gitignore`, and a compact PR template. Do not add fabricated contact emails or company examples.
 - Update the documentation index and any links needed. Commit e.g. `docs: establish architecture and contribution standards`.
 
-**Phase C — Engineering quality infrastructure**
+### Phase C — Engineering quality infrastructure
 
 - Configure ESLint, Prettier, Vitest, strict `tsc`, and Markdown lint. Expose `typecheck`, `lint`, `format:check`, `test`, `build`, `docs:lint` scripts. Avoid excessive plugin or monorepo complexity.
 - Add deterministic smoke tests for the CLI baseline. Ensure quality commands actually run. Commit e.g. `chore: add quality gates and test runner`.
 
-**Phase D — Pure core implementation of documentation initialization**
+### Phase D — Pure core implementation of documentation initialization
 
-- In `src/core/`, implement a small, tested, non-interactive API that (a) detects a *direct* `docs/` child in a selected directory, (b) computes a safe initialization plan, and (c) applies explicitly approved changes.
+- In `src/core/`, implement a small, tested, non-interactive API that (a) detects a _direct_ `docs/` child in a selected directory, (b) computes a safe initialization plan, and (c) applies explicitly approved changes.
 - Existing docs must never be overwritten. Repeated operation must be safe. Honor cancellation by making no change until the user confirms. Do not write outside the selected directory; guard dangerous paths and symlink edge cases.
 - Keep all terminal prompts outside core. Return typed results that future CLI/server adapters can reuse. TSDoc non-obvious exported APIs.
 - Add focused temporary-directory tests **in the same feature commit**, and update `docs/MODULE_CATALOG.md`, `docs/ARCHITECTURE.md`, `docs/TESTING.md` with verified truth. Commit e.g. `feat(core): safely discover and initialize documentation`.
 
-**Phase E — Attractive Clack TUI**
+### Phase E — Attractive Clack TUI
 
 - Implement `kairn init` as an interactive, concise, well-branded wizard: show project directory; detect `docs/`; choose reuse/create/cancel as appropriate; preview writes; confirm; show success and next steps.
 - Use Clack only in CLI. Handle cancellation, errors, `NO_COLOR`, non-TTY, and explicit `--yes` for safe noninteractive use (do not invoke a blocking prompt in CI). No prompts in the npm installation script.
 - Add CLI tests with a prompt adapter/fakes and at least one built-binary smoke test; update CLI docs and README **in the same commit**. Commit e.g. `feat(cli): add interactive kairn init wizard`.
 
-**Phase F — CI and verification**
+### Phase F — CI and verification
 
 - Add GitHub Actions on pushes and PRs to run `npm ci`, typecheck, lint, format check, tests, build, Markdown lint. Minimal workflow permissions; no deployment and no secret-dependent tests. Pin actions to immutable SHAs if practical, and document how versions are managed.
 - Commit e.g. `ci: enforce repository quality checks`.

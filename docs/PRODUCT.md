@@ -7,7 +7,7 @@
 - Markdown remains in its original location; Kairn does not force a proprietary authoring format.
 - Documentation is for **human reading first**, with potential agent use later.
 - A globally installed Kairn can eventually register multiple projects. A project can have multiple documentation directories and individual Markdown files; one primary `docs/` folder is a convenient default, not a restriction.
-- Reading navigation is *filesystem-first, source-aware hybrid*: show useful sections rather than redundant `docs/` wrappers, preserve physical paths and separate labels for additional sources.
+- Reading navigation is _filesystem-first, source-aware hybrid_: show useful sections rather than redundant `docs/` wrappers, preserve physical paths and separate labels for additional sources.
 - Git history is eventually read from the local repository rather than copied to a second permanent history store.
 - Project grouping/collections and richer ownership/deployment documentation are optional extensions, not prerequisites for reading Markdown.
 

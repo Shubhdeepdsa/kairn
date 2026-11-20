@@ -4,13 +4,13 @@
 
 ## Commands
 
-| Command | Intended behavior | v0 status |
-| --- | --- | --- |
-| `kairn --help` | List real commands and quick start | Planned |
-| `kairn --version` | Display package version | Planned |
-| `kairn init` | Interactive documentation initialization in current directory | Planned |
-| `kairn init --yes` | Explicit non-interactive safe default; never clobber existing files | Planned |
-| `kairn run` | Start local document viewer | **Later; do not implement or advertise as working** |
+| Command            | Intended behavior                                                   | v0 status                                           |
+| ------------------ | ------------------------------------------------------------------- | --------------------------------------------------- |
+| `kairn --help`     | List real commands and quick start                                  | Planned                                             |
+| `kairn --version`  | Display package version                                             | Planned                                             |
+| `kairn init`       | Interactive documentation initialization in current directory       | Planned                                             |
+| `kairn init --yes` | Explicit non-interactive safe default; never clobber existing files | Planned                                             |
+| `kairn run`        | Start local document viewer                                         | **Later; do not implement or advertise as working** |
 
 ## Init intent
 

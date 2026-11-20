@@ -22,7 +22,7 @@ This pack contains **engineering instructions and initial documentation template
 
 ## Intentional scope
 
-First milestone: installable TypeScript CLI, strict quality gates, Clack-powered `kairn init`, safe docs discovery/creation, tests, phased commits and publishing to the user's *personal* GitHub repository. Not part of this milestone: `kairn run` server, React UI, Git explorer, AI agent hooks, document generation, or a database.
+First milestone: installable TypeScript CLI, strict quality gates, Clack-powered `kairn init`, safe docs discovery/creation, tests, phased commits and publishing to the user's _personal_ GitHub repository. Not part of this milestone: `kairn run` server, React UI, Git explorer, AI agent hooks, document generation, or a database.
 
 ## License
 
