@@ -11,3 +11,6 @@
 - [Phased roadmap](ROADMAP.md)
 
 Source files and tests are authoritative for implemented behavior; update these documents in the same change.
+
+Repository policies: [contributing](../CONTRIBUTING.md),
+[security](../SECURITY.md), [conduct](../CODE_OF_CONDUCT.md), and [MIT license](../LICENSE).
