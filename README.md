@@ -56,3 +56,19 @@ See [documentation](docs/README.md), [contributing](CONTRIBUTING.md) and
 
 The final React UI, project registry, Git history, editing, search, AI and cloud
 services are outside this milestone. No telemetry or external runtime requests.
+
+## Remember projects and add documentation sources
+
+```sh
+kairn project add --cwd ./my-project --name "My project" --yes
+kairn project list
+kairn project sources add <id> --path README.md --yes
+kairn project sources add <id> --path .github/DEPLOYMENT.md --yes
+kairn run --project <id>
+```
+
+Use the ID printed by add/list. The machine-local Library remembers projects;
+`project config init <id>` explicitly creates optional shareable configuration.
+[CLI commands](docs/CLI.md) cover rename/unregister, source management and basic
+ignore rules. [Configuration](docs/CONFIGURATION.md) defines precedence and JSON.
+No project configuration is created just by running the viewer.

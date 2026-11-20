@@ -96,3 +96,8 @@ existing scanner/read safeguards for directory and individual-file sources.
 canonical paths stay internal. Aggregate scan/document limits span sources;
 primary-first deduplication uses canonical file paths. Refresh retains IDs and
 skips disappeared sources without deleting configuration.
+
+`core/application.ts`: `resolveRunProject` composes Library lookup and shared/
+personal resolution without writes. `cli/project.ts`: `runProjectCommand`,
+`ProjectPrompts`, `projectPrompts` adapt preview/consent and scriptable arguments
+to core operations. No HTTP Library/settings mutation endpoints are introduced.
