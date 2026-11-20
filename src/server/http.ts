@@ -1,3 +1,4 @@
+import { documentRevision } from "../core/freshness.js";
 import { createServer } from "node:http";
 import type { ServerResponse } from "node:http";
 import { DocumentError } from "../core/documents.js";
@@ -155,11 +156,20 @@ export async function startDocumentationServer(
             const id = target.slice("/api/documents/".length);
             const content = await documents.read(id);
             const { path, title, markdown } = content;
+            const revision = documentRevision(markdown);
+            const etag = `"${revision}"`;
+            response.setHeader("ETag", etag);
+            if (request.headers["if-none-match"] === etag) {
+              response.writeHead(304);
+              response.end();
+              return;
+            }
             json(response, 200, {
               id: content.id,
               path,
               title,
               markdown,
+              revision,
               ...(options.viewer
                 ? { html: options.viewer.renderMarkdown(markdown) }
                 : {}),

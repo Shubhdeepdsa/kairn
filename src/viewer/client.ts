@@ -15,6 +15,7 @@ export async function mountViewer(
   const byPath = new Map<string, DocumentEntry>();
   let selected: DocumentEntry | undefined;
   let requestNumber = 0;
+  let contentRevision: string | undefined;
   let disposed = false;
   let signature: string | undefined;
   let timer: number | undefined;
@@ -46,7 +47,11 @@ export async function mountViewer(
     const heading = document.getElementById(id);
     if (heading && article?.contains(heading)) heading.scrollIntoView?.();
   }
-  async function show(id: string, fragment = ""): Promise<void> {
+  async function show(
+    id: string,
+    fragment = "",
+    background = false,
+  ): Promise<void> {
     if (disposed) return;
     const file = files.get(id);
     if (!file) {
@@ -55,9 +60,12 @@ export async function mountViewer(
       return;
     }
     const current = ++requestNumber;
-    status!.textContent = "Loading document…";
-    article!.setAttribute("aria-busy", "true");
-    article!.replaceChildren();
+    if (!background) {
+      contentRevision = undefined;
+      status!.textContent = "Loading document…";
+      article!.setAttribute("aria-busy", "true");
+      article!.replaceChildren();
+    }
     selected = file;
     source!.textContent = file.path;
     for (const link of navigation!.querySelectorAll<HTMLAnchorElement>(
@@ -69,18 +77,49 @@ export async function mountViewer(
     }
     document.defaultView?.history.replaceState(null, "", `#${id}`);
     try {
-      const data = (await api(`/api/documents/${id}`)) as { html: string };
+      const response = await fetcher(`/api/documents/${id}`, {
+        credentials: "same-origin",
+        headers: {
+          Accept: "application/json",
+          ...(background && contentRevision
+            ? { "If-None-Match": `"${contentRevision}"` }
+            : {}),
+        },
+      });
+      if (current !== requestNumber) return;
+      if (response.status === 304) {
+        if (status!.textContent?.startsWith("Could not refresh document:"))
+          status!.textContent = "";
+        return;
+      }
+      const data = (await response.json()) as {
+        html: string;
+        revision?: string;
+        error?: { message: string };
+      };
+      if (!response.ok)
+        throw new Error(data.error?.message ?? "Document could not be read.");
       if (current !== requestNumber) return;
       // HTML comes only from the server's restricted Markdown renderer, never source HTML.
-      article!.innerHTML = data.html;
+      const scroll = window!.scrollY;
+      const changed =
+        !background ||
+        (data.revision
+          ? data.revision !== contentRevision
+          : article!.innerHTML !== data.html);
+      if (changed) article!.innerHTML = data.html;
+      contentRevision = data.revision;
       status!.textContent = "";
       document.title = `${file.title} · Kairn`;
-      article!.focus({ preventScroll: true });
-      showFragment(fragment);
+      if (!background) {
+        article!.focus({ preventScroll: true });
+        showFragment(fragment);
+      } else if (changed && scroll > 0) window!.scrollTo(0, scroll);
     } catch (error) {
       if (current === requestNumber)
         status!.textContent =
-          error instanceof Error ? error.message : "Could not load document.";
+          (background ? "Could not refresh document: " : "") +
+          (error instanceof Error ? error.message : "Could not load document.");
     } finally {
       if (current === requestNumber) article!.removeAttribute("aria-busy");
     }
@@ -238,7 +277,9 @@ export async function mountViewer(
     if (timer !== undefined) window!.clearTimeout(timer);
     timer = window!.setTimeout(() => {
       timer = undefined;
-      void refresh().finally(schedule);
+      void refresh()
+        .then(() => (selected ? show(selected.id, "", true) : undefined))
+        .finally(schedule);
     }, 2000);
   }
   function visibilityChanged(): void {
@@ -246,7 +287,10 @@ export async function mountViewer(
       window!.clearTimeout(timer);
       timer = undefined;
     }
-    if (!document.hidden && !disposed) void refresh().finally(schedule);
+    if (!document.hidden && !disposed)
+      void refresh()
+        .then(() => (selected ? show(selected.id, "", true) : undefined))
+        .finally(schedule);
   }
   function dispose(): void {
     disposed = true;

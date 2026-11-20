@@ -101,3 +101,8 @@ skips disappeared sources without deleting configuration.
 personal resolution without writes. `cli/project.ts`: `runProjectCommand`,
 `ProjectPrompts`, `projectPrompts` adapt preview/consent and scriptable arguments
 to core operations. No HTTP Library/settings mutation endpoints are introduced.
+
+`core/freshness.ts`: `documentRevision` hashes only the bounded active document.
+HTTP document responses expose revision/ETag and honor If-None-Match with 304.
+The viewer reuses its visible-tab loop for background content reads and leaves
+unchanged article DOM/focus intact; failures retain content and retry next cycle.

@@ -68,7 +68,7 @@ describe("localhost API", () => {
     expect(tree.status).toBe(200);
     expect(JSON.parse(tree.body).tree[0].id).toBe(id);
     const doc = await raw(server.url, `/api/documents/${id}`);
-    expect(JSON.parse(doc.body)).toEqual({
+    expect(JSON.parse(doc.body)).toMatchObject({
       id,
       path: "README.md",
       title: "README",
@@ -205,4 +205,20 @@ describe("localhost API", () => {
       socket.destroy();
     }
   });
+});
+
+it("conditionally reads active content by revision and notices external saves", async () => {
+  const { server, id, root } = await fixture();
+  const path = `/api/documents/${id}`;
+  const first = await raw(server.url, path);
+  const etag = String(first.headers.etag);
+  expect(etag).toMatch(/^"[a-f0-9]{64}"$/);
+  const unchanged = await raw(server.url, path, { "If-None-Match": etag });
+  expect(unchanged.status).toBe(304);
+  expect(unchanged.body).toBe("");
+  await writeFile(join(root, "README.md"), "# Edited externally");
+  const changed = await raw(server.url, path, { "If-None-Match": etag });
+  expect(changed.status).toBe(200);
+  expect(changed.headers.etag).not.toBe(etag);
+  expect(JSON.parse(changed.body).markdown).toContain("Edited");
 });

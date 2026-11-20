@@ -379,6 +379,39 @@ describe("browser navigation", () => {
         ?.getAttribute("data-document"),
     ).toBe(nestedId);
   });
+  it("refreshes active content without rerendering unchanged HTML or stealing focus", async () => {
+    vi.useFakeTimers();
+    const value = dom();
+    const document = value.window.document;
+    let content = "# First";
+    let failed = false;
+    const fetcher: typeof fetch = async (input) =>
+      String(input) === "/api/tree"
+        ? fakeFetch()(input)
+        : failed
+          ? Response.json({ error: { message: "Saving" } }, { status: 403 })
+          : Response.json({ html: renderMarkdown(content), revision: content });
+    await mountViewer(document, fetcher);
+    const article = document.getElementById("document")!;
+    const first = article.firstChild;
+    const link = document.querySelector("nav a") as HTMLAnchorElement;
+    link.focus();
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(article.firstChild).toBe(first);
+    expect(document.activeElement).toBe(link);
+    content = "# Second";
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(article.textContent).toContain("Second");
+    expect(document.activeElement).toBe(link);
+    failed = true;
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(article.textContent).toContain("Second");
+    expect(document.getElementById("status")?.textContent).toContain("Saving");
+    failed = false;
+    content = "# Third";
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(article.textContent).toContain("Third");
+  });
   it("serves packaged viewer assets and rendered API content under CSP", async () => {
     // Source tests load the compiled module so asset resolution matches installed packages.
     const { loadViewerPresentation: loadBuilt } = (await import(

@@ -64,7 +64,8 @@ the viewer available and prints a manual-open instruction. Ctrl+C stops the serv
 Navigation refreshes automatically about every two seconds while the tab is
 visible, and immediately when returning to the tab. Added/renamed/deleted Markdown
 files update the sidebar without restarting or reloading. Existing content is
-reread when selected; the active document is not automatically re-rendered. Hidden files, symlinks, attachments and remote
+checked during the same polling cycle; changed active content refreshes without
+reselection, while unchanged content keeps its DOM and focus. Hidden files, symlinks, attachments and remote
 images are not served. The viewer has no editing, search, Git history or registry.
 
 The current selection and collapsed folders survive sidebar updates. If the active

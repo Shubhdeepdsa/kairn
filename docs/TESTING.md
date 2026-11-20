@@ -207,3 +207,6 @@ Phase 3 [push CI](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726328194
 and [PR CI](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726417025) passed
 Linux, macOS and Windows at `f0570f0`. PR #2 is merged; see latest checks for
 follow-up commits. No npm publication or automatic merge.
+
+Phase 4 content tests verify real external saves, conditional 304 responses,
+unchanged DOM, focus preservation, retry and last-render retention on read failure.

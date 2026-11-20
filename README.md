@@ -44,7 +44,8 @@ The prototype supports headings, tables, lists, code blocks and document links.
 Raw HTML is escaped and images are shown as text; no remote assets are loaded.
 The sidebar picks up new, renamed and deleted Markdown files automatically
 about every two seconds while the tab is visible. Existing content is reread on
-selection. Dotfiles and hidden directories remain excluded.
+selection and automatically while displayed. Unchanged content is not re-rendered.
+Dotfiles and hidden directories remain excluded.
 
 ## Development
 
