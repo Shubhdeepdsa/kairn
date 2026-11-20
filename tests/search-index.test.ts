@@ -125,7 +125,7 @@ it("measures a bounded real FTS5 dataset with weighted rank and plain snippets",
     }),
   );
   expect(result).toHaveLength(20);
-}, 30000);
+}, 90000);
 
 it("bounds derived sections before replacing a valid document", async () => {
   const { index } = await open();

@@ -30,6 +30,8 @@ export interface SearchSession extends SearchProject {
 export interface SearchOptions {
   readonly dataDirectory: string;
   readonly reconcileIntervalMs?: number;
+  /** Optional lower per-job document cap; the hard maximum remains 200. */
+  readonly documentBudget?: number;
   readonly session?: SearchSession;
 }
 function files(tree: readonly NavigationEntry[]): DocumentEntry[] {
@@ -46,11 +48,20 @@ export class SearchCoordinator {
   private offsets = new Map<string, { signature: string; offset: number }>();
   private queue: Promise<unknown> = Promise.resolve();
   private cursor = 0;
+  private forced = new Set<string>();
   private recent = new Map<
     string,
     { signature: string; at: number; count: number }
   >();
-  constructor(private readonly options: SearchOptions) {}
+  constructor(private readonly options: SearchOptions) {
+    if (
+      options.documentBudget !== undefined &&
+      (!Number.isInteger(options.documentBudget) ||
+        options.documentBudget < 1 ||
+        options.documentBudget > 200)
+    )
+      throw new RangeError("Document budget must be an integer from 1 to 200.");
+  }
   /** Serialize requests from one instance; other processes coordinate through SQLite transactions. */
   search(request: SearchRequest): Promise<SearchResponse> {
     searchTerms(request);
@@ -96,7 +107,14 @@ export class SearchCoordinator {
       };
     const coverage: ProjectCoverage[] = [];
     const eligible: SearchProject[] = [];
-    let remaining = 200;
+    if (request.refresh) {
+      if (
+        scope.type === "project" ||
+        !projects.some((p) => this.forced.has(p.id))
+      )
+        for (const p of projects) this.forced.add(p.id);
+    }
+    let remaining = this.options.documentBudget ?? 200;
     let bytes = 0;
     const started = performance.now();
     const ordered = [
@@ -104,21 +122,25 @@ export class SearchCoordinator {
       ...projects.slice(0, this.cursor),
     ];
     let visited = 0;
+    let worked = 0;
+    let advance = 0;
+    const canWork = (): boolean =>
+      remaining > 0 &&
+      bytes < 8_388_608 &&
+      (worked === 0 || performance.now() - started <= 250);
+    const deferred = (p: SearchProject): void => {
+      coverage.push({
+        ...p,
+        status: "indexing",
+        indexed: 0,
+        total: 0,
+        message:
+          "Not reconciled in this bounded job; request search again to continue.",
+      });
+    };
     for (const p of ordered) {
-      if (
-        remaining <= 0 ||
-        bytes >= 8_388_608 ||
-        (visited > 0 && performance.now() - started > 250) ||
-        visited >= 32
-      ) {
-        coverage.push({
-          ...p,
-          status: "indexing",
-          indexed: 0,
-          total: 0,
-          message:
-            "Not checked in this bounded job; request search again to continue.",
-        });
+      if (visited >= 32) {
+        deferred(p);
         continue;
       }
       visited++;
@@ -129,9 +151,13 @@ export class SearchCoordinator {
           transient &&
           !this.options.session!.configured &&
           !(await loadProjectConfig(this.options.session!.root))
-        )
+        ) {
+          if (!canWork()) {
+            deferred(p);
+            continue;
+          }
           service = await createDocumentService(this.options.session!.docsRoot);
-        else {
+        } else {
           const registeredProject = transient
             ? undefined
             : registered.find((r) => r.id === p.id);
@@ -146,7 +172,7 @@ export class SearchCoordinator {
           configSignature = JSON.stringify(resolved);
           const recent = this.recent.get(p.id);
           if (
-            !request.refresh &&
+            !this.forced.has(p.id) &&
             recent?.signature === configSignature &&
             performance.now() - recent.at <
               (this.options.reconcileIntervalMs ?? 1500)
@@ -161,8 +187,14 @@ export class SearchCoordinator {
             eligible.push({ id: p.id, name: p.name });
             continue;
           }
+          if (!canWork()) {
+            deferred(p);
+            continue;
+          }
           service = await createProjectDocumentService(resolved);
         }
+        worked++;
+        advance = visited;
         const entries = files(service.tree);
         index.prune(p.id, new Set(entries.map((e) => e.id)));
         const signature = documentRevision(
@@ -205,13 +237,14 @@ export class SearchCoordinator {
           }
         }
         const complete = end >= entries.length;
-        if (complete && !failed)
+        if (complete && !failed) {
+          this.forced.delete(p.id);
           this.recent.set(p.id, {
             signature: configSignature,
             at: performance.now(),
             count: entries.length,
           });
-        else this.recent.delete(p.id);
+        } else this.recent.delete(p.id);
         this.offsets.set(p.id, { signature, offset: complete ? 0 : end });
         coverage.push({
           id: p.id,
@@ -228,6 +261,7 @@ export class SearchCoordinator {
         });
         eligible.push({ id: p.id, name: p.name });
       } catch {
+        this.forced.delete(p.id);
         this.recent.delete(p.id);
         index.prune(p.id, new Set());
         coverage.push({
@@ -242,7 +276,7 @@ export class SearchCoordinator {
       }
     }
     this.cursor = projects.length
-      ? (this.cursor + visited) % projects.length
+      ? (this.cursor + (advance || visited)) % projects.length
       : 0;
     return { results: querySearchIndex(index, request, eligible), coverage };
   }

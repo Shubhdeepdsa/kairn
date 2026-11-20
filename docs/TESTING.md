@@ -343,3 +343,14 @@ and three existing platform-specific permission/symlink skips (no new search ski
 This verifies built-in FTS5, locking, rollback, recovery and installed navigation
 on all three OS runners. It does not establish identical OS performance or human
 browser acceptance. PR #4 remains open and unmerged.
+
+A repeated CI run exposed bounded-work assumptions: global installed acceptance now
+advances indexing responses for at most 12 requests before requiring the full result
+identity set. A deterministic one-document-budget regression proves three-project
+forced refresh converges over three jobs without restarting completed projects.
+Independent process tests accept only the documented temporary SQLite lock error,
+then explicitly retry after both competing processes exit and require both records
+plus crash rollback. The unchanged 250-document FULL-sync benchmark has a 90-second
+safety timeout because runner storage varied beyond 30 seconds; timings remain
+observations, not latency assertions. No corpus, result, durability or rollback
+assertion was removed.

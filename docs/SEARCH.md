@@ -164,3 +164,9 @@ cache failures return redacted 503, distinct from project-level unavailable cove
 
 Coverage indexed counts are persisted documents, not attempted reads or sections.
 An omitted oversized/unreadable document therefore does not inflate a partial count.
+
+Explicit global refresh starts a pass and subsequent refresh requests continue its
+unfinished projects rather than restarting completed work. Fresh completed projects
+still validate current configuration before reuse, even after the indexing budget
+is exhausted. The cursor advances past actual work, avoiding starvation. The optional
+core documentBudget only lowers the hard 200-document cap for embedders/tests.

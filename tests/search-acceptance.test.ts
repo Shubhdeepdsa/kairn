@@ -209,9 +209,20 @@ it("accepts the clean-installed package: three-project search, real HTTP palette
     ): Promise<SearchResponse> => {
       const params = new URLSearchParams({ query, refresh: "1" });
       if (project) params.set("project", project);
-      const r = await fetch(server.url + "/api/search?" + params);
-      expect(r.status).toBe(200);
-      return (await r.json()) as SearchResponse;
+      let response: SearchResponse | undefined;
+      // Bounded cold indexing is allowed to be partial; advance it explicitly,
+      // without sleeps, and still require every expected identity once complete.
+      for (let job = 0; job < 12; job++) {
+        const r = await fetch(server.url + "/api/search?" + params);
+        expect(r.status).toBe(200);
+        response = (await r.json()) as SearchResponse;
+        if (!response.coverage.some((p) => p.status === "indexing"))
+          return response;
+      }
+      throw new Error(
+        "Indexing did not complete within 12 bounded requests: " +
+          JSON.stringify(response?.coverage),
+      );
     };
     expect(
       (await search("authentication", a.id)).results.map((r) => r.projectId),

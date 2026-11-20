@@ -186,3 +186,43 @@ it("reports omitted oversized documents as partial with an accurate persisted co
     await rm(root, { recursive: true, force: true });
   }
 });
+
+it("continues a forced global pass across bounded jobs without restarting completed projects", async () => {
+  const root = await mkdtemp(join(tmpdir(), "kairn-resume-"));
+  const data = join(root, "data");
+  const library = new ProjectLibrary(data);
+  const ids: string[] = [];
+  for (const name of ["A", "B", "C"]) {
+    const p = join(root, name);
+    await mkdir(join(p, "docs"), { recursive: true });
+    await writeFile(
+      join(p, "docs", "README.md"),
+      "# Authentication\n\nConfiguration",
+    );
+    ids.push((await library.register(p, name)).id);
+  }
+  const coordinator = new SearchCoordinator({
+    dataDirectory: data,
+    documentBudget: 1,
+  });
+  try {
+    const request = {
+      query: "authentication",
+      scope: { type: "global" as const },
+      limit: 20,
+      refresh: true,
+    };
+    const first = await coordinator.search(request);
+    expect(first.coverage.filter((p) => p.status === "ready")).toHaveLength(1);
+    const second = await coordinator.search(request);
+    expect(second.coverage.filter((p) => p.status === "ready")).toHaveLength(2);
+    const third = await coordinator.search(request);
+    expect(third.coverage.every((p) => p.status === "ready")).toBe(true);
+    expect(new Set(third.results.map((r) => r.projectId))).toEqual(
+      new Set(ids),
+    );
+  } finally {
+    await coordinator.close();
+    await rm(root, { recursive: true, force: true });
+  }
+});
