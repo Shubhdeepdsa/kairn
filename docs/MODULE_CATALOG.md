@@ -160,3 +160,6 @@ clipboard dependency, final design system or additional polling lifecycle.
   approval validation and bounded service cache.
 - `server/search-routes.ts`: narrow read-only search/context/projects decoder and
   project-scoped mapping into the existing reader adapter; no filesystem routing.
+
+- `core/search-palette.ts`: framework-independent search/scope/picker/selection state,
+  debounce, request generations, partial/error status and disposal. No DOM or SQLite.

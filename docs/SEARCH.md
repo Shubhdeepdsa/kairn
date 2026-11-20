@@ -131,3 +131,13 @@ project and limit (no duplicates/unknown parameters). /api/projects/project-id/t
 /documents/id and /links/id/encoded-target reuse the existing safe reader adapters.
 All original Host/Origin/Fetch Metadata/CSP/size/method limits apply before dispatch.
 Project and search responses contain IDs/relative metadata, never canonical paths.
+
+## Implemented reusable palette controller
+
+`SearchPalette` is a DOM-free controller with injected search/change capabilities.
+It owns contextual open/global open, explicit scope, cursor-aware @ selectors,
+query-preserving project selection, deterministic duplicate-name suggestions,
+selection movement, Escape precedence and composition/selection-safe Backspace.
+Queries debounce by 200 ms; generations discard replies after text/scope/close
+changes. Coverage is visible, error/empty states are distinct, explicit refresh
+continues bounded indexing without another polling loop. Disposal cancels timers.

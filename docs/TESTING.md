@@ -284,3 +284,7 @@ integration verifies coalescing and clean close independently of HTTP and the UI
 `project-navigation.test.ts` verifies approved cross-project identities, duplicate
 labels, heading validation, old/new bookmarks, real scoped HTTP reads, redaction,
 strict search parameters and removed/invalid project refusal without a palette.
+
+`search-palette.test.ts` uses fake timers to verify contextual/global opening,
+composition-safe Backspace, cursor-aware selector removal, query preservation,
+duplicate names, Escape precedence, debounce, scope changes and stale replies.
