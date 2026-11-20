@@ -1,6 +1,6 @@
 # Local search design
 
-Status: Phase 5 contracts IMPLEMENTED; indexing, queries and palette PLANNED.
+Status: Phase 5 contracts and Markdown extraction IMPLEMENTED; indexing, queries and palette PLANNED.
 
 ## Identity and ownership
 
@@ -54,3 +54,7 @@ Each stage adds focused tests and maintains the module catalog. Acceptance uses
 isolated temporary projects/storage, real SQLite and HTTP, installed CLI and honest
 browser observations. CI must verify FTS5 and locking on Linux/macOS/Windows before
 cross-platform support is claimed. See [testing](TESTING.md).
+
+Extraction preserves whole identifiers and adds camel-case components. Punctuation
+uses Unicode token boundaries; raw HTML paragraphs and image metadata are omitted
+conservatively, while literal fenced code remains searchable.

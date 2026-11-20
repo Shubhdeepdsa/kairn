@@ -138,3 +138,8 @@ clipboard dependency, final design system or additional polling lifecycle.
 ## Phase 5 contracts
 
 - `core/search-contracts.ts`: typed scope, request, destination, result and per-project coverage; opaque project-ID validation. No persistence or UI.
+
+- `core/markdown.ts`: `markdownTokens` exposes the existing safe parser for extraction.
+- `core/search-extraction.ts`: pure section/body/code/title extraction plus technical
+  identifier normalization, independent of storage. Reuses reader heading fragments;
+  conservatively omits raw-HTML paragraphs and images, retains fenced code.

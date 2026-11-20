@@ -260,3 +260,9 @@ track the integration/latest-head results. No manual browser check is inferred f
 
 A final duplicate-link regression ensures repeated occurrences do not consume the
 unique-link analysis budget and hide later broken targets. Final suite: 96 tests.
+
+## Phase 5 extraction
+
+`search-contracts.test.ts` validates opaque scope identities. Search extraction tests
+exercise repeated Unicode headings, lists/tables/code, technical identifiers,
+raw-HTML omission and exact reader-fragment compatibility without a database.

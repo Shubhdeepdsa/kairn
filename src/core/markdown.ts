@@ -101,3 +101,10 @@ export function analyzeMarkdown(markdown: string): MarkdownAnalysis {
   const html = parser.render(markdown, env);
   return { html, headings: env.headings, links: [...new Set(env.links)] };
 }
+
+/** Parse bounded source with the same safe parser used by rendering; no resource fetching or raw HTML parser. */
+export function markdownTokens(
+  markdown: string,
+): ReturnType<typeof parser.parse> {
+  return parser.parse(markdown, {});
+}
