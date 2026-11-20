@@ -199,3 +199,6 @@ real HTTP HTML/tree reads, graceful SIGINT and unregister with document/config
 hashes unchanged. All servers/processes were closed. Runtime audit: zero advisories;
 eight pre-existing dev-tool advisories remain. Remote OS results must be verified
 from the feature PR, not inferred from local execution.
+
+Windows overlap checks also distinguish sources on separate drive letters; a
+cross-drive absolute relative() result cannot imply directory containment.

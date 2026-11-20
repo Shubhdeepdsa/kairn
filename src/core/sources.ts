@@ -1,4 +1,4 @@
-import { relative } from "node:path";
+import { isAbsolute, relative } from "node:path";
 import type { ResolvedSource } from "./config/project.js";
 import { ConfigError } from "./config/schema.js";
 
@@ -50,6 +50,7 @@ export function sourceOverlaps(
         const path = relative(parent.absolutePath, child.absolutePath);
         return (
           parent.kind === "directory" &&
+          !isAbsolute(path) &&
           path !== ".." &&
           !path.startsWith("../") &&
           !path.startsWith("..\\")

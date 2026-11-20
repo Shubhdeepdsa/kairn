@@ -44,4 +44,12 @@ it("reports nested overlaps while retaining source identifiers", () => {
       source("c", "other"),
     ]),
   ).toEqual([{ first: "a", second: "b" }]);
+  if (process.platform === "win32") {
+    expect(
+      sourceOverlaps([
+        { ...source("c", "docs"), absolutePath: "C:\\docs" },
+        { ...source("d", "docs"), absolutePath: "D:\\docs" },
+      ]),
+    ).toEqual([]);
+  }
 });
