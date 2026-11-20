@@ -122,3 +122,20 @@ through the real API and terminate without a remaining listener. POSIX signals
 verify graceful exit; Windows process termination is verified as forced cleanup
 because Node's child.kill does not deliver a catchable SIGINT there. Existing
 init tests remain unchanged except replacing run as the unknown-command fixture.
+
+## Phase 2 final acceptance — 2026-11-20
+
+On Node 26.13.0/macOS: clean npm ci and all six quality scripts passed; final
+regression suite has 51 tests. Added checks cover selected-root replacement,
+file-symlink replacement, pending loading state and hostile filename labels.
+Windows skips POSIX permission/file-symlink tests; directory junction and HTTP/DOM
+coverage still run. GitHub Actions retains the existing three-platform matrix.
+
+The packed CLI installed into a clean temporary global prefix and passed help,
+version and self-documentation viewing. Port 4173 was occupied, so the exact
+`kairn run --no-open` invocation verified the conflict error; `--port 0` then
+served the repository's real docs. A real browser verified sidebar selection,
+headings and table rendering. Ctrl+C exited 0, the listener closed, and hashes
+of all nine source docs matched the pre-run snapshot. No browser auto-launch
+occurs in tests and no Kairn listener remains. Runtime npm audit reports zero
+advisories; the eight previously documented development-tool advisories remain.

@@ -5,16 +5,12 @@
 ## Boundary diagram
 
 ```text
-Command line / @clack/prompts
-         │
-         ▼
-   src/cli/ (adapter)
-         │ calls typed interfaces
-         ▼
-   src/core/ (filesystem discovery, planning, safe apply)
-         │
-         ▼
- Node.js filesystem APIs
+CLI (arguments, prompts, lifecycle) ──┬──> core document service
+                                    └──> HTTP adapter ──> core contracts
+                                              │
+                                  static viewer + Markdown renderer
+                                              │
+                                     browser same-origin API
 ```
 
 **Dependency rule:** CLI imports core, never the reverse. Tests may import both. No external services are required.
@@ -24,7 +20,9 @@ Command line / @clack/prompts
 ```text
 src/
   cli/       command parsing, prompts, human-readable output
-  core/      discovered docs root, non-destructive initialization
+  core/      safe initialization and bounded read-only document service
+  server/    loopback HTTP adapter
+  viewer/    vanilla browser module, static shell and Markdown rendering
   index.ts   CLI executable entrypoint or equivalent
 
 tests/      temporary-filesystem and CLI adapter tests

@@ -4,7 +4,6 @@ import { createRequire } from "node:module";
 import { intro, log, outro, text, isCancel } from "@clack/prompts";
 import { runInit } from "./cli/init.js";
 import { clackPrompts } from "./cli/prompts.js";
-
 import { runDocumentation } from "./cli/run.js";
 import { loadViewerPresentation } from "./viewer/assets.js";
 import open from "open";
@@ -126,7 +125,7 @@ try {
     }
   } else {
     if (values.yes || values.cwd !== undefined)
-      throw new Error("--yes and --cwd require init.");
+      throw new Error("--yes requires init; --cwd requires init or run.");
     console.log(help);
   }
 } catch (error) {

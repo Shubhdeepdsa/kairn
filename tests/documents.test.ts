@@ -122,6 +122,35 @@ describe("document service", () => {
       code: "INVALID_PATH",
     });
   });
+  it("rejects replacement of the selected root identity", async () => {
+    const root = await fixture();
+    await writeFile(join(root, "note.md"), "safe");
+    const service = await createDocumentService(root);
+    const id = documents(service.tree)[0]!.id;
+    // Keep the original inode alive so a newly created root cannot reuse it.
+    const { rename } = await import("node:fs/promises");
+    await rename(root, `${root}-old`);
+    roots.push(`${root}-old`);
+    await mkdir(root);
+    await writeFile(join(root, "note.md"), "replacement");
+    await expect(service.read(id)).rejects.toMatchObject({ code: "CHANGED" });
+  });
+  it.skipIf(process.platform === "win32")(
+    "rejects a file symlink added after discovery",
+    async () => {
+      const root = await fixture();
+      const outside = await fixture();
+      await writeFile(join(root, "note.md"), "safe");
+      await writeFile(join(outside, "private.md"), "private");
+      const service = await createDocumentService(root);
+      const id = documents(service.tree)[0]!.id;
+      await rm(join(root, "note.md"));
+      await symlink(join(outside, "private.md"), join(root, "note.md"));
+      await expect(service.read(id)).rejects.toMatchObject({
+        code: "INVALID_PATH",
+      });
+    },
+  );
   it("bounds file size during discovery and fresh reads", async () => {
     const root = await fixture();
     await writeFile(join(root, "note.md"), "1234");

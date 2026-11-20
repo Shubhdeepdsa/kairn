@@ -140,6 +140,47 @@ describe("browser navigation", () => {
       () => document.querySelector("h1")?.textContent === "Nested",
     );
   });
+  it("shows loading while content is pending and labels filenames as text", async () => {
+    const document = dom().window.document;
+    let finish!: (response: Response) => void;
+    let started!: () => void;
+    const requested = new Promise<void>((resolve) => {
+      started = resolve;
+    });
+    const pending = new Promise<Response>((resolve) => {
+      finish = resolve;
+    });
+    const fetcher: typeof fetch = async (input) => {
+      if (String(input) === "/api/tree")
+        return Response.json({
+          tree: [
+            {
+              kind: "document",
+              id: rootId,
+              path: "evil.md",
+              title: "<img src=x onerror=alert(1)>",
+            },
+          ],
+        });
+      started();
+      return pending;
+    };
+    const mounting = mountViewer(document, fetcher);
+    await requested;
+    expect(document.getElementById("status")?.textContent).toBe(
+      "Loading document…",
+    );
+    expect(document.getElementById("document")?.getAttribute("aria-busy")).toBe(
+      "true",
+    );
+    expect(document.querySelector("nav img")).toBeNull();
+    finish(Response.json({ html: renderMarkdown("# Safe") }));
+    await mounting;
+    expect(document.querySelector("h1")?.textContent).toBe("Safe");
+    expect(document.getElementById("document")?.hasAttribute("aria-busy")).toBe(
+      false,
+    );
+  });
   it("handles empty roots, failed API calls and stale bookmarks", async () => {
     const empty = dom().window.document;
     await mountViewer(empty, async () => Response.json({ tree: [] }));

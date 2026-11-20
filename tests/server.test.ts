@@ -180,7 +180,7 @@ describe("localhost API", () => {
     try {
       await new Promise<void>((resolve) => socket.once("connect", resolve));
       await server.close();
-      expect(true).toBe(true);
+      await expect(raw(server.url, "/api/health")).rejects.toThrow();
     } finally {
       socket.destroy();
     }

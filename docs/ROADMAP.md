@@ -21,7 +21,7 @@ Publication is authorized only to the verified personal user account, after revi
 
 ## Later phases (not implemented)
 
-1. `kairn run` local server and simple Markdown view: next smallest milestone.
+1. `kairn run` local server and simple Markdown view: implemented in Phase 2 below.
 2. Global library, project registry and multiple docs sources.
 3. Complete document engine, links/search and source-aware navigation.
 4. Local Git timeline and document-specific history.
@@ -33,7 +33,7 @@ Publication is authorized only to the verified personal user account, after revi
 Initial remote CI exposed Windows CRLF checkout drift. The follow-up enforces LF
 with `.gitattributes`; formatter behavior and check strictness are unchanged.
 
-## Phase 2 — IN PROGRESS
+## Phase 2 — locally VERIFIED; feature PR pending
 
 A. Update milestone instructions, architecture, contracts and security decisions.
 B. Read-only nested document engine with bounded scanning and safe reads.
@@ -42,5 +42,19 @@ D. Minimal vanilla viewer and safe Markdown rendering.
 E. `kairn run` CLI, browser opening and signal lifecycle.
 F. Clean-package acceptance, documentation and cross-platform CI; feature PR.
 
-These are planned, not implementation claims. Preserve Phase 1 behavior and
-commit each phase independently on `feat/local-documentation-viewer`.
+| Phase          | Commit                   | Verification                                                     |
+| -------------- | ------------------------ | ---------------------------------------------------------------- |
+| A — planning   | `73a08fb`                | Documentation formatting/lint and staged review                  |
+| B — core       | `f1c7c61`                | Quality gates; 27 tests                                          |
+| C — server     | `c821dae`                | Quality gates; 35 tests                                          |
+| D — viewer     | `a96d4ea`                | Quality gates; 41 tests                                          |
+| E — CLI        | `b7cafc9`                | Quality gates; 48 tests                                          |
+| F — acceptance | Final integration commit | Clean install, all gates, 51 tests and real-browser self-viewing |
+
+The installed package served Kairn's own docs without modifying their hashes.
+The default port was occupied and correctly reported a conflict; self-viewing
+used `--port 0`. Real browser navigation/headings/tables and real Ctrl+C shutdown
+were verified. Cross-platform results are reported by the feature PR's CI.
+
+Next smallest milestone: explicit refresh/rescan for newly added documents,
+without introducing a registry, persistence or the final React UI.
