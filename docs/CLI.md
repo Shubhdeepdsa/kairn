@@ -1,36 +1,38 @@
 # Kairn CLI contract
 
-**Status: PLANNED until implemented and tested.** This page defines initial intended behavior, not a claim of a working binary.
+Implemented: `kairn --help` (`-h`), `--version` (`-v`), and
+`kairn init [--cwd <directory>] [--yes]`. No other commands are supported.
 
-## Commands
+## Initialization
 
-| Command            | Intended behavior                                                   | v0 status                                           |
-| ------------------ | ------------------------------------------------------------------- | --------------------------------------------------- |
-| `kairn --help`     | List real commands and quick start                                  | Planned                                             |
-| `kairn --version`  | Display package version                                             | Planned                                             |
-| `kairn init`       | Interactive documentation initialization in current directory       | Planned                                             |
-| `kairn init --yes` | Explicit non-interactive safe default; never clobber existing files | Planned                                             |
-| `kairn run`        | Start local document viewer                                         | **Later; do not implement or advertise as working** |
+Default target is the current directory. `--cwd` accepts an existing directory,
+including paths containing spaces. No Git repository or package file is required.
+Only the direct `docs/` child is inspected; no recursive scan is performed.
 
-## Init intent
+The wizard shows the canonical project directory and preview, offers create/reuse
+or cancel, then asks for final confirmation (default no). Creation adds an empty
+`docs/`; reuse writes nothing and preserves all existing content. Canceling any
+prompt, including Ctrl+C, makes no changes. No global configuration is written.
 
-1. Detect an existing direct child `docs/`; do not recurse arbitrarily.
-2. If it exists, offer to use/preserve it. Do **not** overwrite existing Markdown.
-3. If missing, offer to create `docs/` with minimal optional starter content (such as `README.md`).
-4. Show planned writes and ask for confirmation in interactive mode.
-5. Allow cancel at every prompt; canceled operations must leave the filesystem unchanged.
-6. On completion, report precisely which files were created and a sensible next action.
-7. Non-interactive environments require explicit flags; never hang waiting for stdin.
+`--yes` explicitly approves the same safe default without prompts. Without it,
+non-TTY, CI and dumb terminals fail with actionable instructions. Plain output is
+used for `--yes`; Clack uses Node terminal styling and respects `NO_COLOR`.
+Filesystem roots, selected-root symlinks, docs symlinks and file conflicts fail.
 
-`init` doesn't have to register a global Kairn project yet, contact GitHub, create commits or run a server. All these behaviors are separate later milestones.
+## Exit codes
 
-## Accessibility and error handling
+| Code | Meaning                                                                           |
+| ---- | --------------------------------------------------------------------------------- |
+| 0    | Success or help/version                                                           |
+| 1    | Invalid arguments, inaccessible path, conflict, or noninteractive use without yes |
+| 2    | Interactive cancellation or declined confirmation                                 |
 
-Use clear prompts and controls; handle `NO_COLOR`, limited terminals and keyboard cancellation. Errors should explain path permissions, conflicts and missing directories. No ANSI-only distinctions.
+## Examples
 
-Once implemented, update this document with exact verified flags, exit codes, examples and check results.
+```sh
+kairn init
+kairn init --cwd ./my-project --yes
+```
 
-## Phase A implementation
-
-`--help` (`-h`) and `--version` (`-v`) are implemented. Unknown arguments exit 1.
-Initialization remains planned. The executable is `dist/index.js` after building.
+`init` never registers projects, contacts a service, changes Git, installs packages,
+or starts a server. Add Markdown files yourself after initialization.

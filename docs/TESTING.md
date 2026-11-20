@@ -1,6 +1,6 @@
 # Verification and quality strategy
 
-**Status: PLANNED until scripts and tests are implemented.**
+**Status: IMPLEMENTED; local quality gates run during each phase.**
 
 ## Intended scripts
 
@@ -35,7 +35,7 @@ are available; automated tests follow in Phase C.
 ## Quality gates
 
 All six required scripts now exist. `npm test` uses Vitest with deterministic
-subprocess help/version checks; tests use Node's native TypeScript support.
+subprocess help/version checks against compiled output.
 ESLint validates TypeScript and TSDoc syntax. Prettier and markdownlint check
 repository documentation as well as source. Line length and table alignment
 Markdown rules are disabled to permit readable prose and Prettier tables.
@@ -47,3 +47,11 @@ byte-preserving reuse, repeat runs, direct-child-only detection, missing roots,
 file conflicts, root/docs symlinks, stale plans and unreadable roots. Permission
 checks skip on Windows and privileged users, where POSIX mode bits are unreliable.
 Concurrent hostile ancestor replacement is outside the supported threat model.
+
+## CLI coverage
+
+`npm test` builds first, then runs fake-prompt create/reuse, select cancellation,
+keyboard sentinel, declined confirmation, confirmation sentinel, non-TTY and
+explicit-yes tests. Built-binary subprocesses verify help/version, errors,
+first/repeated init and plain NO_COLOR output. Real terminal rendering is not
+asserted by unit tests; Clack owns keyboard input and terminal styling.

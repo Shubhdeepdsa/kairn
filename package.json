@@ -22,7 +22,7 @@
     "lint": "eslint .",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "test": "vitest run",
+    "test": "npm run build && vitest run",
     "docs:lint": "markdownlint-cli2"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 # Kairn — product context
 
-**Status: PLANNED.** Kairn is intended to be a local-first, CLI-installable documentation and Git-history explorer for arbitrary software repositories and personal Markdown libraries.
+**Status: Initial CLI and safe init IMPLEMENTED; viewer/history PLANNED.** Kairn is intended to be a local-first, CLI-installable documentation and Git-history explorer for arbitrary software repositories and personal Markdown libraries.
 
 ## Principles
 
@@ -13,7 +13,7 @@
 
 ## First deliverable: CLI and safe initialization only
 
-Create a global installable `kairn` executable. `kairn init` checks for a direct child `docs/` and can safely create a basic starter structure through an interactive terminal wizard. `kairn --help` and `kairn --version` work. This first milestone does **not** include `kairn run`, a browser UI, Git history, multi-source registry, automatic AI generation, or agent hooks.
+Create a global installable `kairn` executable. `kairn init` checks for a direct child `docs/` and can safely create an empty docs directory through an interactive terminal wizard. `kairn --help` and `kairn --version` work. This first milestone does **not** include `kairn run`, a browser UI, Git history, multi-source registry, automatic AI generation, or agent hooks.
 
 ## Non-goals
 

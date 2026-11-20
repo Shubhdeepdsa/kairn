@@ -1,6 +1,6 @@
 # Kairn architecture
 
-**Status: PROPOSED design; implementation must be verified.**
+**Status: CLI/core boundary IMPLEMENTED and tested. Future viewer is PLANNED.**
 
 ## Boundary diagram
 
@@ -19,7 +19,7 @@ Command line / @clack/prompts
 
 **Dependency rule:** CLI imports core, never the reverse. Tests may import both. No external services are required.
 
-## Planned v0 module structure
+## v0 module structure
 
 ```text
 src/

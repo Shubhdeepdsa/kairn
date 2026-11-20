@@ -12,3 +12,8 @@ All core exports live in `src/core/initialization.ts` and are tested in
 | `InitializationResult`      | Actual created/reused/declined outcome                                |
 
 CLI adapters consume this module; it has no prompts, process exits or network.
+
+CLI boundary exports: `runInit`, `InitContext`, and `InitPrompts` in
+`src/cli/init.ts`; `clackPrompts` in `src/cli/prompts.ts`. These are terminal
+adapters, not core APIs. `tests/cli.test.ts` verifies consent and cancellation
+with fake prompts plus built-binary subprocess checks.

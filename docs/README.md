@@ -1,6 +1,6 @@
 # Kairn documentation index
 
-**Status:** starter / project specifications. No CLI implementation is claimed by this pack.
+**Status:** CLI foundation and safe init implemented. See testing for verification and limitations.
 
 - [Product vision and scope](PRODUCT.md)
 - [Architecture](ARCHITECTURE.md)
