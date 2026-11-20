@@ -91,21 +91,21 @@ The [push run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726328194) a
 passed all Linux/macOS/Windows jobs. `b7208ee` adds a focused Windows cross-drive
 overlap correction; latest-head checks are visible on the PR.
 
-## Phase 4 — locally VERIFIED; feature PR pending
+## Phase 4 — VERIFIED; PR review pending
 
 A contracts; B content freshness; C configuration reload; D core links; E bounded
 diagnostics; F URL/history; G outline/accessibility; acceptance and feature PR.
 
-| Stage      | Commit                  | Outcome                                             |
-| ---------- | ----------------------- | --------------------------------------------------- |
-| 4A         | `8686f64`               | Freshness, link and navigation contracts            |
-| 4B         | `584229a`               | Conditional active-content refresh                  |
-| 4C         | `e3d3ecf`               | Atomic project settings reload                      |
-| 4D         | `f010b23`               | Reusable canonical link resolution                  |
-| 4E         | `9a43495`               | Bounded current-document diagnostics                |
-| 4F         | `50a07ec`               | Document/heading URLs and browser history           |
-| 4G         | `0dddfbd`               | Outline, layout and accessibility                   |
-| Acceptance | Final acceptance commit | Clean install, 95 tests and installed-package smoke |
+| Stage      | Commit    | Outcome                                             |
+| ---------- | --------- | --------------------------------------------------- |
+| 4A         | `8686f64` | Freshness, link and navigation contracts            |
+| 4B         | `584229a` | Conditional active-content refresh                  |
+| 4C         | `e3d3ecf` | Atomic project settings reload                      |
+| 4D         | `f010b23` | Reusable canonical link resolution                  |
+| 4E         | `9a43495` | Bounded current-document diagnostics                |
+| 4F         | `50a07ec` | Document/heading URLs and browser history           |
+| 4G         | `0dddfbd` | Outline, layout and accessibility                   |
+| Acceptance | `82ff53e` | Clean install, 95 tests and installed-package smoke |
 
 Live source/configuration reload planned after Phase 3 is now implemented. Next
 smallest milestone: an explicit bounded CLI command for current-document link
@@ -114,3 +114,9 @@ diagnostics, reusing the same core service without a project-wide index.
 Final React/Stitch UI, themes, search, Git history, cloud, AI, clipboard/code-copy,
 and syntax highlighting remain deferred. No manual browser verification is claimed:
 browser control is disabled in Work settings; DOM tests use the real localhost API.
+
+Feature branch `feat/document-reading-experience` is pushed to the personal
+repository. [PR #3](https://github.com/Shubhdeepdsa/kairn/pull/3) is open, unmerged.
+The [push CI run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44732707496)
+at `82ff53e` passed Linux, macOS and Windows; latest-head/integration checks are
+visible on the PR. Browser verification remains API/DOM-only as documented.
