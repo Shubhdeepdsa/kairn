@@ -54,6 +54,7 @@ export interface DocumentContent {
 export interface DocumentService {
   readonly root: string;
   readonly tree: readonly NavigationEntry[];
+  readonly warning?: string | undefined;
   read(id: string): Promise<DocumentContent>;
   /** Rescan the original root within the same limits; concurrent calls share one scan. Failed scans retain the last valid snapshot. */
   refresh(): Promise<readonly NavigationEntry[]>;

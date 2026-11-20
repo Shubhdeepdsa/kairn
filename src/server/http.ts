@@ -52,7 +52,7 @@ function failure(
  */
 export async function startDocumentationServer(
   documents: Pick<DocumentService, "tree" | "read"> &
-    Partial<Pick<DocumentService, "refresh">>,
+    Partial<Pick<DocumentService, "refresh" | "warning">>,
   options: ServerOptions = {},
 ): Promise<RunningServer> {
   const port = options.port ?? 4173;
@@ -151,6 +151,7 @@ export async function startDocumentationServer(
               tree: documents.refresh
                 ? await documents.refresh()
                 : documents.tree,
+              ...(documents.warning ? { warning: documents.warning } : {}),
             });
           else if (target.startsWith("/api/documents/")) {
             const id = target.slice("/api/documents/".length);

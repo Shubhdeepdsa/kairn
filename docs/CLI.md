@@ -101,8 +101,7 @@ Cancel exits 2 without writing; invalid input/conflicts exit 1. List/show are
 machine-readable JSON; absolute paths there are CLI-only, never HTTP output.
 Remove unregisters metadata only. Config init is explicitly approved, create-only
 and refuses external paths. Personal source changes and ignore rules stay in the
-Library; shared configuration is not edited by these commands. Restart run after
-configuration changes; document files themselves still refresh automatically.
+Library; shared configuration is not edited by these commands. Valid configuration changes reload while running; document files themselves still refresh automatically.
 
 Run with no flags still works without registration. If the selected canonical
 root is registered, run resolves its shared config and personal overrides.
@@ -110,3 +109,8 @@ root is registered, run resolves its shared config and personal overrides.
 `--cwd`. Run never registers or writes configuration. See [configuration](CONFIGURATION.md)
 for schema, storage locations and precedence. Source discover returns candidates
 only; source add is the approval operation.
+
+Invalid configuration reloads preserve the last valid view and show a warning;
+fixing JSON/source paths recovers automatically. Deleting shared config resolves
+defaults and personal overrides again. Removing a bound Library registration
+retains its last valid view with a warning; restart/select a registered project.

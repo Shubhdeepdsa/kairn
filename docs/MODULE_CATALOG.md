@@ -106,3 +106,8 @@ to core operations. No HTTP Library/settings mutation endpoints are introduced.
 HTTP document responses expose revision/ETag and honor If-None-Match with 304.
 The viewer reuses its visible-tab loop for background content reads and leaves
 unchanged article DOM/focus intact; failures retain content and retry next cycle.
+
+`core/live-project.ts`: `createReloadingDocumentService` composes the existing
+resolver/scanner, fingerprints effective settings, coalesces refreshes and swaps
+only complete validated services. Optional `DocumentService.warning` surfaces a
+redacted reload warning while preserving last valid state. No settings are written.

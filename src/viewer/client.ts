@@ -15,6 +15,7 @@ export async function mountViewer(
   const byPath = new Map<string, DocumentEntry>();
   let selected: DocumentEntry | undefined;
   let requestNumber = 0;
+  let configurationWarning: string | undefined;
   let contentRevision: string | undefined;
   let disposed = false;
   let signature: string | undefined;
@@ -109,7 +110,7 @@ export async function mountViewer(
           : article!.innerHTML !== data.html);
       if (changed) article!.innerHTML = data.html;
       contentRevision = data.revision;
-      status!.textContent = "";
+      status!.textContent = configurationWarning ?? "";
       document.title = `${file.title} · Kairn`;
       if (!background) {
         article!.focus({ preventScroll: true });
@@ -205,8 +206,15 @@ export async function mountViewer(
   function refresh(initial = false): Promise<void> {
     refreshing ??= (async () => {
       try {
-        const data = (await api("/api/tree")) as { tree: NavigationEntry[] };
+        const data = (await api("/api/tree")) as {
+          tree: NavigationEntry[];
+          warning?: string;
+        };
         if (disposed) return;
+        configurationWarning = data.warning;
+        if (data.warning) status!.textContent = data.warning;
+        else if (status!.textContent?.startsWith("Project configuration"))
+          status!.textContent = "";
         const nextSignature = JSON.stringify(data.tree);
         if (nextSignature === signature) {
           if (

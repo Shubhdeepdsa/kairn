@@ -8,6 +8,10 @@ import { runDocumentation } from "./cli/run.js";
 import { loadViewerPresentation } from "./viewer/assets.js";
 import open from "open";
 import { ProjectLibrary } from "./core/library.js";
+import {
+  loadProjectConfig,
+  resolveProjectConfig,
+} from "./core/config/project.js";
 import { resolveRunProject } from "./core/application.js";
 import { runProjectCommand } from "./cli/project.js";
 
@@ -122,13 +126,32 @@ try {
       process.on("SIGINT", stop);
       process.on("SIGTERM", stop);
       try {
-        const project = await resolveRunProject(
+        const library = new ProjectLibrary();
+        const bound = values.project
+          ? await library.get(values.project)
+          : await library.find(values.cwd ?? process.cwd());
+        const projectRoot = bound?.root ?? values.cwd ?? process.cwd();
+        let project = await resolveRunProject(
           values.cwd ?? process.cwd(),
           values.project,
-          new ProjectLibrary(),
+          library,
         );
+        if (!project) {
+          const effective = await resolveProjectConfig(projectRoot, null);
+          if (effective.sources.length) project = effective;
+        }
         process.exitCode = await runDocumentation({
           ...(project ? { project } : {}),
+          projectRoot,
+          async reloadProject() {
+            const active = bound
+              ? await library.get(bound.id)
+              : await library.find(projectRoot);
+            const shared = await loadProjectConfig(projectRoot);
+            if (!active && !shared && !project) return null;
+            // Even absent shared config has valid default/personal semantics.
+            return resolveProjectConfig(projectRoot, shared, active?.overrides);
+          },
           directory: values.cwd ?? process.cwd(),
           port: Number(port),
           noOpen: values["no-open"] ?? false,

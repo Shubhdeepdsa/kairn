@@ -251,7 +251,7 @@ export async function runProjectCommand(
     return 2;
   await library.setOverrides(id, overrides, project);
   message(
-    "Personal configuration updated. Restart run to load configuration changes.",
+    "Personal configuration updated. The running viewer will reload these settings automatically.",
   );
   return 0;
 }

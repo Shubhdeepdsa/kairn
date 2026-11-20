@@ -210,3 +210,7 @@ follow-up commits. No npm publication or automatic merge.
 
 Phase 4 content tests verify real external saves, conditional 304 responses,
 unchanged DOM, focus preservation, retry and last-render retention on read failure.
+
+Live-project fixtures verify personal source/ignore/primary edits, shared JSON
+failure and recovery/deletion, missing paths, concurrent refresh sharing and
+registration loss retaining the last valid reader with a redacted warning.
