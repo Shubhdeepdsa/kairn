@@ -14,3 +14,5 @@
 - Update `docs/CLI.md` and root README when behavior changes.
 
 - Phase 2: run discovers existing docs without writes, starts loopback HTTP, supports port/no-open, opens a browser only when appropriate, and shuts down on signals. Prompt only for missing docs in an interactive terminal.
+
+- Phase 3: preserve existing behavior; keep Library/config/source contracts reusable. Isolate persistence tests, validate before writes, and never expose absolute machine paths over HTTP.

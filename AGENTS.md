@@ -1,7 +1,7 @@
 # AGENTS.md — Kairn engineering instructions
 
 > **Scope:** entire Kairn repository. More specific `AGENTS.md` files apply in their directories.
-> **Product:** local-first Markdown documentation and Git-history explorer. **Current milestone:** Phase 2: read-only localhost documentation viewer and `kairn run`; preserve Phase 1.
+> **Product:** local-first Markdown documentation and Git-history explorer. **Current milestone:** Phase 3: persistent project Library, portable configuration and multiple documentation sources; preserve Phases 1–2.
 > **Priority:** small, verifiable, modular work; documentation is maintained with code, not reconstructed afterwards.
 
 ## 1. Preflight and source of truth
@@ -70,10 +70,12 @@ Update the smallest relevant docs **in the same commit as behavior changes**:
 
 ## 7. Scope restraint
 
-**Build now:** read-only nested Markdown engine, secure loopback HTTP, minimal vanilla viewer, `kairn run`, tests/docs/CI. Preserve help/version/init. Push a phased feature branch to the existing personal remote and open a PR; do not merge automatically.
+**Build now:** versioned JSON persistence, project Library, shared/personal configuration, multi-source discovery/reading and CLI integration, tests/docs/CI. Preserve help/version/init. Push a phased feature branch to the existing personal remote and open a PR; do not merge automatically.
 
-**Do not build now:** final React UI/design system, global registry, multi-root configuration, Git timeline, editing, search, agent automation, MCP, AI, cloud services, or SQLite. Do not create another repository or publish to npm.
+**Do not build now:** final React UI/design system, Git timeline, editing, search, agent automation, MCP, AI, cloud services, or SQLite. Do not create another repository or publish to npm.
 
 ## 8. Completion report
 
 Report: phase and commit hashes, what actually works, quality checks (pass/fail/not run), documents changed, personal GitHub URL and push verification (or precise blocker), and next smallest milestone. Never invent successful checks.
+
+- Phase 3 persistence belongs in core services, never scattered CLI JSON writes. Tests must inject an isolated application-data directory. Shared paths are portable; external sources require explicit personal approval.

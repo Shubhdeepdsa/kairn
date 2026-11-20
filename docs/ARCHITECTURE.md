@@ -129,3 +129,19 @@ pauses when hidden, refreshes on visibility return and removes timers/listeners
 on page exit. No overlapping browser polls or persistent server watchers. Sidebar
 DOM is rebuilt only when the tree changes; current content, selection and folder
 expansion are preserved. Deleted selections fall back to another document.
+
+## Phase 3 implemented composition
+
+CLI → Library / project resolver → resolved sources → existing document engine.
+JSON storage owns parsing and transactional replacement; Library owns project
+identity. HTTP remains read-only and consumes the same tree/read/refresh contract.
+See [configuration design](CONFIGURATION.md). No singleton, database or React work.
+
+Sources resolve in core/config/project.ts and compose through
+createProjectDocumentService using the original scanner and safe reader. Directory
+and file sources share a total 10,000-entry/2,000-document budget, with existing
+per-file/depth caps. Primary navigation omits its wrapper; additional sources have
+labeled sections. Source IDs and project-relative paths disambiguate duplicate
+titles and cross-source links. External provenance uses opaque IDs and safe labels;
+absolute paths remain core/CLI only. Unavailable sources stay declared, and refresh
+removes disappeared documents from the view without altering config.

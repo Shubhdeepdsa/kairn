@@ -328,6 +328,57 @@ describe("browser navigation", () => {
     await vi.advanceTimersByTimeAsync(6000);
     expect(fetcher.mock.calls.length).toBe(closed);
   });
+  it("resolves cross-source links without collisions between identical file titles", async () => {
+    const document = dom().window.document;
+    const fetcher: typeof fetch = async (input) =>
+      String(input) === "/api/tree"
+        ? Response.json({
+            tree: [
+              {
+                kind: "document",
+                id: rootId,
+                path: "README.md",
+                title: "README",
+                sourceId: "primary",
+                projectPath: "docs/README.md",
+              },
+              {
+                kind: "directory",
+                path: "extra",
+                title: ".github/README.md",
+                children: [
+                  {
+                    kind: "document",
+                    id: nestedId,
+                    path: "README.md",
+                    title: "README",
+                    sourceId: "extra",
+                    projectPath: ".github/README.md",
+                  },
+                ],
+              },
+            ],
+          })
+        : Response.json({
+            html: renderMarkdown(
+              String(input).endsWith(rootId)
+                ? "# Primary\n\n[Extra](../.github/README.md)"
+                : "# Extra",
+            ),
+          });
+    await mountViewer(document, fetcher);
+    expect(document.querySelector("h1")?.textContent).toBe("Primary");
+    (document.querySelector("article a") as HTMLAnchorElement).click();
+    await until(
+      document,
+      () => document.querySelector("h1")?.textContent === "Extra",
+    );
+    expect(
+      document
+        .querySelector("[aria-current=page]")
+        ?.getAttribute("data-document"),
+    ).toBe(nestedId);
+  });
   it("serves packaged viewer assets and rendered API content under CSP", async () => {
     // Source tests load the compiled module so asset resolution matches installed packages.
     const { loadViewerPresentation: loadBuilt } = (await import(

@@ -71,3 +71,41 @@ The current selection and collapsed folders survive sidebar updates. If the acti
 file disappears, the viewer selects README.md or the first remaining document;
 an empty tree displays guidance and continues checking for files. Refresh errors
 are shown and retried, keeping the last valid sidebar. Dotfiles remain excluded.
+
+## Persistent projects (Phase 3)
+
+```sh
+kairn project add --cwd ./my-project --name "My project" --yes
+kairn project list
+kairn project show <id>
+kairn project rename <id> --name "New name" --yes
+kairn project remove <id> --yes
+kairn project sources discover <id>
+kairn project sources list <id>
+kairn project sources add <id> --path README.md --yes
+kairn project sources add <id> --path .github/DEPLOYMENT.md --yes
+kairn project sources remove <id> --path README.md --yes
+kairn project sources primary <id> --path docs --yes
+kairn project ignore add <id> --pattern '**/AGENTS.md' --yes
+kairn project ignore remove <id> --pattern '**/AGENTS.md' --yes
+kairn project ignore restore <id> --pattern '**/AGENTS.md' --yes
+kairn project config init <id> --yes
+kairn run --project <id> --no-open
+```
+
+IDs are printed by add/list and survive rename. Commands print a preview before
+persisting; --yes explicitly approves, otherwise interactive Clack confirmation
+is required. Missing IDs/names/paths/patterns may be prompted for in a TTY.
+Cancel exits 2 without writing; invalid input/conflicts exit 1. List/show are
+machine-readable JSON; absolute paths there are CLI-only, never HTTP output.
+Remove unregisters metadata only. Config init is explicitly approved, create-only
+and refuses external paths. Personal source changes and ignore rules stay in the
+Library; shared configuration is not edited by these commands. Restart run after
+configuration changes; document files themselves still refresh automatically.
+
+Run with no flags still works without registration. If the selected canonical
+root is registered, run resolves its shared config and personal overrides.
+`--project` selects a registered ID from any directory and cannot combine with
+`--cwd`. Run never registers or writes configuration. See [configuration](CONFIGURATION.md)
+for schema, storage locations and precedence. Source discover returns candidates
+only; source add is the approval operation.

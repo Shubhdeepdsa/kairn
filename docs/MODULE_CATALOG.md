@@ -1,6 +1,6 @@
 # Reusable module catalog
 
-All core exports live in `src/core/initialization.ts` and are tested in
+Initialization exports live in `src/core/initialization.ts` and are tested in
 `tests/core.test.ts`.
 
 | Export                      | Contract                                                              |
@@ -62,3 +62,42 @@ the document service and HTTP adapter. `RunContext` injects prompts, browser ope
 presentation, logging and abort lifetime. It does not own filesystem algorithms.
 `src/index.ts` owns argument validation, Clack adaptation, browser eligibility,
 packaged viewer loading and SIGINT/SIGTERM listener cleanup.
+
+## Versioned configuration storage
+
+`core/config/schema.ts`: strict `projectSchema`, `librarySchema`,
+`overridesSchema`, `relativePathSchema`, inferred domain types, `ConfigError` and
+`validateConfig`. `core/config/storage.ts`: `applicationDataDirectory`,
+`assertRealPath`, `isMissing`, bounded `readJson` and serialized/locked `updateJson`.
+Storage is explicit and injectable; no singleton or browser access.
+
+## Project Library
+
+`core/library.ts`: `canonicalProjectRoot` validates canonical directory identity;
+`ProjectLibrary` offers snapshot/list/get/find/register/rename/unregister,
+setOverrides and availability. Constructor accepts an explicit data directory.
+UUID identity survives rename; unavailable roots remain registered. Mutations
+use locked revision-checked JSON storage; unregister never deletes project files.
+
+`core/config/project.ts`: `loadProjectConfig`, approved create-only
+`createProjectConfig`, direct `discoverSourceCandidates`, and write-free
+`resolveProjectConfig` return `ResolvedProject`/`ResolvedSource`. Relative portable
+paths remain separate from canonical internal paths. Personal fields have explicit
+merge semantics; see CONFIGURATION.md. Source candidates require approval to save.
+
+`core/sources.ts`: `compileExclusions` compiles the deliberately limited glob
+syntax; `sourceOverlaps` reports root overlap without modifying declarations.
+`discoverSourceCandidates` only suggests direct docs and root README. Explicit
+files in hidden directories are approved sources, not recursive discovery.
+
+`core/documents.ts`: `createProjectDocumentService(ResolvedProject)` reuses the
+existing scanner/read safeguards for directory and individual-file sources.
+`DocumentEntry.sourceId/projectPath` preserve source and project provenance while
+canonical paths stay internal. Aggregate scan/document limits span sources;
+primary-first deduplication uses canonical file paths. Refresh retains IDs and
+skips disappeared sources without deleting configuration.
+
+`core/application.ts`: `resolveRunProject` composes Library lookup and shared/
+personal resolution without writes. `cli/project.ts`: `runProjectCommand`,
+`ProjectPrompts`, `projectPrompts` adapt preview/consent and scriptable arguments
+to core operations. No HTTP Library/settings mutation endpoints are introduced.

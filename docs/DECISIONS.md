@@ -78,3 +78,14 @@ Future decisions should record meaningful alternatives and trade-offs rather tha
 - **Consequences:** Bounded scan work while visible and approximately two-second
   discovery latency, plus scan/request time. Hidden tabs pause. Scans that violate
   safety limits fail without replacing valid state; UI reports/retries failures.
+
+## ADR-009 — Layered versioned configuration and cooperating JSON writers
+
+- **Status:** Accepted and implemented in Phase 3.
+- **Decision:** Strict Zod v1 schemas, machine Library with personal overrides,
+  optional portable project config, explicit field-specific resolution. See
+  [configuration](CONFIGURATION.md) for ownership, paths and precedence.
+- **Alternatives:** SQLite, recursive merging, per-project machine paths in Git.
+- **Rationale:** Small inspectable storage, portable source declarations, reusable services.
+- **Consequences:** Lock/revision protection for cooperating writers; no speculative
+  migrations. External paths remain personal. UI receives no absolute paths.

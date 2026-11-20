@@ -33,7 +33,7 @@ Publication is authorized only to the verified personal user account, after revi
 Initial remote CI exposed Windows CRLF checkout drift. The follow-up enforces LF
 with `.gitattributes`; formatter behavior and check strictness are unchanged.
 
-## Phase 2 — VERIFIED; PR review pending
+## Phase 2 — VERIFIED; merged
 
 A. Update milestone instructions, architecture, contracts and security decisions.
 B. Read-only nested document engine with bounded scanning and safe reads.
@@ -61,5 +61,32 @@ deleted Markdown files appear without restarting. No registry or persistence.
 Next smallest milestone: refresh the current document after source content edits.
 
 Feature branch: `feat/local-documentation-viewer`; [PR #1](https://github.com/Shubhdeepdsa/kairn/pull/1)
-is open against main. The [feature CI run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44716122814)
+was merged into main. The [feature CI run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44716122814)
 passed Linux, macOS and Windows at `3633546`. No automatic merge or npm publication.
+
+## Phase 3 — VERIFIED; PR review pending
+
+A: architecture; B: schemas/persistence; C: Library; D: resolver; E: discovery/ignore;
+F: multi-source engine; G: CLI integration; H: acceptance and personal feature PR.
+
+| Stage | Commit            | Verified outcome                                         |
+| ----- | ----------------- | -------------------------------------------------------- |
+| 3A    | `e5b82f7`         | Architecture and instructions                            |
+| 3B    | `b829e0a`         | Schemas and safe JSON storage                            |
+| 3C    | `ea633c1`         | Persistent project Library                               |
+| 3D    | `02ef680`         | Portable/shared/personal resolution                      |
+| 3E    | `2c4656a`         | Source discovery, overlap and limited exclusions         |
+| 3F    | `6c54e17`         | Multi-source document composition                        |
+| 3G    | `e2579dc`         | Project CLI and run integration                          |
+| 3H    | Acceptance commit | 79 tests, clean install and installed-package acceptance |
+
+Phase 3 defers the final React/settings UI, themes, search, Git history, cloud,
+AI and npm publication. Next smallest milestone: source-configuration reload
+without restarting the viewer, preserving the same validation boundaries.
+
+Phase 3 feature branch: `feat/project-library-config`;
+[PR #2](https://github.com/Shubhdeepdsa/kairn/pull/2) is open against main, unmerged.
+The [push run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726328194) and
+[PR run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726417025) at `f0570f0`
+passed all Linux/macOS/Windows jobs. `b7208ee` adds a focused Windows cross-drive
+overlap correction; latest-head checks are visible on the PR.

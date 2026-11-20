@@ -155,7 +155,14 @@ describe("built run command", () => {
       const result = spawnSync(
         process.execPath,
         [resolve("dist/index.js"), ...args],
-        { encoding: "utf8", env: { ...process.env, CI: "1" } },
+        {
+          encoding: "utf8",
+          env: {
+            ...process.env,
+            CI: "1",
+            KAIRN_DATA_DIR: join(root, "isolated-data"),
+          },
+        },
       );
       expect(result.status, result.stdout).toBe(1);
       expect(result.stderr).toContain("Kairn:");
@@ -180,7 +187,14 @@ describe("built run command", () => {
         "0",
         "--no-open",
       ],
-      { env: { ...process.env, CI: "1" }, stdio: ["ignore", "pipe", "pipe"] },
+      {
+        env: {
+          ...process.env,
+          CI: "1",
+          KAIRN_DATA_DIR: join(root, "isolated-data"),
+        },
+        stdio: ["ignore", "pipe", "pipe"],
+      },
     );
     children.push(child);
     let output = "";

@@ -8,3 +8,5 @@
 - Always clean up fixtures, including on assertion failure; ensure tests pass on macOS, Linux, and Windows where applicable.
 - No live GitHub interactions, external network, real emails, or secret-bearing fixtures. Local HTTP tests use ephemeral loopback ports and always close servers; browser launch is injected/disabled.
 - Do not assert unsupported functionality is implemented. Maintain `docs/TESTING.md` with actual test commands and coverage limitations.
+
+- Phase 3: preserve existing behavior; keep Library/config/source contracts reusable. Isolate persistence tests, validate before writes, and never expose absolute machine paths over HTTP.

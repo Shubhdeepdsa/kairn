@@ -1,7 +1,11 @@
 import { constants } from "node:fs";
 import { lstat, open, opendir, realpath } from "node:fs/promises";
 import { createHash } from "node:crypto";
-import { join, parse, resolve } from "node:path";
+import { basename, dirname, join, parse, resolve } from "node:path";
+
+import type { ResolvedProject } from "./config/project.js";
+import { assertRealPath } from "./config/storage.js";
+import { compileExclusions } from "./sources.js";
 
 /** Stable failure categories shared with adapters; messages contain no absolute paths. */
 export type DocumentErrorCode =
@@ -24,6 +28,8 @@ export interface DocumentEntry {
   readonly id: string;
   readonly path: string;
   readonly title: string;
+  readonly sourceId?: string;
+  readonly projectPath?: string;
 }
 
 /** Deterministic directory-first navigation; no empty directories are exposed. */
@@ -89,6 +95,11 @@ function translated(error: unknown): never {
 async function scanDocuments(
   directory: string,
   limits: Partial<DocumentLimits>,
+  selection?: {
+    file?: string;
+    excluded: (path: string) => boolean;
+    budget: { entries: number; documents: number };
+  },
 ): Promise<Omit<DocumentService, "refresh">> {
   const bounds = { ...documentLimits, ...limits };
   for (const key of Object.keys(bounds) as (keyof DocumentLimits)[]) {
@@ -135,10 +146,19 @@ async function scanDocuments(
       const nodes: NavigationEntry[] = [];
       const directoryHandle = await opendir(path);
       for await (const child of directoryHandle) {
-        if (++visited > bounds.entries)
+        if (
+          ++visited > bounds.entries ||
+          (selection && ++selection.budget.entries > documentLimits.entries)
+        )
           fail("LIMIT_EXCEEDED", "Documentation scan entry limit exceeded.");
         if (child.name.startsWith(".")) continue;
         const sourcePath = relative ? `${relative}/${child.name}` : child.name;
+        if (selection?.file && sourcePath !== selection.file) continue;
+        if (
+          selection?.excluded(sourcePath) ||
+          selection?.excluded(sourcePath + "/")
+        )
+          continue;
         const full = join(path, child.name);
         const info = await lstat(full);
         if (info.isSymbolicLink())
@@ -161,7 +181,11 @@ async function scanDocuments(
           if (!/\.(md|markdown)$/i.test(child.name)) continue;
           if (info.size > bounds.fileBytes)
             fail("LIMIT_EXCEEDED", "Markdown file exceeds the size limit.");
-          if (files.size >= bounds.documents)
+          if (
+            files.size >= bounds.documents ||
+            (selection &&
+              ++selection.budget.documents > documentLimits.documents)
+          )
             fail("LIMIT_EXCEEDED", "Documentation file count limit exceeded.");
           const id = createHash("sha256").update(sourcePath).digest("hex");
           const entry: DocumentEntry = Object.freeze({
@@ -335,4 +359,160 @@ export async function createDocumentService(
   } catch (error) {
     return translated(error);
   }
+}
+
+/**
+ * Compose approved sources using the existing bounded scanner/reader. Primary navigation
+ * is unwrapped; additional sources retain labeled provenance. Canonical duplicates are
+ * emitted once (primary first), IDs depend on physical paths, not titles or ordering.
+ * Refresh skips disappeared sources without changing persistent declarations; unsafe
+ * replacements fail and retain the prior snapshot. No absolute paths enter tree output.
+ */
+export async function createProjectDocumentService(
+  project: ResolvedProject,
+): Promise<DocumentService> {
+  const excluded = compileExclusions(project.exclude);
+  const identities = new Map<string, { dev: number; ino: number }>();
+  const projectIdentity = await lstat(project.root);
+  const sources = [...project.sources].sort(
+    (a, b) => Number(b.primary) - Number(a.primary),
+  );
+  async function snapshot(
+    initial: boolean,
+  ): Promise<Omit<DocumentService, "refresh">> {
+    const currentRoot = await lstat(project.root);
+    if (
+      currentRoot.isSymbolicLink() ||
+      currentRoot.dev !== projectIdentity.dev ||
+      currentRoot.ino !== projectIdentity.ino
+    )
+      fail("CHANGED", "Project root changed. Restart the viewer.");
+    const budget = { entries: 0, documents: 0 };
+    const seen = new Set<string>();
+    const records = new Map<
+      string,
+      {
+        service: Omit<DocumentService, "refresh">;
+        original: string;
+        entry: DocumentEntry;
+      }
+    >();
+    const tree: NavigationEntry[] = [];
+    for (const source of sources) {
+      try {
+        await assertRealPath(source.absolutePath);
+        const info = await lstat(source.absolutePath);
+        const identity = identities.get(source.id);
+        if (
+          identity &&
+          source.kind === "directory" &&
+          (identity.dev !== info.dev || identity.ino !== info.ino)
+        )
+          fail("CHANGED", "Documentation source replaced. Restart the viewer.");
+        if (!identity)
+          identities.set(source.id, { dev: info.dev, ino: info.ino });
+        if (source.kind === "file" ? !info.isFile() : !info.isDirectory())
+          fail("INVALID_PATH", "Documentation source type changed.");
+        const service = await scanDocuments(
+          source.kind === "file"
+            ? dirname(source.absolutePath)
+            : source.absolutePath,
+          {},
+          {
+            ...(source.kind === "file"
+              ? { file: basename(source.absolutePath) }
+              : {}),
+            excluded,
+            budget,
+          },
+        );
+        function transform(
+          nodes: readonly NavigationEntry[],
+        ): NavigationEntry[] {
+          return nodes.flatMap((node): NavigationEntry[] => {
+            if (node.kind === "directory") {
+              const children = transform(node.children);
+              return children.length
+                ? [{ ...node, path: `${source.id}/${node.path}`, children }]
+                : [];
+            }
+            const physical = join(service.root, node.path);
+            if (seen.has(physical)) return [];
+            seen.add(physical);
+            const id = createHash("sha256").update(physical).digest("hex");
+            const projectPath = source.external
+              ? undefined
+              : source.kind === "file"
+                ? source.path
+                : source.path === "."
+                  ? node.path
+                  : `${source.path}/${node.path}`;
+            const entry: DocumentEntry = {
+              ...node,
+              id,
+              sourceId: source.id,
+              ...(projectPath ? { projectPath } : {}),
+            };
+            records.set(id, { service, original: node.id, entry });
+            return [entry];
+          });
+        }
+        const children = transform(service.tree);
+        if (source.primary) tree.push(...children);
+        else if (children.length)
+          tree.push({
+            kind: "directory",
+            path: source.id,
+            title: source.external
+              ? `${source.label} (local source)`
+              : source.path,
+            children,
+          });
+      } catch (error) {
+        if (
+          !initial &&
+          ((error instanceof DocumentError && error.code === "NOT_FOUND") ||
+            (error instanceof Error &&
+              "code" in error &&
+              error.code === "ENOENT"))
+        )
+          continue;
+        throw error;
+      }
+    }
+    return {
+      root: project.root,
+      tree,
+      async read(id) {
+        if (!/^[a-f0-9]{64}$/.test(id))
+          fail("INVALID_PATH", "Invalid document identifier.");
+        const record = records.get(id);
+        if (!record) fail("NOT_FOUND", "Document was not found.");
+        const content = await record.service.read(record.original);
+        return { ...content, id, path: record.entry.path };
+      },
+    };
+  }
+  let current = await snapshot(true);
+  let pending: Promise<readonly NavigationEntry[]> | undefined;
+  return {
+    root: project.root,
+    get tree() {
+      return current.tree;
+    },
+    read(id) {
+      return current.read(id);
+    },
+    refresh() {
+      pending ??= snapshot(false)
+        .then((next) => {
+          current = next;
+          return next.tree;
+        })
+        .finally(() => {
+          pending = undefined;
+        });
+      return pending;
+    },
+  };
 }

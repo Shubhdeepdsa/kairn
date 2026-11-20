@@ -145,7 +145,7 @@ advisories; the eight previously documented development-tool advisories remain.
 The [feature-branch CI run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44716122814)
 at `3633546` passed all required gates on Linux, macOS and Windows. The separate
 [PR checks](https://github.com/Shubhdeepdsa/kairn/pull/1/checks) track integration
-with main. PR #1 remains unmerged for review.
+with main. PR #1 has been merged.
 
 ## Automatic navigation refresh
 
@@ -156,3 +156,54 @@ oversized rescans and recovery. Fake-clock DOM tests verify automatic sidebar
 updates, unchanged active content, preserved selection/collapsed folders, empty
 root recovery, deleted selection fallback, retry, hidden-tab pause and cleanup.
 No arbitrary delays or operating-system watcher dependency are used.
+
+## Phase 3 persistence
+
+`config-storage.test.ts` exercises schemas, traversal/version failures, corrupt
+file preservation, isolated OS paths, repeated/concurrent saves, stale values,
+lock conflicts and failed-validation cleanup. No test touches real application data.
+
+Library tests use independent service instances over temporary data to verify
+persistence, duplicate registration, rename identity, safe unregister, unavailable
+roots, invalid roots/names and stale override previews.
+
+Project-config fixtures cover absent defaults, candidate discovery, decline,
+create-only conflicts, portable copied roots, explicit override deltas, primary
+selection and missing-source diagnosis without rewriting configuration.
+
+Source tests cover AGENTS/drafts/generated globs, zero-directory **, case behavior,
+unsupported syntax and overlap reports. Discovery/config tests remain read-only.
+
+Multi-document tests verify primary unwrapping, multiple roots, identical titles,
+explicit hidden-directory files, canonical deduplication, external sources, ignore
+deltas, stable refresh IDs and missing-file removal without absolute-path leakage.
+
+`project-cli.test.ts` verifies canceled/noninteractive mutations, fresh-process
+Library state, add/rename/source/ignore/config commands, project-ID viewing from
+an unrelated cwd, all three source types via real HTTP, absolute-path redaction,
+source removal and unregister preserving shared config and document bytes.
+
+## Phase 3 local acceptance — 2026-11-20
+
+Node 26.13.0/macOS: clean npm ci, typecheck, lint, format check, 79 tests, build
+and Markdown lint passed. Existing init, single-root run, safe rendering, automatic
+navigation refresh, loopback security and signal cleanup regressions still pass.
+Additional acceptance covers a real child-process writer lock, config symlinks,
+shared duplicates, stale metadata previews, missing-source repair and cross-source
+links with duplicate display titles. Tests redirect every Library access to temp data.
+
+The packed executable installed into a clean temporary prefix and passed help,
+version, fresh-process registration, three directory/file sources (including an
+explicit .github file), portable config creation, run by ID from unrelated cwd,
+real HTTP HTML/tree reads, graceful SIGINT and unregister with document/config
+hashes unchanged. All servers/processes were closed. Runtime audit: zero advisories;
+eight pre-existing dev-tool advisories remain. Remote OS results must be verified
+from the feature PR, not inferred from local execution.
+
+Windows overlap checks also distinguish sources on separate drive letters; a
+cross-drive absolute relative() result cannot imply directory containment.
+
+Phase 3 [push CI](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726328194)
+and [PR CI](https://github.com/Shubhdeepdsa/kairn/actions/runs/44726417025) passed
+Linux, macOS and Windows at `f0570f0`. PR #2 remains open; see latest checks for
+follow-up commits. No npm publication or automatic merge.

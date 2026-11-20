@@ -1,12 +1,18 @@
 import { resolve } from "node:path";
 import { discoverDocumentationRoot } from "../core/initialization.js";
-import { createDocumentService } from "../core/documents.js";
+import {
+  createDocumentService,
+  createProjectDocumentService,
+} from "../core/documents.js";
 import { startDocumentationServer } from "../server/http.js";
 import type { ViewerPresentation } from "../server/http.js";
+
+import type { ResolvedProject } from "../core/config/project.js";
 
 /** CLI capabilities and lifetime; browser/prompt actions are injected and never used by core. */
 export interface RunContext {
   readonly directory: string;
+  readonly project?: ResolvedProject;
   readonly port: number;
   readonly noOpen: boolean;
   readonly interactive: boolean;
@@ -26,7 +32,9 @@ export interface RunContext {
  */
 export async function runDocumentation(context: RunContext): Promise<number> {
   if (context.signal.aborted) return 0;
-  let root = await discoverDocumentationRoot(context.directory);
+  let root =
+    context.project?.root ??
+    (await discoverDocumentationRoot(context.directory));
   if (root === null) {
     if (!context.interactive)
       throw new Error(
@@ -42,7 +50,9 @@ export async function runDocumentation(context: RunContext): Promise<number> {
     }
     root = resolve(context.directory, chosen);
   }
-  const documents = await createDocumentService(root);
+  const documents = context.project
+    ? await createProjectDocumentService(context.project)
+    : await createDocumentService(root);
   if (context.signal.aborted) return 0;
   const server = await startDocumentationServer(documents, {
     port: context.port,

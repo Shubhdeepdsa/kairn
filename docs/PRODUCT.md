@@ -29,3 +29,11 @@ registry, persistence, editing, search, Git history or remote services are added
 The sidebar automatically discovers added, renamed and deleted Markdown files
 while running. The current document remains open through navigation changes;
 existing content updates on selection. Hidden files/directories remain excluded.
+
+## Phase 3: persistent projects and sources
+
+The machine-local Library registers, lists, renames and unregisters projects with
+stable IDs. Optional portable JSON and personal overrides support multiple docs
+directories, individual Markdown files, primary-source selection and basic ignore
+patterns. Existing init and unregistered docs viewing remain supported. No final
+settings UI, React, persistence database, Git explorer or cloud integration.
