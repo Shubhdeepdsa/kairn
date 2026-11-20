@@ -32,3 +32,15 @@ Publication is authorized only to the verified personal user account, after revi
 
 Initial remote CI exposed Windows CRLF checkout drift. The follow-up enforces LF
 with `.gitattributes`; formatter behavior and check strictness are unchanged.
+
+## Phase 2 — IN PROGRESS
+
+A. Update milestone instructions, architecture, contracts and security decisions.
+B. Read-only nested document engine with bounded scanning and safe reads.
+C. Secure loopback HTTP with structured API errors and shutdown.
+D. Minimal vanilla viewer and safe Markdown rendering.
+E. `kairn run` CLI, browser opening and signal lifecycle.
+F. Clean-package acceptance, documentation and cross-platform CI; feature PR.
+
+These are planned, not implementation claims. Preserve Phase 1 behavior and
+commit each phase independently on `feat/local-documentation-viewer`.

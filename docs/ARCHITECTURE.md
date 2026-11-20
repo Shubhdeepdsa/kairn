@@ -61,3 +61,25 @@ applying. Non-recursive mkdir fails rather than replacing concurrent entries.
 Node path APIs cannot make ancestor replacement atomic across validation and
 mkdir. Operate only in directories controlled by the user, not trees concurrently
 modified by hostile processes. No claim of an adversarial filesystem sandbox.
+
+## Phase 2 design — PLANNED
+
+CLI composes the document engine and HTTP adapter. Both CLI and HTTP depend on
+core contracts; core knows neither prompts nor HTTP. Reuse
+`discoverDocumentationRoot` for project `docs/` detection without changing init.
+
+- Core document service: one explicitly selected canonical root, immutable
+  navigation snapshot, opaque stable document IDs, bounded fresh reads.
+- Server: built-in Node HTTP on IPv4 loopback only; consumes tree/read contracts.
+- Viewer: vanilla browser module and CSS; Markdown rendering is a separate module
+  using a maintained parser. No React, persistence, registry or live watcher.
+
+Limits will be explicit. Symlinks are rejected for selected roots, descendants and
+reads. Hidden entries are excluded. Canonical file identities remain internal;
+HTTP exposes only relative paths and IDs. Restart to discover added files.
+
+Security boundary: user-controlled trees, not hostile concurrent filesystem
+mutation. HTTP will validate exact Host/Origin, reject cross-site fetches and
+non-GET/body-bearing requests, bound request sizes, and return structured errors.
+No CORS, remote assets, raw HTML, arbitrary filesystem routes or shell execution.
+Loopback is not authentication against other processes running as the same user.
