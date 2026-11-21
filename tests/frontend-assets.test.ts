@@ -7,10 +7,12 @@ import {
   loadFrontendPresentation,
   isFrontendRoute,
 } from "../src/server/frontend-assets.js";
-import { loadViewerPresentation } from "../dist/viewer/assets.js";
 import { createDocumentService } from "../src/core/documents.js";
 import { startDocumentationServer } from "../src/server/http.js";
 it("serves exact packaged assets and app routes behind existing security without swallowing API/file errors", async () => {
+  const { loadViewerPresentation } = (await import(
+    new URL("../dist/viewer/assets.js", import.meta.url).href
+  )) as typeof import("../src/viewer/assets.js");
   const root = await mkdtemp(join(tmpdir(), "kairn-app-"));
   await writeFile(join(root, "README.md"), "# Existing reader");
   const server = await startDocumentationServer(

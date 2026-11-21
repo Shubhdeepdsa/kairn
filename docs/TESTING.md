@@ -450,3 +450,8 @@ Playwright Chromium installed-package smoke. Existing Phase 1–5 assertions rem
 The baseline workspace has unrelated untracked designs/ and temp.md that fail
 format/docs checks; clean tracked-tree verification and CI are reported separately.
 Bundle/package/browser measurements are in [frontend architecture](FRONTEND.md).
+
+Clean-export verification caught a test-only dependency on pre-existing dist type
+declarations. The asset test now dynamically loads compiled presentation code
+with a source contract type, matching the existing worker tests; typecheck can run
+before the first build on a fresh checkout.
