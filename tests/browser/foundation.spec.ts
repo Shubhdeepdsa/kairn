@@ -533,3 +533,90 @@ test("Documentation explorer loads server-backed tree and reader for the active 
     page.getByRole("heading", { name: "Browser fixture updated" }),
   ).toBeVisible();
 });
+
+test("Documentation explorer renders outline TOC, navigates heading fragments, and resolves relative links safely", async ({
+  page,
+  request,
+}) => {
+  const context = (await (await request.get(url + "/api/context")).json()) as {
+    id: string;
+    name: string;
+  };
+
+  // Add rich markdown and secondary guide file
+  await writeFile(
+    join(root, "project", "docs", "README.md"),
+    `# Browser fixture updated
+
+## Getting Started
+
+Welcome to the browser test fixture.
+
+## Architecture & Design
+
+Details on architecture. See [Guide](./guide.md), [Broken Link](./nonexistent.md), or jump to [Details](#details).
+
+### Details
+
+Deep details here.
+`,
+  );
+  await writeFile(
+    join(root, "project", "docs", "guide.md"),
+    `# Fixture Guide
+
+## Installation
+
+Run installation steps.
+`,
+  );
+
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(url + `/app/projects/${context.id}/docs`);
+
+  // Outline TOC contains the headings
+  await expect(page.locator(".doc-outline")).toBeVisible();
+  await expect(
+    page
+      .locator(".doc-outline")
+      .getByRole("link", { name: "Getting Started", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page
+      .locator(".doc-outline")
+      .getByRole("link", { name: "Architecture & Design", exact: true }),
+  ).toBeVisible();
+  const detailsHeadingLink = page.locator(".doc-outline").getByRole("link", {
+    name: "Details",
+    exact: true,
+  });
+  await expect(detailsHeadingLink).toBeVisible();
+
+  // Click outline TOC heading: jumps to fragment without full page reload
+  await detailsHeadingLink.click();
+  await expect(page).toHaveURL(/#details$/);
+  await expect(
+    detailsHeadingLink.locator('.doc-outline-dot[data-active="true"]'),
+  ).toBeVisible();
+
+  // Click broken link: shows non-disruptive Link Resolution Warning without crashing
+  await page.getByRole("link", { name: "Broken Link" }).click();
+  await expect(
+    page.getByText(/Markdown destination is missing/i).first(),
+  ).toBeVisible();
+
+  // Click relative local link [Guide](./guide.md): navigates to guide document
+  await page.getByRole("link", { name: "Guide" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Fixture Guide" }),
+  ).toBeVisible();
+  await expect(page.locator(".doc-reader-breadcrumbs")).toContainText(
+    "guide.md",
+  );
+
+  // Browser back button restores previous document and fragment
+  await page.goBack();
+  await expect(
+    page.getByRole("heading", { name: "Browser fixture updated" }),
+  ).toBeVisible();
+});

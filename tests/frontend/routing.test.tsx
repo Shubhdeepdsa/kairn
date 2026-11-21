@@ -47,6 +47,7 @@ function mount(path = "/", api = client) {
 }
 
 afterEach(cleanup);
+window.scrollTo = vi.fn();
 
 it("initializes from real-shaped API data and reuses one shell across routes", async () => {
   mount();

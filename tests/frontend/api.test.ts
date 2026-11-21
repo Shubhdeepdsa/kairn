@@ -171,4 +171,20 @@ it("fetches and validates link resolution responses", async () => {
     `/api/projects/${project.id}/links/${docId}/${encodeURIComponent("target.md")}`,
     expect.objectContaining({ method: "GET" }),
   );
+
+  const diagnosticRes: LinkResolution = {
+    kind: "diagnostic",
+    diagnostic: {
+      code: "MISSING",
+      message: "Destination is missing.",
+      target: "nonexistent.md",
+      documentId: docId,
+    },
+  };
+  const diagFetcher = vi.fn<typeof fetch>(async () =>
+    Response.json(diagnosticRes),
+  );
+  const diagClient = createApiClient(diagFetcher);
+  const diagOutcome = await diagClient.resolveLink(docId, "nonexistent.md");
+  expect(diagOutcome).toEqual(diagnosticRes);
 });

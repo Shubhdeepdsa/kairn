@@ -34,8 +34,9 @@ export interface DocumentHeading {
 }
 
 export interface LinkDiagnostic {
-  readonly line: number;
-  readonly column: number;
+  readonly line?: number | undefined;
+  readonly column?: number | undefined;
+  readonly documentId?: string | undefined;
   readonly target: string;
   readonly code: string;
   readonly message: string;

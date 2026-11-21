@@ -19,8 +19,6 @@ export function DocOutline({
 }: DocOutlineProps) {
   const [collapsed, setCollapsed] = useState(false);
 
-  if (headings.length === 0) return null;
-
   return (
     <aside className="doc-outline" aria-label="Table of contents">
       <div className="doc-outline-sticky">
@@ -36,43 +34,60 @@ export function DocOutline({
             onClick={() => setCollapsed((v) => !v)}
           />
         </div>
-        {!collapsed && (
-          <nav className="doc-outline-nav">
-            <ul className="doc-outline-list">
-              {headings.map((heading) => {
-                const isActive = activeFragment === heading.fragment;
-                const isSubheading = heading.level > 2;
+        {!collapsed &&
+          (headings.length > 0 ? (
+            <nav className="doc-outline-nav">
+              <ul className="doc-outline-list">
+                {headings.map((heading) => {
+                  const isActive = activeFragment === heading.fragment;
+                  const isSubheading = heading.level > 2;
 
-                return (
-                  <li
-                    key={heading.fragment}
-                    className={`doc-outline-item ${
-                      isSubheading ? "doc-outline-subitem" : ""
-                    }`}
-                  >
-                    <a
-                      href={`#${heading.fragment}`}
-                      className={`doc-outline-link ${
-                        isActive ? "is-active" : ""
+                  return (
+                    <li
+                      key={heading.fragment}
+                      className={`doc-outline-item level-${heading.level} ${
+                        isSubheading ? "doc-outline-subitem" : ""
                       }`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        onSelectHeading?.(heading.fragment);
-                      }}
                     >
-                      <span
-                        className="doc-outline-dot"
-                        aria-hidden="true"
-                        data-active={isActive ? "true" : "false"}
-                      />
-                      <span className="doc-outline-text">{heading.title}</span>
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
-        )}
+                      <a
+                        href={`#${encodeURIComponent(heading.fragment)}`}
+                        className={`doc-outline-link ${
+                          isActive ? "is-active" : ""
+                        }`}
+                        aria-current={isActive ? "location" : undefined}
+                        onClick={(e) => {
+                          if (
+                            e.button !== 0 ||
+                            e.ctrlKey ||
+                            e.metaKey ||
+                            e.shiftKey ||
+                            e.altKey
+                          ) {
+                            return;
+                          }
+                          e.preventDefault();
+                          onSelectHeading?.(heading.fragment);
+                        }}
+                      >
+                        <span
+                          className="doc-outline-dot"
+                          aria-hidden="true"
+                          data-active={isActive ? "true" : "false"}
+                        />
+                        <span className="doc-outline-text">
+                          {heading.title}
+                        </span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+          ) : (
+            <div className="doc-outline-empty">
+              <span>No headings on this page</span>
+            </div>
+          ))}
       </div>
     </aside>
   );

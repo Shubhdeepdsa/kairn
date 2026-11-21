@@ -537,3 +537,23 @@ Total tests: 161 Vitest tests in 35 files, 3 Playwright tests, all quality gates
   - Discovers and auto-selects default `README.md`.
   - Renders project name badge, active tree item, and article reader content.
 - Total tests: 184 Vitest tests in 38 files, 6 Playwright browser tests, all quality gates passing.
+
+## Phase 6C-2B safe reader, table of contents & link resolution
+
+- Unit & integration tests in `tests/frontend/reader-and-toc.test.tsx` (9 tests) verify:
+  - `SafeHtmlArticle` trust boundary and safe rendering inside `.kairn-prose`.
+  - `DocReader` local anchor click routing: internal `#fragment` jumps route to `onSelectHeading`.
+  - Relative Markdown link interception: routes to `onNavigateLink` through typed link resolution.
+  - External links (`http:`, `https:`, `mailto:`) proceed without interception.
+  - Scan-time diagnostics rendering from `DocumentResponse.diagnostics`.
+  - Runtime link resolution diagnostic rendering from `client.resolveLink`.
+  - `DocOutline` empty state (`No headings on this page`).
+  - Unicode heading titles, duplicate heading slug fragments, and nested heading levels (`level-1` through `level-6`).
+- Browser test in `tests/browser/foundation.spec.ts` verifies:
+  - Real installed-browser reader rendering Markdown headings, outline TOC, and footer pagination.
+  - TOC heading click smoothly scrolls and jumps to fragment without full-page reloads.
+  - Waypoint dot in outline highlights active heading fragment.
+  - Relative Markdown link click navigates via `/api/projects/:projectId/links/...` to target document.
+  - Broken relative link shows accessible, non-disruptive `Link Resolution Warning` callout.
+  - Browser Back button preserves and restores previous document and heading state.
+- Total tests: 193 Vitest tests in 39 files, 7 Playwright browser tests, all quality gates passing.

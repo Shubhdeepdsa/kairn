@@ -155,8 +155,6 @@ function validateDiagnostic(value: unknown): LinkDiagnostic {
   }
   const d = value as Record<string, unknown>;
   if (
-    typeof d.line !== "number" ||
-    typeof d.column !== "number" ||
     typeof d.target !== "string" ||
     typeof d.code !== "string" ||
     typeof d.message !== "string"
@@ -164,8 +162,9 @@ function validateDiagnostic(value: unknown): LinkDiagnostic {
     throw new ApiError(200, "INVALID_RESPONSE");
   }
   return {
-    line: d.line,
-    column: d.column,
+    ...(typeof d.line === "number" ? { line: d.line } : {}),
+    ...(typeof d.column === "number" ? { column: d.column } : {}),
+    ...(typeof d.documentId === "string" ? { documentId: d.documentId } : {}),
     target: d.target,
     code: d.code,
     message: d.message,

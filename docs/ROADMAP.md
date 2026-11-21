@@ -186,5 +186,7 @@ CI is reported on the Phase 6B PR; no merge or npm publication is automatic.
   Reusable 3-region Explorer shell, hierarchical navigation tree, reading plane, outline TOC, pager, and callout primitives integrated with Mineral design tokens. Runtime fixture specimen active at `/app/design-system/explorer`. Accessibility, responsive reflow, and visual baselines verified across 173 Vitest unit tests and 5 Playwright browser tests.
 - **Phase 6C-2A: Tree and data integration (IMPLEMENTED; VERIFIED)**
   Real server-backed project tree data (`/api/projects/:projectId/tree`), typed client methods, hierarchical `DocTree` with per-project collapse state retention, Phase 5 default document discovery (`README.md` first), and active document routing at `/app/projects/:projectId/docs`.
-- **Phase 6C-2B: Safe reader and TOC (NEXT)**
-  Heading intersection observer for on-page outline TOC, safe HTML article surface, and link diagnostics.
+- **Phase 6C-2B: Safe reader, TOC & link resolution (IMPLEMENTED; VERIFIED)**
+  Audited `SafeHtmlArticle` trust boundary consuming server-rendered safe Markdown HTML (`DocumentResponse.html`). Heading outline TOC with scroll spy intersection observer, waypoint dot indicator, Unicode headings, and duplicate slug handling. Local Markdown link interception with core link resolution (`client.resolveLink`), scan-time diagnostics rendering, and runtime link failure callouts. 193 Vitest unit tests in 39 files and 7 Playwright browser tests passing.
+- **Phase 6C-2C: Search palette, live reading & bookmarks (NEXT)**
+  Framework-independent SearchPalette integration, keyboard shortcuts (Cmd/Ctrl+K), live refresh coalescing, history Back/Forward, and URL bookmarks.
