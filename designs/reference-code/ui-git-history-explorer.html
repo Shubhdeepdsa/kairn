@@ -1,0 +1,662 @@
+<!DOCTYPE html><html lang="en" class="h-full bg-[#fbfcfd] text-[#20282e]"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kairn — Git History Explorer (Marketing Backend)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Syne:wght@600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            graphite: '#20282e',
+            mineral: {
+              yellow: '#E4D13A',
+              DEFAULT: '#E4D13A',
+              hover: '#d6c332',
+              light: '#fdfceb'
+            },
+            surface: {
+              subtle: '#f4f6f8',
+              card: '#ffffff',
+              muted: '#eceff2'
+            },
+            border: {
+              subtle: '#e2e7ec',
+              muted: '#edf1f4'
+            }
+          },
+          fontFamily: {
+            syne: ['Syne', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #d8dee4;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #bcc4cc;
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col bg-[#fbfcfd] text-[#20282e] antialiased selection:bg-[#E4D13A]/30">
+
+  <!-- TOP APPLICATION HEADER (Standardized across Kairn) -->
+  <header class="h-[52px] min-h-[52px] bg-white border-b border-[#e2e7ec] px-4 flex items-center justify-between z-30 select-none">
+    
+    <!-- Left Section: Canonical Direction A Brand Lockup + Context Switcher -->
+    <div class="flex items-center space-x-3.5">
+      <!-- Canonical Cairn Vector Logo (Direction A) -->
+      <a href="#" class="flex items-center space-x-2.5 group">
+        <svg width="22" height="20" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
+          <!-- Top Capstone (Mineral Yellow with graphite center dot) -->
+          <rect x="7" y="1" width="10" height="4.5" rx="1.8" fill="#E4D13A"></rect>
+          <circle cx="12" cy="3.25" r="1.1" fill="#20282e"></circle>
+          <!-- Middle Tier (Graphite with centered titanium white horizontal slit) -->
+          <rect x="4" y="8" width="16" height="5" rx="1.8" fill="#20282e"></rect>
+          <line x1="9" y1="10.5" x2="15" y2="10.5" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round"></line>
+          <!-- Base Tier (Graphite with lower-left Mineral Yellow waypoint dash) -->
+          <rect x="1" y="15.5" width="22" height="5.5" rx="2" fill="#20282e"></rect>
+          <line x1="3.5" y1="18.25" x2="6.5" y2="18.25" stroke="#E4D13A" stroke-width="1.5" stroke-linecap="round"></line>
+        </svg>
+        <span class="font-syne font-bold text-[17px] tracking-tight text-[#20282e]">kairn<span class="text-[#E4D13A]">.</span></span>
+      </a>
+
+      <!-- Subtle Hairline Divider -->
+      <div class="h-4 w-[1px] bg-[#e2e7ec]"></div>
+
+      <!-- Project Context Dropdown Button -->
+      <div class="flex items-center space-x-2 text-[13px] font-medium text-[#20282e] hover:bg-[#f4f6f8] px-2.5 py-1 rounded transition-colors cursor-pointer border border-transparent hover:border-[#e2e7ec]"><span class="w-2 h-2 rounded-full bg-[#E4D13A]"></span><span class="font-semibold text-[#20282e]">Marketing Backend</span><div class="h-3.5 w-[1px] bg-[#d8dee4] mx-0.5"></div><div class="flex items-center space-x-1 font-mono text-[12px] text-[#556471]"><svg class="w-3 h-3 text-[#707e8a] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg><span class="font-medium text-[#20282e]">main</span></div><svg class="w-3.5 h-3.5 text-[#6c7a87] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></div>
+
+      <!-- Branch Context Indicator in Header -->
+      
+    </div>
+
+    <!-- Center Section: Global Search Bar -->
+    <div class="flex-1 max-w-[460px] mx-4">
+      <div class="relative flex items-center">
+        <svg class="w-3.5 h-3.5 text-[#7c8b98] absolute left-3 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <input type="text" placeholder="Search documentation, commits, or jump to..." class="w-full bg-[#f4f6f8] hover:bg-[#eef2f5] focus:bg-white text-[13px] text-[#20282e] placeholder-[#7c8b98] pl-9 pr-11 py-1.5 rounded-md border border-[#e2e7ec] focus:border-[#20282e] focus:outline-none transition-all">
+        <div class="absolute right-2.5 flex items-center">
+          <kbd class="font-mono text-[10px] text-[#7c8b98] bg-white border border-[#d8dee4] px-1.5 py-0.5 rounded shadow-2xs font-semibold">⌘K</kbd>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Section: Theme Toggle & Settings (Avatar excluded) -->
+    <div class="flex items-center space-x-2 text-[#4e5b66]">
+      <button title="Toggle light/dark theme" class="w-8 h-8 flex items-center justify-center rounded hover:bg-[#f4f6f8] text-[#556471] transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="5" stroke-width="1.8"></circle>
+          <line x1="12" y1="1" x2="12" y2="3" stroke-width="1.8" stroke-linecap="round"></line>
+          <line x1="12" y1="21" x2="12" y2="23" stroke-width="1.8" stroke-linecap="round"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke-width="1.8" stroke-linecap="round"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke-width="1.8" stroke-linecap="round"></line>
+          <line x1="1" y1="12" x2="3" y2="12" stroke-width="1.8" stroke-linecap="round"></line>
+          <line x1="21" y1="12" x2="23" y2="12" stroke-width="1.8" stroke-linecap="round"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke-width="1.8" stroke-linecap="round"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke-width="1.8" stroke-linecap="round"></line>
+        </svg>
+      </button>
+      <button title="Workspace Settings" class="w-8 h-8 flex items-center justify-center rounded hover:bg-[#f4f6f8] text-[#556471] transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN APP CONTAINER -->
+  <div class="flex-1 flex overflow-hidden">
+
+    <!-- UNIFIED PROJECT SIDEBAR (~220px) -->
+    <aside class="w-[220px] min-w-[220px] bg-white border-r border-[#e2e7ec] flex flex-col justify-between select-none shrink-0 z-20">
+      
+      <!-- Primary Navigation Links -->
+      <div class="p-3">
+        <!-- Project Context Micro-header -->
+        <div class="px-2 pt-1.5 pb-2 text-[11px] font-semibold tracking-wider text-[#7c8b98] uppercase">
+          Project Workspace
+        </div>
+
+        <nav class="space-y-1">
+          <!-- Documentation Link (Inactive) -->
+          <a href="#" class="flex items-center justify-between px-2.5 py-2 rounded text-[13px] font-medium text-[#4e5b66] hover:bg-[#f4f6f8] hover:text-[#20282e] transition-colors group">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-[#7c8b98] group-hover:text-[#20282e] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              <span>Documentation</span>
+            </div>
+            <span class="text-[11px] font-mono text-[#8a97a3] bg-[#f4f6f8] px-1.5 py-0.5 rounded">12</span>
+          </a>
+
+          <!-- Git History Link (Active / Selected) -->
+          <div class="flex items-center justify-between px-2.5 py-2 rounded bg-[#20282e] text-white text-[13px] font-medium shadow-xs">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-[#E4D13A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="18" cy="18" r="3"></circle>
+                <circle cx="6" cy="6" r="3"></circle>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 6h3a2 2 0 0 1 2 2v7"></path>
+                <line x1="6" y1="9" x2="6" y2="21"></line>
+              </svg>
+              <span class="text-white font-medium">Git History</span>
+            </div>
+            <!-- Restrained Mineral Yellow Active Indicator Dot & Count -->
+            <div class="flex items-center space-x-1.5">
+              <span class="text-[10px] font-mono text-[#d8dee4] bg-[#2d3840] px-1.5 py-0.5 rounded">142</span>
+              <span class="w-1.5 h-1.5 rounded-full bg-[#E4D13A]"></span>
+            </div>
+          </div>
+
+          <!-- Project Settings Link (Inactive) -->
+          <a href="#" class="flex items-center space-x-2.5 px-2.5 py-2 rounded text-[13px] font-medium text-[#4e5b66] hover:bg-[#f4f6f8] hover:text-[#20282e] transition-colors group">
+            <svg class="w-4 h-4 text-[#7c8b98] group-hover:text-[#20282e] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+              <circle cx="12" cy="12" r="3" stroke-width="1.8"></circle>
+            </svg>
+            <span>Project Settings</span>
+          </a>
+        </nav>
+
+        <!-- Contextual Note / Guidance -->
+        
+      </div>
+
+      <!-- Bottom Status Bar -->
+      
+    </aside>
+
+    <!-- MAIN GIT HISTORY WORKSPACE -->
+    <main class="flex-1 flex flex-col min-w-0 bg-[#fbfcfd] overflow-hidden">
+      
+      <!-- Page Header: Title + Context Info -->
+      <div class="px-6 py-4 border-b border-[#e2e7ec] bg-white flex items-center justify-between shrink-0">
+        <div>
+          <div class="flex items-center space-x-3">
+            <h1 class="font-syne font-bold text-[24px] text-[#20282e] tracking-tight">Git History</h1>
+            
+          </div>
+          <div class="flex items-center space-x-2 mt-1 text-[13px] text-[#6c7a87]">
+            <span>Explore changes to your project's repository and documentation.</span>
+            <span class="text-[#d8dee4]">•</span>
+            <span class="font-mono text-[12px] text-[#556471]">~/Developer/repos/marketing-backend</span>
+          </div>
+        </div>
+
+        <!-- Quick Action: Return to Documentation Reader -->
+        <a href="#" class="inline-flex items-center space-x-1.5 text-[13px] font-medium text-[#4e5b66] hover:text-[#20282e] px-3 py-1.5 rounded border border-[#d8dee4] hover:border-[#20282e] bg-white transition-all shadow-2xs">
+          <svg class="w-3.5 h-3.5 text-[#7c8b98]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          <span>Return to Documentation</span>
+        </a>
+      </div>
+
+      <!-- TWO-COLUMN WORKSPACE: LEFT COMMIT TIMELINE & RIGHT COMMIT INSPECTION / DIFF -->
+      <div class="flex-1 flex overflow-hidden">
+        
+        <!-- COLUMN 1: LEFT COMMIT LIST (340px) -->
+        <div class="w-[340px] min-w-[340px] max-w-[340px] border-r border-[#e2e7ec] bg-white flex flex-col shrink-0">
+          
+          <!-- Commit Filter Field -->
+          <div class="p-3 border-b border-[#edf1f4] bg-[#fbfcfd]">
+            <div class="relative">
+              <svg class="w-3.5 h-3.5 text-[#8a97a3] absolute left-3 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+              <input type="text" placeholder="Filter commits by message or hash..." class="w-full bg-white text-[12.5px] text-[#20282e] placeholder-[#8a97a3] pl-8 pr-3 py-1.5 rounded border border-[#d8dee4] focus:border-[#20282e] focus:outline-none transition-colors">
+            </div>
+            <div class="flex items-center justify-between mt-2 px-1 text-[11px] text-[#7c8b98]">
+              <span>Showing <strong>5</strong> of 142 commits</span>
+              <span class="font-mono text-[10px] text-[#8a97a3]">Chronological</span>
+            </div>
+          </div>
+
+          <!-- Commit List (Vertically Scrollable) -->
+          <div class="flex-1 overflow-y-auto custom-scrollbar divide-y divide-[#f0f4f7]">
+            
+            <!-- Commit Item 1 -->
+            <div class="p-3 hover:bg-[#f8fafb] transition-colors cursor-pointer group relative">
+              <div class="flex items-start justify-between gap-2">
+                <span class="text-[13.5px] font-semibold text-[#20282e] leading-snug group-hover:text-[#000000]">
+                  Update authentication documentation
+                </span>
+                <span class="font-mono text-[11px] text-[#7c8b98] bg-[#f4f6f8] px-1.5 py-0.5 rounded shrink-0">a84c291</span>
+              </div>
+              <div class="flex items-center space-x-2 mt-1.5 text-[12px] text-[#6c7a87]">
+                <span class="font-medium text-[#4e5b66]">Elena Rostova</span>
+                <span>•</span>
+                <span>2 hours ago</span>
+              </div>
+              <div class="mt-2 flex items-center space-x-1.5">
+                <span class="inline-flex items-center text-[10.5px] font-medium text-[#404c56] bg-[#edf2f6] px-1.5 py-0.5 rounded">
+                  <svg class="w-2.5 h-2.5 text-[#20282e] mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                  docs/auth
+                </span>
+                <span class="text-[10px] font-mono text-[#8a97a3]">+18 -4</span>
+              </div>
+            </div>
+
+            <!-- Commit Item 2 (SELECTED STATE with Mineral Yellow Accent Bar) -->
+            <div class="p-3 bg-[#fdfef0] border-l-[3.5px] border-[#E4D13A] relative cursor-pointer shadow-2xs">
+              <div class="flex items-start justify-between gap-2">
+                <span class="text-[13.5px] font-bold text-[#20282e] leading-snug">
+                  Refine system architecture diagram
+                </span>
+                <span class="text-[11px] font-sans font-medium text-[#20282e] bg-[#E4D13A]/20 px-1.5 py-0.5 rounded border border-[#E4D13A]/40 shrink-0">Viewing Diff</span>
+              </div>
+              <div class="flex items-center space-x-2 mt-1.5 text-[12px] text-[#4e5b66]">
+                <span class="font-semibold text-[#20282e]">Marcus Lee</span>
+                <span>•</span>
+                <span class="text-[#6c7a87]">Yesterday</span>
+              </div>
+              <div class="mt-2 flex items-center justify-between">
+                <span class="inline-flex items-center text-[10.5px] font-semibold text-[#20282e] bg-[#E4D13A]/20 px-2 py-0.5 rounded border border-[#E4D13A]/30">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#E4D13A] mr-1.5"></span>
+                  3 files changed
+                </span>
+                <span class="text-[11px] font-mono text-[#4e5b66] font-medium">
+                  <span class="text-emerald-700 font-semibold">+42</span> <span class="text-rose-700 font-semibold">-12</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Commit Item 3 -->
+            <div class="p-3 hover:bg-[#f8fafb] transition-colors cursor-pointer group relative">
+              <div class="flex items-start justify-between gap-2">
+                <span class="text-[13.5px] font-semibold text-[#20282e] leading-snug group-hover:text-[#000000]">
+                  Add deployment troubleshooting guide
+                </span>
+                <span class="font-mono text-[11px] text-[#7c8b98] bg-[#f4f6f8] px-1.5 py-0.5 rounded shrink-0">f9b137c</span>
+              </div>
+              <div class="flex items-center space-x-2 mt-1.5 text-[12px] text-[#6c7a87]">
+                <span class="font-medium text-[#4e5b66]">Elena Rostova</span>
+                <span>•</span>
+                <span>3 days ago</span>
+              </div>
+              <div class="mt-2 flex items-center space-x-1.5">
+                <span class="inline-flex items-center text-[10.5px] font-medium text-[#404c56] bg-[#edf2f6] px-1.5 py-0.5 rounded">
+                  <svg class="w-2.5 h-2.5 text-[#20282e] mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                  docs/deploy
+                </span>
+                <span class="text-[10px] font-mono text-[#8a97a3]">+64 -0</span>
+              </div>
+            </div>
+
+            <!-- Commit Item 4 -->
+            <div class="p-3 hover:bg-[#f8fafb] transition-colors cursor-pointer group relative">
+              <div class="flex items-start justify-between gap-2">
+                <span class="text-[13.5px] font-semibold text-[#20282e] leading-snug group-hover:text-[#000000]">
+                  Improve event dispatcher implementation
+                </span>
+                <span class="font-mono text-[11px] text-[#7c8b98] bg-[#f4f6f8] px-1.5 py-0.5 rounded shrink-0">c28e4f6</span>
+              </div>
+              <div class="flex items-center space-x-2 mt-1.5 text-[12px] text-[#6c7a87]">
+                <span class="font-medium text-[#4e5b66]">Marcus Lee</span>
+                <span>•</span>
+                <span>5 days ago</span>
+              </div>
+              <div class="mt-2 flex items-center space-x-1.5">
+                <span class="inline-flex items-center text-[10.5px] font-medium text-[#505f6c] bg-[#edf2f6] px-1.5 py-0.5 rounded font-mono">
+                  src/services
+                </span>
+                <span class="text-[10px] font-mono text-[#8a97a3]">+112 -45</span>
+              </div>
+            </div>
+
+            <!-- Commit Item 5 -->
+            <div class="p-3 hover:bg-[#f8fafb] transition-colors cursor-pointer group relative">
+              <div class="flex items-start justify-between gap-2">
+                <span class="text-[13.5px] font-semibold text-[#20282e] leading-snug group-hover:text-[#000000]">
+                  Initial architecture documentation
+                </span>
+                <span class="font-mono text-[11px] text-[#7c8b98] bg-[#f4f6f8] px-1.5 py-0.5 rounded shrink-0">e2a817b</span>
+              </div>
+              <div class="flex items-center space-x-2 mt-1.5 text-[12px] text-[#6c7a87]">
+                <span class="font-medium text-[#4e5b66]">Elena Rostova</span>
+                <span>•</span>
+                <span>1 week ago</span>
+              </div>
+              <div class="mt-2 flex items-center space-x-1.5">
+                <span class="inline-flex items-center text-[10.5px] font-medium text-[#404c56] bg-[#edf2f6] px-1.5 py-0.5 rounded">
+                  <svg class="w-2.5 h-2.5 text-[#20282e] mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                  docs/init
+                </span>
+                <span class="text-[10px] font-mono text-[#8a97a3]">+240 -0</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- COLUMN 2: RIGHT COMMIT DETAILS & DIFF VIEWER (Flexible dominant space) -->
+        <div class="flex-1 flex flex-col min-w-0 bg-[#fbfcfd] overflow-y-auto custom-scrollbar p-6">
+          
+          <div class="max-w-[980px] w-full mx-auto space-y-6">
+
+            <!-- COMMIT METADATA CARD -->
+            <div class="bg-white rounded-lg border border-[#e2e7ec] p-5 shadow-2xs">
+              <div class="flex items-start justify-between">
+                <div>
+                  <h2 class="font-syne font-bold text-[20px] text-[#20282e] tracking-tight">
+                    Refine system architecture diagram
+                  </h2>
+                  <div class="flex flex-wrap items-center gap-y-2 gap-x-4 mt-2.5 text-[13px] text-[#556471]">
+                    <div class="flex items-center space-x-1.5">
+                      <span class="text-[#7c8b98]">Author:</span>
+                      <strong class="font-semibold text-[#20282e]">Marcus Lee</strong>
+                      <span class="text-[12px] font-mono text-[#8a97a3]">&lt;m.lee@kairn.internal&gt;</span>
+                    </div>
+                    <span class="text-[#d8dee4]">•</span>
+                    <div class="flex items-center space-x-1.5">
+                      <span class="text-[#7c8b98]">Committed:</span>
+                      <span class="text-[#20282e] font-medium">Nov 19, 2026 at 14:32</span>
+                    </div>
+                    <span class="text-[#d8dee4]">•</span>
+                    <div class="flex items-center space-x-1.5">
+                      <span class="text-[#7c8b98]">Hash:</span>
+                      <code class="font-mono text-[12px] bg-[#f4f6f8] px-2 py-0.5 rounded border border-[#e2e7ec] text-[#20282e] font-semibold">d4e92a188fbc97401a6e9a0e28f3a14</code>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Open in Document Reader action if commit modified active docs -->
+                <a href="#" class="inline-flex items-center space-x-1.5 text-[12px] font-medium text-[#20282e] hover:bg-[#f4f6f8] px-2.5 py-1.5 rounded border border-[#d8dee4] transition-colors shrink-0">
+                  <svg class="w-3.5 h-3.5 text-[#E4D13A]" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="12" r="6"></circle>
+                  </svg>
+                  <span>Read Current Doc</span>
+                </a>
+              </div>
+
+              <!-- Changed Files Overview (Compact list) -->
+              <div class="mt-5 pt-4 border-t border-[#edf1f4]">
+                <div class="flex items-center justify-between mb-2.5">
+                  <div class="flex items-center space-x-2 text-[12.5px] font-bold text-[#20282e]">
+                    <span>Changed files</span>
+                    <span class="bg-[#f4f6f8] text-[#556471] font-mono text-[11px] px-2 py-0.5 rounded font-semibold">3</span>
+                  </div>
+                  <div class="text-[12px] font-mono text-[#6c7a87]">
+                    <span class="text-emerald-700 font-semibold">+42</span> lines added, <span class="text-rose-700 font-semibold">-12</span> lines removed
+                  </div>
+                </div>
+
+                <!-- Files Pill/Row Grid -->
+                <div class="space-y-1.5">
+                  
+                  <!-- File 1 (Active Diff target) -->
+                  <div class="flex items-center justify-between px-3 py-2 rounded-md bg-[#fdfef0] border border-[#E4D13A]/60 text-[13px] font-mono">
+                    <div class="flex items-center space-x-2.5 min-w-0">
+                      <span class="w-2 h-2 rounded-full bg-[#E4D13A] shrink-0"></span>
+                      <span class="font-medium text-[#20282e] truncate">docs/architecture/system-overview.md</span>
+                      <span class="text-[11px] font-sans font-medium text-[#20282e] bg-[#E4D13A]/20 px-1.5 py-0.5 rounded border border-[#E4D13A]/40 shrink-0">Viewing Diff</span>
+                    </div>
+                    <div class="flex items-center space-x-3 shrink-0 text-[12px]">
+                      <span class="text-emerald-700 font-medium">+28</span>
+                      <span class="text-rose-700 font-medium">-8</span>
+                      <span class="text-[11px] text-[#4e5b66] font-sans font-medium">Modified</span>
+                    </div>
+                  </div>
+
+                  <!-- File 2 -->
+                  <div class="flex items-center justify-between px-3 py-2 rounded-md bg-white hover:bg-[#f8fafb] border border-[#edf1f4] text-[13px] font-mono text-[#4e5b66] transition-colors cursor-pointer">
+                    <div class="flex items-center space-x-2.5 min-w-0">
+                      <svg class="w-3.5 h-3.5 text-[#7c8b98] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                      </svg>
+                      <span class="truncate">docs/architecture/images/topology.svg</span>
+                    </div>
+                    <div class="flex items-center space-x-3 shrink-0 text-[12px]">
+                      <span class="text-emerald-700 font-medium">+10</span>
+                      <span class="text-rose-700 font-medium">-4</span>
+                      <span class="text-[11px] text-[#6c7a87] font-sans">Modified</span>
+                    </div>
+                  </div>
+
+                  <!-- File 3 -->
+                  <div class="flex items-center justify-between px-3 py-2 rounded-md bg-white hover:bg-[#f8fafb] border border-[#edf1f4] text-[13px] font-mono text-[#4e5b66] transition-colors cursor-pointer">
+                    <div class="flex items-center space-x-2.5 min-w-0">
+                      <svg class="w-3.5 h-3.5 text-[#7c8b98] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                      </svg>
+                      <span class="truncate">docs/api/introduction.md</span>
+                    </div>
+                    <div class="flex items-center space-x-3 shrink-0 text-[12px]">
+                      <span class="text-emerald-700 font-medium">+4</span>
+                      <span class="text-rose-700 font-medium">-0</span>
+                      <span class="text-[11px] text-[#6c7a87] font-sans">Modified</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- UNIFIED DIFF VIEWER SECTION -->
+            <div class="bg-white rounded-lg border border-[#e2e7ec] shadow-2xs overflow-hidden">
+              
+              <!-- Diff Header Bar -->
+              <div class="px-4 py-3 bg-[#f8fafb] border-b border-[#e2e7ec] flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                  <div class="flex items-center space-x-2 font-mono text-[13px] font-semibold text-[#20282e]">
+                    <svg class="w-4 h-4 text-[#7c8b98]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <span>docs/architecture/system-overview.md</span>
+                  </div>
+                  <span class="font-mono text-[11px] text-[#6c7a87] bg-white border border-[#d8dee4] px-2 py-0.5 rounded">
+                    markdown
+                  </span>
+                </div>
+
+                <!-- Actions: Copy path, Diff mode note -->
+                <div class="flex items-center space-x-2">
+                  <button class="flex items-center space-x-1.5 text-[12px] font-medium text-[#4e5b66] hover:text-[#20282e] px-2.5 py-1 rounded hover:bg-[#edf1f4] transition-colors border border-transparent hover:border-[#d8dee4]">
+                    <svg class="w-3.5 h-3.5 text-[#7c8b98]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                    </svg>
+                    <span>Copy file path</span>
+                  </button>
+                  <span class="text-[11px] font-mono text-[#8a97a3] bg-[#edf2f6] px-2 py-1 rounded">unified diff</span>
+                </div>
+              </div>
+
+              <!-- Diff Content Block -->
+              <div class="font-mono text-[13px] leading-[21px] overflow-x-auto selection:bg-[#20282e] selection:text-white">
+                
+                <!-- Diff Chunk 1 Header -->
+                <div class="bg-[#f0f4f8] text-[#556471] px-4 py-1 border-y border-[#e2e7ec] flex items-center justify-between text-[11.5px] select-none">
+                  <span>@@ -14,10 +14,14 @@ The Marketing Backend orchestrates multi-channel audience targeting @@</span>
+                  <span class="text-[#8a97a3]">Architecture Directive Block</span>
+                </div>
+
+                <!-- Context lines -->
+                <div class="flex hover:bg-[#fbfcfd]">
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#8a97a3] bg-[#f8fafb] border-r border-[#e2e7ec] select-none shrink-0">14</div>
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#8a97a3] bg-[#f8fafb] border-r border-[#e2e7ec] select-none shrink-0">14</div>
+                  <div class="px-4 py-0.5 text-[#333d45] whitespace-pre"> The Marketing Backend orchestrates multi-channel audience targeting, behavioral segmentation,</div>
+                </div>
+                <div class="flex hover:bg-[#fbfcfd]">
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#8a97a3] bg-[#f8fafb] border-r border-[#e2e7ec] select-none shrink-0">15</div>
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#8a97a3] bg-[#f8fafb] border-r border-[#e2e7ec] select-none shrink-0">15</div>
+                  <div class="px-4 py-0.5 text-[#333d45] whitespace-pre"> and dynamic campaign payload dispatching. It is constructed as an event-driven cluster utilizing</div>
+                </div>
+
+                <!-- Deletion Lines (Red/Rose tint, readable graphite text) -->
+                <div class="flex bg-[#ffeef0] text-[#9e1c23]">
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#cb2431]/70 bg-[#ffdce0] border-r border-[#f9c2c8] select-none shrink-0">16</div>
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#cb2431]/70 bg-[#ffdce0] border-r border-[#f9c2c8] select-none shrink-0"></div>
+                  <div class="px-4 py-0.5 whitespace-pre flex items-baseline">
+                    <span class="select-none font-bold mr-2 text-[#cb2431]">-</span>
+                    <span><del class="no-underline bg-[#fdb8c0]/50 px-0.5 rounded">asynchronous HTTP workers</del> with distributed Redis key-space notifications.</span>
+                  </div>
+                </div>
+
+                <!-- Addition Lines (Green/Emerald tint, readable graphite text) -->
+                <div class="flex bg-[#e6ffed] text-[#13662e]">
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#22863a]/70 bg-[#cdffd8] border-r border-[#bef5cb] select-none shrink-0"></div>
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#22863a]/70 bg-[#cdffd8] border-r border-[#bef5cb] select-none shrink-0">16</div>
+                  <div class="px-4 py-0.5 whitespace-pre flex items-baseline">
+                    <span class="select-none font-bold mr-2 text-[#22863a]">+</span>
+                    <span><ins class="no-underline bg-[#acf2bd]/60 px-0.5 rounded">asynchronous message ingestion, deterministic idempotency filters</ins>, and distributed Redis key-</span>
+                  </div>
+                </div>
+                <div class="flex bg-[#e6ffed] text-[#13662e]">
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#22863a]/70 bg-[#cdffd8] border-r border-[#bef5cb] select-none shrink-0"></div>
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#22863a]/70 bg-[#cdffd8] border-r border-[#bef5cb] select-none shrink-0">17</div>
+                  <div class="px-4 py-0.5 whitespace-pre flex items-baseline">
+                    <span class="select-none font-bold mr-2 text-[#22863a]">+</span>
+                    <span>space notifications to ensure sub-50ms message processing at continuous peak loads exceeding</span>
+                  </div>
+                </div>
+                <div class="flex bg-[#e6ffed] text-[#13662e]">
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#22863a]/70 bg-[#cdffd8] border-r border-[#bef5cb] select-none shrink-0"></div>
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#22863a]/70 bg-[#cdffd8] border-r border-[#bef5cb] select-none shrink-0">18</div>
+                  <div class="px-4 py-0.5 whitespace-pre flex items-baseline">
+                    <span class="select-none font-bold mr-2 text-[#22863a]">+</span>
+                    <span>40,000 requests per second.</span>
+                  </div>
+                </div>
+
+                <!-- Context line -->
+                <div class="flex hover:bg-[#fbfcfd]">
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#8a97a3] bg-[#f8fafb] border-r border-[#e2e7ec] select-none shrink-0">17</div>
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#8a97a3] bg-[#f8fafb] border-r border-[#e2e7ec] select-none shrink-0">19</div>
+                  <div class="px-4 py-0.5 text-[#333d45] whitespace-pre"> </div>
+                </div>
+
+                <!-- Diff Chunk 2 Header (Architecture Topology diagram update) -->
+                <div class="bg-[#f0f4f8] text-[#556471] px-4 py-1 border-y border-[#e2e7ec] flex items-center justify-between text-[11.5px] select-none">
+                  <span>@@ -32,8 +34,14 @@ ## Architecture Topology @@</span>
+                  <span class="text-[#8a97a3]">Topology Section Refinement</span>
+                </div>
+
+                <div class="flex hover:bg-[#fbfcfd]">
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#8a97a3] bg-[#f8fafb] border-r border-[#e2e7ec] select-none shrink-0">32</div>
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#8a97a3] bg-[#f8fafb] border-r border-[#e2e7ec] select-none shrink-0">34</div>
+                  <div class="px-4 py-0.5 text-[#333d45] whitespace-pre"> ## Architecture Topology</div>
+                </div>
+                <div class="flex hover:bg-[#fbfcfd]">
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#8a97a3] bg-[#f8fafb] border-r border-[#e2e7ec] select-none shrink-0">33</div>
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#8a97a3] bg-[#f8fafb] border-r border-[#e2e7ec] select-none shrink-0">35</div>
+                  <div class="px-4 py-0.5 text-[#333d45] whitespace-pre"> </div>
+                </div>
+
+                <!-- Deletion of old diagram reference -->
+                <div class="flex bg-[#ffeef0] text-[#9e1c23]">
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#cb2431]/70 bg-[#ffdce0] border-r border-[#f9c2c8] select-none shrink-0">34</div>
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#cb2431]/70 bg-[#ffdce0] border-r border-[#f9c2c8] select-none shrink-0"></div>
+                  <div class="px-4 py-0.5 whitespace-pre flex items-baseline">
+                    <span class="select-none font-bold mr-2 text-[#cb2431]">-</span>
+                    <span><del class="no-underline bg-[#fdb8c0]/50 px-0.5 rounded">![Architecture Overview](./images/old-architecture-v1.png)</del></span>
+                  </div>
+                </div>
+
+                <!-- Addition of SVG Topology graphic and narrative clarification -->
+                <div class="flex bg-[#e6ffed] text-[#13662e]">
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#22863a]/70 bg-[#cdffd8] border-r border-[#bef5cb] select-none shrink-0"></div>
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#22863a]/70 bg-[#cdffd8] border-r border-[#bef5cb] select-none shrink-0">36</div>
+                  <div class="px-4 py-0.5 whitespace-pre flex items-baseline">
+                    <span class="select-none font-bold mr-2 text-[#22863a]">+</span>
+                    <span>The topological flow decouples edge ingress validation from asynchronous workload processing,</span>
+                  </div>
+                </div>
+                <div class="flex bg-[#e6ffed] text-[#13662e]">
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#22863a]/70 bg-[#cdffd8] border-r border-[#bef5cb] select-none shrink-0"></div>
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#22863a]/70 bg-[#cdffd8] border-r border-[#bef5cb] select-none shrink-0">37</div>
+                  <div class="px-4 py-0.5 whitespace-pre flex items-baseline">
+                    <span class="select-none font-bold mr-2 text-[#22863a]">+</span>
+                    <span>maintaining strict single-direction pipelines through the persistence matrix:</span>
+                  </div>
+                </div>
+                <div class="flex bg-[#e6ffed] text-[#13662e]">
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#22863a]/70 bg-[#cdffd8] border-r border-[#bef5cb] select-none shrink-0"></div>
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#22863a]/70 bg-[#cdffd8] border-r border-[#bef5cb] select-none shrink-0">38</div>
+                  <div class="px-4 py-0.5 whitespace-pre flex items-baseline">
+                    <span class="select-none font-bold mr-2 text-[#22863a]">+</span>
+                    <span> </span>
+                  </div>
+                </div>
+                <div class="flex bg-[#e6ffed] text-[#13662e]">
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#22863a]/70 bg-[#cdffd8] border-r border-[#bef5cb] select-none shrink-0"></div>
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#22863a]/70 bg-[#cdffd8] border-r border-[#bef5cb] select-none shrink-0">39</div>
+                  <div class="px-4 py-0.5 whitespace-pre flex items-baseline">
+                    <span class="select-none font-bold mr-2 text-[#22863a]">+</span>
+                    <span><ins class="no-underline bg-[#acf2bd]/60 px-0.5 rounded">![Architecture Topology](./images/topology.svg)</ins></span>
+                  </div>
+                </div>
+
+                <!-- Context lines -->
+                <div class="flex hover:bg-[#fbfcfd]">
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#8a97a3] bg-[#f8fafb] border-r border-[#e2e7ec] select-none shrink-0">35</div>
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#8a97a3] bg-[#f8fafb] border-r border-[#e2e7ec] select-none shrink-0">40</div>
+                  <div class="px-4 py-0.5 text-[#333d45] whitespace-pre"> </div>
+                </div>
+                <div class="flex hover:bg-[#fbfcfd]">
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#8a97a3] bg-[#f8fafb] border-r border-[#e2e7ec] select-none shrink-0">36</div>
+                  <div class="w-12 py-0.5 pr-2.5 text-right text-[11px] text-[#8a97a3] bg-[#f8fafb] border-r border-[#e2e7ec] select-none shrink-0">41</div>
+                  <div class="px-4 py-0.5 text-[#333d45] whitespace-pre"> ### Core Components</div>
+                </div>
+
+              </div>
+
+              <!-- Diff Footer Info Bar -->
+              <div class="px-4 py-2.5 bg-[#f8fafb] border-t border-[#e2e7ec] flex items-center justify-between text-[11.5px] text-[#6c7a87]">
+                <div class="flex items-center space-x-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span>Unified diff representation from local git index</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                  <span>Showing 2 modified sections</span>
+                  <span>•</span>
+                  <a href="#" class="text-[#20282e] font-semibold hover:underline">View file in Documentation Explorer →</a>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+
+
+
+
+
+</body></html>

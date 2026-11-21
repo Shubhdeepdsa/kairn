@@ -1,0 +1,588 @@
+<!DOCTYPE html><html lang="en"><svg class="inline-defs-container" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"></svg><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Syne:wght@600;700;800&amp;family=Courier+Prime&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-container-lowest":"#ffffff","surface-tint":"#575f66","surface-container":"#e1f0ff","surface-container-high":"#dbeaf9","inverse-surface":"#24323e","primary-fixed":"#dbe3ec","on-primary-container":"#878f96","on-surface":"#0f1d28","surface-container-low":"#ecf4ff","secondary":"#6a5f00","on-tertiary-container":"#9c8b7c","primary-container":"#20282e","secondary-fixed-dim":"#dbc831","on-primary-fixed-variant":"#40484e","on-primary-fixed":"#151d22","surface-container-highest":"#d5e4f4","tertiary-container":"#30251a","surface":"#f7f9ff","outline-variant":"#c4c7ca","secondary-container":"#f8e54d","background":"#f7f9ff","on-secondary-container":"#706500","tertiary-fixed-dim":"#d6c3b3","surface-variant":"#d5e4f4","surface-dim":"#cddceb","on-tertiary-fixed":"#241a0f","error-container":"#ffdad6","on-secondary-fixed-variant":"#4f4700","on-primary":"#ffffff","inverse-on-surface":"#e6f2ff","on-error":"#ffffff","primary":"#0b1319","primary-fixed-dim":"#bfc7cf","surface-bright":"#f7f9ff","on-tertiary-fixed-variant":"#514438","outline":"#74777b","inverse-primary":"#bfc7cf","on-surface-variant":"#44474a","error":"#ba1a1a","on-tertiary":"#ffffff","tertiary-fixed":"#f3dfce","secondary-fixed":"#f8e54d","on-error-container":"#93000a","on-background":"#0f1d28","tertiary":"#1a1107","on-secondary":"#ffffff","on-secondary-fixed":"#201c00"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{},fontFamily:{"headline":["Syne"],"display":["Syne"],"body":["Plus Jakarta Sans"],"label":["Plus Jakarta Sans"]},fontSize:{}}}}</script></head><body class="bg-background font-body text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 h-14 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.03)] px-4 flex items-center justify-between"><div class="flex items-center gap-4"><div class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" class="h-7 w-auto" fill="none" style="height: 28px; width: auto; display: block;"><g transform="translate(10, 14)"><rect x="16" y="0" width="18" height="9" rx="2.5" fill="#E4D13A"></rect><circle cx="25" cy="4.5" r="1.4" fill="#20282E"></circle><rect x="8" y="14" width="34" height="11" rx="3" fill="#20282E"></rect><line x1="17" y1="19.5" x2="33" y2="19.5" stroke="#FFFFFF" stroke-width="1.4" stroke-linecap="round"></line><rect x="0" y="30" width="50" height="14" rx="4" fill="#20282E"></rect><rect x="4" y="35" width="9" height="3" rx="1.5" fill="#E4D13A"></rect><text x="68" y="37" font-family="'Syne', sans-serif" font-size="34" font-weight="700" fill="#20282E" letter-spacing="-0.03em">kairn</text><circle cx="158" cy="34" r="4.5" fill="#E4D13A"></circle></g></svg><span class="text-xs font-mono font-medium tracking-tight text-on-surface-variant/80 uppercase">/ EXP-01</span></div><div class="h-4 w-[1px] bg-surface-container-highest"></div><div class="flex items-center gap-2 px-2.5 py-1 rounded bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer group"><span class="material-symbols-outlined text-[16px] text-secondary">folder_open</span><span class="text-xs font-semibold tracking-tight text-on-surface group-hover:text-primary font-body">core-architecture.git</span><span class="material-symbols-outlined text-[14px] text-on-surface-variant">unfold_more</span></div></div><div class="flex items-center gap-3 flex-1 max-w-lg mx-6"><div class="relative w-full flex items-center"><span class="material-symbols-outlined absolute left-3 text-[18px] text-on-surface-variant">search</span><input class="w-full pl-9 pr-14 py-1.5 bg-surface-container-low rounded text-xs text-on-surface placeholder:text-on-surface-variant/70 focus:outline-none cursor-pointer hover:bg-surface-container transition-all" placeholder="Search documentation, commits, symbols..." readonly="" type="text"><div class="absolute right-2.5 flex items-center gap-1"><kbd class="px-1.5 py-0.5 text-[10px] font-mono bg-surface-container-lowest rounded text-on-surface-variant shadow-[0_1px_2px_rgba(0,0,0,0.05)]">⌘K</kbd></div></div></div><div class="flex items-center gap-4"><div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-secondary-fixed-dim ring-2 ring-secondary-container"></div><span class="text-[11px] font-mono text-on-surface-variant uppercase tracking-wider">SYNCHRONIZED</span></div><div class="h-4 w-[1px] bg-surface-container-highest"></div><div class="flex items-center gap-2"><button class="p-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" title="Terminal Output" type="button"><span class="material-symbols-outlined text-[18px]">terminal</span></button><button class="p-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" title="Quick Settings" type="button"><span class="material-symbols-outlined text-[18px]">tune</span></button></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><aside class="fixed left-0 top-14 bottom-0 w-64 bg-surface-container-low z-40 flex flex-col justify-between p-3"><div class="space-y-4"><div class="px-2 pt-1 flex items-center justify-between"><span class="text-[11px] font-mono font-semibold text-on-surface-variant uppercase tracking-wider">Explorer Nodes</span><span class="material-symbols-outlined text-[16px] text-on-surface-variant hover:text-on-surface cursor-pointer">filter_list</span></div><nav class="space-y-1" data-active-classes="bg-primary-container text-on-primary font-semibold"><a class="flex items-center gap-2.5 px-3 py-2 rounded text-xs text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="overview" href="#"><span class="material-symbols-outlined text-[18px]">dashboard</span><span>Overview</span></a><a aria-current="page" class="flex items-center gap-2.5 px-3 py-2 rounded transition-all bg-primary-container text-on-primary font-semibold" data-path="markdown-tree" href="#"><span class="material-symbols-outlined text-[18px]">article</span><span>Markdown Docs</span></a><a class="flex items-center gap-2.5 px-3 py-2 rounded text-xs text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="git-timeline" href="#"><span class="material-symbols-outlined text-[18px]">commit</span><span>Git Timeline</span></a><a class="flex items-center gap-2.5 px-3 py-2 rounded text-xs text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="diff-inspector" href="#"><span class="material-symbols-outlined text-[18px]">difference</span><span>Diff Inspector</span></a><a class="flex items-center gap-2.5 px-3 py-2 rounded text-xs text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="tag-graph" href="#"><span class="material-symbols-outlined text-[18px]">hub</span><span>Knowledge Graph</span></a></nav></div><div class="p-2.5 rounded bg-surface-container-lowest/80 shadow-[0_1px_4px_rgba(0,0,0,0.02)] space-y-2"><div class="flex items-center justify-between"><span class="text-[10px] font-mono uppercase text-on-surface-variant">Branch: main</span><span class="text-[10px] font-mono text-secondary font-semibold">a79f1c0</span></div><div class="w-full bg-surface-container-high h-1 rounded-full overflow-hidden"><div class="bg-secondary w-3/4 h-full"></div></div><div class="flex items-center justify-between text-[10px] text-on-surface-variant"><span>340 Markdown Files</span><span>Local Ready</span></div></div></aside><div class="pl-64"><main class="w-full min-h-[calc(100vh-3.5rem)] pt-14 bg-background"><div class="flex flex-col w-full">
+<!-- Top Document Utility Strip -->
+<div class="w-full bg-surface-container-lowest/80 backdrop-blur-md px-6 py-2.5 flex items-center justify-between text-xs shadow-sm sticky top-0 z-20">
+<div class="flex items-center gap-3">
+<!-- Breadcrumb with cairn waypoint styling -->
+<div class="flex items-center gap-1.5 font-mono text-[11px] text-on-surface-variant">
+<span class="hover:text-on-surface cursor-pointer transition-colors font-medium">marketing-backend</span>
+<span class="text-outline-variant">/</span>
+<span class="hover:text-on-surface cursor-pointer transition-colors">docs</span>
+<span class="text-outline-variant">/</span>
+<span class="hover:text-on-surface cursor-pointer transition-colors">architecture</span>
+<span class="text-outline-variant">/</span>
+<span class="font-semibold text-on-surface flex items-center gap-1 bg-surface-container px-2 py-0.5 rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed-dim"></span>
+          system-overview.md
+        </span>
+</div>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" onclick="navigator.clipboard.writeText('marketing-backend/docs/architecture/system-overview.md')" title="Copy file path" type="button">
+<span class="material-symbols-outlined text-[15px]">content_copy</span>
+</button>
+</div>
+<!-- Quick action links -->
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5 text-[11px] font-mono text-on-surface-variant bg-surface-container-low px-2 py-1 rounded">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span>HEAD: d4e92a1</span>
+</div>
+<div class="h-3.5 w-[1px] bg-surface-container-highest"></div>
+<div class="flex items-center gap-1">
+<button class="flex items-center gap-1 px-2.5 py-1 rounded text-xs font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">edit_document</span>
+<span>Edit MD</span>
+</button>
+<button class="flex items-center gap-1 px-2.5 py-1 rounded text-xs font-semibold bg-primary text-on-primary hover:bg-primary-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">history</span>
+<span>14 Commits</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Master 3-Column Document Workspace -->
+<div class="grid grid-cols-12 w-full gap-0">
+<!-- LEFT REGION: Source-Aware Documentation Sidebar (Cols 1-3: ~270px nominal) -->
+<div class="col-span-12 lg:col-span-3 xl:col-span-3 bg-surface-container-lowest flex flex-col justify-between p-4 shadow-[1px_0_0_0_rgba(15,29,40,0.05)] min-h-[calc(100vh-6.5rem)]">
+<div class="space-y-5">
+<!-- Project Context & Switcher Box -->
+<div class="p-3 rounded-lg bg-surface-container-low transition-all hover:bg-surface-container cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<div class="flex items-center gap-2">
+<!-- Cairn visual mark glyph mini -->
+<div class="w-5 h-5 flex flex-col justify-between items-center py-0.5">
+<span class="w-1.5 h-1 bg-secondary-fixed-dim rounded-sm"></span>
+<span class="w-3 h-1 bg-on-surface rounded-sm"></span>
+<span class="w-4 h-1 bg-on-surface rounded-sm"></span>
+</div>
+<span class="text-xs font-mono uppercase tracking-wider font-semibold text-on-surface">Target Project</span>
+</div>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant group-hover:text-on-surface transition-transform group-hover:translate-y-0.5">expand_more</span>
+</div>
+<div class="flex items-center justify-between">
+<h2 class="font-headline font-bold text-sm text-on-surface tracking-tight truncate">Marketing Backend</h2>
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.5 bg-surface-container-lowest text-[10px] font-mono rounded text-secondary font-bold">git:main</span>
+</div>
+</div>
+</div>
+<!-- Search Input -->
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-2 text-[16px] text-on-surface-variant">search</span>
+<input class="w-full pl-8 pr-12 py-1.5 bg-surface-container-low hover:bg-surface-container focus:bg-surface-container-lowest rounded text-xs text-on-surface placeholder:text-on-surface-variant/70 focus:outline-none transition-all shadow-sm" placeholder="Search docs, symbols, commits..." type="text">
+<kbd class="absolute right-2 top-2 px-1.5 py-0.2 text-[9px] font-mono bg-surface-container-lowest rounded text-on-surface-variant shadow-[0_1px_2px_rgba(0,0,0,0.05)]">⌘K</kbd>
+</div>
+<!-- Primary View Navigation Tabs -->
+<div class="grid grid-cols-3 gap-1 p-1 bg-surface-container-low rounded-lg text-center text-xs">
+<button class="py-1 px-1.5 rounded font-semibold text-[11px] bg-surface-container-lowest text-on-surface shadow-sm flex items-center justify-center gap-1 relative" type="button">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed-dim"></span>
+<span>Docs</span>
+</button>
+<button class="py-1 px-1.5 rounded text-[11px] text-on-surface-variant hover:text-on-surface transition-colors flex items-center justify-center gap-1" type="button">
+<span>Git (142)</span>
+</button>
+<button class="py-1 px-1.5 rounded text-[11px] text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+            Config
+          </button>
+</div>
+<!-- Hierarchical Tree Navigation -->
+<div class="space-y-4 pt-1">
+<!-- Tree Section: Core Documentation -->
+<div>
+<div class="flex items-center justify-between px-2 mb-1.5">
+<span class="text-[10px] font-mono uppercase tracking-widest text-on-surface-variant/80 font-bold">Documentation Tree</span>
+<span class="text-[10px] font-mono text-outline">v2.4.0</span>
+</div>
+<div class="space-y-0.5 text-xs">
+<!-- Overview -->
+<a class="flex items-center gap-2 px-2.5 py-1.5 rounded text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px] text-outline">description</span>
+<span class="truncate">Overview</span>
+</a>
+<!-- Architecture Section (Expanded) -->
+<div class="space-y-0.5">
+<div class="flex items-center justify-between px-2.5 py-1.5 rounded hover:bg-surface-container-low cursor-pointer group">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-on-surface transition-transform">folder_open</span>
+<span class="font-semibold text-on-surface">Architecture</span>
+</div>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">expand_more</span>
+</div>
+<!-- Sub-items with Active Node Marker -->
+<div class="pl-3 ml-2.5 space-y-0.5 bg-surface-container-low/30 rounded-r-lg">
+<!-- ACTIVE NODE -->
+<div class="relative flex items-center justify-between px-2.5 py-1.5 rounded bg-surface-container text-on-surface font-semibold shadow-xs">
+<!-- Wayfinding Yellow Indicator -->
+<span class="absolute left-0 top-1 bottom-1 w-[3px] bg-secondary-fixed-dim rounded-r"></span>
+<div class="flex items-center gap-2 pl-1.5 truncate">
+<span class="w-1 h-1 rounded-full bg-secondary"></span>
+<span class="truncate">System Overview</span>
+</div>
+<span class="text-[9px] font-mono px-1 py-0.2 rounded bg-surface-container-lowest text-secondary uppercase font-bold">ACTIVE</span>
+</div>
+<a class="flex items-center gap-2 px-2.5 py-1.5 rounded text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors pl-3.5" href="#">
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="truncate">Database Design</span>
+</a>
+<a class="flex items-center gap-2 px-2.5 py-1.5 rounded text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors pl-3.5" href="#">
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="truncate">Authentication &amp; JWT</span>
+</a>
+</div>
+</div>
+<!-- API Reference (Collapsed/Expandable) -->
+<div class="space-y-0.5 pt-1">
+<div class="flex items-center justify-between px-2.5 py-1.5 rounded hover:bg-surface-container-low cursor-pointer group">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline group-hover:text-on-surface">folder</span>
+<span class="text-on-surface-variant group-hover:text-on-surface">API Reference</span>
+</div>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">chevron_right</span>
+</div>
+</div>
+<!-- Deployment -->
+<div class="space-y-0.5">
+<div class="flex items-center justify-between px-2.5 py-1.5 rounded hover:bg-surface-container-low cursor-pointer group">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline group-hover:text-on-surface">dns</span>
+<span class="text-on-surface-variant group-hover:text-on-surface">Deployment Specs</span>
+</div>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Tree Section: Additional Sources -->
+<div class="pt-2">
+<div class="flex items-center justify-between px-2 mb-1.5">
+<span class="text-[10px] font-mono uppercase tracking-widest text-on-surface-variant/80 font-bold">Additional Sources</span>
+<span class="material-symbols-outlined text-[14px] text-outline cursor-pointer hover:text-on-surface">add</span>
+</div>
+<div class="space-y-0.5 text-xs">
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" href="#">
+<div class="flex items-center gap-2 truncate">
+<span class="material-symbols-outlined text-[15px] text-outline">feed</span>
+<span class="truncate">Project README</span>
+</div>
+<span class="text-[9px] font-mono text-outline">.md</span>
+</a>
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" href="#">
+<div class="flex items-center gap-2 truncate">
+<span class="material-symbols-outlined text-[15px] text-outline">rate_review</span>
+<span class="truncate">Engineering Notes</span>
+</div>
+<span class="text-[9px] font-mono text-outline">.md</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Tray: Repository Status & Sync info -->
+<div class="pt-4 mt-6">
+<div class="p-2.5 rounded-lg bg-surface-container-low text-xs flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-secondary-fixed-dim"></span>
+</div>
+<div class="flex flex-col">
+<span class="text-[11px] font-medium text-on-surface">Synced with origin</span>
+<span class="text-[9px] font-mono text-on-surface-variant">git fetch 4m ago</span>
+</div>
+</div>
+<button class="p-1 rounded hover:bg-surface-container-highest transition-colors text-on-surface-variant hover:text-on-surface" title="Force Sync" type="button">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+</button>
+</div>
+</div>
+</div>
+<!-- CENTER REGION: Main Documentation Reader (Cols 4-10: Max 820px reading plane) -->
+<div class="col-span-12 lg:col-span-6 xl:col-span-7 bg-surface-container-lowest p-6 md:p-12 overflow-y-auto">
+<article class="max-w-[760px] mx-auto space-y-10">
+<!-- Document Header Area -->
+<header class="space-y-4">
+<div class="flex flex-wrap items-center justify-between gap-3">
+<div class="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-secondary-container/50 text-on-secondary-container text-xs font-mono font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>WAYPOINT // ARCH-01</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs text-on-surface-variant font-mono">6 min read</span>
+<span class="text-outline-variant">·</span>
+<span class="text-xs text-on-surface-variant font-mono">1,420 words</span>
+</div>
+</div>
+<h1 class="text-3xl md:text-4xl font-headline font-bold text-on-surface tracking-tight leading-tight">
+            System Overview
+          </h1>
+<!-- Meta Author & Commit Badge Row -->
+<div class="flex flex-wrap items-center gap-y-2 gap-x-4 text-xs text-on-surface-variant pt-1 pb-2">
+<div class="flex items-center gap-1.5 font-medium text-on-surface">
+<div class="w-5 h-5 rounded-full bg-surface-container-highest flex items-center justify-center font-mono text-[10px] font-bold text-on-surface">ML</div>
+<span>@m-lindqvist</span>
+</div>
+<span class="text-outline-variant">·</span>
+<div class="flex items-center gap-1 font-mono text-[11px]">
+<span class="material-symbols-outlined text-[14px]">commit</span>
+<span>commit <code class="text-secondary font-bold">d4e92a1</code></span>
+</div>
+<span class="text-outline-variant">·</span>
+<span class="font-mono text-[11px]">Updated May 24, 2025</span>
+<button class="ml-auto inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface text-[11px] font-mono transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px] text-secondary">source_environment</span>
+<span>View Diff (14 commits)</span>
+</button>
+</div>
+</header>
+<!-- Markdown Lead Paragraph -->
+<div class="prose max-w-none space-y-4">
+<p class="text-[15px] md:text-base leading-relaxed text-on-surface font-body font-normal">
+            The <strong class="font-semibold text-on-surface">Marketing Backend</strong> orchestrates multi-channel audience targeting, behavioral segmentation, and dynamic campaign payload dispatching. It is constructed as an event-driven cluster utilizing asynchronous message ingestion, deterministic idempotency filters, and distributed Redis key-space notifications to ensure sub-50ms message processing at continuous peak loads exceeding 40,000 requests per second.
+          </p>
+</div>
+<!-- Technical Waypoint Information Callout Box -->
+<div class="relative p-5 rounded-xl bg-surface-container-low/70 shadow-xs space-y-2 overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary-fixed-dim"></div>
+<div class="flex items-center gap-2 text-on-surface font-semibold text-xs font-mono uppercase tracking-wider">
+<span class="material-symbols-outlined text-[18px] text-secondary">verified_user</span>
+<span>Architectural Directive: Distributed Tracing &amp; Tenant Isolation</span>
+</div>
+<p class="text-xs md:text-sm text-on-surface-variant leading-relaxed">
+            Every ingress request must propagate the standard OpenTelemetry context headers (<code class="px-1.5 py-0.5 rounded bg-surface-container-highest text-[11px] font-mono text-on-surface">traceparent</code>, <code class="px-1.5 py-0.5 rounded bg-surface-container-highest text-[11px] font-mono text-on-surface">x-tenant-partition-id</code>). Requests lacking a verifiable cryptographically signed tenant token will terminate at the Envoy perimeter prior to internal queue publication.
+          </p>
+</div>
+<!-- Architecture Topology Section -->
+<section class="space-y-4 pt-2" id="architecture-topology">
+<div class="flex items-center justify-between">
+<h2 class="text-xl md:text-2xl font-headline font-bold text-on-surface tracking-tight flex items-center gap-2">
+<span>Architecture Topology</span>
+</h2>
+<span class="text-[11px] font-mono text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">FIG-01 // FLOW</span>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+            The topological flow decouples edge ingress validation from asynchronous workload processing, maintaining strict single-direction pipelines through the persistence matrix:
+          </p>
+<!-- Instrument-Grade SVG Architecture Diagram -->
+<div class="p-6 rounded-xl bg-surface-container-low shadow-sm">
+<svg class="w-full h-auto text-on-surface" fill="none" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
+<!-- Grid background lines -->
+<defs>
+<pattern height="20" id="grid-pattern" patternUnits="userSpaceOnUse" width="20">
+<path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" stroke-opacity="0.04" stroke-width="1"></path>
+</pattern>
+<marker id="arrow" markerHeight="6" markerWidth="6" orient="auto-start-reverse" refX="6" refY="5" viewBox="0 0 10 10">
+<path d="M 0 1 L 8 5 L 0 9 z" fill="#0b1319"></path>
+</marker>
+<marker id="arrow-yellow" markerHeight="6" markerWidth="6" orient="auto-start-reverse" refX="6" refY="5" viewBox="0 0 10 10">
+<path d="M 0 1 L 8 5 L 0 9 z" fill="#6a5f00"></path>
+</marker>
+</defs>
+<rect fill="url(#grid-pattern)" height="100%" width="100%"></rect>
+<!-- Step 1: External Client / Ingress -->
+<g transform="translate(10, 85)">
+<rect fill="#ffffff" height="85" rx="6" stroke="#c4c7ca" stroke-width="1.5" width="110"></rect>
+<rect fill="#ecf4ff" height="20" rx="6" width="110" x="0" y="0"></rect>
+<text fill="#0f1d28" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" x="10" y="14">CLIENT LAYER</text>
+<text fill="#0f1d28" font-family="Plus Jakarta Sans" font-size="11" font-weight="600" x="12" y="44">Web &amp; SDK</text>
+<text fill="#44474a" font-family="Courier Prime" font-size="9" x="12" y="60">HTTPS / TLS 1.3</text>
+<text fill="#6a5f00" font-family="Courier Prime" font-size="9" x="12" y="74">Port :443</text>
+</g>
+<!-- Connection Line: Client to Envoy -->
+<path d="M 120 127 L 165 127" marker-end="url(#arrow)" stroke="#0b1319" stroke-dasharray="3 3" stroke-width="1.5"></path>
+<!-- Step 2: API Gateway (Envoy) -->
+<g transform="translate(170, 75)">
+<rect fill="#ffffff" height="105" rx="6" stroke="#0b1319" stroke-width="2" width="125"></rect>
+<rect fill="#0b1319" height="22" rx="6" width="125" x="0" y="0"></rect>
+<text fill="#ffffff" font-family="Syne" font-size="10" font-weight="700" x="10" y="15">REVERSE PROXY</text>
+<circle cx="112" cy="11" fill="#f8e54d" r="3"></circle>
+<text fill="#0f1d28" font-family="Plus Jakarta Sans" font-size="12" font-weight="700" x="12" y="45">Envoy Gateway</text>
+<text fill="#44474a" font-family="Plus Jakarta Sans" font-size="9" x="12" y="63">Rate Limiting · WAF</text>
+<text fill="#44474a" font-family="Courier Prime" font-size="9" x="12" y="78">JWT Verification</text>
+<rect fill="#ecf4ff" height="12" rx="2" width="105" x="10" y="86"></rect>
+<text fill="#6a5f00" font-family="Courier Prime" font-size="8" x="14" y="95">latency &lt; 2.1ms</text>
+</g>
+<!-- Connection: Envoy to Campaign Engine -->
+<path d="M 295 110 L 350 75" marker-end="url(#arrow-yellow)" stroke="#6a5f00" stroke-width="2"></path>
+<!-- Connection: Envoy to Audience Service -->
+<path d="M 295 145 L 350 180" marker-end="url(#arrow)" stroke="#0b1319" stroke-width="1.5"></path>
+<!-- Step 3: Backend Services Cluster -->
+<!-- Service A: Campaign Engine -->
+<g transform="translate(355, 30)">
+<rect fill="#ffffff" height="75" rx="6" stroke="#c4c7ca" stroke-width="1.5" width="145"></rect>
+<rect fill="#ecf4ff" height="18" rx="6" width="145" x="0" y="0"></rect>
+<text fill="#0f1d28" font-family="Courier Prime" font-size="9" font-weight="700" x="8" y="13">SVC // ENGINE</text>
+<text fill="#0f1d28" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" x="10" y="38">Campaign Core</text>
+<text fill="#44474a" font-family="Plus Jakarta Sans" font-size="9" x="10" y="53">State Machine (Go)</text>
+<text fill="#6a5f00" font-family="Courier Prime" font-size="9" x="10" y="67">gRPC :9091</text>
+</g>
+<!-- Service B: Audience Svc -->
+<g transform="translate(355, 145)">
+<rect fill="#ffffff" height="75" rx="6" stroke="#c4c7ca" stroke-width="1.5" width="145"></rect>
+<rect fill="#ecf4ff" height="18" rx="6" width="145" x="0" y="0"></rect>
+<text fill="#0f1d28" font-family="Courier Prime" font-size="9" font-weight="700" x="8" y="13">SVC // SEGMENTATION</text>
+<text fill="#0f1d28" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" x="10" y="38">Audience Engine</text>
+<text fill="#44474a" font-family="Plus Jakarta Sans" font-size="9" x="10" y="53">Graph Evaluator (Rust)</text>
+<text fill="#6a5f00" font-family="Courier Prime" font-size="9" x="10" y="67">gRPC :9092</text>
+</g>
+<!-- Connections: Services to Event Stream / DB -->
+<path d="M 500 65 L 565 105" marker-end="url(#arrow-yellow)" stroke="#6a5f00" stroke-width="2"></path>
+<path d="M 500 180 L 565 145" marker-end="url(#arrow)" stroke="#0b1319" stroke-width="1.5"></path>
+<!-- Step 4: Event Backbone & Persistence -->
+<g transform="translate(570, 75)">
+<rect fill="#ffffff" height="115" rx="6" stroke="#0b1319" stroke-width="1.5" width="155"></rect>
+<rect fill="#e1f0ff" height="22" rx="6" width="155" x="0" y="0"></rect>
+<text fill="#0f1d28" font-family="Syne" font-size="10" font-weight="700" x="10" y="15">PERSISTENCE MATRIX</text>
+<!-- Kafka Stream mini-box -->
+<rect fill="#ecf4ff" height="34" rx="4" width="139" x="8" y="30"></rect>
+<text fill="#0f1d28" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" x="14" y="44">Kafka Cluster (3-Node)</text>
+<text fill="#44474a" font-family="Courier Prime" font-size="8" x="14" y="57">events.marketing.dispatch</text>
+<!-- PostgreSQL mini-box -->
+<rect fill="#f7f9ff" height="36" rx="4" stroke="#c4c7ca" stroke-width="1" width="139" x="8" y="70"></rect>
+<text fill="#0f1d28" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" x="14" y="85">PostgreSQL 16 + Read Rep</text>
+<text fill="#6a5f00" font-family="Courier Prime" font-size="8" x="14" y="98">WAL streaming / HA</text>
+</g>
+</svg>
+</div>
+</section>
+<!-- Core Components Section -->
+<section class="space-y-4 pt-2" id="core-components">
+<h2 class="text-xl md:text-2xl font-headline font-bold text-on-surface tracking-tight">
+            Core Components
+          </h2>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+            The infrastructure is partitioned into modular runtime daemons that execute independently across the Kubernetes cluster topology.
+          </p>
+<!-- Component Specification Table -->
+<div class="overflow-x-auto rounded-lg shadow-sm bg-surface-container-low">
+<table class="w-full text-left text-xs">
+<thead class="bg-surface-container font-mono uppercase text-on-surface text-[10px] tracking-wider">
+<tr>
+<th class="py-2.5 px-4 font-bold">Subsystem</th>
+<th class="py-2.5 px-4 font-bold">Language Runtime</th>
+<th class="py-2.5 px-4 font-bold">SLA Threshold</th>
+<th class="py-2.5 px-4 font-bold">Scale Model</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container/60 font-body text-on-surface">
+<tr class="hover:bg-surface-container-highest/30 transition-colors">
+<td class="py-2.5 px-4 font-semibold flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>Envoy Proxy</span>
+</td>
+<td class="py-2.5 px-4 font-mono text-[11px]">C++ / Envoy 1.28</td>
+<td class="py-2.5 px-4 font-mono text-[11px] text-emerald-700">p99 &lt; 3.0ms</td>
+<td class="py-2.5 px-4 text-on-surface-variant">HPA · CPU &gt; 70%</td>
+</tr>
+<tr class="hover:bg-surface-container-highest/30 transition-colors">
+<td class="py-2.5 px-4 font-semibold flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span>Campaign Core</span>
+</td>
+<td class="py-2.5 px-4 font-mono text-[11px]">Go 1.22.3</td>
+<td class="py-2.5 px-4 font-mono text-[11px] text-emerald-700">p99 &lt; 14ms</td>
+<td class="py-2.5 px-4 text-on-surface-variant">Stateless Deployment (12x)</td>
+</tr>
+<tr class="hover:bg-surface-container-highest/30 transition-colors">
+<td class="py-2.5 px-4 font-semibold flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span>Audience Evaluator</span>
+</td>
+<td class="py-2.5 px-4 font-mono text-[11px]">Rust 1.78 (Tokio)</td>
+<td class="py-2.5 px-4 font-mono text-[11px] text-emerald-700">p99 &lt; 8.5ms</td>
+<td class="py-2.5 px-4 text-on-surface-variant">Cluster Queue Workers</td>
+</tr>
+<tr class="hover:bg-surface-container-highest/30 transition-colors">
+<td class="py-2.5 px-4 font-semibold flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span>Event Dispatcher</span>
+</td>
+<td class="py-2.5 px-4 font-mono text-[11px]">Node.js 20 LTS</td>
+<td class="py-2.5 px-4 font-mono text-[11px] text-amber-700">p99 &lt; 35ms</td>
+<td class="py-2.5 px-4 text-on-surface-variant">KEDA Event Consumers</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Syntax-Highlighted Code Block -->
+<section class="space-y-3 pt-2">
+<div class="flex items-center justify-between">
+<span class="text-xs font-mono font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-secondary">code</span>
+<span>Sample Implementation: Event Dispatcher</span>
+</span>
+<span class="text-[10px] font-mono text-on-surface-variant uppercase">TypeScript // Strict Mode</span>
+</div>
+<!-- Code Card Window -->
+<div class="rounded-xl overflow-hidden bg-primary shadow-lg">
+<!-- Window Tab Header -->
+<div class="px-4 py-2 bg-primary-container flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></span>
+<span class="font-mono text-xs text-on-primary-container pl-2 font-medium">src/services/event-dispatcher.ts</span>
+</div>
+<button class="flex items-center gap-1 text-[11px] font-mono text-on-primary-container hover:text-on-primary transition-colors" onclick="navigator.clipboard.writeText('// Copied code');" type="button">
+<span class="material-symbols-outlined text-[14px]">content_copy</span>
+<span>Copy</span>
+</button>
+</div>
+<!-- Code Content Body -->
+<div class="p-4 font-mono text-[12px] leading-relaxed text-inverse-on-surface overflow-x-auto">
+<pre><code><span class="text-secondary-fixed">import</span> { Kafka, Producer, CompressionTypes } <span class="text-secondary-fixed">from</span> <span class="text-emerald-400">'kafkajs'</span>;
+<span class="text-secondary-fixed">import</span> { TraceContext, injectSpan } <span class="text-secondary-fixed">from</span> <span class="text-emerald-400">'@kairn/telemetry'</span>;
+
+<span class="text-on-primary-container">// Partition-keyed campaign egress envelope</span>
+<span class="text-secondary-fixed">export interface</span> <span class="text-yellow-300">CampaignDispatchEvent</span>&lt;<span class="text-yellow-300">T</span> = <span class="text-cyan-300">Record</span>&lt;<span class="text-yellow-300">string</span>, <span class="text-yellow-300">unknown</span>&gt;&gt; {
+  <span class="text-cyan-300">tenantId</span>: <span class="text-yellow-300">string</span>;
+  <span class="text-cyan-300">campaignId</span>: <span class="text-yellow-300">string</span>;
+  <span class="text-cyan-300">audienceSegmentId</span>: <span class="text-yellow-300">string</span>;
+  <span class="text-cyan-300">payload</span>: <span class="text-yellow-300">T</span>;
+  <span class="text-cyan-300">idempotencyKey</span>: <span class="text-yellow-300">string</span>;
+  <span class="text-cyan-300">timestamp</span>: <span class="text-yellow-300">number</span>;
+}
+
+<span class="text-secondary-fixed">export class</span> <span class="text-yellow-300">EventDispatcher</span> {
+  <span class="text-secondary-fixed">private</span> <span class="text-cyan-300">producer</span>: <span class="text-yellow-300">Producer</span>;
+
+  <span class="text-secondary-fixed">constructor</span>(<span class="text-cyan-300">private readonly</span> <span class="text-cyan-300">kafkaCluster</span>: <span class="text-yellow-300">Kafka</span>) {
+    <span class="text-cyan-300">this</span>.<span class="text-cyan-300">producer</span> = <span class="text-cyan-300">this</span>.<span class="text-cyan-300">kafkaCluster</span>.<span class="text-cyan-300">producer</span>({ <span class="text-cyan-300">allowAutoTopicCreation</span>: <span class="text-secondary-fixed">false</span> });
+  }
+
+  <span class="text-secondary-fixed">public async</span> <span class="text-yellow-300">publishDispatch</span>(
+    <span class="text-cyan-300">event</span>: <span class="text-yellow-300">CampaignDispatchEvent</span>,
+    <span class="text-cyan-300">ctx</span>: <span class="text-yellow-300">TraceContext</span>
+  ): <span class="text-yellow-300">Promise</span>&lt;<span class="text-yellow-300">void</span>&gt; {
+    <span class="text-secondary-fixed">const</span> <span class="text-cyan-300">traceHeaders</span> = <span class="text-yellow-300">injectSpan</span>(<span class="text-cyan-300">ctx</span>);
+
+    <span class="text-secondary-fixed">await</span> <span class="text-cyan-300">this</span>.<span class="text-cyan-300">producer</span>.<span class="text-yellow-300">send</span>({
+      <span class="text-cyan-300">topic</span>: <span class="text-emerald-400">`marketing.events.${event.tenantId}`</span>,
+      <span class="text-cyan-300">compression</span>: <span class="text-yellow-300">CompressionTypes</span>.<span class="text-yellow-300">GZIP</span>,
+      <span class="text-cyan-300">messages</span>: [{
+        <span class="text-cyan-300">key</span>: <span class="text-cyan-300">event</span>.<span class="text-cyan-300">campaignId</span>,
+        <span class="text-cyan-300">value</span>: <span class="text-yellow-300">JSON</span>.<span class="text-yellow-300">stringify</span>(<span class="text-cyan-300">event</span>),
+        <span class="text-cyan-300">headers</span>: {
+          ...<span class="text-cyan-300">traceHeaders</span>,
+          <span class="text-emerald-400">'x-idempotency-key'</span>: <span class="text-cyan-300">event</span>.<span class="text-cyan-300">idempotencyKey</span>,
+        },
+      }],
+    });
+  }
+}</code></pre>
+</div>
+</div>
+</section>
+<!-- Cross references -->
+<div class="p-4 rounded-lg bg-surface-container-low/60 text-xs space-y-1.5">
+<div class="font-semibold text-on-surface font-mono uppercase text-[10px] tracking-wider text-secondary">
+            Related Waypoints &amp; Blueprints
+          </div>
+<p class="text-on-surface-variant">
+            Refer to <a class="text-on-surface font-semibold underline decoration-secondary-fixed-dim hover:text-secondary" href="#">Database Design (./database.md)</a> for partition schema definitions, and review the <a class="text-on-surface font-semibold underline decoration-secondary-fixed-dim hover:text-secondary" href="#">Authentication &amp; JWT (./authentication.md)</a> manual for session revoking protocol.
+          </p>
+</div>
+<!-- Next / Previous Page Navigation Footer -->
+<footer class="pt-8 border-t border-surface-container-highest flex items-center justify-between">
+<a class="p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-all group flex flex-col items-start gap-1 max-w-[200px]" href="#">
+<span class="text-[10px] font-mono uppercase text-on-surface-variant flex items-center gap-1 group-hover:text-on-surface">
+<span class="material-symbols-outlined text-[12px]">arrow_back</span>
+<span>Previous</span>
+</span>
+<span class="font-headline font-bold text-xs text-on-surface">Overview</span>
+</a>
+<a class="p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-all group flex flex-col items-end gap-1 max-w-[200px] text-right" href="#">
+<span class="text-[10px] font-mono uppercase text-on-surface-variant flex items-center gap-1 group-hover:text-on-surface">
+<span>Next</span>
+<span class="material-symbols-outlined text-[12px]">arrow_forward</span>
+</span>
+<span class="font-headline font-bold text-xs text-on-surface">Database Design</span>
+</a>
+</footer>
+</article>
+</div>
+<!-- RIGHT REGION: On-Page Document Outline / Table of Contents (~230px nominal) -->
+<div class="col-span-12 lg:col-span-3 xl:col-span-2 bg-surface-container-lowest p-5 space-y-6 hidden lg:block shadow-[-1px_0_0_0_rgba(15,29,40,0.05)]">
+<!-- Outline Header -->
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-mono font-bold tracking-widest text-on-surface-variant uppercase">On This Page</span>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors p-1" title="Collapse Outline" type="button">
+<span class="material-symbols-outlined text-[15px]">vertical_align_top</span>
+</button>
+</div>
+<!-- TOC Jump List -->
+<nav class="space-y-1 text-xs">
+<!-- Active TOC Item -->
+<a class="group flex items-center gap-2 py-1.5 text-on-surface font-semibold relative" href="#architecture-topology">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed-dim"></span>
+<span class="truncate">Architecture Topology</span>
+</a>
+<a class="group flex items-center gap-2 py-1.5 text-on-surface-variant hover:text-on-surface transition-colors" href="#core-components">
+<span class="w-1 h-1 rounded-full bg-outline-variant group-hover:bg-on-surface"></span>
+<span class="truncate">Core Components</span>
+</a>
+<!-- Nested TOC sub-items -->
+<div class="pl-4 space-y-1 text-[11px] text-on-surface-variant">
+<a class="block py-1 hover:text-on-surface transition-colors truncate" href="#">
+            Envoy Gateway
+          </a>
+<a class="block py-1 hover:text-on-surface transition-colors truncate" href="#">
+            Event Dispatcher
+          </a>
+<a class="block py-1 hover:text-on-surface transition-colors truncate" href="#">
+            Persistence Layer
+          </a>
+</div>
+<a class="group flex items-center gap-2 py-1.5 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="w-1 h-1 rounded-full bg-outline-variant group-hover:bg-on-surface"></span>
+<span class="truncate">Configuration Schema</span>
+</a>
+<a class="group flex items-center gap-2 py-1.5 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="w-1 h-1 rounded-full bg-outline-variant group-hover:bg-on-surface"></span>
+<span class="truncate">Security &amp; Tenant Isolation</span>
+</a>
+</nav>
+<!-- Document Actions -->
+<div class="pt-4 space-y-2 border-t border-surface-container-highest">
+<span class="text-[10px] font-mono uppercase text-on-surface-variant font-bold tracking-wider">Quick Actions</span>
+<button class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded bg-surface-container-low hover:bg-surface-container text-xs text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">file_copy</span>
+<span>Copy Raw Markdown</span>
+</button>
+<button class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded bg-surface-container-low hover:bg-surface-container text-xs text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">terminal</span>
+<span>Open in VS Code</span>
+</button>
+<button class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded bg-surface-container-low hover:bg-surface-container text-xs text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">picture_as_pdf</span>
+<span>Export Clean PDF</span>
+</button>
+</div>
+<!-- Mineral Precision Cairn Metadata Card -->
+<div class="p-3 rounded-lg bg-surface-container-low space-y-2">
+<div class="flex items-center gap-2">
+<!-- Waypoint geometry icon -->
+<div class="w-3.5 h-3.5 rounded bg-secondary-fixed flex items-center justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-on-secondary-fixed"></span>
+</div>
+<span class="text-[10px] font-mono font-bold uppercase text-on-surface">Index Spec</span>
+</div>
+<div class="space-y-1 text-[10px] font-mono text-on-surface-variant">
+<div class="flex justify-between">
+<span>Node UUID:</span>
+<span class="text-on-surface">kn-9840-arch</span>
+</div>
+<div class="flex justify-between">
+<span>Hash:</span>
+<span class="text-on-surface">sha256:4f8e...</span>
+</div>
+<div class="flex justify-between">
+<span>Encoding:</span>
+<span class="text-on-surface">UTF-8 / LF</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></main></div>
+
+</body></html>

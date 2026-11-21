@@ -1,0 +1,517 @@
+<!DOCTYPE html><html lang="en"><svg class="inline-defs-container" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"></svg><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>System Overview · Marketing Backend · Kairn</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Syne:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-tint": "#575f66",
+            "on-background": "#20282E",
+            "surface-container-lowest": "#ffffff",
+            "outline": "#74777b",
+            "surface-container-low": "#F4F6F7",
+            "surface-container": "#EAEFF2",
+            "primary": "#20282E",
+            "primary-container": "#20282E",
+            "on-primary": "#ffffff",
+            "secondary": "#6a5f00",
+            "secondary-container": "#f8e54d",
+            "background": "#F4F6F7",
+            "kairn-yellow": "#E4D13A",
+            "kairn-graphite": "#20282E",
+            "kairn-titanium": "#F8FAFB",
+            "hairline": "#E5E7EB",
+          },
+          fontFamily: {
+            headline: ["Syne", "sans-serif"],
+            display: ["Syne", "sans-serif"],
+            body: ["Plus Jakarta Sans", "sans-serif"],
+            mono: ["IBM Plex Mono", "monospace"],
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    body {
+      background-color: #F4F6F7;
+      color: #20282E;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #DCE1E5;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #B8C2CC;
+    }
+  </style>
+</head>
+<body class="bg-[#F4F6F7] text-[#20282E] antialiased selection:bg-[#E4D13A]/30">
+<!-- 1. TOP APPLICATION BAR (54px high) -->
+<header class="fixed top-0 left-0 right-0 z-50 h-[54px] bg-white border-b border-[#E5E7EB] px-6 flex items-center justify-between relative"><div class="flex items-center gap-3 shrink-0"><a class="flex items-center gap-3 transition-opacity hover:opacity-90 shrink-0" href="#"><svg class="h-6 w-auto" fill="none" viewBox="0 0 170 42" xmlns="http://www.w3.org/2000/svg"><g transform="translate(2, 6)"><rect fill="#E4D13A" height="8" rx="2" width="16" x="13" y="0"></rect><circle cx="21" cy="4" fill="#20282E" r="1.3"></circle><rect fill="#20282E" height="9" rx="2.5" width="30" x="6" y="11"></rect><line stroke="#FFFFFF" stroke-linecap="round" stroke-width="1.3" x1="14" x2="28" y1="15.5" y2="15.5"></line><rect fill="#20282E" height="11" rx="3" width="42" x="0" y="23"></rect><rect fill="#E4D13A" height="2.5" rx="1.2" width="8" x="4" y="27"></rect><text fill="#20282E" font-family="'Syne', sans-serif" font-size="28" font-weight="700" letter-spacing="-0.03em" x="56" y="29">kairn</text><circle cx="132" cy="27" fill="#E4D13A" r="3.5"></circle></g></svg></a><div class="h-4 w-[1px] bg-[#E5E7EB]"></div><div class="relative group cursor-pointer"><button class="flex items-center gap-2 px-2.5 py-1 rounded-md hover:bg-[#F4F6F7] transition-colors text-left" type="button"><span class="w-2 h-2 rounded-full bg-[#E4D13A] shrink-0"></span><span class="text-[13px] font-headline font-bold text-[#20282E] truncate">Marketing Backend</span><span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono text-gray-500 bg-[#F4F6F7] border border-[#E5E7EB]"><span class="material-symbols-outlined text-[11px]">fork_right</span><span>git:main</span></span><span class="material-symbols-outlined text-[15px] text-gray-400 group-hover:text-[#20282E] transition-colors ml-0.5">expand_more</span></button></div></div><div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[360px] flex items-center"><span class="material-symbols-outlined absolute left-3 text-[17px] text-gray-400 select-none pointer-events-none">search</span><input class="w-full h-8 pl-9 pr-14 bg-[#F8FAFB] border border-[#E5E7EB] rounded-md text-xs text-[#20282E] placeholder:text-gray-400 focus:outline-none focus:border-[#20282E] focus:bg-white transition-all cursor-pointer" placeholder="Search documentation or jump to..." readonly="" type="text"><kbd class="absolute right-2 px-1.5 py-0.5 text-[10px] font-mono text-gray-400 bg-white border border-[#E5E7EB] rounded shadow-xs select-none pointer-events-none">⌘K</kbd></div><div class="flex items-center gap-1.5 shrink-0"><button class="w-8 h-8 rounded-md flex items-center justify-center text-gray-500 hover:text-[#20282E] hover:bg-[#F4F6F7] transition-colors" title="Toggle Theme" type="button"><span class="material-symbols-outlined text-[18px]">light_mode</span></button><button class="w-8 h-8 rounded-md flex items-center justify-center text-gray-500 hover:text-[#20282E] hover:bg-[#F4F6F7] transition-colors" title="Documentation Settings" type="button"><span class="material-symbols-outlined text-[18px]">tune</span></button></div></header>
+<!-- WORKSPACE WRAPPER -->
+<div class="pt-[54px] min-h-screen flex">
+<!-- 2. UNIFIED LEFT SIDEBAR (268px wide) -->
+<aside class="fixed top-[54px] left-0 bottom-0 w-[268px] bg-white border-r border-[#E5E7EB] flex flex-col justify-between z-30 select-none">
+<div class="flex-1 overflow-y-auto px-3.5 py-4 space-y-4">
+<!-- Project Return Affordance & Selector -->
+
+<!-- Project-Level Navigation -->
+<nav class="space-y-0.5">
+<!-- Active Documentation link -->
+<a class="flex items-center justify-between h-9 px-2.5 rounded-md bg-[#20282E] text-white text-[13px] font-medium shadow-xs" href="#">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[17px] text-[#E4D13A]">article</span>
+<span>Documentation</span>
+</div>
+<span class="w-1.5 h-1.5 rounded-full bg-[#E4D13A]"></span>
+</a>
+<a class="flex items-center justify-between h-9 px-2.5 rounded-md text-gray-600 hover:text-[#20282E] hover:bg-[#F4F6F7] text-[13px] font-medium transition-colors" href="#">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[17px] text-gray-400">commit</span>
+<span>Git History</span>
+</div>
+<span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#F4F6F7] text-gray-500 border border-[#E5E7EB]">142</span>
+</a>
+<a class="flex items-center gap-2.5 h-9 px-2.5 rounded-md text-gray-600 hover:text-[#20282E] hover:bg-[#F4F6F7] text-[13px] font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-[17px] text-gray-400">settings</span>
+<span>Project Settings</span>
+</a>
+</nav>
+<!-- Subtle 1px Hairline Divider -->
+<div class="h-[1px] bg-[#E5E7EB]"></div>
+<!-- Hierarchical Documentation Tree -->
+<div class="space-y-3">
+<div class="flex items-center justify-between px-1">
+<span class="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">Navigation Tree</span>
+</div>
+<div class="space-y-0.5">
+<!-- Overview -->
+<a class="flex items-center gap-2.5 h-8 px-2 rounded-md text-gray-600 hover:text-[#20282E] hover:bg-[#F4F6F7] text-[13px] transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px] text-gray-400">description</span>
+<span>Overview</span>
+</a>
+<!-- Architecture (Expanded Group) -->
+<div class="space-y-0.5">
+<div class="flex items-center justify-between h-8 px-2 rounded-md text-[#20282E] font-semibold text-[13px] cursor-pointer hover:bg-[#F4F6F7] transition-colors">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-gray-500">folder_open</span>
+<span>Architecture</span>
+</div>
+<span class="material-symbols-outlined text-[14px] text-gray-400">expand_more</span>
+</div>
+<!-- Sub-items with Active Node Marker -->
+<div class="pl-3.5 ml-2.5 border-l border-[#E5E7EB] space-y-0.5">
+<!-- SELECTED DOCUMENT: Highlighted with subtle active pill, 3px Mineral Yellow bar -->
+<a class="relative flex items-center justify-between h-8 px-2.5 rounded bg-[#F4F6F7] text-[#20282E] font-medium text-[13px]" href="#">
+<span class="absolute -left-[15px] top-1.5 bottom-1.5 w-[3px] bg-[#E4D13A] rounded-full"></span>
+<span class="truncate">System Overview</span>
+<span class="w-1.5 h-1.5 rounded-full bg-[#E4D13A]"></span>
+</a>
+<a class="flex items-center h-8 px-2.5 rounded text-gray-600 hover:text-[#20282E] hover:bg-[#F4F6F7] text-[13px] transition-colors" href="#">
+<span class="truncate">Database Design</span>
+</a>
+<a class="flex items-center h-8 px-2.5 rounded text-gray-600 hover:text-[#20282E] hover:bg-[#F4F6F7] text-[13px] transition-colors" href="#">
+<span class="truncate">Authentication</span>
+</a>
+</div>
+</div>
+<!-- API Reference (Collapsed Group) -->
+<div class="flex items-center justify-between h-8 px-2 rounded-md text-gray-600 hover:text-[#20282E] hover:bg-[#F4F6F7] text-[13px] cursor-pointer transition-colors">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-gray-400">folder</span>
+<span>API Reference</span>
+</div>
+<span class="material-symbols-outlined text-[14px] text-gray-400">chevron_right</span>
+</div>
+<!-- Deployment (Collapsed Group) -->
+<div class="flex items-center justify-between h-8 px-2 rounded-md text-gray-600 hover:text-[#20282E] hover:bg-[#F4F6F7] text-[13px] cursor-pointer transition-colors">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-gray-400">folder</span>
+<span>Deployment</span>
+</div>
+<span class="material-symbols-outlined text-[14px] text-gray-400">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Subtle Separator -->
+<div class="h-[1px] bg-[#E5E7EB]"></div>
+<!-- Additional Sources -->
+<div class="space-y-2">
+<span class="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider px-1 block">Additional Sources</span>
+<div class="space-y-0.5">
+<a class="flex items-center justify-between h-7 px-2 rounded-md text-gray-600 hover:text-[#20282E] hover:bg-[#F4F6F7] text-xs transition-colors" href="#">
+<div class="flex items-center gap-2 truncate">
+<span class="material-symbols-outlined text-[15px] text-gray-400">feed</span>
+<span class="truncate">Project README</span>
+</div>
+<span class="text-[10px] font-mono text-gray-400">README.md</span>
+</a>
+<a class="flex items-center justify-between h-7 px-2 rounded-md text-gray-600 hover:text-[#20282E] hover:bg-[#F4F6F7] text-xs transition-colors" href="#">
+<div class="flex items-center gap-2 truncate">
+<span class="material-symbols-outlined text-[15px] text-gray-400">rate_review</span>
+<span class="truncate">Engineering Notes</span>
+</div>
+<span class="text-[10px] font-mono text-gray-400">decisions.md</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Bottom Footer: Minimal clean local repository indicator -->
+<div class="p-3 border-t border-[#E5E7EB] bg-white">
+<div class="flex items-center justify-between text-[11px] text-gray-500 font-mono">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+<span>Synced · git fetch 4m ago</span>
+</div>
+<button class="text-gray-400 hover:text-[#20282E] transition-colors p-0.5" title="Fetch updates" type="button">
+<span class="material-symbols-outlined text-[14px]">refresh</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- MAIN CONTENT PLANE -->
+<div class="pl-[268px] flex-1 flex justify-center min-w-0">
+<!-- 3. CENTRAL DOCUMENT READER (center-aligned max-w-[780px] reading column) -->
+<main class="w-full max-w-[820px] px-8 pb-24 pt-5">
+<!-- Breadcrumbs (Clean, non-noisy) -->
+<div class="flex items-center justify-between text-xs text-gray-400 font-mono mb-4">
+<div class="flex items-center gap-2">
+<span class="hover:text-gray-600 cursor-pointer transition-colors">marketing-backend</span>
+<span>/</span>
+<span class="hover:text-gray-600 cursor-pointer transition-colors">architecture</span>
+<span>/</span>
+<span class="text-[#20282E] font-medium">system-overview.md</span>
+</div>
+<button class="flex items-center gap-1 text-[11px] text-gray-400 hover:text-[#20282E] transition-colors" onclick="navigator.clipboard.writeText(document.querySelector('main').innerText)" title="Copy document" type="button"><span class="material-symbols-outlined text-[14px]">content_copy</span><span>Copy document</span></button>
+</div>
+<!-- Document Header Area -->
+<div class="mb-8">
+  <h1 class="text-[36px] leading-[44px] font-headline font-bold text-[#20282E] tracking-tight mb-3">System Overview</h1>
+  <div class="flex items-center gap-3 text-xs text-gray-500 font-mono">
+    <span>Created May 12, 2026</span>
+    <span>·</span>
+    <div class="flex items-center gap-1.5">
+      <span class="w-4 h-4 rounded-full bg-[#20282E] text-white flex items-center justify-center text-[9px] font-sans font-bold">ER</span>
+      <span class="text-[#20282E] font-medium">Elena Rostova</span>
+    </div>
+    <span>·</span>
+    <a href="#" class="text-gray-400 hover:text-[#20282E] transition-colors flex items-center gap-0.5">
+      <span class="material-symbols-outlined text-[13px]">history</span>
+      <span>View history</span>
+    </a>
+  </div>
+</div>
+<!-- Lead Paragraph: 16px body text in Plus Jakarta Sans, 27px line-height, text color #374151 -->
+<div class="mb-9">
+<p class="text-[16px] leading-[27px] text-[#374151]">
+            The <strong class="font-semibold text-[#20282E]">Marketing Backend</strong> orchestrates multi-channel audience targeting, behavioral segmentation, and dynamic campaign payload dispatching. It is constructed as an event-driven cluster utilizing asynchronous message ingestion, deterministic idempotency filters, and distributed Redis key-space notifications to ensure sub-50ms message processing at continuous peak loads exceeding 40,000 requests per second.
+          </p>
+</div>
+<!-- Callout: Architectural Directive box with clean Titanium background (#F8FAFB), left 3px solid #E4D13A -->
+<div class="relative p-5 rounded-lg bg-[#F8FAFB] border border-[#E5E7EB] mb-9 pl-6">
+<div class="absolute left-0 top-0 bottom-0 w-[3px] bg-[#E4D13A] rounded-l"></div>
+<div class="flex items-center gap-2 text-[13px] font-semibold text-[#20282E] mb-1.5">
+<span class="material-symbols-outlined text-[18px] text-[#20282E]">shield</span>
+<span>Architectural Directive: Distributed Tracing &amp; Tenant Isolation</span>
+</div>
+<p class="text-[15px] leading-[25px] text-[#374151]">
+            Every ingress request must propagate standard OpenTelemetry context headers (<code class="px-1.5 py-0.5 rounded bg-[#EAEFF2] text-xs font-mono text-[#20282E]">traceparent</code>, <code class="px-1.5 py-0.5 rounded bg-[#EAEFF2] text-xs font-mono text-[#20282E]">x-tenant-partition-id</code>). Requests lacking a verifiable cryptographically signed tenant token will terminate at the Envoy perimeter prior to internal queue publication.
+          </p>
+</div>
+<!-- Section: Architecture Topology -->
+<section class="mb-10 scroll-mt-20" id="architecture-topology">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-[26px] leading-[34px] font-headline font-bold text-[#20282E] tracking-tight">
+              Architecture Topology
+            </h2>
+<span class="text-[10px] font-mono text-gray-400 bg-white border border-[#E5E7EB] px-2 py-0.5 rounded">
+              FIG-01
+            </span>
+</div>
+<p class="text-[15px] leading-[25px] text-[#374151] mb-5">
+            The topological flow decouples edge ingress validation from asynchronous workload processing, maintaining strict single-direction pipelines through the persistence matrix:
+          </p>
+<!-- Wide, crisp vector graphic container (approx 740px wide) -->
+<div class="w-full bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-xs overflow-x-auto">
+<svg class="w-full min-w-[700px] h-auto" fill="none" viewBox="0 0 740 250" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="arrow" markerHeight="6" markerWidth="6" orient="auto-start-reverse" refX="6" refY="5" viewBox="0 0 10 10">
+<path d="M 0 1 L 8 5 L 0 9 z" fill="#20282E"></path>
+</marker>
+<marker id="arrow-accent" markerHeight="6" markerWidth="6" orient="auto-start-reverse" refX="6" refY="5" viewBox="0 0 10 10">
+<path d="M 0 1 L 8 5 L 0 9 z" fill="#6a5f00"></path>
+</marker>
+</defs>
+<!-- Node 1: Client Layer -->
+<g transform="translate(10, 80)">
+<rect fill="#F8FAFB" height="85" rx="6" stroke="#DCE1E5" stroke-width="1.5" width="115"></rect>
+<rect fill="#EAEFF2" height="22" rx="6" width="115"></rect>
+<text fill="#20282E" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" x="10" y="15">CLIENT LAYER</text>
+<text fill="#20282E" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="600" x="10" y="44">Web &amp; SDK</text>
+<text fill="#575f66" font-family="'IBM Plex Mono', monospace" font-size="9" x="10" y="60">HTTPS / TLS 1.3</text>
+<text fill="#20282E" font-family="'IBM Plex Mono', monospace" font-size="9" x="10" y="74">Port :443</text>
+</g>
+<!-- Line: Client -> Envoy -->
+<path d="M 125 122 L 165 122" marker-end="url(#arrow)" stroke="#20282E" stroke-dasharray="3 3" stroke-width="1.5"></path>
+<!-- Node 2: Envoy Gateway -->
+<g transform="translate(170, 68)">
+<rect fill="#FFFFFF" height="110" rx="6" stroke="#20282E" stroke-width="2" width="130"></rect>
+<rect fill="#20282E" height="24" rx="6" width="130"></rect>
+<text fill="#FFFFFF" font-family="'Syne', sans-serif" font-size="10" font-weight="700" x="10" y="16">REVERSE PROXY</text>
+<circle cx="118" cy="12" fill="#E4D13A" r="3.5"></circle>
+<text fill="#20282E" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="700" x="12" y="46">Envoy Gateway</text>
+<text fill="#575f66" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" x="12" y="64">Rate Limiting · WAF</text>
+<text fill="#575f66" font-family="'IBM Plex Mono', monospace" font-size="9" x="12" y="80">JWT Verification</text>
+<rect fill="#F8FAFB" height="14" rx="3" stroke="#E5E7EB" width="106" x="12" y="88"></rect>
+<text fill="#20282E" font-family="'IBM Plex Mono', monospace" font-size="8.5" x="18" y="99">latency &lt; 2.1ms</text>
+</g>
+<!-- Lines: Envoy to Engines -->
+<path d="M 300 105 L 345 68" marker-end="url(#arrow-accent)" stroke="#6a5f00" stroke-width="2"></path>
+<path d="M 300 142 L 345 178" marker-end="url(#arrow)" stroke="#20282E" stroke-width="1.5"></path>
+<!-- Node 3A: Campaign Core -->
+<g transform="translate(350, 30)">
+<rect fill="#FFFFFF" height="74" rx="6" stroke="#DCE1E5" stroke-width="1.5" width="150"></rect>
+<rect fill="#F4F6F7" height="18" rx="6" width="150"></rect>
+<text fill="#575f66" font-family="'IBM Plex Mono', monospace" font-size="9" font-weight="600" x="10" y="13">SVC // ENGINE</text>
+<text fill="#20282E" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="700" x="10" y="38">Campaign Core</text>
+<text fill="#575f66" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" x="10" y="52">State Machine (Go)</text>
+<text fill="#20282E" font-family="'IBM Plex Mono', monospace" font-size="9" x="10" y="66">gRPC :9091</text>
+</g>
+<!-- Node 3B: Audience Engine -->
+<g transform="translate(350, 145)">
+<rect fill="#FFFFFF" height="74" rx="6" stroke="#DCE1E5" stroke-width="1.5" width="150"></rect>
+<rect fill="#F4F6F7" height="18" rx="6" width="150"></rect>
+<text fill="#575f66" font-family="'IBM Plex Mono', monospace" font-size="9" font-weight="600" x="10" y="13">SVC // SEGMENTATION</text>
+<text fill="#20282E" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="700" x="10" y="38">Audience Engine</text>
+<text fill="#575f66" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" x="10" y="52">Graph Evaluator (Rust)</text>
+<text fill="#20282E" font-family="'IBM Plex Mono', monospace" font-size="9" x="10" y="66">gRPC :9092</text>
+</g>
+<!-- Lines: Engines to Persistence -->
+<path d="M 500 66 L 555 102" marker-end="url(#arrow-accent)" stroke="#6a5f00" stroke-width="2"></path>
+<path d="M 500 182 L 555 146" marker-end="url(#arrow)" stroke="#20282E" stroke-width="1.5"></path>
+<!-- Node 4: Persistence Matrix -->
+<g transform="translate(560, 68)">
+<rect fill="#FFFFFF" height="114" rx="6" stroke="#20282E" stroke-width="1.5" width="165"></rect>
+<rect fill="#EAEFF2" height="24" rx="6" width="165"></rect>
+<text fill="#20282E" font-family="'Syne', sans-serif" font-size="10" font-weight="700" x="10" y="16">PERSISTENCE MATRIX</text>
+<!-- Kafka -->
+<rect fill="#F8FAFB" height="34" rx="4" stroke="#E5E7EB" width="149" x="8" y="32"></rect>
+<text fill="#20282E" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" x="14" y="46">Kafka Cluster (3-Node)</text>
+<text fill="#575f66" font-family="'IBM Plex Mono', monospace" font-size="8" x="14" y="58">events.marketing.dispatch</text>
+<!-- Postgres -->
+<rect fill="#F8FAFB" height="34" rx="4" stroke="#E5E7EB" width="149" x="8" y="71"></rect>
+<text fill="#20282E" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" x="14" y="85">PostgreSQL 16 + Replica</text>
+<text fill="#575f66" font-family="'IBM Plex Mono', monospace" font-size="8" x="14" y="97">WAL streaming / HA</text>
+</g>
+</svg>
+</div>
+</section>
+<!-- Section: Core Components -->
+<section class="mb-10 scroll-mt-20" id="core-components">
+<h2 class="text-[26px] leading-[34px] font-headline font-bold text-[#20282E] tracking-tight mb-3">
+            Core Components
+          </h2>
+<p class="text-[15px] leading-[25px] text-[#374151] mb-5">
+            The infrastructure is partitioned into modular runtime daemons that execute independently across the Kubernetes cluster topology.
+          </p>
+<!-- Technical Comparison Table: Clean styling, generous padding (py-3 px-4) -->
+<div class="w-full bg-white border border-[#E5E7EB] rounded-lg overflow-hidden shadow-xs mb-8">
+<table class="w-full text-left text-[14px]">
+<thead class="bg-[#F8FAFB] border-b border-[#E5E7EB] font-mono text-[11px] uppercase tracking-wider text-gray-500">
+<tr>
+<th class="py-3 px-4 font-semibold">Subsystem</th>
+<th class="py-3 px-4 font-semibold">Language Runtime</th>
+<th class="py-3 px-4 font-semibold">SLA Threshold</th>
+<th class="py-3 px-4 font-semibold">Scale Model</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#E5E7EB] text-[#20282E]">
+<tr class="hover:bg-[#F8FAFB] transition-colors">
+<td class="py-3 px-4 font-medium flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-[#E4D13A]"></span>
+<span>Envoy Proxy</span>
+</td>
+<td class="py-3 px-4 font-mono text-xs text-gray-600">C++ / Envoy 1.28</td>
+<td class="py-3 px-4 font-mono text-xs text-emerald-700 font-medium">p99 &lt; 3.0ms</td>
+<td class="py-3 px-4 text-xs text-gray-600">HPA · CPU &gt; 70%</td>
+</tr>
+<tr class="hover:bg-[#F8FAFB] transition-colors">
+<td class="py-3 px-4 font-medium flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-[#20282E]"></span>
+<span>Campaign Core</span>
+</td>
+<td class="py-3 px-4 font-mono text-xs text-gray-600">Go 1.22.3</td>
+<td class="py-3 px-4 font-mono text-xs text-emerald-700 font-medium">p99 &lt; 14ms</td>
+<td class="py-3 px-4 text-xs text-gray-600">Stateless Deployment (12x)</td>
+</tr>
+<tr class="hover:bg-[#F8FAFB] transition-colors">
+<td class="py-3 px-4 font-medium flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-[#20282E]"></span>
+<span>Audience Evaluator</span>
+</td>
+<td class="py-3 px-4 font-mono text-xs text-gray-600">Rust 1.78 (Tokio)</td>
+<td class="py-3 px-4 font-mono text-xs text-emerald-700 font-medium">p99 &lt; 8.5ms</td>
+<td class="py-3 px-4 text-xs text-gray-600">Cluster Queue Workers</td>
+</tr>
+<tr class="hover:bg-[#F8FAFB] transition-colors">
+<td class="py-3 px-4 font-medium flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-[#20282E]"></span>
+<span>Event Dispatcher</span>
+</td>
+<td class="py-3 px-4 font-mono text-xs text-gray-600">Node.js 20 LTS</td>
+<td class="py-3 px-4 font-mono text-xs text-amber-700 font-medium">p99 &lt; 35ms</td>
+<td class="py-3 px-4 text-xs text-gray-600">KEDA Event Consumers</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Syntax-Highlighted Code Block: Dark graphite terminal theme -->
+<div class="rounded-xl overflow-hidden bg-[#20282E] shadow-md border border-[#20282E] mb-8" id="event-dispatcher-code">
+<!-- Window header -->
+<div class="px-4 py-2.5 bg-[#171D22] flex items-center justify-between border-b border-[#2D373E]">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></span>
+<span class="font-mono text-xs text-gray-300 pl-2">src/services/event-dispatcher.ts</span>
+</div>
+<button class="flex items-center gap-1 text-[11px] font-mono text-gray-400 hover:text-white transition-colors" onclick="navigator.clipboard.writeText('// Event Dispatcher code snippet copied')" title="Copy code" type="button">
+<span class="material-symbols-outlined text-[13px]">content_copy</span>
+<span>Copy</span>
+</button>
+</div>
+<!-- Code content: IBM Plex Mono 13px -->
+<div class="p-4 font-mono text-[13px] leading-relaxed text-gray-200 overflow-x-auto">
+<pre><code><span class="text-[#E4D13A]">import</span> { Kafka, Producer, CompressionTypes } <span class="text-[#E4D13A]">from</span> <span class="text-emerald-400">'kafkajs'</span>;
+<span class="text-[#E4D13A]">import</span> { TraceContext, injectSpan } <span class="text-[#E4D13A]">from</span> <span class="text-emerald-400">'@kairn/telemetry'</span>;
+
+<span class="text-gray-400">// Partition-keyed campaign egress envelope</span>
+<span class="text-[#E4D13A]">export interface</span> <span class="text-yellow-200">CampaignDispatchEvent</span>&lt;<span class="text-yellow-200">T</span> = <span class="text-cyan-300">Record</span>&lt;<span class="text-yellow-200">string</span>, <span class="text-yellow-200">unknown</span>&gt;&gt; {
+  <span class="text-cyan-300">tenantId</span>: <span class="text-yellow-200">string</span>;
+  <span class="text-cyan-300">campaignId</span>: <span class="text-yellow-200">string</span>;
+  <span class="text-cyan-300">audienceSegmentId</span>: <span class="text-yellow-200">string</span>;
+  <span class="text-cyan-300">payload</span>: <span class="text-yellow-200">T</span>;
+  <span class="text-cyan-300">idempotencyKey</span>: <span class="text-yellow-200">string</span>;
+  <span class="text-cyan-300">timestamp</span>: <span class="text-yellow-200">number</span>;
+}
+
+<span class="text-[#E4D13A]">export class</span> <span class="text-yellow-200">EventDispatcher</span> {
+  <span class="text-[#E4D13A]">private</span> <span class="text-cyan-300">producer</span>: <span class="text-yellow-200">Producer</span>;
+
+  <span class="text-[#E4D13A]">constructor</span>(<span class="text-[#E4D13A]">private readonly</span> <span class="text-cyan-300">kafkaCluster</span>: <span class="text-yellow-200">Kafka</span>) {
+    <span class="text-cyan-300">this</span>.<span class="text-cyan-300">producer</span> = <span class="text-cyan-300">this</span>.<span class="text-cyan-300">kafkaCluster</span>.<span class="text-cyan-300">producer</span>({ <span class="text-cyan-300">allowAutoTopicCreation</span>: <span class="text-[#E4D13A]">false</span> });
+  }
+
+  <span class="text-[#E4D13A]">public async</span> <span class="text-yellow-200">publishDispatch</span>(
+    <span class="text-cyan-300">event</span>: <span class="text-yellow-200">CampaignDispatchEvent</span>,
+    <span class="text-cyan-300">ctx</span>: <span class="text-yellow-200">TraceContext</span>
+  ): <span class="text-yellow-200">Promise</span>&lt;<span class="text-yellow-200">void</span>&gt; {
+    <span class="text-[#E4D13A]">const</span> <span class="text-cyan-300">traceHeaders</span> = <span class="text-yellow-200">injectSpan</span>(<span class="text-cyan-300">ctx</span>);
+
+    <span class="text-[#E4D13A]">await</span> <span class="text-cyan-300">this</span>.<span class="text-cyan-300">producer</span>.<span class="text-yellow-200">send</span>({
+      <span class="text-cyan-300">topic</span>: <span class="text-emerald-400">`marketing.events.${event.tenantId}`</span>,
+      <span class="text-cyan-300">compression</span>: <span class="text-yellow-200">CompressionTypes</span>.<span class="text-yellow-200">GZIP</span>,
+      <span class="text-cyan-300">messages</span>: [{
+        <span class="text-cyan-300">key</span>: <span class="text-cyan-300">event</span>.<span class="text-cyan-300">campaignId</span>,
+        <span class="text-cyan-300">value</span>: <span class="text-yellow-200">JSON</span>.<span class="text-yellow-200">stringify</span>(<span class="text-cyan-300">event</span>),
+        <span class="text-cyan-300">headers</span>: {
+          ...<span class="text-cyan-300">traceHeaders</span>,
+          <span class="text-emerald-400">'x-idempotency-key'</span>: <span class="text-cyan-300">event</span>.<span class="text-cyan-300">idempotencyKey</span>,
+        },
+      }],
+    });
+  }
+}</code></pre>
+</div>
+</div>
+</section>
+<!-- Internal documentation links: Clean callout -->
+<div class="p-4 rounded-lg bg-white border border-[#E5E7EB] mb-12 scroll-mt-20" id="related-documentation">
+<div class="text-[11px] font-mono uppercase font-semibold text-gray-500 tracking-wider mb-1.5">
+            Related Documentation
+          </div>
+<p class="text-[14px] text-[#374151]">
+            Refer to <a class="font-semibold text-[#20282E] underline decoration-[#E4D13A] decoration-2 underline-offset-2 hover:text-[#6a5f00] transition-colors" href="#">Database Design</a> for partition schema definitions, and review <a class="font-semibold text-[#20282E] underline decoration-[#E4D13A] decoration-2 underline-offset-2 hover:text-[#6a5f00] transition-colors" href="#">Authentication &amp; JWT</a> for session revocation protocol.
+          </p>
+</div>
+<!-- Previous / Next Navigation: Generous, understated cards -->
+<div class="pt-8 border-t border-[#E5E7EB] grid grid-cols-2 gap-4">
+<a class="p-4 rounded-lg bg-white border border-[#E5E7EB] hover:border-[#20282E] transition-all group flex flex-col items-start gap-1" href="#">
+<span class="text-[11px] font-mono text-gray-400 group-hover:text-[#20282E] transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">arrow_back</span>
+<span>Previous</span>
+</span>
+<span class="font-headline font-semibold text-[14px] text-[#20282E]">Overview</span>
+</a>
+<a class="p-4 rounded-lg bg-white border border-[#E5E7EB] hover:border-[#20282E] transition-all group flex flex-col items-end text-right gap-1" href="#">
+<span class="text-[11px] font-mono text-gray-400 group-hover:text-[#20282E] transition-colors flex items-center gap-1">
+<span>Next</span>
+<span class="material-symbols-outlined text-[13px]">arrow_forward</span>
+</span>
+<span class="font-headline font-semibold text-[14px] text-[#20282E]">Database Design</span>
+</a>
+</div>
+</main>
+<!-- 4. RIGHT ON-PAGE DOCUMENT OUTLINE (190px wide, sticky, visually quiet) -->
+<aside class="w-[190px] shrink-0 hidden xl:block pr-6 pl-2 pt-5">
+<div class="sticky top-[78px] space-y-3">
+<!-- Header -->
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-mono font-medium tracking-wider text-gray-400 uppercase">ON THIS PAGE</span>
+<button class="text-gray-400 hover:text-[#20282E] transition-colors" title="Collapse outline" type="button">
+<span class="material-symbols-outlined text-[14px]">unfold_less</span>
+</button>
+</div>
+<!-- Outline Hierarchy -->
+<nav class="space-y-1.5 text-[13px]">
+<!-- Active section with subtle #E4D13A waypoint indicator -->
+<a class="group flex items-center gap-2 font-medium text-[#20282E] transition-colors" href="#architecture-topology">
+<span class="w-1.5 h-1.5 rounded-full bg-[#E4D13A] shrink-0"></span>
+<span class="truncate">Architecture Topology</span>
+</a>
+<div>
+<a class="group flex items-center gap-2 text-gray-500 hover:text-[#20282E] transition-colors py-0.5" href="#core-components">
+<span class="w-1.5 h-1.5 rounded-full bg-transparent group-hover:bg-gray-300 shrink-0"></span>
+<span class="truncate">Core Components</span>
+</a>
+<!-- Subsections -->
+<div class="pl-4 space-y-1 mt-1 text-xs text-gray-400 border-l border-[#E5E7EB] ml-2">
+<a class="block hover:text-[#20282E] transition-colors truncate" href="#core-components">
+                  Subsystem Runtimes
+                </a>
+<a class="block hover:text-[#20282E] transition-colors truncate" href="#event-dispatcher-code">
+                  Event Dispatcher
+                </a>
+</div>
+</div>
+<a class="group flex items-center gap-2 text-gray-500 hover:text-[#20282E] transition-colors pt-1" href="#related-documentation">
+<span class="w-1.5 h-1.5 rounded-full bg-transparent group-hover:bg-gray-300 shrink-0"></span>
+<span class="truncate">Related Documentation</span>
+</a>
+</nav>
+</div>
+</aside>
+</div>
+</div>
+
+
+</body></html>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80" fill="none">
+  <!-- Direction A: Full Horizontal Lockup (Cairn Mark + kairn. Wordmark with Mineral dot) -->
+  <g transform="translate(10, 14)">
+    <!-- Symbol -->
+    <rect x="16" y="0" width="18" height="9" rx="2.5" fill="#E4D13A"/>
+    <rect x="8" y="14" width="34" height="11" rx="3" fill="#20282E"/>
+    <rect x="0" y="30" width="50" height="14" rx="4" fill="#20282E"/>
+    
+    <!-- Wordmark text rendered with precise geometric paths/styling -->
+    <text x="68" y="37" font-family="'Syne', sans-serif" font-size="34" font-weight="700" fill="#20282E" letter-spacing="-0.03em">kairn</text>
+    <!-- Characteristic Mineral Dot/Line Wayfinding anchor -->
+    <circle cx="158" cy="34" r="4.5" fill="#E4D13A"/>
+  </g>
+</svg>

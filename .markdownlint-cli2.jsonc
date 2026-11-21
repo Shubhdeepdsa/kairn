@@ -5,7 +5,7 @@
     "dist/**",
     "playwright-report/**",
     "test-results/**",
-    "designs/**",
+    "agent-prompts/**",
     "temp.md",
   ],
   "config": { "MD013": false, "MD060": false },

@@ -1,0 +1,131 @@
+<!DOCTYPE html><html class="h-full bg-[#fbfcfd] text-[#20282e]" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<title>Kairn — Git History Explorer (Marketing Backend)</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Syne:wght@600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            graphite: '#20282e',
+            mineral: {
+              yellow: '#E4D13A',
+              DEFAULT: '#E4D13A',
+              hover: '#d6c332',
+              light: '#fdfceb'
+            },
+            surface: {
+              subtle: '#f4f6f8',
+              card: '#ffffff',
+              muted: '#eceff2'
+            },
+            border: {
+              subtle: '#e2e7ec',
+              muted: '#edf1f4'
+            }
+          },
+          fontFamily: {
+            syne: ['Syne', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #d8dee4;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #bcc4cc;
+    }
+  </style>
+<meta content="web_dashboard" name="shell-type"></head>
+<body class="h-full flex flex-col bg-[#fbfcfd] text-[#20282e] antialiased selection:bg-[#E4D13A]/30">
+<!-- TOP APPLICATION HEADER (Standardized across Kairn) -->
+<header class="h-[52px] min-h-[52px] bg-white border-b border-[#e2e7ec] px-4 flex items-center justify-between z-30 select-none">
+<!-- Left Section: Canonical Direction A Brand Lockup + Context Switcher -->
+<div class="flex items-center space-x-3.5">
+<!-- Canonical Cairn Vector Logo (Direction A) -->
+<a class="flex items-center space-x-2.5 group" href="#">
+<svg class="shrink-0" fill="none" height="20" viewBox="0 0 24 22" width="22" xmlns="http://www.w3.org/2000/svg">
+<!-- Top Capstone (Mineral Yellow with graphite center dot) -->
+<rect fill="#E4D13A" height="4.5" rx="1.8" width="10" x="7" y="1"></rect>
+<circle cx="12" cy="3.25" fill="#20282e" r="1.1"></circle>
+<!-- Middle Tier (Graphite with centered titanium white horizontal slit) -->
+<rect fill="#20282e" height="5" rx="1.8" width="16" x="4" y="8"></rect>
+<line stroke="#FFFFFF" stroke-linecap="round" stroke-width="1.2" x1="9" x2="15" y1="10.5" y2="10.5"></line>
+<!-- Base Tier (Graphite with lower-left Mineral Yellow waypoint dash) -->
+<rect fill="#20282e" height="5.5" rx="2" width="22" x="1" y="15.5"></rect>
+<line stroke="#E4D13A" stroke-linecap="round" stroke-width="1.5" x1="3.5" x2="6.5" y1="18.25" y2="18.25"></line>
+</svg>
+<span class="font-syne font-bold text-[17px] tracking-tight text-[#20282e]">kairn<span class="text-[#E4D13A]">.</span></span>
+</a>
+<!-- Subtle Hairline Divider -->
+<div class="h-4 w-[1px] bg-[#e2e7ec]"></div>
+<!-- Project Context Dropdown Button -->
+<div class="flex items-center space-x-2 text-[13px] font-medium text-[#20282e] hover:bg-[#f4f6f8] px-2.5 py-1 rounded transition-colors cursor-pointer border border-transparent hover:border-[#e2e7ec]"><span class="w-2 h-2 rounded-full bg-[#E4D13A]"></span><span class="font-semibold text-[#20282e]">Marketing Backend</span><div class="h-3.5 w-[1px] bg-[#d8dee4] mx-0.5"></div><div class="flex items-center space-x-1 font-mono text-[12px] text-[#556471]"><svg class="w-3 h-3 text-[#707e8a] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="6" x2="6" y1="3" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg><span class="font-medium text-[#20282e]">main</span></div><svg class="w-3.5 h-3.5 text-[#6c7a87] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></div>
+<!-- Branch Context Indicator in Header -->
+</div>
+<!-- Center Section: Global Search Bar -->
+<div class="flex-1 max-w-[460px] mx-4">
+<div class="relative flex items-center">
+<svg class="w-3.5 h-3.5 text-[#7c8b98] absolute left-3 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<input class="w-full bg-[#f4f6f8] hover:bg-[#eef2f5] focus:bg-white text-[13px] text-[#20282e] placeholder-[#7c8b98] pl-9 pr-11 py-1.5 rounded-md border border-[#e2e7ec] focus:border-[#20282e] focus:outline-none transition-all" placeholder="Search documentation, commits, or jump to..." type="text">
+<div class="absolute right-2.5 flex items-center">
+<kbd class="font-mono text-[10px] text-[#7c8b98] bg-white border border-[#d8dee4] px-1.5 py-0.5 rounded shadow-2xs font-semibold">⌘K</kbd>
+</div>
+</div>
+</div>
+<!-- Right Section: Theme Toggle & Settings (Avatar excluded) -->
+<div class="flex items-center space-x-2 text-[#4e5b66]">
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-[#f4f6f8] text-[#556471] transition-colors" title="Toggle light/dark theme">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="5" stroke-width="1.8"></circle>
+<line stroke-linecap="round" stroke-width="1.8" x1="12" x2="12" y1="1" y2="3"></line>
+<line stroke-linecap="round" stroke-width="1.8" x1="12" x2="12" y1="21" y2="23"></line>
+<line stroke-linecap="round" stroke-width="1.8" x1="4.22" x2="5.64" y1="4.22" y2="5.64"></line>
+<line stroke-linecap="round" stroke-width="1.8" x1="18.36" x2="19.78" y1="18.36" y2="19.78"></line>
+<line stroke-linecap="round" stroke-width="1.8" x1="1" x2="3" y1="12" y2="12"></line>
+<line stroke-linecap="round" stroke-width="1.8" x1="21" x2="23" y1="12" y2="12"></line>
+<line stroke-linecap="round" stroke-width="1.8" x1="4.22" x2="5.64" y1="19.78" y2="18.36"></line>
+<line stroke-linecap="round" stroke-width="1.8" x1="18.36" x2="19.78" y1="5.64" y2="4.22"></line>
+</svg>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-[#f4f6f8] text-[#556471] transition-colors" title="Workspace Settings">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+</button>
+</div>
+</header>
+<!-- MAIN APP CONTAINER -->
+<div class="flex-1 flex overflow-hidden">
+<!-- UNIFIED PROJECT SIDEBAR (~220px) -->
+<aside class="w-[220px] min-w-[220px] bg-white border-r border-[#e2e7ec] flex flex-col justify-between select-none shrink-0 z-20"><div class="p-3"><div class="px-2 pt-1.5 pb-2 text-[11px] font-semibold tracking-wider text-[#7c8b98] uppercase">Project Workspace</div><nav class="space-y-1"><a class="flex items-center justify-between px-2.5 py-2 rounded text-[13px] font-medium text-[#4e5b66] hover:bg-[#f4f6f8] hover:text-[#20282e] transition-colors group" href="#"><div class="flex items-center space-x-2.5"><svg class="w-4 h-4 text-[#7c8b98] group-hover:text-[#20282e] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg><span>Documentation</span></div><span class="text-[11px] font-mono text-[#8a97a3] bg-[#f4f6f8] px-1.5 py-0.5 rounded">12</span></a><a class="flex items-center justify-between px-2.5 py-2 rounded text-[13px] font-medium text-[#4e5b66] hover:bg-[#f4f6f8] hover:text-[#20282e] transition-colors group" href="#"><div class="flex items-center space-x-2.5"><svg class="w-4 h-4 text-[#7c8b98] group-hover:text-[#20282e] transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M13 6h3a2 2 0 0 1 2 2v7" stroke-linecap="round" stroke-linejoin="round"></path><line x1="6" x2="6" y1="9" y2="21"></line></svg><span>Git History</span></div><span class="text-[11px] font-mono text-[#8a97a3] bg-[#f4f6f8] px-1.5 py-0.5 rounded">142</span></a><div class="flex items-center justify-between px-2.5 py-2 rounded bg-[#20282e] text-white text-[13px] font-medium shadow-xs"><div class="flex items-center space-x-2.5"><svg class="w-4 h-4 text-[#E4D13A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path><circle cx="12" cy="12" r="3" stroke-width="1.8"></circle></svg><span class="text-white font-medium">Project Settings</span></div><span class="w-1.5 h-1.5 rounded-full bg-[#E4D13A]"></span></div></nav></div></aside>
+<!-- MAIN GIT HISTORY WORKSPACE -->
+<main class="flex-1 flex flex-col min-w-0 bg-[#fbfcfd] overflow-hidden"><div class="flex-1 overflow-y-auto custom-scrollbar bg-[#fbfcfd]"><div class="max-w-[1040px] mx-auto px-8 pt-8 pb-20"><div class="flex items-start justify-center gap-8 mx-auto"><nav class="w-[180px] min-w-[180px] space-y-1 select-none shrink-0 pt-[76px]"><a class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-white border-l-[3px] border-[#E4D13A] border-y border-r border-[#e2e7ec] text-[#20282e] text-[13.5px] font-semibold shadow-xs" href="#details"><span class="material-symbols-outlined text-[16px] text-[#20282e]">tune</span><span class="truncate">General</span></a><a class="flex items-center space-x-2.5 px-3 py-2 rounded-lg text-[13.5px] font-medium text-[#4e5b66] hover:text-[#20282e] hover:bg-[#f4f6f8] transition-all group" href="#doc-sources"><span class="material-symbols-outlined text-[16px] text-[#556471] group-hover:text-[#20282e] transition-colors">menu_book</span><span class="truncate">Sources</span></a><a class="flex items-start space-x-2.5 px-3 py-2 rounded-lg text-[13.5px] font-medium text-[#4e5b66] hover:text-[#20282e] hover:bg-[#f4f6f8] transition-all group leading-tight" href="#visibility"><span class="material-symbols-outlined text-[16px] text-[#556471] group-hover:text-[#20282e] transition-colors mt-0.5">visibility_off</span><span>Visibility &amp; Ignore Rules</span></a><a class="flex items-center space-x-2.5 px-3 py-2 rounded-lg text-[13.5px] font-medium text-[#4e5b66] hover:text-[#20282e] hover:bg-[#f4f6f8] transition-all group" href="#navigation"><span class="material-symbols-outlined text-[16px] text-[#556471] group-hover:text-[#20282e] transition-colors">explore</span><span class="truncate">Navigation</span></a><a class="flex items-center space-x-2.5 px-3 py-2 rounded-lg text-[13.5px] font-medium text-[#4e5b66] hover:text-[#20282e] hover:bg-[#f4f6f8] transition-all group" href="#git-history"><svg class="w-4 h-4 text-[#556471] group-hover:text-[#20282e] shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M13 6h3a2 2 0 0 1 2 2v7" stroke-linecap="round" stroke-linejoin="round"></path><line x1="6" x2="6" y1="9" y2="21"></line></svg><span class="truncate">Git</span></a><a class="flex items-center space-x-2.5 px-3 py-2 rounded-lg text-[13.5px] font-medium text-[#4e5b66] hover:text-[#20282e] hover:bg-[#f4f6f8] transition-all group" href="#advanced"><span class="material-symbols-outlined text-[16px] text-[#556471] group-hover:text-[#20282e] transition-colors">terminal</span><span class="truncate">Advanced</span></a></nav><div class="w-full max-w-[700px] flex-1 space-y-5"><header class="mb-6"><div><h1 class="font-syne text-[30px] leading-tight font-bold tracking-tight text-[#20282e]">Project Settings</h1><p class="font-body text-[13.5px] text-[#556471] mt-1 font-normal">Marketing Backend</p></div></header><section class="bg-white border border-[#e2e7ec] rounded-xl p-6 shadow-xs" id="details"><div class="pb-3.5 border-b border-[#e2e7ec]"><h2 class="text-[17px] font-semibold text-[#20282e]">Details</h2></div><div class="space-y-4 pt-4"><div class="space-y-1.5"><label class="block text-[13px] font-semibold text-[#20282e]" for="project-name">Name</label><input class="w-full h-10 px-3.5 bg-[#fbfcfd] border border-[#e2e7ec] text-[#20282e] text-[13.5px] font-medium rounded-lg focus:outline-none focus:border-[#20282e] transition-all" id="project-name" type="text" value="Marketing Backend"></div><div class="space-y-1.5"><label class="block text-[13px] font-semibold text-[#20282e]" for="project-desc">Description</label><textarea class="w-full h-[88px] p-3 bg-[#fbfcfd] border border-[#e2e7ec] text-[#20282e] text-[13.5px] leading-relaxed rounded-lg focus:outline-none focus:border-[#20282e] transition-all resize-none" id="project-desc">Event-driven marketing platform and API documentation.</textarea></div><div class="space-y-1.5"><label class="block text-[13px] font-semibold text-[#20282e]">Icon</label><div class="flex items-center space-x-3 p-3 bg-[#fbfcfd] border border-[#e2e7ec] rounded-lg"><div class="w-10 h-10 rounded-lg bg-[#e2e7ec] flex items-center justify-center text-[#20282e] shrink-0"><span class="material-symbols-outlined text-[20px]">folder</span></div><div class="flex-1 text-[13px] text-[#556471]">Default Project Icon</div><button class="px-3 py-1.5 rounded text-[12.5px] font-semibold bg-white border border-[#d8dee4] hover:bg-[#f4f6f8] text-[#20282e] transition-colors cursor-pointer" type="button">Change Icon</button></div></div></div></section><section class="bg-white border border-[#e2e7ec] rounded-xl p-6 shadow-xs" id="location"><div class="pb-3.5 border-b border-[#e2e7ec]"><h2 class="text-[17px] font-semibold text-[#20282e]">Location</h2></div><div class="pt-4"><div class="flex items-center justify-between gap-3 p-3 bg-[#fbfcfd] border border-[#e2e7ec] rounded-lg"><div class="flex items-center space-x-2.5 min-w-0"><span class="material-symbols-outlined text-[18px] text-[#707e8a] shrink-0">folder_open</span><span class="font-mono text-[13px] text-[#20282e] truncate select-all">~/Developer/repos/marketing-backend</span></div><div class="flex items-center space-x-2 shrink-0"><button class="flex items-center space-x-1.5 px-2.5 py-1.5 rounded text-[12px] font-medium text-[#4e5b66] hover:text-[#20282e] bg-white border border-[#d8dee4] hover:bg-[#f4f6f8] transition-colors cursor-pointer" id="copy-path-btn" onclick="navigator.clipboard.writeText('~/Developer/repos/marketing-backend'); this.innerText='Copied!'; setTimeout(()=&gt;this.innerText='Copy Path', 2000)" type="button"><span class="material-symbols-outlined text-[14px]">content_copy</span><span>Copy Path</span></button><button class="px-2.5 py-1.5 rounded text-[12px] font-semibold text-[#20282e] bg-white border border-[#d8dee4] hover:bg-[#f4f6f8] transition-colors cursor-pointer" type="button">Change Directory</button></div></div></div></section><section class="bg-white border border-[#e2e7ec] rounded-xl p-6 shadow-xs" id="organization"><div class="pb-3.5 border-b border-[#e2e7ec]"><h2 class="text-[17px] font-semibold text-[#20282e]">Organization</h2></div><div class="space-y-4 pt-4"><div class="space-y-1.5"><label class="block text-[13px] font-semibold text-[#20282e]">Collections</label><div class="flex flex-wrap items-center gap-2 p-2.5 bg-[#fbfcfd] border border-[#e2e7ec] rounded-lg min-h-[46px]"><div class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded bg-[#e2e7ec] text-[#20282e] text-[12.5px] font-medium"><span class="material-symbols-outlined text-[15px] text-[#707e8a]">folder_special</span><span>Backend Services</span><button class="text-[#7c8b98] hover:text-[#ba1a1a] ml-1 transition-colors" title="Remove collection" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button></div><button class="inline-flex items-center space-x-1 px-2.5 py-1 rounded text-[12px] font-semibold text-[#556471] hover:text-[#20282e] hover:bg-white border border-transparent hover:border-[#d8dee4] transition-colors cursor-pointer" type="button"><span class="material-symbols-outlined text-[14px]">add</span><span>Add to Collection</span></button></div></div><div class="space-y-1.5"><label class="block text-[13px] font-semibold text-[#20282e]" for="default-doc">Default Document</label><div class="relative"><div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#7c8b98]"><span class="material-symbols-outlined text-[18px]">article</span></div><select class="w-full h-10 pl-9 pr-8 bg-[#fbfcfd] border border-[#e2e7ec] text-[#20282e] text-[13.5px] font-medium rounded-lg focus:outline-none focus:border-[#20282e] cursor-pointer appearance-none" id="default-doc"><option selected="" value="docs/architecture/system-overview.md">Overview</option><option value="README.md">README</option><option value="docs/api/quickstart.md">API Quickstart</option></select><div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[#7c8b98]"><span class="material-symbols-outlined text-[18px]">unfold_more</span></div></div><p class="text-[12px] text-[#7c8b98]">Opened when entering this project.</p></div></div></section><section class="bg-white border border-[#e2e7ec] rounded-xl p-6 shadow-xs" id="git-history"><div class="pb-3.5 border-b border-[#e2e7ec]"><h2 class="text-[17px] font-semibold text-[#20282e]">Git Repository</h2></div><div class="pt-4"><div class="flex items-center justify-between gap-3 p-3.5 bg-[#fbfcfd] border border-[#e2e7ec] rounded-lg"><div class="flex items-center space-x-2.5 min-w-0"><svg class="w-4 h-4 text-[#707e8a] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M13 6h3a2 2 0 0 1 2 2v7" stroke-linecap="round" stroke-linejoin="round"></path><line x1="6" x2="6" y1="9" y2="21"></line></svg><span class="text-[13.5px] font-medium text-[#20282e]">Git repository detected</span><span class="font-mono text-[12px] text-[#556471] truncate select-all">~/Developer/repos/marketing-backend</span></div><a class="inline-flex items-center space-x-1 px-3 py-1.5 rounded text-[12.5px] font-semibold text-[#20282e] bg-white border border-[#d8dee4] hover:bg-[#f4f6f8] transition-colors whitespace-nowrap shrink-0 cursor-pointer" href="#git-history"><span>Manage Git Settings</span></a></div></div></section><div class="flex items-center justify-end pt-2"><div class="flex items-center space-x-3"><button class="px-4 py-2 rounded-lg text-[13px] font-semibold text-[#556471] hover:text-[#20282e] hover:bg-[#f4f6f8] transition-colors cursor-pointer" type="button">Cancel Changes</button><button class="px-5 py-2.5 rounded-lg text-[13px] font-bold bg-[#E4D13A] hover:bg-[#dbc831] text-[#201c00] transition-all shadow-xs cursor-pointer" onclick="this.innerText='Saved!'; setTimeout(()=&gt;this.innerText='Save Changes', 2000)" type="button">Save Changes</button></div></div><div class="pt-8 w-full"><section class="rounded-xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full shadow-xs" style="background-color: #FEF2F2; border: 1px solid #FECACA;"><div class="space-y-1 max-w-[480px]"><h3 class="text-[15px] font-bold tracking-tight" style="color: #991B1B;">Remove Project</h3><p class="text-[12.5px] leading-relaxed" style="color: #4B5563;">Remove Marketing Backend from your Kairn Library. Your local documentation files and Git repository will not be deleted.</p></div><button class="px-4 py-2 rounded-lg text-[12.5px] font-semibold transition-all cursor-pointer whitespace-nowrap self-start sm:self-auto bg-white hover:bg-[#FEE2E2]/60" style="border: 1px solid #FCA5A5; color: #DC2626;" type="button">Remove from Library</button></section></div></div></div></div></div></main>
+</div>
+
+
+</body></html>
