@@ -502,3 +502,186 @@ test("Explorer visual baselines use one controlled platform and bundled fonts", 
     });
   }
 });
+
+test("Documentation explorer loads server-backed tree and reader for the active project", async ({
+  page,
+  request,
+}) => {
+  const context = (await (await request.get(url + "/api/context")).json()) as {
+    id: string;
+    name: string;
+  };
+
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(url + `/app/projects/${context.id}/docs`);
+
+  // Auto-redirects to default document (README.md) and renders Documentation Explorer
+  await expect(page.locator(".explorer-shell")).toBeVisible();
+  await expect(page.locator(".doc-tree")).toBeVisible();
+  await expect(page.locator(".doc-reader")).toBeVisible();
+
+  // Project name badge in sidebar
+  await expect(page.locator(".explorer-project-name")).toHaveText(context.name);
+
+  // Tree contains README
+  await expect(
+    page.getByRole("button", { name: "README", exact: true }),
+  ).toBeVisible();
+
+  // Reader contains the heading from README.md
+  await expect(
+    page.getByRole("heading", { name: /Browser fixture/ }),
+  ).toBeVisible();
+});
+
+test("Documentation explorer renders outline TOC, navigates heading fragments, and resolves relative links safely", async ({
+  page,
+  request,
+}) => {
+  const context = (await (await request.get(url + "/api/context")).json()) as {
+    id: string;
+    name: string;
+  };
+
+  // Add rich markdown and secondary guide file
+  await writeFile(
+    join(root, "project", "docs", "README.md"),
+    `# Browser fixture updated
+
+## Getting Started
+
+Welcome to the browser test fixture.
+
+## Architecture & Design
+
+Details on architecture. See [Guide](./guide.md), [Broken Link](./nonexistent.md), or jump to [Details](#details).
+
+### Details
+
+Deep details here.
+`,
+  );
+  await writeFile(
+    join(root, "project", "docs", "guide.md"),
+    `# Fixture Guide
+
+## Installation
+
+Run installation steps.
+`,
+  );
+
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(url + `/app/projects/${context.id}/docs`);
+
+  // Outline TOC contains the headings
+  await expect(page.locator(".doc-outline")).toBeVisible();
+  await expect(
+    page
+      .locator(".doc-outline")
+      .getByRole("link", { name: "Getting Started", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page
+      .locator(".doc-outline")
+      .getByRole("link", { name: "Architecture & Design", exact: true }),
+  ).toBeVisible();
+  const detailsHeadingLink = page.locator(".doc-outline").getByRole("link", {
+    name: "Details",
+    exact: true,
+  });
+  await expect(detailsHeadingLink).toBeVisible();
+
+  // Click outline TOC heading: jumps to fragment without full page reload
+  await detailsHeadingLink.click();
+  await expect(page).toHaveURL(/#details$/);
+  await expect(
+    detailsHeadingLink.locator('.doc-outline-dot[data-active="true"]'),
+  ).toBeVisible();
+
+  // Click broken link: shows non-disruptive Link Resolution Warning without crashing
+  await page.getByRole("link", { name: "Broken Link" }).click();
+  await expect(
+    page.getByText(/Markdown destination is missing/i).first(),
+  ).toBeVisible();
+
+  // Click relative local link [Guide](./guide.md): navigates to guide document
+  await page.getByRole("link", { name: "Guide" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Fixture Guide" }),
+  ).toBeVisible();
+  await expect(page.locator(".doc-reader-breadcrumbs")).toContainText(
+    "guide.md",
+  );
+
+  // Browser back button restores previous document and fragment
+  await page.goBack();
+  await expect(
+    page.getByRole("heading", { name: "Browser fixture updated" }),
+  ).toBeVisible();
+});
+
+test("Documentation explorer opens search palette via shortcut/trigger, searches across projects, and updates live on edits", async ({
+  page,
+  request,
+}) => {
+  const context = (await (await request.get(url + "/api/context")).json()) as {
+    id: string;
+    name: string;
+  };
+
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(url + `/app/projects/${context.id}/docs`);
+
+  // Open search via header search trigger button
+  const trigger = page.getByRole("button", {
+    name: "Search documentation (Command or Control K)",
+  });
+  await expect(trigger).toBeVisible();
+  await trigger.click();
+
+  // Dialog appears with search combobox
+  const dialog = page.getByRole("dialog", { name: "Search documentation" });
+  await expect(dialog).toBeVisible();
+  const searchInput = page.getByRole("combobox", {
+    name: "Search documentation",
+  });
+  await expect(searchInput).toBeFocused();
+
+  // Search for "Guide"
+  await searchInput.fill("Guide");
+  await expect(page.locator("#search-results li")).toHaveCount(2, {
+    timeout: 5000,
+  });
+  await expect(
+    page.locator(".search-result-title").filter({ hasText: "Fixture Guide" }),
+  ).toBeVisible();
+
+  // Press Enter to navigate to selected search result
+  await searchInput.press("Enter");
+  await expect(dialog).toBeHidden();
+  await expect(
+    page.getByRole("heading", { name: "Fixture Guide" }),
+  ).toBeVisible();
+
+  // Test live edit on disk: update guide.md while viewing it
+  await writeFile(
+    join(root, "project", "docs", "guide.md"),
+    `# Fixture Guide Live Edited\n\n## Live Update\n\nLive editing refreshed smoothly.\n`,
+  );
+
+  // Background polling (~2s) should detect the edit and update the reader without page reload
+  await expect(
+    page.getByRole("heading", { name: "Fixture Guide Live Edited" }),
+  ).toBeVisible({ timeout: 6000 });
+
+  // Keyboard shortcut Cmd+K / Ctrl+K opens search palette
+  await page.keyboard.press(
+    process.platform === "darwin" ? "Meta+k" : "Control+k",
+  );
+  await expect(dialog).toBeVisible();
+
+  // Press Escape to dismiss
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+});

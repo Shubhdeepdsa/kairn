@@ -270,9 +270,9 @@ export async function startDocumentationServer(
               title,
               markdown,
               revision,
-              ...(options.viewer
-                ? { html: options.viewer.renderMarkdown(markdown) }
-                : {}),
+              html: options.viewer
+                ? options.viewer.renderMarkdown(markdown)
+                : analysis.html,
             };
             json(response, 200, body);
           } else if (

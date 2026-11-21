@@ -116,6 +116,46 @@ describe("DocTree component", () => {
     fireEvent.click(archFolder!);
     expect(archFolder?.getAttribute("aria-expanded")).toBe("false");
   });
+
+  it("renders real NavigationEntry hierarchy with warning and empty state", () => {
+    // Empty state
+    const { rerender } = render(
+      <DocTree nodes={[]} warning="Scanner budget exceeded" />,
+    );
+    expect(screen.getByText("Scanner budget exceeded")).not.toBeNull();
+    expect(screen.getByText("No documentation files found.")).not.toBeNull();
+
+    // Real server NavigationEntry tree
+    const realTree = [
+      {
+        kind: "directory" as const,
+        path: "guides",
+        title: "Guides",
+        children: [
+          {
+            kind: "document" as const,
+            id: "d".repeat(64),
+            path: "guides/install.md",
+            title: "Installation",
+          },
+        ],
+      },
+    ];
+
+    const toggleCollapse = vi.fn();
+    rerender(
+      <DocTree
+        nodes={realTree}
+        collapsedPaths={new Set(["guides"])}
+        onToggleCollapse={toggleCollapse}
+      />,
+    );
+
+    const folderBtn = screen.getByText("Guides").closest("button");
+    expect(folderBtn?.getAttribute("aria-expanded")).toBe("false");
+    fireEvent.click(folderBtn!);
+    expect(toggleCollapse).toHaveBeenCalledWith("guides");
+  });
 });
 
 describe("DocReader component", () => {

@@ -1,7 +1,7 @@
 # AGENTS.md — Kairn engineering instructions
 
 > **Scope:** entire Kairn repository. More specific `AGENTS.md` files apply in their directories.
-> **Product:** local-first Markdown documentation and Git-history explorer. **Current milestone:** Phase 6B: Mineral design system and showcase under `/app`; preserve the complete Phase 1–5 vanilla reader at `/`.
+> **Product:** local-first Markdown documentation and Git-history explorer. **Current milestone:** Phase 6C: React Documentation Explorer at `/app`; preserve the complete Phase 1–5 vanilla reader at `/`.
 > **Priority:** small, verifiable, modular work; documentation is maintained with code, not reconstructed afterwards.
 
 ## 1. Preflight and source of truth

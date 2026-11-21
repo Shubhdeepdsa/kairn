@@ -86,7 +86,17 @@ diagnostics }`, with quoted ETag. Exact If-None-Match returns 304 without a body
   `{ kind: "diagnostic", diagnostic }`. The encoded field is data, never a file route.
 - GET `/navigation.js`: one fixed packaged browser module; no dynamic asset routing.
 
-Tree warnings and diagnostics use textContent in the POC. No final React/settings
+Tree warnings and diagnostics use textContent in the POC. No final settings
 UI, remote images, attachment serving, syntax-highlighting ecosystem or full link
 index is introduced. Loopback is still not authentication against local processes;
 user-controlled source/storage parents remain required.
+
+## Phase 6C React Documentation Explorer parity
+
+In Phase 6C, the React Documentation Explorer at `/app/projects/:projectId/docs[/:documentId]` achieves feature parity with the vanilla reader:
+
+- **Scoped APIs**: Consumes `/api/projects/:projectId/tree`, `/api/projects/:projectId/documents/:id`, and `/api/projects/:projectId/links/:id/:href`.
+- **Live Refresh Loop**: Runs the identical ~2s bounded cadence while visible, pausing on hidden tabs (`document.hidden`), checking for tree changes, sending `If-None-Match` on document reads to handle HTTP 304 without DOM destruction, and gracefully displaying warning banners on vanished files with fallback to `README.md`.
+- **Link Resolution**: Intercepts relative Markdown link clicks inside `SafeHtmlArticle` and resolves them via server-backed link categorization, displaying accessible `DocCallout` warning dialogs for broken or unresolvable targets.
+- **Legacy Bookmark Bridging**: Translates `#id` and `#p/projectId/id/fragment` locations into `/app/projects/:projectId/docs/:documentId[#fragment]` via `parseReaderLocation`.
+- The vanilla reader at `/` remains intact and unaffected until post-review user sign-off.
