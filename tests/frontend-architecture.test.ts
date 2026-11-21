@@ -174,7 +174,7 @@ it("keeps primitive colors and shared control/layout styles out of feature CSS",
 });
 
 it.each(["light", "dark"])(
-  "keeps the %s wordmark outlined and brand colors unchanged",
+  "keeps the %s wordmark outlined with consistent brand hierarchy",
   async (theme) => {
     const svg = await readFile(
       `src/frontend/assets/brand/kairn-wordmark-${theme}.svg`,
@@ -188,15 +188,26 @@ it.each(["light", "dark"])(
         `src/frontend/assets/brand/kairn-${kind}-${theme}.svg`,
         "utf8",
       );
+      const light = await readFile(
+        `src/frontend/assets/brand/kairn-${kind}-light.svg`,
+        "utf8",
+      );
+      expect(asset.replace(/#[0-9A-F]{6}/g, "COLOR")).toBe(
+        light.replace(/#[0-9A-F]{6}/g, "COLOR"),
+      );
       const colors = [...asset.matchAll(/(?:fill|stroke)="(#[^"]+)"/g)].map(
         (match) => match[1],
       );
       expect(new Set(colors)).toEqual(
-        new Set(["#E4D13A", "#20282E", "#FFFFFF"]),
+        new Set(
+          theme === "dark"
+            ? ["#E4D13A", "#52606D", "#F1F4F6"]
+            : ["#E4D13A", "#20282E", "#FFFFFF"],
+        ),
       );
       const markColors =
         theme === "dark"
-          ? ["#20282E", "#E4D13A", "#FFFFFF", "#20282E", "#E4D13A", "#20282E"]
+          ? ["#E4D13A", "#52606D", "#52606D", "#F1F4F6", "#52606D", "#E4D13A"]
           : ["#E4D13A", "#20282E", "#20282E", "#FFFFFF", "#20282E", "#E4D13A"];
       expect(colors).toEqual(
         kind === "mark"
@@ -204,7 +215,7 @@ it.each(["light", "dark"])(
           : [
               ...markColors,
               ...Array<string>(5).fill(
-                theme === "dark" ? "#FFFFFF" : "#20282E",
+                theme === "dark" ? "#F1F4F6" : "#20282E",
               ),
               "#E4D13A",
             ],

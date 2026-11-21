@@ -65,8 +65,11 @@ kairn-wordmark-light.svg and kairn-wordmark-dark.svg are the wide header variant
 kairn-mark-light.svg and kairn-mark-dark.svg are compact variants at 48rem.
 Explicit appearance selects matching assets; System follows live OS changes through
 picture media queries. Assets sit directly on the header surface, without a backing plate.
-Dark variants use only the existing yellow #E4D13A, slate #20282E and white #FFFFFF:
-top slate/yellow, middle white/slate, bottom yellow/slate; lettering white and dot yellow.
+Dark variants preserve the light artwork's hierarchy and geometry: the middle
+and bottom stones remain slate, with yellow confined to the small cap, inset and dot.
+They use existing Mineral secondary slate #52606D for separation from the dark header,
+original yellow #E4D13A accents, and existing dark-theme off-white #F1F4F6 for the
+outlined wordmark and middle detail. The icon is adapted, not fully inverted.
 The packaged wordmark converts “kairn” to Syne Bold (700) vector outlines using
 our bundled Syne font; it has no font dependency when rendered as an image.
 The editable originals in designs/ remain unchanged. Brand assets remain distinct
