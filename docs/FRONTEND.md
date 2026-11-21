@@ -112,3 +112,15 @@ uses a packed installed CLI with isolated docs/data, verifies direct app routes,
 Back/Forward, unknown routes, request/console security and the existing reader.
 All Phase 1–5 tests remain. Record bundle JS/CSS/gzip/chunks and package growth from
 real builds; document browser/CI limitations separately. No npm publication.
+
+## Build scripts (implemented)
+
+`npm run build` compiles Node then builds the static frontend. `npm run typecheck`
+checks separate Node/browser programs. `npm run dev:frontend` watches frontend
+build output; run the CLI normally and restart/reload after a rebuild. Vite is
+build tooling only. React, React DOM, router and Lucide are bundled devDependencies,
+so production-only package installation adds no Node runtime resolution of them.
+The official [Vite build guide](https://vite.dev/guide/build.html),
+[Tailwind Vite integration](https://tailwindcss.com/docs/installation/using-vite)
+and [declarative router](https://reactrouter.com/start/declarative/installation)
+are the integration references. Node 26.13.0 satisfies the installed manifests.

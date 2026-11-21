@@ -1,0 +1,37 @@
+@import "tailwindcss" source("../");
+@import "./tokens.css";
+@import "./themes.css";
+@theme inline {
+  --color-canvas: var(--kairn-canvas);
+  --color-surface: var(--kairn-surface);
+  --color-primary: var(--kairn-text);
+  --color-accent: var(--kairn-accent);
+  --color-border: var(--kairn-border);
+}
+body {
+  margin: 0;
+  font-family: var(--kairn-font-body);
+  font-size: var(--kairn-text-body);
+  line-height: 1.6;
+  background: var(--kairn-canvas);
+  color: var(--kairn-text);
+}
+:focus-visible {
+  outline: var(--kairn-focus-width) solid var(--kairn-accent);
+  outline-offset: var(--kairn-focus-offset);
+}
+a {
+  color: var(--kairn-accent);
+  text-decoration: underline;
+}
+h1 {
+  font-size: var(--kairn-text-heading);
+  font-weight: 700;
+}
+p {
+  margin-block: var(--kairn-space-3);
+}
+main {
+  padding: var(--kairn-space-4);
+  min-width: 0;
+}

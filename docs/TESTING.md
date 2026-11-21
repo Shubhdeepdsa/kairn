@@ -402,3 +402,10 @@ without sleeps or slower-runner timing assumptions. Production budgets are uncha
 Local verification of this correction: all six quality gates pass, with 128 tests
 in 28 files. Windows verification is tracked by the fix PR CI, separately from
 these macOS results.
+
+## Phase 6A build foundation
+
+Browser TSX has a separate strict no-emit TypeScript program. Vitest now includes
+React Testing Library/jsdom tests for initialization and redacted root render
+errors. Node production compilation excludes frontend sources; Vite builds them
+into dist/frontend. Browser smoke tests are added in the acceptance stage.

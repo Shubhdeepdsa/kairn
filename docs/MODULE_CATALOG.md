@@ -179,3 +179,10 @@ PaletteSelection distinguishes dismissal, project navigation and exact-document
 navigation from a query-only scope change. NavigationDestination permits a project
 without a document ID; viewer/navigation.defaultReaderDocument shares the initial
 reader's approved default choice with direct project switching.
+
+## Phase 6A browser foundation
+
+- `frontend/main.tsx`: React StrictMode composition, separate from Node entry.
+- `frontend/app/ErrorBoundary.tsx`: redacted render-error fallback.
+- `frontend/styles/`: provisional semantic tokens and light/dark/system mechanism;
+  not the final Mineral theme. See [frontend contracts](FRONTEND.md).

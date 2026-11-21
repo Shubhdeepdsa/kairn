@@ -1,0 +1,35 @@
+/* Runtime theme attributes override system preference. No persistence in 6A. */
+:root {
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --kairn-canvas: #14231e;
+  --kairn-surface: #1d3028;
+  --kairn-text: #edf4ee;
+  --kairn-secondary: #d3dfd5;
+  --kairn-muted: #b4c7ba;
+  --kairn-border: #5e7867;
+  --kairn-accent: #96d8b6;
+  --kairn-accent-text: #14231e;
+  --kairn-danger: #ffaaaa;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    color-scheme: dark;
+    --kairn-canvas: #14231e;
+    --kairn-surface: #1d3028;
+    --kairn-text: #edf4ee;
+    --kairn-secondary: #d3dfd5;
+    --kairn-muted: #b4c7ba;
+    --kairn-border: #5e7867;
+    --kairn-accent: #96d8b6;
+    --kairn-accent-text: #14231e;
+    --kairn-danger: #ffaaaa;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --kairn-motion: 0ms;
+  }
+}
