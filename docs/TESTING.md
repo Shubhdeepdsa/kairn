@@ -416,3 +416,7 @@ reader serving, file/count bounds and package symlink rejection where supported.
 
 Shared UI tests cover Button defaults/refs/variants/loading/disabled behavior,
 semantic icon resolution and accessible labeling, plus theme root cleanup.
+
+Typed-client tests exercise fixed URLs/options, malformed IDs/payloads, transport
+errors, HTTP redaction and cancellation. Provider tests cover loading/retry and
+obsolete-response cleanup when integrated with the routed shell.

@@ -196,3 +196,8 @@ reader's approved default choice with direct project switching.
   labeled currentColor SVGs, token sizes, custom-provider replacement boundary.
 - `frontend/app/providers/ThemeProvider.tsx`: runtime appearance state and root
   attribute lifecycle; CSS owns system/reduced-motion resolution, no persistence.
+
+- `frontend/lib/api/client.ts`: exact same-origin context/projects GETs, cancellation,
+  response validation and redacted transport errors; no settings mutation methods.
+- `frontend/app/providers/ApplicationProvider.tsx`: one abortable startup-data owner
+  with loading/error/retry; route context derives from approved project identities.
