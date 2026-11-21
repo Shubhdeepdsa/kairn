@@ -12,90 +12,118 @@ import { expect, it } from "vitest";
 import { ProjectLibrary } from "../src/core/library.js";
 import { SearchCoordinator } from "../src/core/search-coordinator.js";
 import { overridesSchema } from "../src/core/config/schema.js";
-it("reconciles real Library sources, ignores, edits/deletions, unavailable roots and unregistration without rewriting documents", async () => {
-  const root = await mkdtemp(join(tmpdir(), "kairn-coordinate-"));
-  const data = join(root, "data");
-  const library = new ProjectLibrary(data);
-  const coordinator = new SearchCoordinator({
-    dataDirectory: data,
-    reconcileIntervalMs: 0,
-  });
-  try {
-    const projects = [];
-    for (const name of ["one", "two"]) {
-      const p = join(root, name);
-      await mkdir(join(p, "docs"), { recursive: true });
-      await writeFile(
-        join(p, "docs", "README.md"),
-        "# Authentication\n\nOriginal searchablecontent",
+import type {
+  SearchRequest,
+  SearchResponse,
+} from "../src/core/search-contracts.js";
+it.each([200, 1])(
+  "reconciles real Library sources, ignores, edits/deletions, unavailable roots and unregistration without rewriting documents with budget %i",
+  async (documentBudget) => {
+    const root = await mkdtemp(join(tmpdir(), "kairn-coordinate-"));
+    const data = join(root, "data");
+    const library = new ProjectLibrary(data);
+    const coordinator = new SearchCoordinator({
+      dataDirectory: data,
+      documentBudget,
+      reconcileIntervalMs: 60_000,
+    });
+    // Complete explicit refresh passes, rather than assuming one bounded job is enough.
+    // Keep completed projects reusable while the forced pass advances unfinished ones.
+    async function completedSearch(
+      request: SearchRequest,
+    ): Promise<SearchResponse> {
+      let response: SearchResponse = { results: [], coverage: [] };
+      for (let job = 0; job < 12; job++) {
+        response = await coordinator.search({ ...request, refresh: true });
+        if (!response.coverage.some((p) => p.status === "indexing"))
+          return response;
+      }
+      throw new Error(
+        "Indexing did not complete within 12 bounded jobs: " +
+          JSON.stringify(response.coverage),
       );
-      projects.push(await library.register(p, "Duplicate"));
     }
-    const request = {
-      query: "searchablecontent",
-      scope: { type: "global" as const },
-      limit: 20,
-    };
-    let result = await coordinator.search(request);
-    expect(result.results).toHaveLength(2);
-    expect(result.coverage.every((p) => p.status === "ready")).toBe(true);
-    expect(JSON.stringify(result)).not.toContain(root);
-    const a = projects[0]!;
-    const file = join(a.root, "docs", "README.md");
-    await writeFile(file, "# Authentication\n\nReplacement freshtoken");
-    expect((await coordinator.search(request)).results).toHaveLength(1);
-    expect(
-      (await coordinator.search({ ...request, query: "freshtoken" })).results,
-    ).toHaveLength(1);
-    await library.setOverrides(
-      a.id,
-      overridesSchema.parse({ excludeAdd: ["**/README.md"] }),
-    );
-    expect(
-      (await coordinator.search({ ...request, query: "freshtoken" })).results,
-    ).toHaveLength(0);
-    await library.setOverrides(a.id, overridesSchema.parse({}));
-    expect(
-      (await coordinator.search({ ...request, query: "freshtoken" })).results,
-    ).toHaveLength(1);
-    await writeFile(join(a.root, "EXTRA.md"), "# Extra\n\nextrasource");
-    await library.setOverrides(
-      a.id,
-      overridesSchema.parse({
-        additionalSources: [{ path: "EXTRA.md" }],
-        primary: "EXTRA.md",
-      }),
-    );
-    expect(
-      (await coordinator.search({ ...request, query: "extrasource" })).results,
-    ).toHaveLength(1);
-    await library.setOverrides(a.id, overridesSchema.parse({}));
-    expect(
-      (await coordinator.search({ ...request, query: "extrasource" })).results,
-    ).toHaveLength(0);
-    await rm(file);
-    expect(
-      (await coordinator.search({ ...request, query: "freshtoken" })).results,
-    ).toHaveLength(0);
-    const b = projects[1]!;
-    await rename(b.root, b.root + "-absent");
-    result = await coordinator.search(request);
-    expect(result.results).toHaveLength(0);
-    expect(result.coverage.find((p) => p.id === b.id)?.status).toBe(
-      "unavailable",
-    );
-    expect(await library.list()).toHaveLength(2);
-    await rename(b.root + "-absent", b.root);
-    await library.unregister(b.id);
-    expect((await coordinator.search(request)).coverage).toHaveLength(1);
-    expect(await readFile(join(b.root, "docs", "README.md"), "utf8")).toContain(
-      "Original searchablecontent",
-    );
-  } finally {
-    await coordinator.close();
-    await rm(root, { recursive: true, force: true });
-  }
-});
+    try {
+      const projects = [];
+      for (const name of ["one", "two"]) {
+        const p = join(root, name);
+        await mkdir(join(p, "docs"), { recursive: true });
+        await writeFile(
+          join(p, "docs", "README.md"),
+          "# Authentication\n\nOriginal searchablecontent",
+        );
+        projects.push(await library.register(p, "Duplicate"));
+      }
+      const request = {
+        query: "searchablecontent",
+        scope: { type: "global" as const },
+        limit: 20,
+      };
+      let result = await completedSearch(request);
+      expect(result.results).toHaveLength(2);
+      expect(new Set(result.results.map((r) => r.projectId))).toEqual(
+        new Set(projects.map((p) => p.id)),
+      );
+      expect(result.coverage).toHaveLength(2);
+      expect(result.coverage.every((p) => p.status === "ready")).toBe(true);
+      expect(JSON.stringify(result)).not.toContain(root);
+      const a = projects[0]!;
+      const file = join(a.root, "docs", "README.md");
+      await writeFile(file, "# Authentication\n\nReplacement freshtoken");
+      expect((await completedSearch(request)).results).toHaveLength(1);
+      expect(
+        (await completedSearch({ ...request, query: "freshtoken" })).results,
+      ).toHaveLength(1);
+      await library.setOverrides(
+        a.id,
+        overridesSchema.parse({ excludeAdd: ["**/README.md"] }),
+      );
+      expect(
+        (await completedSearch({ ...request, query: "freshtoken" })).results,
+      ).toHaveLength(0);
+      await library.setOverrides(a.id, overridesSchema.parse({}));
+      expect(
+        (await completedSearch({ ...request, query: "freshtoken" })).results,
+      ).toHaveLength(1);
+      await writeFile(join(a.root, "EXTRA.md"), "# Extra\n\nextrasource");
+      await library.setOverrides(
+        a.id,
+        overridesSchema.parse({
+          additionalSources: [{ path: "EXTRA.md" }],
+          primary: "EXTRA.md",
+        }),
+      );
+      expect(
+        (await completedSearch({ ...request, query: "extrasource" })).results,
+      ).toHaveLength(1);
+      await library.setOverrides(a.id, overridesSchema.parse({}));
+      expect(
+        (await completedSearch({ ...request, query: "extrasource" })).results,
+      ).toHaveLength(0);
+      await rm(file);
+      expect(
+        (await completedSearch({ ...request, query: "freshtoken" })).results,
+      ).toHaveLength(0);
+      const b = projects[1]!;
+      await rename(b.root, b.root + "-absent");
+      result = await completedSearch(request);
+      expect(result.results).toHaveLength(0);
+      expect(result.coverage.find((p) => p.id === b.id)?.status).toBe(
+        "unavailable",
+      );
+      expect(await library.list()).toHaveLength(2);
+      await rename(b.root + "-absent", b.root);
+      await library.unregister(b.id);
+      expect((await completedSearch(request)).coverage).toHaveLength(1);
+      expect(
+        await readFile(join(b.root, "docs", "README.md"), "utf8"),
+      ).toContain("Original searchablecontent");
+    } finally {
+      await coordinator.close();
+      await rm(root, { recursive: true, force: true });
+    }
+  },
+);
 it("keeps transient active search separate from global registration and cleans its derived cache", async () => {
   const root = await mkdtemp(join(tmpdir(), "kairn-session-"));
   const data = join(root, "data");
