@@ -8,7 +8,7 @@ export interface FrontendPresentation {
   >;
 }
 /**
- * Preload only index.html and flat hashed JS/CSS/font outputs, bounded to 32 assets,
+ * Preload only index.html and flat hashed JS/CSS/font/SVG outputs, bounded to 32 assets,
  * 2 MiB each and 8 MiB total. Symlinks, source maps and nested output are rejected.
  * @param root - Packaged build directory; explicit override is for fixture tests.
  * @throws If output is absent, malformed or exceeds the fixed presentation limits.
@@ -67,7 +67,7 @@ export async function loadFrontendPresentation(
       ].includes(name)
     )
       continue;
-    if (!/^[A-Za-z0-9_-]+\.(?:js|css|woff2)$/.test(name))
+    if (!/^[A-Za-z0-9_-]+\.(?:js|css|woff2|svg)$/.test(name))
       throw new Error("Unexpected frontend asset type.");
     const body = await boundedFile(new URL(name, directory), 2_097_152);
     total += body.length;
@@ -79,7 +79,9 @@ export async function loadFrontendPresentation(
         ? "text/javascript"
         : name.endsWith(".woff2")
           ? "font/woff2"
-          : "text/css",
+          : name.endsWith(".svg")
+            ? "image/svg+xml"
+            : "text/css",
     });
   }
   if (!assets.size) throw new Error("Frontend build has no assets.");

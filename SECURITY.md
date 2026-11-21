@@ -69,10 +69,11 @@ into a newer scope. Shared-cache approval drift invalidates coverage reuse.
 
 The transitional `/app` namespace serves packaged static output only. At startup,
 the loader rejects symlinks, non-regular files, nested assets and unexpected types;
-limits are 32 JS/CSS assets, 2 MiB each and 8 MiB combined, plus 64 KiB HTML.
+limits are 32 JS/CSS/font/SVG assets, 2 MiB each and 8 MiB combined, plus 64 KiB HTML.
 Requests only look up a preloaded map. Unknown app pages use the React not-found
 view; APIs, missing assets, encoded/traversal paths and other routes never receive
-SPA HTML. The same request checks and CSP apply. No maps, inline scripts/styles,
+SPA HTML. The same request checks apply; /app permits same-origin images for packaged logos,
+while the vanilla reader retains img-src none. No maps, inline scripts/styles,
 CDNs, mutation endpoints, proxy or development server are exposed. Build-watch
 requires restarting Kairn to reload its asset snapshot. Package files and their
 parents must be user-controlled, like the existing document/storage boundary.
@@ -80,3 +81,7 @@ parents must be user-controlled, like the existing document/storage boundary.
 Phase 6B adds only packaged WOFF2 fonts to the bounded asset allowlist and
 `font-src self` to CSP. Font notices ship with the package but have no HTTP route.
 No remote font/image loading, inline style exception or mutation endpoint is added.
+
+Header branding adds two trusted packaged SVGs to the bounded startup map.
+SVG requests use image/svg+xml; no user-document image routing or remote images
+are enabled. Source logos contain no scripts, external references or embedded HTML.

@@ -60,8 +60,10 @@ use ordered navigation and aria-current; no false functional product data.
 
 Sidebar remains hide/reveal disclosure; this is not an icon rail. All workspace and
 settings layouts reuse the same primitive. Header remains one component and shows
-only implemented links. Custom wayfinding icon is an original non-brand glyph;
-approved logo integration stays distinct from semantic icons.
+only implemented links. Approved SVG originals live in frontend/assets/brand:
+the header uses kairn-with-text.svg, switching to kairn-logo.svg at narrow widths.
+A fixed light backing preserves their original colors in every appearance/accent.
+Brand assets remain distinct from the semantic icon registry.
 
 ## Prose and showcase
 
@@ -126,8 +128,7 @@ Reproduce using `npm run build`, `node scripts/measure-frontend.mjs` and
 The showcase uses provisional runtime preview controls, not saved settings. It
 matches the supplied neutral/surface/typography/wayfinding language; it deliberately
 does not recreate Explorer screens, mock metadata, search bars or settings actions.
-The shared header uses the original non-brand wayfinding glyph; the approved brand
-logo is not redrawn or replaced. Accent foreground/backgrounds switch atomically
+The shared header uses the supplied brand SVGs without redrawing them. Accent foreground/backgrounds switch atomically
 (no intermediate contrast loss from color interpolation). Sidebar remains disclosure.
 
 Local automated evidence: all six appearance/accent combinations pass axe A/AA

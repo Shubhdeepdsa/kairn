@@ -76,6 +76,19 @@ main {
   align-items: center;
   gap: var(--kairn-space-2);
 }
+.app-brand {
+  padding: var(--kairn-space-1) var(--kairn-space-2);
+  border-radius: var(--kairn-radius);
+  background: var(--kairn-reference-white);
+}
+.app-brand picture,
+.app-brand img {
+  display: block;
+}
+.app-brand img {
+  height: var(--kairn-control-md);
+  width: auto;
+}
 .app-header > span {
   color: var(--kairn-muted);
   font-size: var(--kairn-text-small);

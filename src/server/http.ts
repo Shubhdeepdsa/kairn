@@ -177,6 +177,10 @@ export async function startDocumentationServer(
           const frontend = options.viewer?.frontend;
           const asset = frontend?.assets.get(target);
           if (asset || (frontend && isFrontendRoute(target))) {
+            response.setHeader(
+              "Content-Security-Policy",
+              csp.replace("img-src 'none'", "img-src 'self'"),
+            );
             response.writeHead(200, {
               "Content-Type": `${asset?.contentType ?? "text/html"}; charset=utf-8`,
             });

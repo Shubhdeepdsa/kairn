@@ -308,8 +308,23 @@ test("Mineral showcase themes, contrast, native keyboard controls and responsive
   await page
     .getByRole("button", { name: "Expand Specimen navigation" })
     .click();
-  for (const width of [640, 320]) {
+  for (const width of [1100, 640, 320]) {
     await page.setViewportSize({ width, height: 900 });
+    const brand = page.getByRole("img", { name: "Kairn", exact: true });
+    await expect
+      .poll(() =>
+        brand.evaluate((image, viewportWidth) => {
+          const img = image as HTMLImageElement;
+          return (
+            img.complete &&
+            img.naturalWidth > 0 &&
+            img.currentSrc.includes(
+              viewportWidth > 768 ? "kairn-with-text-" : "kairn-logo-",
+            )
+          );
+        }, width),
+      )
+      .toBe(true);
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,

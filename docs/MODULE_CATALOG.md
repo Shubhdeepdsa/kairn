@@ -187,7 +187,7 @@ reader's approved default choice with direct project switching.
 - `frontend/styles/`: provisional semantic tokens and light/dark/system mechanism;
   not the final Mineral theme. See [frontend contracts](FRONTEND.md).
 
-- `server/frontend-assets.ts`: bounded startup preload of trusted packaged HTML/JS/CSS;
+- `server/frontend-assets.ts`: bounded startup preload of trusted packaged HTML/JS/CSS/WOFF2/SVG;
   fixed application namespace, no arbitrary static-file route or source maps.
 
 - `frontend/components/ui/Button.tsx`: native props/ref, shared variants/sizes and
@@ -234,3 +234,6 @@ It does not enable rendering or resources; Phase 6C integrates the existing pars
 `features/design-system/ShowcasePage` lazily composes all Mineral primitives at
 `/app/design-system`, with real runtime theme/accent previews and static prose.
 No new product settings or mutation behavior.
+
+Approved header logos are bundled from src/frontend/assets/brand; responsive
+Header composition keeps brand artwork separate from semantic icons.

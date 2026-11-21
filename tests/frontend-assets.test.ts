@@ -28,6 +28,9 @@ it("serves exact packaged assets and app routes behind existing security without
       expect(response.headers.get("content-security-policy")).toContain(
         "script-src 'self'",
       );
+      expect(response.headers.get("content-security-policy")).toContain(
+        "img-src 'self'",
+      );
       expect(response.headers.get("cache-control")).toBe("no-store");
     }
     const html = await (await fetch(server.url + "/app")).text();
@@ -53,6 +56,22 @@ it("serves exact packaged assets and app routes behind existing security without
     expect((await fetch(server.url + "/app", { method: "POST" })).status).toBe(
       405,
     );
+    const reader = await fetch(server.url);
+    expect(reader.headers.get("content-security-policy")).toContain(
+      "img-src 'none'",
+    );
+    const presentation = await loadFrontendPresentation(
+      new URL("../dist/frontend/", import.meta.url),
+    );
+    const logos = [...presentation.assets].filter(([name]) =>
+      name.endsWith(".svg"),
+    );
+    expect(logos).toHaveLength(2);
+    for (const [name, asset] of logos) {
+      const response = await fetch(server.url + name);
+      expect(response.headers.get("content-type")).toContain("image/svg+xml");
+      expect(await response.text()).toBe(asset.body.toString());
+    }
     expect(await (await fetch(server.url)).text()).toContain('id="document"');
   } finally {
     await server.close();

@@ -76,6 +76,16 @@ it("keeps the entire browser import closure Node-free and acyclic, with safe sha
         continue;
       }
       if (specifier.endsWith(".css")) continue;
+      if (specifier.endsWith(".svg?no-inline")) {
+        const asset = portable(
+          resolve(dirname(file), specifier.split("?")[0]!),
+        );
+        expect(asset.startsWith(frontend + "/assets/brand/")).toBe(true);
+        expect(known.has(asset)).toBe(true);
+        const svg = await readFile(asset, "utf8");
+        expect(svg).not.toMatch(/<script|<foreignObject|(?:href|src)=/i);
+        continue;
+      }
       const base = portable(
         resolve(dirname(file), specifier.replace(/\.js$/, "")),
       );
