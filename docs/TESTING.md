@@ -573,3 +573,15 @@ Total tests: 161 Vitest tests in 35 files, 3 Playwright tests, all quality gates
   - Live editing on disk (~2s cadence) detects changes and updates active document without full page reload.
   - Keyboard shortcuts (`Cmd+K` / `Ctrl+K`) open search palette and `Escape` dismisses.
 - Total tests: 199 Vitest tests in 40 files, 8 Playwright browser tests, all quality gates passing.
+
+## Quality and architectural enforcement audit
+
+- ESLint rules enforce design-system control adoption (`button`, `input`, `select`, `textarea`) and ban inline `style` attributes across all frontend layers (`app/`, `features/`, `layouts/`, `components/ui/`), with exemptions granted only to adopted primitives (`Button.tsx`, `TextInput.tsx`, `Select.tsx`, `Switch.tsx`).
+- Subsystem architectural boundaries are codified and enforced in ESLint and test fixtures:
+  - `src/core/` cannot import `react`, `frontend`, `server`, `cli`, or `viewer` modules.
+  - `src/server/` cannot import `react`, `frontend`, `cli`, or `viewer` modules.
+  - `src/viewer/` cannot import `react`, `frontend`, or `cli` modules.
+  - `src/cli/` cannot import `react` or `frontend` modules.
+- `process.exit()` is banned via ESLint AST selector across all library modules (`core`, `server`, `viewer`, `frontend`) and CLI commands (which set `process.exitCode` instead).
+- GitHub Actions CI workflow directly runs `node scripts/measure-frontend.mjs` to enforce production asset budgets (max count, max file size, max total size) after build.
+- Vitest suite in `tests/frontend-architecture.test.ts` expanded to 8 tests (201 total tests across 40 files), including comprehensive positive/negative matrix tests for design-system adoption, semantic HTML allowance, and subsystem boundary enforcement.

@@ -173,6 +173,165 @@ it("keeps primitive colors and shared control/layout styles out of feature CSS",
   }
 });
 
+it("enforces design-system controls comprehensively across all frontend layers with exemptions only for approved primitives", async () => {
+  const lint = new ESLint();
+  const layers = [
+    "src/frontend/app/Probe.tsx",
+    "src/frontend/features/Probe.tsx",
+    "src/frontend/layouts/Probe.tsx",
+    "src/frontend/components/ui/CustomWidget.tsx",
+  ];
+  const elements = ["button", "input", "select", "textarea"];
+  for (const layer of layers) {
+    for (const element of elements) {
+      const results = await lint.lintText(
+        `export const Bad = () => <${element} aria-label="Bad"/>;\n`,
+        { filePath: layer },
+      );
+      expect(
+        results[0]?.errorCount,
+        `Expected ${layer} using <${element}> to fail ESLint`,
+      ).toBeGreaterThan(0);
+    }
+    const styleResult = await lint.lintText(
+      `export const BadStyle = () => <div style={{ color: "red" }}>Bad</div>;\n`,
+      { filePath: layer },
+    );
+    expect(
+      styleResult[0]?.errorCount,
+      `Expected ${layer} using style attr to fail ESLint`,
+    ).toBeGreaterThan(0);
+
+    const exitResult = await lint.lintText(
+      `export const BadExit = () => { process.exit(1); };\n`,
+      { filePath: layer },
+    );
+    expect(
+      exitResult[0]?.errorCount,
+      `Expected ${layer} calling process.exit to fail ESLint`,
+    ).toBeGreaterThan(0);
+  }
+
+  // Positive: approved primitives pass lint
+  const approvedPrimitives = [
+    "src/frontend/components/ui/Button.tsx",
+    "src/frontend/components/ui/TextInput.tsx",
+    "src/frontend/components/ui/Select.tsx",
+    "src/frontend/components/ui/Switch.tsx",
+  ];
+  const primitiveResults = await lint.lintFiles(approvedPrimitives);
+  for (const res of primitiveResults) {
+    expect(res.errorCount, `Expected ${res.filePath} to pass lint`).toBe(0);
+  }
+
+  // Positive: semantic HTML landmarks and text elements pass lint in all layers
+  const semanticSnippet = `export const Semantic = () => (
+    <header>
+      <nav aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Home</a></li>
+        </ol>
+      </nav>
+      <main>
+        <article>
+          <section>
+            <h1>Heading 1</h1>
+            <p>Body text</p>
+            <dialog aria-label="Modal"><kbd>Ctrl+K</kbd></dialog>
+          </section>
+        </article>
+      </main>
+    </header>
+  );\n`;
+  for (const layer of layers) {
+    const semanticResult = await lint.lintText(semanticSnippet, {
+      filePath: layer,
+    });
+    expect(
+      semanticResult[0]?.errorCount,
+      `Expected semantic HTML in ${layer} to pass`,
+    ).toBe(0);
+  }
+});
+
+it("enforces strict subsystem boundaries and bans process.exit() across core, server, viewer, and cli", async () => {
+  const lint = new ESLint();
+
+  const boundaryViolations: [string, string][] = [
+    // Core violations
+    [
+      "src/core/probe.ts",
+      'import { isFrontendRoute } from "../server/frontend-assets.js"; export const v = isFrontendRoute;',
+    ],
+    [
+      "src/core/probe.ts",
+      'import { runProjectCommand } from "../cli/project.js"; export const v = runProjectCommand;',
+    ],
+    [
+      "src/core/probe.ts",
+      'import { renderMarkdown } from "../viewer/markdown.js"; export const v = renderMarkdown;',
+    ],
+    [
+      "src/core/probe.ts",
+      'import { useState } from "react"; export const v = useState;',
+    ],
+    [
+      "src/core/probe.ts",
+      "export function terminate(): void { process.exit(1); }",
+    ],
+
+    // Server violations
+    [
+      "src/server/probe.ts",
+      'import { runProjectCommand } from "../cli/project.js"; export const v = runProjectCommand;',
+    ],
+    [
+      "src/server/probe.ts",
+      'import { renderMarkdown } from "../viewer/markdown.js"; export const v = renderMarkdown;',
+    ],
+    [
+      "src/server/probe.ts",
+      'import { useState } from "react"; export const v = useState;',
+    ],
+    [
+      "src/server/probe.ts",
+      "export function terminate(): void { process.exit(1); }",
+    ],
+
+    // Viewer violations
+    [
+      "src/viewer/probe.ts",
+      'import { runProjectCommand } from "../cli/project.js"; export const v = runProjectCommand;',
+    ],
+    [
+      "src/viewer/probe.ts",
+      'import { useState } from "react"; export const v = useState;',
+    ],
+    [
+      "src/viewer/probe.ts",
+      "export function terminate(): void { process.exit(1); }",
+    ],
+
+    // CLI violations
+    [
+      "src/cli/probe.ts",
+      'import { useState } from "react"; export const v = useState;',
+    ],
+    [
+      "src/cli/probe.ts",
+      "export function terminate(): void { process.exit(1); }",
+    ],
+  ];
+
+  for (const [filePath, code] of boundaryViolations) {
+    const results = await lint.lintText(code, { filePath });
+    expect(
+      results[0]?.errorCount,
+      `Expected ${filePath} with code "${code}" to fail linting`,
+    ).toBeGreaterThan(0);
+  }
+});
+
 it.each(["light", "dark"])(
   "keeps the %s wordmark outlined with consistent brand hierarchy",
   async (theme) => {

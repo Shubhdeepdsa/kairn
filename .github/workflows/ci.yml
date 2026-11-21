@@ -23,6 +23,7 @@ jobs:
       - run: npm run format:check
       - run: npm test
       - run: npm run build
+      - run: node scripts/measure-frontend.mjs
       - run: npm run docs:lint
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
