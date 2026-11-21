@@ -1,3 +1,5 @@
+import { isFrontendRoute } from "./frontend-assets.js";
+import type { FrontendPresentation } from "./frontend-assets.js";
 import {
   searchRoute,
   projectRoute,
@@ -16,6 +18,7 @@ import type { DocumentService } from "../core/documents.js";
 
 /** Static viewer boundary, supplied at composition time; no filesystem routing. */
 export interface ViewerPresentation {
+  readonly frontend?: FrontendPresentation;
   readonly page: string;
   readonly script: string;
   readonly style: string;
@@ -171,6 +174,15 @@ export async function startDocumentationServer(
       active++;
       void (async () => {
         try {
+          const frontend = options.viewer?.frontend;
+          const asset = frontend?.assets.get(target);
+          if (asset || (frontend && isFrontendRoute(target))) {
+            response.writeHead(200, {
+              "Content-Type": `${asset?.contentType ?? "text/html"}; charset=utf-8`,
+            });
+            response.end(asset?.body ?? frontend!.page);
+            return;
+          }
           if (
             options.application &&
             (target === "/api/context" ||

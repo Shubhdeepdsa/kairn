@@ -1,3 +1,4 @@
+import { loadFrontendPresentation } from "../server/frontend-assets.js";
 import { readFile } from "node:fs/promises";
 import type { ViewerPresentation } from "../server/http.js";
 import { renderMarkdown } from "./markdown.js";
@@ -30,6 +31,7 @@ export async function loadViewerPresentation(): Promise<ViewerPresentation> {
       "utf8",
     );
   return {
+    frontend: await loadFrontendPresentation(),
     page,
     style: style + searchStyle,
     script,

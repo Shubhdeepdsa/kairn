@@ -92,3 +92,6 @@ project/document/section through the same local reader.
 
 An empty project search closes on Enter. Remove its chip to browse projects, then
 use arrows and Enter to switch directly to the selected project's documentation.
+
+The transitional React foundation is available at `/app` on the same `kairn run`
+server. The working reader remains at `/`. See [frontend development](docs/FRONTEND.md).

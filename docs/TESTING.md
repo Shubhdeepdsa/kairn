@@ -409,3 +409,7 @@ Browser TSX has a separate strict no-emit TypeScript program. Vitest now include
 React Testing Library/jsdom tests for initialization and redacted root render
 errors. Node production compilation excludes frontend sources; Vite builds them
 into dist/frontend. Browser smoke tests are added in the acceptance stage.
+
+Packaged-asset/API regression checks pass (20 tests across asset/server/run files).
+They cover direct app routes, unknown assets/APIs, request protections, legacy
+reader serving, file/count bounds and package symlink rejection where supported.

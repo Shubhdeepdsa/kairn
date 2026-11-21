@@ -186,3 +186,6 @@ reader's approved default choice with direct project switching.
 - `frontend/app/ErrorBoundary.tsx`: redacted render-error fallback.
 - `frontend/styles/`: provisional semantic tokens and light/dark/system mechanism;
   not the final Mineral theme. See [frontend contracts](FRONTEND.md).
+
+- `server/frontend-assets.ts`: bounded startup preload of trusted packaged HTML/JS/CSS;
+  fixed application namespace, no arbitrary static-file route or source maps.
