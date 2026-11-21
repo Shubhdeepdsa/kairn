@@ -66,6 +66,19 @@ it("resolves semantic icons and distinguishes decorative and meaningful SVGs", (
     "settings",
     "sidebar",
     "wayfinding",
+    "folder",
+    "folderOpen",
+    "file",
+    "chevronRight",
+    "chevronDown",
+    "copy",
+    "history",
+    "refresh",
+    "arrowLeft",
+    "arrowRight",
+    "search",
+    "external",
+    "check",
   ]);
   expect(
     view.container

@@ -177,3 +177,12 @@ acceptance. No Explorer implementation; Phase 6C composes these primitives.
 Mineral implementation preserves Phases 1–6A. Local tests: 157 in 35 files plus
 three installed-browser tests and four reviewed visual baselines. Cross-platform
 CI is reported on the Phase 6B PR; no merge or npm publication is automatic.
+
+## Phase 6C — React Documentation Explorer
+
+- **Phase 6C-0: Reference audit (IMPLEMENTED; VERIFIED)**
+  Comprehensive audit of 38 PNG mockups, 26 HTML screens, 6 SVGs, and canonical screenshots recorded in `docs/EXPLORER_DESIGN_MAPPING.md`. Fixtures created and unit tested in `src/frontend/features/design-system/explorer-fixtures.ts`.
+- **Phase 6C-1: Visual integration (IMPLEMENTED; VERIFIED)**
+  Reusable 3-region Explorer shell, hierarchical navigation tree, reading plane, outline TOC, pager, and callout primitives integrated with Mineral design tokens. Runtime fixture specimen active at `/app/design-system/explorer`. Accessibility, responsive reflow, and visual baselines verified across 173 Vitest unit tests and 5 Playwright browser tests.
+- **Phase 6C-2: Functional Documentation Explorer (PENDING)**
+  Wire real live project tree, server-rendered Markdown reader, heading observer TOC, link resolution diagnostics, search palette integration, and live sync.
