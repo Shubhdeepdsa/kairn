@@ -389,3 +389,116 @@ test("Mineral visual baselines use one controlled platform and bundled fonts", a
     });
   }
 });
+
+test("Explorer shell specimen stays accessible across viewports and supports navigation and reflow", async ({
+  page,
+}) => {
+  const external: string[] = [],
+    errors: string[] = [];
+  page.on("request", (req) => {
+    if (!req.url().startsWith(url + "/")) external.push(req.url());
+  });
+  page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (m) => {
+    if (m.type() === "error") errors.push(m.text());
+  });
+
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(url + "/app/design-system/explorer");
+  await expect(
+    page.getByText("Phase 6C-1 Visual Foundation Specimen"),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "System Overview" }),
+  ).toBeVisible();
+  await page.evaluate(() => document.fonts.ready);
+
+  // Check accessibility with Axe in light & dark modes
+  const { default: AxeBuilder } = await import("@axe-core/playwright");
+  for (const mode of ["light", "dark"] as const) {
+    await page.getByRole("combobox", { name: "Theme" }).selectOption(mode);
+    await page.waitForTimeout(200);
+    const violations = (
+      await new AxeBuilder({ page })
+        .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+        .analyze()
+    ).violations;
+    expect(
+      violations.map((v) => ({
+        id: v.id,
+        nodes: v.nodes.map((n) => n.target),
+      })),
+    ).toEqual([]);
+  }
+
+  // Interactive fixture switching: select Database Design in tree
+  await page
+    .getByRole("button", { name: "Database Design", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Database Design & Partitioning" }),
+  ).toBeVisible();
+  await expect(page.getByText("database.md")).toBeVisible();
+
+  // Test responsive reflow:
+  // 1. Laptop / Tablet (1000px): TOC outline hides, sidebar stays
+  await page.setViewportSize({ width: 1000, height: 900 });
+  await expect(page.locator(".explorer-outline-pane")).toBeHidden();
+  await expect(page.locator(".explorer-sidebar")).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+
+  // 2. Mobile (390px): Sidebar hides, mobile bar appears with toggle
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator(".explorer-mobile-bar")).toBeVisible();
+  await expect(page.locator(".explorer-sidebar")).toBeHidden();
+
+  // Open mobile drawer
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  await expect(page.locator(".explorer-sidebar")).toBeVisible();
+  await expect(page.locator(".explorer-sidebar")).toHaveClass(/is-open/);
+
+  // Close mobile drawer
+  await page.getByRole("button", { name: "Close navigation" }).click();
+  await expect(page.locator(".explorer-sidebar")).toBeHidden();
+
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+
+  expect(external).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test("Explorer visual baselines use one controlled platform and bundled fonts", async ({
+  page,
+}) => {
+  test.skip(
+    process.platform !== "darwin",
+    "Pixel baselines use macOS Chromium only; behavior and contrast run on every OS.",
+  );
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(url + "/app/design-system/explorer");
+  await expect(
+    page.getByText("Phase 6C-1 Visual Foundation Specimen"),
+  ).toBeVisible();
+  await page.evaluate(() => document.fonts.ready);
+  for (const [mode, name, width] of [
+    ["light", "explorer-light", 1280],
+    ["dark", "explorer-dark", 1280],
+    ["light", "explorer-mobile", 390],
+  ] as const) {
+    await page.getByRole("combobox", { name: "Theme" }).selectOption(mode);
+    await page.setViewportSize({ width, height: 900 });
+    await page.waitForTimeout(200);
+    await expect(page).toHaveScreenshot(name + ".png", {
+      animations: "disabled",
+      maxDiffPixelRatio: 0.01,
+    });
+  }
+});

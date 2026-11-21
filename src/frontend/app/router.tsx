@@ -4,6 +4,7 @@ import { AppShell } from "../layouts/AppShell";
 import { WorkspaceLayout } from "../layouts/WorkspaceLayout";
 import { GlobalSettingsLayout } from "../layouts/GlobalSettingsLayout";
 import { ProjectSettingsLayout } from "../layouts/ProjectSettingsLayout";
+
 const Overview = lazy(() =>
   import("../features/foundation/OverviewPage").then((m) => ({
     default: m.OverviewPage,
@@ -24,6 +25,12 @@ const Showcase = lazy(() =>
     default: m.ShowcasePage,
   })),
 );
+const ExplorerShowcase = lazy(() =>
+  import("../features/design-system/ExplorerShowcasePage").then((m) => ({
+    default: m.ExplorerShowcasePage,
+  })),
+);
+
 /** Sole route owner; basename is supplied by the browser entry, and tests can supply MemoryRouter. */
 export function ApplicationRoutes() {
   return (
@@ -31,6 +38,7 @@ export function ApplicationRoutes() {
       <Route element={<AppShell />}>
         <Route index element={<Overview />} />
         <Route path="design-system" element={<Showcase />} />
+        <Route path="design-system/explorer" element={<ExplorerShowcase />} />
         <Route path="projects/:projectId" element={<WorkspaceLayout />}>
           <Route path="docs" element={<Documentation />} />
           <Route path="docs/:documentId" element={<Documentation />} />

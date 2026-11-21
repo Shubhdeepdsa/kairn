@@ -239,3 +239,10 @@ No new product settings or mutation behavior.
 Approved header logos are bundled from src/frontend/assets/brand; responsive
 Header composition selects light/dark mark and outlined wordmark assets for explicit
 appearance or live system preference, separate from semantic icons.
+
+## Phase 6C Explorer foundation
+
+- `frontend/features/explorer/`: `ExplorerShell` (3-region responsive layout shell), `DocTree` (hierarchical navigation tree with active waypoint indicator and folder collapse), `DocReader` (reading plane with breadcrumbs, copy path button, metadata, HTML article surface), `DocOutline` (sticky on-page TOC with waypoint dots), and `DocPager` (previous/next footer cards).
+- `frontend/components/ui/DocCallout.tsx`: architectural directive / note callout box with 3px yellow wayfinding indicator.
+- `frontend/features/design-system/ExplorerShowcasePage.tsx`: dedicated visual specimen at `/app/design-system/explorer` demonstrating the 3-region layout with canonical Marketing Backend fixture data.
+- `frontend/features/design-system/explorer-fixtures.ts`: typed browser-safe fixture data modeling canonical Stitch Marketing Backend specifications.

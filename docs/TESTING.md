@@ -515,3 +515,13 @@ Playwright visual regression policy: behavioral and accessibility tests run acro
 supported platforms (Linux, macOS, Windows); pixel comparison runs exclusively on
 macOS Chromium with pinned bundled fonts (`test.skip(process.platform !== "darwin", ...)`).
 Total tests: 161 Vitest tests in 35 files, 3 Playwright tests, all quality gates passing.
+
+## Phase 6C-1 visual integration
+
+- Unit & integration tests in `tests/frontend/explorer-fixtures.test.ts` (4 tests) and `tests/frontend/explorer-components.test.tsx` (8 tests) verify fixture invariants, DocTree selection, DocOutline TOC navigation, DocPager previous/next cards, DocReader metadata/breadcrumbs/copy, and ExplorerShell 3-region responsive reflow.
+- Browser test in `tests/browser/foundation.spec.ts` verifies:
+  - Axe WCAG A/AA accessibility across Light and Dark themes for the Explorer shell specimen.
+  - Interactive fixture selection in the tree.
+  - Responsive reflow across desktop (1280px), tablet (1000px), and mobile (390px) viewports with mobile drawer disclosure.
+  - Darwin Chromium pixel baselines (`explorer-light-darwin.png`, `explorer-dark-darwin.png`, `explorer-mobile-darwin.png`).
+- Total tests: 173 Vitest tests in 37 files, 5 Playwright browser tests, all quality gates passing.
