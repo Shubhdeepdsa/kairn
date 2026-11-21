@@ -2,7 +2,11 @@ import { Worker } from "node:worker_threads";
 import type { SearchOptions } from "./search-coordinator.js";
 import type { SearchRequest, SearchResponse } from "./search-contracts.js";
 import { searchTerms } from "./search-query.js";
-/** Lazy off-thread search API. Coalesces equal requests and bounds pending jobs; never blocks the reader with SQLite work. */
+/**
+ * Lazy off-thread search API with bounded, coalesced jobs.
+ * Worker failure rejects outstanding jobs; the next search starts a replacement.
+ * SQLite work never blocks the reader thread.
+ */
 export class SearchService {
   private worker: Worker | undefined;
   private sequence = 0;
@@ -22,12 +26,17 @@ export class SearchService {
     if (this.pending.size >= 8)
       return Promise.reject(new Error("Search is busy. Retry shortly."));
     if (!this.worker) {
-      this.worker = new Worker(new URL("./search-worker.js", import.meta.url), {
-        workerData: this.options,
-      });
-      this.worker.on(
+      const worker = new Worker(
+        new URL("./search-worker.js", import.meta.url),
+        {
+          workerData: this.options,
+        },
+      );
+      this.worker = worker;
+      worker.on(
         "message",
         (message: { id: number; response: SearchResponse; error?: string }) => {
+          if (this.worker !== worker) return;
           const job = this.pending.get(message.id);
           this.pending.delete(message.id);
           if (message.error) job?.reject(new Error(message.error));
@@ -35,19 +44,23 @@ export class SearchService {
         },
       );
       const failed = (): void => {
+        // An old worker's later exit must not invalidate its replacement's jobs.
+        if (this.worker !== worker) return;
+        this.worker = undefined;
+        this.requests.clear();
         for (const job of this.pending.values())
-          job.reject(new Error("Search worker stopped. Restart the reader."));
+          job.reject(new Error("Search worker stopped. Retry search."));
         this.pending.clear();
       };
-      this.worker.on("error", failed);
-      this.worker.on("exit", failed);
+      worker.on("error", failed);
+      worker.on("exit", failed);
     }
     const id = ++this.sequence;
     const promise = new Promise<SearchResponse>((resolve, reject) => {
       this.pending.set(id, { resolve, reject });
       this.worker!.postMessage({ id, request });
     }).finally(() => {
-      this.requests.delete(key);
+      if (this.requests.get(key) === promise) this.requests.delete(key);
     });
     this.requests.set(key, promise);
     return promise;

@@ -154,7 +154,9 @@ clipboard dependency, final design system or additional polling lifecycle.
 - `core/search-coordinator.ts`: approved Library/session reconciliation, content
   hashes, source/ignore pruning, bounded progress and honest coverage.
 - `core/search-service.ts` / `search-worker.ts`: lazy worker facade, duplicate-job
-  coalescing, queue bound, redacted failures and bounded resource cleanup.
+  coalescing, queue bound, redacted failures and bounded resource cleanup. Failed
+  workers reject their jobs and are replaced lazily on the next search; late events
+  from the failed worker cannot invalidate replacement jobs.
 
 - `core/project-navigation.ts`: independent ID-based project/destination resolver,
   approval validation and bounded service cache.

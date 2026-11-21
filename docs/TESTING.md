@@ -380,3 +380,10 @@ cannot unexpectedly move the highlighted documentation result.
 Active-project reselection regressions cover both the global project list and a
 selector-only query from a nondefault document, preserving DOM identity, URL,
 history and reading position without another navigation request.
+
+Worker recovery regressions terminate a real worker with an outstanding request
+and inject an error before its later exit. They verify rejection, lazy replacement,
+duplicate-request coalescing and successful subsequent searches with isolated data.
+
+After these review fixes, the full local suite passes 127 tests in 28 files.
+Typecheck, lint/TSDoc, formatting, build and Markdown checks also pass.

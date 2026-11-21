@@ -310,3 +310,54 @@ it("fences cached results against a late writer using an obsolete ignore configu
     await rm(root, { recursive: true, force: true });
   }
 });
+
+it.each(["exit", "error"])(
+  "replaces a failed search worker after %s without stranding or duplicating requests",
+  async (failure) => {
+    const { SearchService } = (await import(
+      new URL("../dist/core/search-service.js", import.meta.url).href
+    )) as typeof import("../src/core/search-service.js");
+    const root = await mkdtemp(join(tmpdir(), "kairn-worker-recovery-"));
+    const service = new SearchService({ dataDirectory: root });
+    // Inspect the owned worker solely to inject lifecycle failure; no production test hook.
+    const owned = service as unknown as {
+      worker?: import("node:worker_threads").Worker;
+    };
+    try {
+      const request = {
+        query: "anything",
+        scope: { type: "global" as const },
+        limit: 20,
+      };
+      const pending = service.search(request);
+      const rejected = expect(pending).rejects.toThrow(
+        "Search worker stopped. Retry search.",
+      );
+      const failedWorker = owned.worker!;
+      let termination: Promise<number>;
+      if (failure === "error") {
+        // Error precedes exit. Start the replacement before the old worker exits.
+        failedWorker.emit("error", new Error("Injected worker failure"));
+        termination = failedWorker.terminate();
+      } else {
+        termination = failedWorker.terminate();
+        await termination;
+      }
+      const replacement = service.search(request);
+      const replacementWorker = owned.worker;
+      await rejected;
+      expect(replacementWorker).not.toBe(failedWorker);
+      expect(service.search(request)).toBe(replacement);
+      await termination;
+      expect(await replacement).toEqual({ results: [], coverage: [] });
+      expect(owned.worker).toBe(replacementWorker);
+      expect(await service.search(request)).toEqual({
+        results: [],
+        coverage: [],
+      });
+    } finally {
+      await service.close();
+      await rm(root, { recursive: true, force: true });
+    }
+  },
+);
