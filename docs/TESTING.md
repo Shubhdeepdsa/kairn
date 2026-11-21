@@ -413,3 +413,6 @@ into dist/frontend. Browser smoke tests are added in the acceptance stage.
 Packaged-asset/API regression checks pass (20 tests across asset/server/run files).
 They cover direct app routes, unknown assets/APIs, request protections, legacy
 reader serving, file/count bounds and package symlink rejection where supported.
+
+Shared UI tests cover Button defaults/refs/variants/loading/disabled behavior,
+semantic icon resolution and accessible labeling, plus theme root cleanup.

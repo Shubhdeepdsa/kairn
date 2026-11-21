@@ -33,3 +33,8 @@
     --kairn-motion: 0ms;
   }
 }
+
+:root[data-accent="blue"] {
+  --kairn-accent: #2259b5;
+  --kairn-accent-text: #ffffff;
+}

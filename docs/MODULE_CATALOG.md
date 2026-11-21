@@ -189,3 +189,10 @@ reader's approved default choice with direct project switching.
 
 - `server/frontend-assets.ts`: bounded startup preload of trusted packaged HTML/JS/CSS;
   fixed application namespace, no arbitrary static-file route or source maps.
+
+- `frontend/components/ui/Button.tsx`: native props/ref, shared variants/sizes and
+  disabled/loading contract, independent of features.
+- `frontend/icons/`: semantic, statically imported Lucide registry; decorative or
+  labeled currentColor SVGs, token sizes, custom-provider replacement boundary.
+- `frontend/app/providers/ThemeProvider.tsx`: runtime appearance state and root
+  attribute lifecycle; CSS owns system/reduced-motion resolution, no persistence.
