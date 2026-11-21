@@ -168,8 +168,12 @@ Clean exported-tree verification passes npm ci, all quality gates, 149 tests in
 on the Phase 6A PR. Shared shell/API/tokens/layouts and lazy routes are foundations
 for 6B; no canonical reader switch occurs before 6C parity.
 
-## Phase 6B — Mineral design system (IN PROGRESS)
+## Phase 6B — Mineral design system (IMPLEMENTED; local checks VERIFIED)
 
 Phase 6A merged as `a373192`. Normalize references, implement semantic themes and
 fonts, reusable controls/layouts/icons/prose, then showcase and browser/visual
 acceptance. No Explorer implementation; Phase 6C composes these primitives.
+
+Mineral implementation preserves Phases 1–6A. Local tests: 157 in 35 files plus
+three installed-browser tests and four reviewed visual baselines. Cross-platform
+CI is reported on the Phase 6B PR; no merge or npm publication is automatic.

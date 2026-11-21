@@ -498,3 +498,8 @@ Local Phase 6B verification: 157 Vitest tests in 35 files pass. All three
 installed-package Chromium tests pass, including four normal visual baseline
 comparisons. Typecheck, lint, build, maintained Markdown and changed-file formatting
 pass; clean-export and remote CI verification are recorded separately.
+
+Clean archived-tree acceptance (no existing dist or user reference files) passes
+npm ci, all required quality gates, 157 tests and all three packaged Chromium
+tests with normal screenshot comparison. Cross-platform results belong to the
+Phase 6B PR. The unrelated untracked design references/temp.md remain untouched.
