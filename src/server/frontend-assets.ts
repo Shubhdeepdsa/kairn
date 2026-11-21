@@ -8,7 +8,7 @@ export interface FrontendPresentation {
   >;
 }
 /**
- * Preload only index.html and flat hashed JS/CSS outputs, bounded to 32 assets,
+ * Preload only index.html and flat hashed JS/CSS/font outputs, bounded to 32 assets,
  * 2 MiB each and 8 MiB total. Symlinks, source maps and nested output are rejected.
  * @param root - Packaged build directory; explicit override is for fixture tests.
  * @throws If output is absent, malformed or exceeds the fixed presentation limits.
@@ -59,7 +59,15 @@ export async function loadFrontendPresentation(
   const assets = new Map<string, { body: Buffer; contentType: string }>();
   let total = Buffer.byteLength(page);
   for (const name of names) {
-    if (!/^[A-Za-z0-9_-]+\.(?:js|css)$/.test(name))
+    if (
+      [
+        "syne-LICENSE.txt",
+        "plus-jakarta-sans-LICENSE.txt",
+        "ibm-plex-mono-LICENSE.txt",
+      ].includes(name)
+    )
+      continue;
+    if (!/^[A-Za-z0-9_-]+\.(?:js|css|woff2)$/.test(name))
       throw new Error("Unexpected frontend asset type.");
     const body = await boundedFile(new URL(name, directory), 2_097_152);
     total += body.length;
@@ -67,7 +75,11 @@ export async function loadFrontendPresentation(
       throw new Error("Frontend presentation is too large.");
     assets.set("/app/assets/" + name, {
       body,
-      contentType: name.endsWith(".js") ? "text/javascript" : "text/css",
+      contentType: name.endsWith(".js")
+        ? "text/javascript"
+        : name.endsWith(".woff2")
+          ? "font/woff2"
+          : "text/css",
     });
   }
   if (!assets.size) throw new Error("Frontend build has no assets.");

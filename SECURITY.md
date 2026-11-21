@@ -76,3 +76,7 @@ SPA HTML. The same request checks and CSP apply. No maps, inline scripts/styles,
 CDNs, mutation endpoints, proxy or development server are exposed. Build-watch
 requires restarting Kairn to reload its asset snapshot. Package files and their
 parents must be user-controlled, like the existing document/storage boundary.
+
+Phase 6B adds only packaged WOFF2 fonts to the bounded asset allowlist and
+`font-src self` to CSP. Font notices ship with the package but have no HTTP route.
+No remote font/image loading, inline style exception or mutation endpoint is added.

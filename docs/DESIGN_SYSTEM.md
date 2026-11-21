@@ -85,3 +85,14 @@ motion, reflow and installed local-only font/assets. Stable screenshot baselines
 use bundled fonts on a single pinned browser/OS family, not cross-platform pixel
 comparisons. Behavioral tests remain cross-platform. Measurements and actual
 verification are recorded below once run.
+
+## Font provenance
+
+Selected Latin WOFF2 sources: Fontsource 5.3.0 packages for Syne variable 400–800,
+Plus Jakarta Sans variable 200–800 and IBM Plex Mono normal 400. The matching OFL
+notices are preserved beside source fonts and copied into packaged assets by the
+build. [Fontsource Jakarta license](https://fontsource.org/fonts/plus-jakarta-sans/about)
+and [IBM Plex source](https://github.com/IBM/plex) document the upstream licensing.
+Only three fonts ship; no italic or additional script subsets. Fallback fonts cover
+other scripts. The asset loader permits fonts under the same file/count/byte caps;
+CSP permits only same-origin fonts. Notices are packaged, not served as routes.

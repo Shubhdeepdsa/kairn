@@ -41,7 +41,7 @@ export interface RunningServer {
 }
 
 const csp =
-  "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
+  "default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; connect-src 'self'; img-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
 function json(response: ServerResponse, status: number, data: unknown): void {
   response.writeHead(status, {
     "Content-Type": "application/json; charset=utf-8",

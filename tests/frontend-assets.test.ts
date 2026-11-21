@@ -68,6 +68,13 @@ it("bounds packaged output and rejects maps, nested assets, oversized files and 
     const asset = join(root, "assets", "entry-123.js");
     await writeFile(asset, "export {};");
     expect((await loadFrontendPresentation(url)).assets.size).toBe(1);
+    await writeFile(join(root, "assets", "local-123.woff2"), "font fixture");
+    expect(
+      (await loadFrontendPresentation(url)).assets.get(
+        "/app/assets/local-123.woff2",
+      )?.contentType,
+    ).toBe("font/woff2");
+    await rm(join(root, "assets", "local-123.woff2"));
     for (const name of ["entry.map", "nested"]) {
       await writeFile(join(root, "assets", name), "x");
       await expect(loadFrontendPresentation(url)).rejects.toThrow("type");
