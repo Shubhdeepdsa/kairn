@@ -9,6 +9,8 @@ export interface ApplicationData {
   readonly projects: readonly SearchProject[];
 }
 const ApplicationContext = createContext<ApplicationData | null>(null);
+const ApiContext = createContext<ApiClient | null>(null);
+
 type Resource =
   | { status: "loading" }
   | { status: "error" }
@@ -54,11 +56,18 @@ export function ApplicationProvider({
       </section>
     );
   return (
-    <ApplicationContext value={resource.data}>{children}</ApplicationContext>
+    <ApiContext value={client}>
+      <ApplicationContext value={resource.data}>{children}</ApplicationContext>
+    </ApiContext>
   );
 }
 export function useApplication(): ApplicationData {
   const value = useContext(ApplicationContext);
   if (!value) throw new Error("ApplicationProvider is required.");
+  return value;
+}
+export function useApiClient(): ApiClient {
+  const value = useContext(ApiContext);
+  if (!value) throw new Error("ApiClient is required.");
   return value;
 }

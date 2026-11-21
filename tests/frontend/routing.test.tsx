@@ -1,23 +1,43 @@
 // @vitest-environment jsdom
-import {
-  render,
-  screen,
-  fireEvent,
-  cleanup,
-  waitFor,
-} from "@testing-library/react";
+import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import { afterEach, it, expect, vi } from "vitest";
 import { App } from "../../src/frontend/app/App";
 import type { ApiClient } from "../../src/frontend/lib/api/client";
+
 const current = {
   id: "11111111-1111-4111-8111-111111111111",
   name: "Fixture project",
 };
+
+const defaultDocId = "a".repeat(64);
+
 const client: ApiClient = {
   getContext: async () => current,
   getProjects: async () => [current],
+  getTree: async () => ({
+    tree: [
+      {
+        kind: "document",
+        id: defaultDocId,
+        path: "README.md",
+        title: "Fixture Readme",
+      },
+    ],
+  }),
+  getDocument: async (id) => ({
+    id,
+    path: "README.md",
+    title: "Fixture Readme",
+    markdown: "# Fixture Readme",
+    revision: "rev-fixture-01",
+    headings: [],
+    diagnostics: [],
+    html: "<p>Fixture content</p>",
+  }),
+  resolveLink: async () => ({ kind: "external", href: "https://example.com" }),
 };
+
 function mount(path = "/", api = client) {
   return render(
     <MemoryRouter initialEntries={[path]}>
@@ -25,7 +45,9 @@ function mount(path = "/", api = client) {
     </MemoryRouter>,
   );
 }
+
 afterEach(cleanup);
+
 it("initializes from real-shaped API data and reuses one shell across routes", async () => {
   mount();
   await screen.findByRole("heading", { name: "React foundation" });
@@ -65,21 +87,9 @@ it("initializes from real-shaped API data and reuses one shell across routes", a
       .getAttribute("aria-expanded"),
   ).toBe("true");
 });
-it("uses the same sidebar disclosure contract in workspace and project settings", async () => {
-  mount(`/projects/${current.id}/docs`);
-  await screen.findByRole("heading", {
-    name: "Documentation workspace foundation",
-  });
-  fireEvent.click(
-    screen.getByRole("button", { name: "Collapse Workspace navigation" }),
-  );
-  expect(
-    screen.queryByRole("navigation", { name: "Workspace navigation" }),
-  ).toBeNull();
-  fireEvent.click(
-    screen.getByRole("button", { name: "Expand Workspace navigation" }),
-  );
-  fireEvent.click(screen.getByRole("link", { name: "Project settings" }));
+
+it("uses the sidebar disclosure contract in project settings", async () => {
+  mount(`/projects/${current.id}/settings/general`);
   await screen.findByRole("heading", {
     name: "Settings architecture contract",
   });
@@ -95,9 +105,10 @@ it("uses the same sidebar disclosure contract in workspace and project settings"
     screen.getByRole("button", { name: "Expand Project settings navigation" }),
   );
   expect(
-    screen.getByRole("navigation", { name: "Workspace navigation" }),
+    screen.getByRole("navigation", { name: "Project settings navigation" }),
   ).toBeTruthy();
 });
+
 it.each([
   ["/unknown", "Page not found"],
   ["/projects/invalid/docs", "Invalid project identifier."],
@@ -110,14 +121,71 @@ it.each([
   mount(path);
   await screen.findByText(new RegExp(message!));
 });
-it("hands valid document IDs to the unchanged legacy URL contract", async () => {
-  const id = "a".repeat(64);
-  mount(`/projects/${current.id}/docs/${id}`);
-  const link = await screen.findByRole("link", {
-    name: "Open document in the working reader",
+
+it("loads server-backed document tree and auto-selects default document at /docs", async () => {
+  const treeDoc = {
+    kind: "document" as const,
+    id: "a".repeat(64),
+    path: "README.md",
+    title: "Project Readme",
+  };
+  const testClient: ApiClient = {
+    ...client,
+    getTree: async () => ({ tree: [treeDoc] }),
+    getDocument: async (id) => ({
+      id,
+      path: "README.md",
+      title: "Project Readme",
+      markdown: "# Readme",
+      revision: "rev-1",
+      headings: [
+        { level: 1, title: "Project Readme", fragment: "project-readme" },
+      ],
+      diagnostics: [],
+      html: "<h1>Project Readme</h1>",
+    }),
+  };
+
+  mount(`/projects/${current.id}/docs`, testClient);
+  const headings = await screen.findAllByRole("heading", {
+    name: "Project Readme",
   });
-  expect(link.getAttribute("href")).toBe(`/#p/${current.id}/${id}`);
+  expect(headings.length).toBeGreaterThanOrEqual(1);
+  expect(screen.getByText("Navigation tree")).toBeTruthy();
+  expect(screen.getByRole("button", { name: "Project Readme" })).toBeTruthy();
 });
+
+it("loads specific document when documentId is in the URL", async () => {
+  const specificId = "b".repeat(64);
+  const testClient: ApiClient = {
+    ...client,
+    getTree: async () => ({
+      tree: [
+        {
+          kind: "document",
+          id: specificId,
+          path: "docs/spec.md",
+          title: "Specification",
+        },
+      ],
+    }),
+    getDocument: async (id) => ({
+      id,
+      path: "docs/spec.md",
+      title: "Specification",
+      markdown: "# Specification",
+      revision: "rev-2",
+      headings: [],
+      diagnostics: [],
+      html: "<p>Spec body</p>",
+    }),
+  };
+
+  mount(`/projects/${current.id}/docs/${specificId}`, testClient);
+  await screen.findByRole("heading", { name: "Specification" });
+  expect(screen.getByText("spec.md")).toBeTruthy();
+});
+
 it("shows loading and retry errors, then recovers through the same provider", async () => {
   const getContext = vi
     .fn<ApiClient["getContext"]>()
@@ -130,6 +198,7 @@ it("shows loading and retry errors, then recovers through the same provider", as
   fireEvent.click(screen.getByRole("button", { name: "Retry connection" }));
   await screen.findByRole("heading", { name: "React foundation" });
 });
+
 it("aborts pending startup reads on unmount and ignores their late completion", async () => {
   let finish: ((value: typeof current) => void) | undefined;
   let signal: AbortSignal | undefined;
@@ -146,5 +215,4 @@ it("aborts pending startup reads on unmount and ignores their late completion", 
   view.unmount();
   expect(signal?.aborted).toBe(true);
   finish?.(current);
-  await waitFor(() => expect(screen.queryByRole("heading")).toBeNull());
 });

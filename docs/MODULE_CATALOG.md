@@ -242,7 +242,11 @@ appearance or live system preference, separate from semantic icons.
 
 ## Phase 6C Explorer foundation
 
-- `frontend/features/explorer/`: `ExplorerShell` (3-region responsive layout shell), `DocTree` (hierarchical navigation tree with active waypoint indicator and folder collapse), `DocReader` (reading plane with breadcrumbs, copy path button, metadata, HTML article surface), `DocOutline` (sticky on-page TOC with waypoint dots), and `DocPager` (previous/next footer cards).
+- `frontend/lib/api/types.ts`: typed browser-safe API contracts (`NavigationEntry`, `DocumentEntry`, `DirectoryEntry`, `TreeResponse`, `DocumentResponse`, `DocumentHeading`, `LinkDiagnostic`, `LinkResolution`), mirroring server contracts without importing Node or core filesystem services.
+- `frontend/lib/api/client.ts`: extended with typed same-origin GET methods (`getTree`, `getDocument`, `resolveLink`), validating JSON response shapes and enforcing opaque IDs and route segments.
+- `frontend/features/explorer/navigation-tree.ts`: pure tree utilities (`flattenTree`, `findDefaultDocument`, `findDocumentById`, `getPreviousNextDocuments`), matching Phase 5 README-first priority and sequential pagination.
+- `frontend/features/explorer/`: `ExplorerShell` (3-region responsive layout shell), `DocTree` (hierarchical navigation tree with active waypoint indicator, directory collapse retention, and warning banner), `DocReader` (reading plane with breadcrumbs, copy path button, metadata, HTML article surface), `DocOutline` (sticky on-page TOC with waypoint dots), and `DocPager` (previous/next footer cards).
 - `frontend/components/ui/DocCallout.tsx`: architectural directive / note callout box with 3px yellow wayfinding indicator.
+- `frontend/features/foundation/DocumentationPage.tsx`: real Documentation Explorer view wired to server-backed tree and document APIs at `/app/projects/:projectId/docs`, automatically selecting default documents and preserving folder expansion per project.
 - `frontend/features/design-system/ExplorerShowcasePage.tsx`: dedicated visual specimen at `/app/design-system/explorer` demonstrating the 3-region layout with canonical Marketing Backend fixture data.
 - `frontend/features/design-system/explorer-fixtures.ts`: typed browser-safe fixture data modeling canonical Stitch Marketing Backend specifications.

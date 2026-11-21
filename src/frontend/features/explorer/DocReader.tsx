@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { DocumentResponse } from "../design-system/explorer-fixtures";
+import type { DocumentResponse } from "../../lib/api/types.js";
 import { Icon } from "../../icons/Icon";
 import { Button } from "../../components/ui/Button";
 import { DocPager } from "./DocPager";

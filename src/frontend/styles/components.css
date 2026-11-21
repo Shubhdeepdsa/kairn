@@ -380,6 +380,23 @@
   gap: var(--kairn-space-4);
   font-size: var(--kairn-text-small);
 }
+.doc-tree-empty {
+  padding: var(--kairn-space-4);
+  color: var(--kairn-muted);
+  font-size: var(--kairn-text-small);
+}
+.doc-tree-warning {
+  display: flex;
+  align-items: center;
+  gap: var(--kairn-space-2);
+  padding: var(--kairn-space-2) var(--kairn-space-3);
+  margin-bottom: var(--kairn-space-3);
+  border-radius: var(--kairn-radius);
+  background: var(--kairn-warning-subtle);
+  border: 1px solid var(--kairn-warning);
+  color: var(--kairn-warning);
+  font-size: var(--kairn-caption);
+}
 .doc-tree-section {
   display: flex;
   flex-direction: column;

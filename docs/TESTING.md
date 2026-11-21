@@ -525,3 +525,15 @@ Total tests: 161 Vitest tests in 35 files, 3 Playwright tests, all quality gates
   - Responsive reflow across desktop (1280px), tablet (1000px), and mobile (390px) viewports with mobile drawer disclosure.
   - Darwin Chromium pixel baselines (`explorer-light-darwin.png`, `explorer-dark-darwin.png`, `explorer-mobile-darwin.png`).
 - Total tests: 173 Vitest tests in 37 files, 5 Playwright browser tests, all quality gates passing.
+
+## Phase 6C-2A real project data & interactive tree
+
+- Unit tests in `tests/frontend/navigation-tree.test.ts` (6 tests) verify tree flattening, default document selection (README first, then first document), document lookup by ID, and previous/next document computation.
+- Client tests in `tests/frontend/api.test.ts` (6 tests) verify `getTree`, `getDocument`, and `resolveLink` requests against root and scoped project routes with shape and error validation.
+- Component tests in `tests/frontend/explorer-components.test.tsx` (9 tests) verify `DocTree` with real `NavigationEntry` hierarchy, warning banner, empty state, and controlled collapse callbacks.
+- Routing tests in `tests/frontend/routing.test.tsx` (10 tests) verify `/app/projects/:projectId/docs` auto-selects the default document and renders server-backed navigation without placeholder stubs.
+- Browser test in `tests/browser/foundation.spec.ts` verifies:
+  - Installed production app loads server-backed tree and reader at `/app/projects/:projectId/docs`.
+  - Discovers and auto-selects default `README.md`.
+  - Renders project name badge, active tree item, and article reader content.
+- Total tests: 184 Vitest tests in 38 files, 6 Playwright browser tests, all quality gates passing.

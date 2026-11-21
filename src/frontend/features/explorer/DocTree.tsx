@@ -1,71 +1,130 @@
 import { useState } from "react";
 import type { FixtureTreeNode } from "../design-system/explorer-fixtures";
+import type { NavigationEntry } from "../../lib/api/types";
 import { Icon } from "../../icons/Icon";
 import { Button } from "../../components/ui/Button";
 
+export type TreeNode = NavigationEntry | FixtureTreeNode;
+
 export interface DocTreeProps {
-  readonly nodes: readonly FixtureTreeNode[];
+  readonly nodes: readonly TreeNode[];
   readonly activeDocumentId?: string | undefined;
   readonly onSelectDocument?: ((id: string) => void) | undefined;
+  readonly collapsedPaths?: ReadonlySet<string> | undefined;
+  readonly onToggleCollapse?: ((path: string) => void) | undefined;
   readonly defaultExpandedIds?: readonly string[] | undefined;
+  readonly warning?: string | undefined;
 }
 
 /**
  * Hierarchical document tree navigation.
  * Renders nested directories, file nodes, and distinct source categories.
+ * Preserves directory-before-file ordering and supports folder expansion retention.
  */
 export function DocTree({
   nodes,
   activeDocumentId,
   onSelectDocument,
-  defaultExpandedIds = ["marketing-backend:dir:architecture"],
+  collapsedPaths,
+  onToggleCollapse,
+  defaultExpandedIds,
+  warning,
 }: DocTreeProps) {
-  const [expandedIds, setExpandedIds] = useState<ReadonlySet<string>>(
-    () => new Set(defaultExpandedIds),
+  // If defaultExpandedIds is explicitly provided (e.g. in specimen fixture), track expanded IDs.
+  // Otherwise, default to all-open behavior with a collapsed set.
+  const isFixtureMode =
+    defaultExpandedIds !== undefined && collapsedPaths === undefined;
+  const [fixtureExpanded, setFixtureExpanded] = useState<ReadonlySet<string>>(
+    () => new Set(defaultExpandedIds ?? []),
   );
+  const [internalCollapsed, setInternalCollapsed] = useState<
+    ReadonlySet<string>
+  >(() => new Set());
 
-  const toggleDirectory = (id: string) => {
-    setExpandedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
+  const isControlled = collapsedPaths !== undefined;
+  const currentCollapsed = isControlled ? collapsedPaths : internalCollapsed;
+
+  const toggleDirectory = (node: TreeNode) => {
+    const key = node.path;
+    if (isFixtureMode && "id" in node && typeof node.id === "string") {
+      setFixtureExpanded((prev) => {
+        const next = new Set(prev);
+        if (next.has(node.id as string)) next.delete(node.id as string);
+        else next.add(node.id as string);
+        return next;
+      });
+      return;
+    }
+
+    if (onToggleCollapse) {
+      onToggleCollapse(key);
+    }
+    if (!isControlled) {
+      setInternalCollapsed((prev) => {
+        const next = new Set(prev);
+        if (next.has(key)) next.delete(key);
+        else next.add(key);
+        return next;
+      });
+    }
   };
 
-  // Group nodes by source or main tree
-  const mainNodes = nodes.filter((n) => !n.source);
+  const isExpanded = (node: TreeNode) => {
+    if (isFixtureMode && "id" in node && typeof node.id === "string") {
+      return fixtureExpanded.has(node.id as string);
+    }
+    return !currentCollapsed.has(node.path);
+  };
+
+  if (nodes.length === 0) {
+    return (
+      <nav
+        className="doc-tree doc-tree-empty"
+        aria-label="Documentation hierarchy"
+      >
+        {warning && (
+          <div className="doc-tree-warning" role="status">
+            <Icon name="wayfinding" className="icon-sm" />
+            <span>{warning}</span>
+          </div>
+        )}
+        <p className="doc-tree-empty-message">No documentation files found.</p>
+      </nav>
+    );
+  }
+
+  // Group nodes if source headers are present (e.g. in fixtures)
+  const mainNodes = nodes.filter((n) => !("source" in n) || !n.source);
   const additionalNodes = nodes.filter(
-    (n) => n.source === "Additional Sources",
+    (n) => "source" in n && n.source === "Additional Sources",
   );
 
-  const renderNode = (node: FixtureTreeNode, depth = 0) => {
+  const renderNode = (node: TreeNode, depth = 0) => {
     if (node.kind === "directory") {
-      const isExpanded = expandedIds.has(node.id);
+      const expanded = isExpanded(node);
+      const key = `dir:${node.path}`;
       return (
-        <li key={node.id} className="doc-tree-branch" data-depth={depth}>
+        <li key={key} className="doc-tree-branch" data-depth={depth}>
           <Button
             variant="ghost"
             className="doc-tree-folder-btn"
-            aria-expanded={isExpanded}
-            onClick={() => toggleDirectory(node.id)}
+            aria-expanded={expanded}
+            title={node.path}
+            onClick={() => toggleDirectory(node)}
           >
-            <div className="doc-tree-item-leading">
+            <span className="doc-tree-item-leading">
               <Icon
-                name={isExpanded ? "folderOpen" : "folder"}
+                name={expanded ? "folderOpen" : "folder"}
                 className="icon-sm"
               />
               <span className="doc-tree-item-title">{node.title}</span>
-            </div>
+            </span>
             <Icon
-              name={isExpanded ? "chevronDown" : "chevronRight"}
+              name={expanded ? "chevronDown" : "chevronRight"}
               className="icon-sm doc-tree-chevron"
             />
           </Button>
-          {isExpanded && node.children && (
+          {expanded && node.children && (
             <ul className="doc-tree-children">
               {node.children.map((child) => renderNode(child, depth + 1))}
             </ul>
@@ -74,23 +133,25 @@ export function DocTree({
       );
     }
 
-    const isActive = activeDocumentId === node.id;
+    const docId = node.id;
+    const isActive = activeDocumentId === docId;
     return (
-      <li key={node.id} className="doc-tree-leaf" data-depth={depth}>
+      <li key={docId} className="doc-tree-leaf" data-depth={depth}>
         <Button
           variant="ghost"
           className="doc-tree-file-btn"
           data-active={isActive ? "true" : "false"}
           aria-current={isActive ? "page" : undefined}
-          onClick={() => onSelectDocument?.(node.id)}
+          title={node.path}
+          onClick={() => onSelectDocument?.(docId)}
         >
           {isActive && (
             <span className="doc-tree-active-bar" aria-hidden="true" />
           )}
-          <div className="doc-tree-item-leading">
+          <span className="doc-tree-item-leading">
             <Icon name="file" className="icon-sm" />
             <span className="doc-tree-item-title">{node.title}</span>
-          </div>
+          </span>
           {isActive && (
             <span className="doc-tree-active-dot" aria-hidden="true" />
           )}
@@ -101,6 +162,13 @@ export function DocTree({
 
   return (
     <nav className="doc-tree" aria-label="Documentation hierarchy">
+      {warning && (
+        <div className="doc-tree-warning" role="status">
+          <Icon name="wayfinding" className="icon-sm" />
+          <span>{warning}</span>
+        </div>
+      )}
+
       <div className="doc-tree-section">
         <div className="doc-tree-section-header">
           <span className="doc-tree-section-title">Navigation tree</span>

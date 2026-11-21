@@ -1,21 +1,7 @@
 import type { SearchProject } from "../../../core/search-contracts.js";
+import type { DocumentHeading, DocumentResponse } from "../../lib/api/types.js";
 
-export interface DocumentHeading {
-  readonly level: number;
-  readonly title: string;
-  readonly fragment: string;
-}
-
-export interface DocumentResponse {
-  readonly id: string;
-  readonly path: string;
-  readonly title: string;
-  readonly markdown: string;
-  readonly revision: string;
-  readonly html?: string;
-  readonly headings: readonly DocumentHeading[];
-  readonly diagnostics: readonly string[];
-}
+export type { DocumentHeading, DocumentResponse };
 
 export interface FixtureTreeNode {
   readonly id: string;

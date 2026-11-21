@@ -502,3 +502,34 @@ test("Explorer visual baselines use one controlled platform and bundled fonts", 
     });
   }
 });
+
+test("Documentation explorer loads server-backed tree and reader for the active project", async ({
+  page,
+  request,
+}) => {
+  const context = (await (await request.get(url + "/api/context")).json()) as {
+    id: string;
+    name: string;
+  };
+
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(url + `/app/projects/${context.id}/docs`);
+
+  // Auto-redirects to default document (README.md) and renders Documentation Explorer
+  await expect(page.locator(".explorer-shell")).toBeVisible();
+  await expect(page.locator(".doc-tree")).toBeVisible();
+  await expect(page.locator(".doc-reader")).toBeVisible();
+
+  // Project name badge in sidebar
+  await expect(page.locator(".explorer-project-name")).toHaveText(context.name);
+
+  // Tree contains README
+  await expect(
+    page.getByRole("button", { name: "README", exact: true }),
+  ).toBeVisible();
+
+  // Reader contains the heading from README.md
+  await expect(
+    page.getByRole("heading", { name: "Browser fixture updated" }),
+  ).toBeVisible();
+});

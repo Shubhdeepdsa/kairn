@@ -184,5 +184,7 @@ CI is reported on the Phase 6B PR; no merge or npm publication is automatic.
   Comprehensive audit of 38 PNG mockups, 26 HTML screens, 6 SVGs, and canonical screenshots recorded in `docs/EXPLORER_DESIGN_MAPPING.md`. Fixtures created and unit tested in `src/frontend/features/design-system/explorer-fixtures.ts`.
 - **Phase 6C-1: Visual integration (IMPLEMENTED; VERIFIED)**
   Reusable 3-region Explorer shell, hierarchical navigation tree, reading plane, outline TOC, pager, and callout primitives integrated with Mineral design tokens. Runtime fixture specimen active at `/app/design-system/explorer`. Accessibility, responsive reflow, and visual baselines verified across 173 Vitest unit tests and 5 Playwright browser tests.
-- **Phase 6C-2: Functional Documentation Explorer (PENDING)**
-  Wire real live project tree, server-rendered Markdown reader, heading observer TOC, link resolution diagnostics, search palette integration, and live sync.
+- **Phase 6C-2A: Tree and data integration (IMPLEMENTED; VERIFIED)**
+  Real server-backed project tree data (`/api/projects/:projectId/tree`), typed client methods, hierarchical `DocTree` with per-project collapse state retention, Phase 5 default document discovery (`README.md` first), and active document routing at `/app/projects/:projectId/docs`.
+- **Phase 6C-2B: Safe reader and TOC (NEXT)**
+  Heading intersection observer for on-page outline TOC, safe HTML article surface, and link diagnostics.

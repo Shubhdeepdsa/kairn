@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { DocumentHeading } from "../design-system/explorer-fixtures";
+import type { DocumentHeading } from "../../lib/api/types.js";
 import { IconButton } from "../../components/ui/IconButton";
 
 export interface DocOutlineProps {
