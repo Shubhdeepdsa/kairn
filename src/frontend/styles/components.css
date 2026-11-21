@@ -10,7 +10,7 @@
   color: var(--kairn-text);
   font: inherit;
   cursor: pointer;
-  transition: background var(--kairn-motion);
+  transition: opacity var(--kairn-motion);
   min-height: var(--kairn-control-md);
   border-color: var(--kairn-control-border);
   font-size: var(--kairn-text-body);

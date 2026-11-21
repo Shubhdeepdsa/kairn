@@ -142,3 +142,23 @@ it("connects semantic Tailwind aliases and shared component styles to the same t
   expect(themes).toContain("prefers-reduced-motion");
   expect(themes).toContain("prefers-color-scheme");
 });
+
+it("keeps primitive colors and shared control/layout styles out of feature CSS", async () => {
+  const all = await files(resolve("src/frontend"));
+  for (const file of all.filter((path) => path.endsWith(".css"))) {
+    const source = await readFile(file, "utf8");
+    if (!file.endsWith("/tokens.css") && !file.endsWith("/themes.css")) {
+      expect(source, file).not.toMatch(/#[0-9a-f]{3,8}\b|\b(?:rgb|hsl)a?\(/i);
+      expect(source, file).not.toContain("var(--mineral-");
+    }
+    expect(file).not.toContain("/features/");
+  }
+  const lint = new ESLint();
+  for (const element of ["input", "select"]) {
+    const results = await lint.lintText(
+      `export const Bad=()=> <${element} aria-label="Bad"/>;`,
+      { filePath: "src/frontend/features/Probe.tsx" },
+    );
+    expect(results[0]?.errorCount).toBeGreaterThan(0);
+  }
+});

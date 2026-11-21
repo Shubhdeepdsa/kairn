@@ -183,3 +183,7 @@ No external resource requests or unexpected console errors occurred.
 Canonical Mineral tokens/components and normalization decisions are maintained in
 [the design system](DESIGN_SYSTEM.md). Phase 6A architecture and reader migration
 boundaries remain unchanged.
+
+Phase 6B extends the SVG contract through icons/types.ts (registry re-exports it),
+adds runtime initialAppearance/initialAccent injection and a lazy showcase. Font
+assets/notices extend the existing build only; the vanilla migration is unchanged.

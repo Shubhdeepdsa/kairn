@@ -96,3 +96,53 @@ and [IBM Plex source](https://github.com/IBM/plex) document the upstream licensi
 Only three fonts ship; no italic or additional script subsets. Fallback fonts cover
 other scripts. The asset loader permits fonts under the same file/count/byte caps;
 CSP permits only same-origin fonts. Notices are packaged, not served as routes.
+
+## Measured Phase 6B baseline
+
+Node 26.13.0, production build; offline gzip uses Node zlib, not HTTP compression.
+
+| Measure                    |  Phase 6A |  Phase 6B |
+| -------------------------- | --------: | --------: |
+| Total JavaScript           | 273,034 B | 287,732 B |
+| HTML-referenced initial JS | 270,851 B | 271,812 B |
+| CSS                        |   8,357 B |  23,131 B |
+| Font assets                |       0 B |  76,664 B |
+| Packed package sample      | 152,744 B | 239,230 B |
+| Unpacked package sample    | 512,874 B | 633,867 B |
+
+Showcase lazy JS: 13,700 B / 4,042 B gzip, not loaded by the overview. Initial JS
+is now three chunks; overview adds one. The shared Icon chunk is 21,088 B / 8,221 B
+gzip including its runtime dependencies, not an isolated icon-only attribution.
+CSS: 5,179 B gzip. Three WOFF2 fonts: Syne 34,608 B, Jakarta 27,348 B, Plex 14,708 B;
+WOFF2 is already compressed. OFL notices add 14,233 B raw. Package impact sample:
++86,486 B compressed / +120,993 B unpacked; metadata/doc edits can move final bytes.
+No new runtime Node dependencies. Build font-source packages (5.3.0) and browser-only
+axe tooling (4.14.0) are devDependencies; only selected font binaries/notices ship.
+Reproduce using `npm run build`, `node scripts/measure-frontend.mjs` and
+`npm pack --dry-run --json`. Existing font sourcing is documented above.
+
+## Implemented boundaries and evidence
+
+The showcase uses provisional runtime preview controls, not saved settings. It
+matches the supplied neutral/surface/typography/wayfinding language; it deliberately
+does not recreate Explorer screens, mock metadata, search bars or settings actions.
+The shared header uses the original non-brand wayfinding glyph; the approved brand
+logo is not redrawn or replaced. Accent foreground/backgrounds switch atomically
+(no intermediate contrast loss from color interpolation). Sidebar remains disclosure.
+
+Local automated evidence: all six appearance/accent combinations pass axe A/AA
+checks and explicit text/control contrast assertions. Live system preference,
+explicit override, reduced motion, keyboard tabs/switches, and 320/640px reflow pass.
+Four reviewed macOS Chromium viewport baselines cover Light/Dark/Blue/mobile.
+Snapshots do not establish full pixel fidelity to Stitch or universal accessibility.
+Human review of initial light/dark/mobile compositions accompanied automated checks.
+
+## Phase 6C readiness
+
+Ready: actions, labeled native inputs/select/switch, status/surface/section/settings
+composition, tabs/breadcrumbs/sidebar items, shared header/sidebar disclosure,
+semantic icons and scoped prose for the existing safe renderer. Explorer still
+needs document-tree composition, responsive reader/outline orchestration, search
+controller adaptation and any demonstrated complex overlays. No design-system
+blocker is known; actual reader parity and retirement remain independently tested
+Phase 6C work. No image loading, syntax highlighting or file-type icon resolver yet.

@@ -3,6 +3,7 @@
   max-width: var(--kairn-content-width);
   margin-inline: auto;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--kairn-space-8);
 }
 .showcase-intro {
@@ -86,4 +87,8 @@
   .showcase .ui-card {
     padding: var(--kairn-space-4);
   }
+}
+
+.showcase > * {
+  min-width: 0;
 }

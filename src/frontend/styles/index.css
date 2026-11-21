@@ -166,13 +166,6 @@ main {
   display: none !important;
 }
 
-.ui-button:hover:not(:disabled) {
-  background: var(--kairn-surface-hover);
-}
-.ui-button[data-variant="primary"]:hover:not(:disabled) {
-  background: var(--kairn-accent-hover);
-}
-
 /* Typography roles, shared across layouts, controls and reading specimens. */
 .type-display {
   font-family: var(--kairn-font-display);

@@ -474,3 +474,27 @@ contrast, system media changes and explicit overrides independently of DOM tests
 Mineral control regressions cover labels/descriptions/errors and refs, native
 input/select form reset, controlled/disabled switches, labeled icon actions,
 manual tab roving focus/disabled skipping and panel associations, and breadcrumbs.
+
+## Mineral accessibility and visual checks
+
+The installed-package Chromium suite tests all six Light/Dark × Mineral/Blue/Forest
+combinations with axe WCAG A/AA rules plus explicit text, accent-fill and control
+outline contrast ratios. It changes system media preference live, verifies explicit
+overrides and reduced motion, native Space switching and manual tab activation,
+sidebar disclosure and reflow at 640/320 CSS px (the latter equivalent to 200% on a
+640px viewport). No claim of universal WCAG conformance follows from automated checks.
+Four viewport screenshots cover Light, Dark, Blue and mobile using bundled fonts.
+Only macOS Chromium compares pixels; Linux/Windows run behavioral/contrast checks
+and explicitly skip the pixel test. Baselines require human review on intentional
+changes: `npm run test:browser -- --update-snapshots`. Do not update blindly to hide
+regressions. No remote assets, new settings writes or real project fixture data.
+
+The first contrast run exposed animated background/instant foreground mismatch
+on accent changes; color transitions were removed. The first 320px run exposed
+an implicit grid minimum; explicit minmax(0,1fr) fixes it. Tests retain both
+assertions. Baselines were inspected and then compared without update mode.
+
+Local Phase 6B verification: 157 Vitest tests in 35 files pass. All three
+installed-package Chromium tests pass, including four normal visual baseline
+comparisons. Typecheck, lint, build, maintained Markdown and changed-file formatting
+pass; clean-export and remote CI verification are recorded separately.

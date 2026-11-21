@@ -189,3 +189,10 @@ approvals independently of search. See [search contracts](SEARCH.md).
 React foundation is scoped to `/app`; the working reader remains at `/`.
 Browser and Node builds remain separate, with one package and secure loopback
 server. Canonical ownership and migration plan: [frontend architecture](FRONTEND.md).
+
+## Phase 6B Mineral ownership
+
+Primitive/semantic theme tokens feed shared control/layout/prose CSS. Features
+compose those primitives; no duplicate theme engine, persistence or renderer.
+The showcase is lazy; font assets share the bounded packaged asset mechanism.
+Canonical contracts: [Mineral design system](DESIGN_SYSTEM.md).
