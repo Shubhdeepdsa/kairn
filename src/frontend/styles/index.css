@@ -36,7 +36,6 @@ p {
   margin-block: var(--kairn-space-3);
 }
 main {
-  padding: var(--kairn-space-4);
   min-width: 0;
 }
 
@@ -72,11 +71,17 @@ main {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  padding: 0;
+}
+.app-main > section {
+  padding: var(--kairn-space-4);
 }
 .app-main:has(.explorer-shell),
 .app-main:has(.explorer-showcase-container),
-.app-main > .explorer-shell {
+.app-main > .explorer-shell,
+.app-main > .explorer-showcase-container {
   overflow: hidden;
+  padding: 0;
 }
 
 /* Application chrome header (canonical Stitch 54px compact bar) */
