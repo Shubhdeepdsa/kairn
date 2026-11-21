@@ -128,7 +128,9 @@ it("rejects Node imports, page-level buttons, inline styles, direct icons and Re
   }
 });
 it("connects semantic Tailwind aliases and shared component styles to the same token owners", async () => {
-  const css = await readFile("src/frontend/styles/index.css", "utf8");
+  const css =
+    (await readFile("src/frontend/styles/index.css", "utf8")) +
+    (await readFile("src/frontend/styles/components.css", "utf8"));
   const tokens = await readFile("src/frontend/styles/tokens.css", "utf8");
   const themes = await readFile("src/frontend/styles/themes.css", "utf8");
   expect(css).toContain('@import "tailwindcss"');

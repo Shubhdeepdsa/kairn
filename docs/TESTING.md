@@ -470,3 +470,7 @@ added. The follow-up passes the full 150-test local suite, typecheck, lint and b
 Phase 6B theme contract tests verify injected initial appearance/accent, runtime
 accent propagation and root cleanup. Browser tests verify resolved CSS values,
 contrast, system media changes and explicit overrides independently of DOM tests.
+
+Mineral control regressions cover labels/descriptions/errors and refs, native
+input/select form reset, controlled/disabled switches, labeled icon actions,
+manual tab roving focus/disabled skipping and panel associations, and breadcrumbs.
