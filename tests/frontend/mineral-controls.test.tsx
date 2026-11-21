@@ -125,3 +125,32 @@ it("labels icon actions once and breadcrumbs identify only the current location"
   expect(screen.getByText("Current").getAttribute("aria-current")).toBe("page");
   expect(screen.getByRole("link", { name: "Home" })).toBeTruthy();
 });
+
+it("renders the lazy showcase using the same provider and shared primitives", async () => {
+  const { ShowcasePage } =
+    await import("../../src/frontend/features/design-system/ShowcasePage");
+  const { ThemeProvider } =
+    await import("../../src/frontend/app/providers/ThemeProvider");
+  render(
+    <MemoryRouter>
+      <ThemeProvider>
+        <ShowcasePage />
+      </ThemeProvider>
+    </MemoryRouter>,
+  );
+  expect(
+    screen.getByRole("heading", { name: "Mineral Precision" }),
+  ).toBeTruthy();
+  fireEvent.change(screen.getByRole("combobox", { name: "Accent palette" }), {
+    target: { value: "blue" },
+  });
+  expect(document.documentElement.dataset.accent).toBe("blue");
+  fireEvent.change(screen.getByRole("combobox", { name: "Appearance" }), {
+    target: { value: "dark" },
+  });
+  expect(document.documentElement.dataset.theme).toBe("dark");
+  expect(
+    screen.getByRole("article", { name: "Markdown presentation specimen" }),
+  ).toBeTruthy();
+  expect(screen.getByRole("img", { name: "wayfinding" })).toBeTruthy();
+});

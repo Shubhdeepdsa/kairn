@@ -4,6 +4,7 @@
 @import "./themes.css";
 @import "./components.css";
 @import "./prose.css";
+@import "./showcase.css";
 @theme inline {
   --color-canvas: var(--kairn-canvas);
   --color-surface: var(--kairn-surface);

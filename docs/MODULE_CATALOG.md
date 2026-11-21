@@ -230,3 +230,7 @@ compatibility, so custom components do not introduce registry import cycles.
 `styles/prose.css` scopes static reading foundations to `.kairn-prose`, including
 headings/lists/tables/code/quotes/callouts and image-placeholder/caption patterns.
 It does not enable rendering or resources; Phase 6C integrates the existing parser.
+
+`features/design-system/ShowcasePage` lazily composes all Mineral primitives at
+`/app/design-system`, with real runtime theme/accent previews and static prose.
+No new product settings or mutation behavior.

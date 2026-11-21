@@ -10,6 +10,9 @@
   --mineral-secondary: #52606d;
   --mineral-tertiary: #768692;
   --mineral-hairline: #dce1e5;
+  --kairn-reference-yellow: var(--mineral-yellow);
+  --kairn-reference-graphite: var(--mineral-graphite);
+  --kairn-reference-white: var(--mineral-white);
   --kairn-canvas: light-dark(var(--mineral-canvas), #0b1319);
   --kairn-surface: light-dark(var(--mineral-white), #151f27);
   --kairn-surface-subtle: light-dark(var(--mineral-subtle), #1e2b35);

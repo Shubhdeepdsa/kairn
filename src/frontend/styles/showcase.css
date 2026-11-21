@@ -1,0 +1,89 @@
+/* Specimen composition only. Primitive swatches are semantic aliases defined by the token owner. */
+.showcase {
+  max-width: var(--kairn-content-width);
+  margin-inline: auto;
+  display: grid;
+  gap: var(--kairn-space-8);
+}
+.showcase-intro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--kairn-space-4);
+}
+.showcase-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--kairn-space-6);
+  align-items: end;
+}
+.showcase-controls > p {
+  grid-column: 1/-1;
+}
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--kairn-space-6);
+}
+.specimen-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--kairn-space-4);
+}
+.swatch-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--kairn-space-2);
+  margin-block: var(--kairn-space-4);
+}
+.swatch {
+  min-width: 5rem;
+  min-height: 4rem;
+  border: 1px solid var(--kairn-control-border);
+  border-radius: var(--kairn-radius);
+  display: grid;
+  place-items: center;
+  font-size: var(--kairn-caption);
+  padding: var(--kairn-space-2);
+}
+.swatch-canvas {
+  background: var(--kairn-canvas);
+}
+.swatch-surface {
+  background: var(--kairn-surface);
+}
+.swatch-subtle {
+  background: var(--kairn-surface-subtle);
+}
+.swatch-accent {
+  background: var(--kairn-accent);
+  color: var(--kairn-accent-text);
+}
+.swatch-selected {
+  background: var(--kairn-accent-subtle);
+}
+.primitive-yellow {
+  background: var(--kairn-reference-yellow);
+  color: var(--kairn-reference-graphite);
+}
+.primitive-graphite {
+  background: var(--kairn-reference-graphite);
+  color: var(--kairn-reference-white);
+}
+.icon-specimen {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kairn-space-2);
+  color: var(--kairn-secondary);
+}
+@media (max-width: 48rem) {
+  .showcase-grid,
+  .showcase-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .showcase .ui-card {
+    padding: var(--kairn-space-4);
+  }
+}
