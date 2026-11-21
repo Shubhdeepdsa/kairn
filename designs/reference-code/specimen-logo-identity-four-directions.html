@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Syne:wght@700;800&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "secondary-fixed": "#f8e54d", "primary-fixed": "#dbe3ec", "surface": "#f7f9ff", "on-tertiary": "#ffffff", "on-tertiary-container": "#9c8b7c", "on-tertiary-fixed-variant": "#514438", "on-primary-container": "#878f96", "on-primary-fixed-variant": "#40484e", "primary-fixed-dim": "#bfc7cf", "on-primary": "#ffffff", "on-secondary-fixed-variant": "#4f4700", "primary-container": "#20282e", "surface-container-low": "#ecf4ff", "surface-container-high": "#dbeaf9", "surface-dim": "#cddceb", "surface-container-lowest": "#ffffff", "outline": "#74777b", "surface-variant": "#d5e4f4", "tertiary-fixed": "#f3dfce", "inverse-primary": "#bfc7cf", "on-error": "#ffffff", "primary": "#0b1319", "on-secondary": "#ffffff", "on-background": "#0f1d28", "secondary-container": "#f8e54d", "on-surface-variant": "#44474a", "on-secondary-container": "#706500", "tertiary-container": "#30251a", "secondary": "#6a5f00", "on-surface": "#0f1d28", "inverse-on-surface": "#e6f2ff", "error-container": "#ffdad6", "on-primary-fixed": "#151d22", "inverse-surface": "#24323e", "outline-variant": "#c4c7ca", "secondary-fixed-dim": "#dbc831", "surface-bright": "#f7f9ff", "on-tertiary-fixed": "#241a0f", "on-secondary-fixed": "#201c00", "on-error-container": "#93000a", "surface-container": "#e1f0ff", "tertiary": "#1a1107", "background": "#f7f9ff", "tertiary-fixed-dim": "#d6c3b3", "error": "#ba1a1a", "surface-container-highest": "#d5e4f4", "surface-tint": "#575f66" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": {}, "fontFamily": { "headline": ["Syne"], "display": ["Syne"], "body": ["Plus Jakarta Sans"], "label": ["Plus Jakarta Sans"], "mono": ["IBM Plex Mono", "monospace"] }, "fontSize": {} } } }</script></head><body class="bg-surface font-body text-on-surface antialiased"><header class="fixed top-0 left-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(15,29,40,0.04)]"><div class="h-20 w-full px-8 flex items-center justify-between gap-6"><div class="flex items-center gap-6"><div class="flex items-center gap-3"><div class="flex flex-col gap-0.5"><div class="w-3 h-0.5 bg-primary"></div><div class="w-2 h-0.5 bg-secondary-fixed-dim"></div><div class="w-1 h-0.5 bg-primary"></div></div><div class="flex flex-col"><div class="flex items-center gap-2.5"><span class="font-headline font-bold text-sm tracking-tight text-primary">KAIRN // BRAND IDENTITY EXPLORATION</span><span class="px-1.5 py-0.5 rounded font-mono text-[10px] font-medium tracking-wide bg-surface-container-high text-on-surface-variant">SPEC-ID.04</span></div><div class="flex items-center gap-1.5 text-xs text-on-surface-variant font-mono"><span class="text-[11px]">Brand Architecture</span><span class="text-outline-variant">/</span><span class="text-[11px] text-on-surface font-medium">Symbol Exploration</span></div></div></div></div><nav class="hidden xl:flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-surface-container-low/60" data-active-classes="bg-surface-container-high text-on-surface font-medium relative after:content-[''] after:absolute after:bottom-0 after:left-3 after:right-3 after:h-[2px] after:bg-secondary-fixed"><a aria-current="page" class="px-3 py-1.5 tracking-tight rounded transition-colors bg-surface-container-high text-on-surface font-medium relative after:content-[''] after:absolute after:bottom-0 after:left-3 after:right-3 after:h-[2px] after:bg-secondary-fixed" data-path="concepts-overview" href="#">Concepts Overview</a><a class="px-3 py-1.5 text-xs font-medium tracking-tight rounded text-on-surface-variant hover:text-on-surface transition-colors" data-path="direction-a-cairn" href="#">Direction A: Cairn</a><a class="px-3 py-1.5 text-xs font-medium tracking-tight rounded text-on-surface-variant hover:text-on-surface transition-colors" data-path="direction-b-marker" href="#">Direction B: Marker</a><a class="px-3 py-1.5 text-xs font-medium tracking-tight rounded text-on-surface-variant hover:text-on-surface transition-colors" data-path="direction-c-monogram" href="#">Direction C: Monogram</a><a class="px-3 py-1.5 text-xs font-medium tracking-tight rounded text-on-surface-variant hover:text-on-surface transition-colors" data-path="direction-d-wayfinding" href="#">Direction D: Wayfinding</a><a class="px-3 py-1.5 text-xs font-medium tracking-tight rounded text-on-surface-variant hover:text-on-surface transition-colors" data-path="optical-size-grid" href="#">Optical Size Grid</a></nav><div class="flex items-center gap-3"><div class="hidden md:flex items-center gap-2 px-2.5 py-1 rounded bg-surface-container-low text-xs font-mono text-on-surface-variant"><span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed"></span><span>NODE::SPEC_ACTIVE</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-sm"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface min-h-[calc(100vh-5rem)]"><div class="flex flex-col w-full">
+<!-- ========================================== -->
+<!-- 1. HERO INTRO HEADER                       -->
+<!-- ========================================== -->
+<section class="w-full px-8 py-12 md:py-16 bg-surface-container-lowest shadow-sm">
+<div class="max-w-7xl mx-auto flex flex-col gap-8">
+<!-- Metadata Top Bar -->
+<div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-outline-variant/60 font-mono text-xs text-on-surface-variant">
+<div class="flex items-center gap-3">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-primary text-on-primary font-medium tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed"></span>
+            SYS-ARCH::SPEC_04
+          </span>
+<span class="hidden sm:inline text-outline-variant">/</span>
+<span class="font-medium tracking-tight text-on-surface">BRAND IDENTITY STUDY: FORM &amp; CALIBRATION</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="px-2.5 py-1 rounded bg-surface-container text-on-surface font-medium">STATUS: REVIEW PHASE</span>
+<span class="hidden md:inline italic text-on-surface-variant">“A point of reference in complexity.”</span>
+</div>
+</div>
+<!-- Main Headline + Thesis -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+<div class="lg:col-span-8 flex flex-col gap-4">
+<div class="flex items-center gap-2">
+<span class="w-6 h-0.5 bg-secondary-fixed-dim"></span>
+<span class="font-mono text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Directional Synthesis &amp; Vector System</span>
+</div>
+<h1 class="font-headline font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-primary tracking-tight leading-[1.08]">
+            Kairn Brand Mark &amp; Identity System Exploration
+          </h1>
+<p class="font-body text-base md:text-lg text-on-surface-variant max-w-2xl leading-relaxed mt-2">
+            Four genuinely distinct, mathematically calibrated geometric explorations for the Kairn AI Knowledge System. 
+            Rooted in Swiss architectural rigor, navigational cairn geology, and instrument-grade wayfinding.
+          </p>
+</div>
+<!-- Jump Navigation Pills -->
+<div class="lg:col-span-4 flex flex-col gap-2.5 bg-surface-container-low p-4 rounded-xl shadow-sm">
+<div class="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant font-semibold flex items-center justify-between">
+<span>Direct Jump Index</span>
+<span class="font-mono text-xs text-secondary font-bold">4 DIRECTIONS</span>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<a class="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-container-lowest hover:bg-secondary-fixed/25 transition-all text-xs font-mono font-medium text-on-surface shadow-sm" href="#direction-a">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed-dim"></span>
+<span>DIR_A Cairn</span>
+</a>
+<a class="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-container-lowest hover:bg-secondary-fixed/25 transition-all text-xs font-mono font-medium text-on-surface shadow-sm" href="#direction-b">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span>DIR_B Marker</span>
+</a>
+<a class="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-container-lowest hover:bg-secondary-fixed/25 transition-all text-xs font-mono font-medium text-on-surface shadow-sm" href="#direction-c">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span>DIR_C Monogram</span>
+</a>
+<a class="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-container-lowest hover:bg-secondary-fixed/25 transition-all text-xs font-mono font-medium text-on-surface shadow-sm" href="#direction-d">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed-dim"></span>
+<span>DIR_D Wayfinding</span>
+</a>
+</div>
+<div class="pt-1 flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>METRIC: 4PX GRID ALIGNMENT</span>
+<span>COLOR: MINERAL #E4D13A</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================== -->
+<!-- 2. THE 4 DISTINCT LOGO DIRECTIONS          -->
+<!-- ========================================== -->
+<div class="w-full px-8 py-14 max-w-7xl mx-auto flex flex-col gap-20">
+<!-- ---------------------------------------- -->
+<!-- DIRECTION A: ABSTRACT CAIRN             -->
+<!-- ---------------------------------------- -->
+<section class="flex flex-col gap-6 scroll-mt-24" id="direction-a">
+<!-- Concept Header Banner -->
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-outline-variant/70">
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center gap-2.5 font-mono text-xs">
+<span class="px-2 py-0.5 rounded font-bold bg-primary text-on-primary">DIR::A</span>
+<span class="text-on-surface-variant font-medium">GEOMETRIC TIER SYNTHESIS</span>
+<span class="text-outline-variant">•</span>
+<span class="text-secondary font-semibold">FOUNDATIONAL STABILITY</span>
+</div>
+<h2 class="font-headline font-bold text-2xl md:text-3xl text-primary tracking-tight">
+            Direction A: “The Abstract Cairn”
+          </h2>
+</div>
+<p class="font-mono text-xs text-on-surface-variant max-w-md italic text-left sm:text-right">
+          “Three mathematically calibrated horizontal tiers stacked with intentional engineered tension — zero literal stones.”
+        </p>
+</div>
+<!-- 4-Column Presentation Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5">
+<!-- Col 1: Large Primary Symbol (lg:col-span-3) -->
+<div class="lg:col-span-3 rounded-xl bg-surface-container-lowest p-6 flex flex-col items-center justify-between min-h-[300px] shadow-sm relative overflow-hidden group">
+<div class="w-full flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>ISOLATED MARK</span>
+<span>120×120 REF</span>
+</div>
+<!-- Subtle Engineering Grid Backdrop -->
+<div class="relative w-40 h-40 flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full opacity-20 pointer-events-none" viewbox="0 0 160 160">
+<defs>
+<pattern height="16" id="grid-a" patternunits="userSpaceOnUse" width="16">
+<path d="M 16 0 L 0 0 0 16" fill="none" stroke="#74777b" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid-a)" height="160" width="160"></rect>
+<circle cx="80" cy="80" fill="none" opacity="0.4" r="56" stroke="#6a5f00" stroke-dasharray="2 2" stroke-width="0.5"></circle>
+<line stroke="#74777b" stroke-dasharray="2 2" stroke-width="0.5" x1="80" x2="80" y1="10" y2="150"></line>
+<line stroke="#74777b" stroke-dasharray="2 2" stroke-width="0.5" x1="10" x2="150" y1="80" y2="80"></line>
+</svg>
+<!-- SVG MARK A: Engineered Abstract Cairn -->
+<svg class="w-28 h-28 relative z-10 transition-transform duration-300 group-hover:scale-105" fill="none" viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<!-- Top Capstone (Mineral Yellow #E4D13A) -->
+<rect fill="#E4D13A" height="12" rx="3" width="28" x="36" y="22"></rect>
+<circle cx="50" cy="28" fill="#20282E" r="2"></circle>
+<!-- Mid Tier (Graphite #20282E, slight asymmetric engineered shift) -->
+<rect fill="#20282E" height="16" rx="4" width="56" x="22" y="40"></rect>
+<line stroke="#ffffff" stroke-linecap="round" stroke-opacity="0.25" stroke-width="1.5" x1="32" x2="68" y1="48" y2="48"></line>
+<!-- Base Tier (Grounded Precision Slab) -->
+<rect fill="#20282E" height="20" rx="5" width="76" x="12" y="62"></rect>
+<rect fill="#E4D13A" height="3" rx="1" width="8" x="20" y="70"></rect>
+</svg>
+</div>
+<div class="w-full flex items-center justify-between text-[11px] font-mono text-on-surface-variant pt-2 border-t border-outline-variant/40">
+<span>RATIO: 1:1 CANONICAL</span>
+<span class="text-secondary font-bold">PRIMARY SVG</span>
+</div>
+</div>
+<!-- Col 2: Horizontal Lockup (lg:col-span-4) -->
+<div class="lg:col-span-4 rounded-xl bg-surface-container-lowest p-6 flex flex-col justify-between min-h-[300px] shadow-sm">
+<div class="w-full flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>HORIZONTAL SYSTEM LOCKUP</span>
+<span>KERNING: BESPOKE</span>
+</div>
+<!-- Lockup Display Container -->
+<div class="py-8 px-4 flex items-center justify-center bg-surface-container-low/50 rounded-lg">
+<div class="flex items-center gap-4">
+<!-- Inline Mark A -->
+<svg class="w-12 h-12 flex-shrink-0" fill="none" viewbox="0 0 100 100">
+<rect fill="#E4D13A" height="12" rx="3" width="28" x="36" y="22"></rect>
+<circle cx="50" cy="28" fill="#20282E" r="2"></circle>
+<rect fill="#20282E" height="16" rx="4" width="56" x="22" y="40"></rect>
+<rect fill="#20282E" height="20" rx="5" width="76" x="12" y="62"></rect>
+</svg>
+<!-- Typography Lockup -->
+<div class="flex items-baseline">
+<span class="font-headline font-bold text-3xl tracking-tight text-primary">kairn</span>
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-fixed ml-1 translate-y-[-2px] inline-block shadow-sm"></span>
+</div>
+</div>
+</div>
+<!-- Baseline Spec Dimensions -->
+<div class="font-mono text-[11px] text-on-surface-variant flex items-center justify-between pt-2 border-t border-outline-variant/40">
+<span>CAP_HEIGHT: 32PX</span>
+<span>PERIOD: 4PX OFFSET CIRCULAR BEACON</span>
+</div>
+</div>
+<!-- Col 3: Colorway Duality (lg:col-span-3) -->
+<div class="lg:col-span-3 rounded-xl bg-surface-container-lowest p-6 flex flex-col justify-between min-h-[300px] shadow-sm">
+<div class="w-full flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>COLORWAY DUALITY</span>
+<span>HIGH CONTRAST</span>
+</div>
+<div class="flex flex-col gap-3 my-auto">
+<!-- 1. Pure Monochrome (Precision Graphite on White) -->
+<div class="p-3.5 rounded-lg bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<svg class="w-8 h-8" fill="none" viewbox="0 0 100 100">
+<rect fill="#20282E" height="12" rx="3" width="28" x="36" y="22"></rect>
+<rect fill="#20282E" height="16" rx="4" width="56" x="22" y="40"></rect>
+<rect fill="#20282E" height="20" rx="5" width="76" x="12" y="62"></rect>
+</svg>
+<div class="flex flex-col">
+<span class="font-headline font-bold text-sm text-primary">kairn.</span>
+<span class="font-mono text-[10px] text-on-surface-variant">100% Graphite (#20282E)</span>
+</div>
+</div>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-medium">MONO</span>
+</div>
+<!-- 2. Dark Titanium Inverse with Mineral Accent -->
+<div class="p-3.5 rounded-lg bg-primary text-on-primary shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<svg class="w-8 h-8" fill="none" viewbox="0 0 100 100">
+<rect fill="#E4D13A" height="12" rx="3" width="28" x="36" y="22"></rect>
+<rect fill="#FFFFFF" height="16" rx="4" width="56" x="22" y="40"></rect>
+<rect fill="#FFFFFF" height="20" rx="5" width="76" x="12" y="62"></rect>
+</svg>
+<div class="flex flex-col">
+<div class="flex items-baseline">
+<span class="font-headline font-bold text-sm text-on-primary">kairn</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed ml-0.5 inline-block"></span>
+</div>
+<span class="font-mono text-[10px] text-on-primary-container">Mineral + Inverted Tit.</span>
+</div>
+</div>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-primary-container text-secondary-fixed font-medium">INVERSE</span>
+</div>
+</div>
+<div class="font-mono text-[10px] text-on-surface-variant pt-2 border-t border-outline-variant/40 flex justify-between">
+<span>WCAG AAA 11.2:1</span>
+<span>PRINT &amp; ETCH CERTIFIED</span>
+</div>
+</div>
+<!-- Col 4: App Icon Preview (lg:col-span-2) -->
+<div class="lg:col-span-2 rounded-xl bg-surface-container-lowest p-6 flex flex-col justify-between min-h-[300px] shadow-sm">
+<div class="w-full flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>APP ICON</span>
+<span>OPTICALS</span>
+</div>
+<!-- Icons Display -->
+<div class="flex flex-col items-center justify-center gap-4 my-auto">
+<!-- 64px Icon Dark -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-16 h-16 rounded-[18px] bg-primary flex items-center justify-center shadow-md p-2">
+<svg class="w-10 h-10" fill="none" viewbox="0 0 100 100">
+<rect fill="#E4D13A" height="12" rx="3" width="28" x="36" y="22"></rect>
+<rect fill="#FFFFFF" height="16" rx="4" width="56" x="22" y="40"></rect>
+<rect fill="#FFFFFF" height="20" rx="5" width="76" x="12" y="62"></rect>
+</svg>
+</div>
+<span class="font-mono text-[9px] text-on-surface-variant">64px iOS/OSX</span>
+</div>
+<!-- 48px Icon Light -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-12 h-12 rounded-[14px] bg-surface-container-high shadow-sm flex items-center justify-center p-1.5">
+<svg class="w-7 h-7" fill="none" viewbox="0 0 100 100">
+<rect fill="#6a5f00" height="12" rx="3" width="28" x="36" y="22"></rect>
+<rect fill="#20282E" height="16" rx="4" width="56" x="22" y="40"></rect>
+<rect fill="#20282E" height="20" rx="5" width="76" x="12" y="62"></rect>
+</svg>
+</div>
+<span class="font-mono text-[9px] text-on-surface-variant">48px Web/Favicon</span>
+</div>
+</div>
+<div class="font-mono text-[10px] text-on-surface-variant pt-2 border-t border-outline-variant/40 text-center">
+<span>SQUIRCLE R_18 / R_14</span>
+</div>
+</div>
+</div>
+<!-- Architectural Rationale Card -->
+<div class="rounded-xl bg-surface-container-low p-6 shadow-sm">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="flex flex-col gap-1 font-mono text-xs">
+<span class="text-on-surface-variant font-medium">GEOMETRY_TYPE</span>
+<span class="font-bold text-primary text-sm">3-Tier Planar Massing</span>
+<span class="text-on-surface-variant mt-2">OPTICAL_CENTER</span>
+<span class="font-semibold text-primary">Y: 52.4% (Calculated Anchor)</span>
+</div>
+<div class="flex flex-col gap-1 font-mono text-xs">
+<span class="text-on-surface-variant font-medium">NEGATIVE_SPACE</span>
+<span class="font-bold text-primary text-sm">6px Uniform Slit Canal</span>
+<span class="text-on-surface-variant mt-2">METAPHOR_CLASS</span>
+<span class="font-semibold text-secondary">Navigational Marker Stack</span>
+</div>
+<div class="md:col-span-2 flex flex-col justify-center">
+<h4 class="font-headline font-bold text-xs uppercase tracking-wider text-primary mb-1">Architectural Rationale</h4>
+<p class="font-body text-xs md:text-sm text-on-surface-variant leading-relaxed">
+              Direction A transforms the primitive mountain cairn into an ultra-clean modular structural stack. 
+              The wide base establishes institutional endurance, while the top yellow capstone provides immediate cognitive recall. 
+              By strictly rounding the corners to 3px/4px/5px proportional curves, the mark retains warmth without sacrificing mathematical precision.
+            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- ---------------------------------------- -->
+<!-- DIRECTION B: REFERENCE MARKER           -->
+<!-- ---------------------------------------- -->
+<section class="flex flex-col gap-6 scroll-mt-24" id="direction-b">
+<!-- Concept Header Banner -->
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-outline-variant/70">
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center gap-2.5 font-mono text-xs">
+<span class="px-2 py-0.5 rounded font-bold bg-primary text-on-primary">DIR::B</span>
+<span class="text-on-surface-variant font-medium">CARTESIAN COORDINATE RETICLE</span>
+<span class="text-outline-variant">•</span>
+<span class="text-secondary font-semibold">ANCHOR BENCHMARK</span>
+</div>
+<h2 class="font-headline font-bold text-2xl md:text-3xl text-primary tracking-tight">
+            Direction B: “The Reference Marker”
+          </h2>
+</div>
+<p class="font-mono text-xs text-on-surface-variant max-w-md italic text-left sm:text-right">
+          “An interlocking precision square frame with an offset quadrant solid block and a floating reference coordinate — the immutable single point of truth.”
+        </p>
+</div>
+<!-- 4-Column Presentation Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5">
+<!-- Col 1: Large Primary Symbol (lg:col-span-3) -->
+<div class="lg:col-span-3 rounded-xl bg-surface-container-lowest p-6 flex flex-col items-center justify-between min-h-[300px] shadow-sm relative overflow-hidden group">
+<div class="w-full flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>COORDINATE SYMBOL</span>
+<span>120×120 REF</span>
+</div>
+<!-- Engineering Reticle Backdrop -->
+<div class="relative w-40 h-40 flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full opacity-20 pointer-events-none" viewbox="0 0 160 160">
+<defs>
+<pattern height="16" id="grid-b" patternunits="userSpaceOnUse" width="16">
+<path d="M 16 0 L 0 0 0 16" fill="none" stroke="#74777b" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid-b)" height="160" width="160"></rect>
+<rect fill="none" height="100" stroke="#74777b" stroke-dasharray="3 3" stroke-width="0.5" width="100" x="30" y="30"></rect>
+</svg>
+<!-- SVG MARK B: Reference Marker Vector -->
+<svg class="w-28 h-28 relative z-10 transition-transform duration-300 group-hover:scale-105" fill="none" viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<!-- Outer Precision L-Frames (Graphite #20282E) -->
+<path d="M 16 36 L 16 18 C 16 16.895 16.895 16 18 16 L 36 16" stroke="#20282E" stroke-linecap="round" stroke-width="6"></path>
+<path d="M 64 16 L 82 16 C 83.105 16 84 16.895 84 18 L 84 36" stroke="#20282E" stroke-linecap="round" stroke-width="6"></path>
+<path d="M 84 64 L 84 82 C 84 83.105 83.105 84 82 84 L 64 84" stroke="#20282E" stroke-linecap="round" stroke-width="6"></path>
+<path d="M 36 84 L 18 84 C 16.895 84 16 83.105 16 82 L 16 64" stroke="#20282E" stroke-linecap="round" stroke-width="6"></path>
+<!-- Quadrant Solid Block (Precision massing) -->
+<rect fill="#20282E" height="22" rx="3" width="22" x="28" y="28"></rect>
+<!-- Floating Focal Coordinate (Mineral Yellow Beacon #E4D13A) -->
+<circle cx="63" cy="63" fill="#E4D13A" r="8"></circle>
+<circle cx="63" cy="63" fill="#20282E" r="3"></circle>
+<!-- Crosshair hairline indicators -->
+<line stroke="#74777b" stroke-dasharray="2 2" stroke-width="1.5" x1="63" x2="63" y1="28" y2="40"></line>
+<line stroke="#74777b" stroke-dasharray="2 2" stroke-width="1.5" x1="28" x2="40" y1="63" y2="63"></line>
+</svg>
+</div>
+<div class="w-full flex items-center justify-between text-[11px] font-mono text-on-surface-variant pt-2 border-t border-outline-variant/40">
+<span>GRID: CARTESIAN QUAD</span>
+<span class="text-secondary font-bold">INSTRUMENT CLASS</span>
+</div>
+</div>
+<!-- Col 2: Horizontal Lockup (lg:col-span-4) -->
+<div class="lg:col-span-4 rounded-xl bg-surface-container-lowest p-6 flex flex-col justify-between min-h-[300px] shadow-sm">
+<div class="w-full flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>HORIZONTAL LOCKUP</span>
+<span>TRACKING: 0.04EM</span>
+</div>
+<!-- Lockup Display Container -->
+<div class="py-8 px-4 flex items-center justify-center bg-surface-container-low/50 rounded-lg">
+<div class="flex items-center gap-4">
+<!-- Inline Mark B -->
+<svg class="w-12 h-12 flex-shrink-0" fill="none" viewbox="0 0 100 100">
+<path d="M 16 36 L 16 18 C 16 16.895 16.895 16 18 16 L 36 16" stroke="#20282E" stroke-linecap="round" stroke-width="6"></path>
+<path d="M 64 16 L 82 16 C 83.105 16 84 16.895 84 18 L 84 36" stroke="#20282E" stroke-linecap="round" stroke-width="6"></path>
+<path d="M 84 64 L 84 82 C 84 83.105 83.105 84 82 84 L 64 84" stroke="#20282E" stroke-linecap="round" stroke-width="6"></path>
+<path d="M 36 84 L 18 84 C 16.895 84 16 83.105 16 82 L 16 64" stroke="#20282E" stroke-linecap="round" stroke-width="6"></path>
+<rect fill="#20282E" height="22" rx="3" width="22" x="28" y="28"></rect>
+<circle cx="63" cy="63" fill="#E4D13A" r="8"></circle>
+</svg>
+<!-- Typography Lockup -->
+<div class="flex items-baseline">
+<span class="font-headline font-bold text-3xl tracking-tight text-primary">kairn</span>
+<span class="w-2.5 h-2.5 rounded bg-primary ml-1 translate-y-[-2px] inline-block"></span>
+</div>
+</div>
+</div>
+<div class="font-mono text-[11px] text-on-surface-variant flex items-center justify-between pt-2 border-t border-outline-variant/40">
+<span>OPTICAL ANCHOR: [X:63, Y:63]</span>
+<span>SQUARE PUNCTUATION</span>
+</div>
+</div>
+<!-- Col 3: Colorway Duality (lg:col-span-3) -->
+<div class="lg:col-span-3 rounded-xl bg-surface-container-lowest p-6 flex flex-col justify-between min-h-[300px] shadow-sm">
+<div class="w-full flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>DUAL COLOR SPECS</span>
+<span>INSTRUMENT PALETTE</span>
+</div>
+<div class="flex flex-col gap-3 my-auto">
+<!-- 1. Pure Monochrome -->
+<div class="p-3.5 rounded-lg bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<svg class="w-8 h-8" fill="none" viewbox="0 0 100 100">
+<path d="M 16 36 L 16 18 C 16 16.895 16.895 16 18 16 L 36 16" stroke="#20282E" stroke-width="6"></path>
+<path d="M 84 64 L 84 82 C 84 83.105 83.105 84 82 84 L 64 84" stroke="#20282E" stroke-width="6"></path>
+<rect fill="#20282E" height="22" width="22" x="28" y="28"></rect>
+<circle cx="63" cy="63" fill="#20282E" r="8"></circle>
+</svg>
+<div class="flex flex-col">
+<span class="font-headline font-bold text-sm text-primary">kairn.</span>
+<span class="font-mono text-[10px] text-on-surface-variant">Monochrome Steel</span>
+</div>
+</div>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-medium">B&amp;W</span>
+</div>
+<!-- 2. Technical Yellow Accent -->
+<div class="p-3.5 rounded-lg bg-surface-container-high shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<svg class="w-8 h-8" fill="none" viewbox="0 0 100 100">
+<path d="M 16 36 L 16 18 L 36 16" stroke="#20282E" stroke-width="6"></path>
+<path d="M 84 64 L 84 82 L 64 84" stroke="#20282E" stroke-width="6"></path>
+<rect fill="#20282E" height="22" width="22" x="28" y="28"></rect>
+<circle cx="63" cy="63" fill="#6a5f00" r="8"></circle>
+</svg>
+<div class="flex flex-col">
+<div class="flex items-baseline">
+<span class="font-headline font-bold text-sm text-primary">kairn</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary ml-0.5 inline-block"></span>
+</div>
+<span class="font-mono text-[10px] text-on-surface-variant">Calibrated Mineral #E4D13A</span>
+</div>
+</div>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-bold">CALIBRATED</span>
+</div>
+</div>
+<div class="font-mono text-[10px] text-on-surface-variant pt-2 border-t border-outline-variant/40 flex justify-between">
+<span>RETICLE TOLERANCE: ±0.1PX</span>
+<span>HIGH FIDELITY</span>
+</div>
+</div>
+<!-- Col 4: App Icon Preview (lg:col-span-2) -->
+<div class="lg:col-span-2 rounded-xl bg-surface-container-lowest p-6 flex flex-col justify-between min-h-[300px] shadow-sm">
+<div class="w-full flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>APP ICON</span>
+<span>DESKTOP/MOBILE</span>
+</div>
+<!-- Icons Display -->
+<div class="flex flex-col items-center justify-center gap-4 my-auto">
+<!-- 64px Icon Dark -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-16 h-16 rounded-[18px] bg-primary flex items-center justify-center shadow-md p-2">
+<svg class="w-10 h-10" fill="none" viewbox="0 0 100 100">
+<path d="M 18 36 L 18 20 C 18 18.895 18.895 18 20 18 L 36 18" stroke="#FFFFFF" stroke-linecap="round" stroke-width="6"></path>
+<path d="M 64 18 L 80 18 C 81.105 18 82 18.895 82 20 L 82 36" stroke="#FFFFFF" stroke-linecap="round" stroke-width="6"></path>
+<path d="M 82 64 L 82 80 C 82 81.105 81.105 82 80 82 L 64 82" stroke="#FFFFFF" stroke-linecap="round" stroke-width="6"></path>
+<path d="M 36 82 L 20 82 C 18.895 82 18 81.105 18 80 L 18 64" stroke="#FFFFFF" stroke-linecap="round" stroke-width="6"></path>
+<rect fill="#FFFFFF" height="20" rx="3" width="20" x="30" y="30"></rect>
+<circle cx="62" cy="62" fill="#E4D13A" r="7"></circle>
+</svg>
+</div>
+<span class="font-mono text-[9px] text-on-surface-variant">64px Reticle UI</span>
+</div>
+<!-- 48px Icon Light -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-12 h-12 rounded-[14px] bg-surface-container-high shadow-sm flex items-center justify-center p-1.5">
+<svg class="w-7 h-7" fill="none" viewbox="0 0 100 100">
+<path d="M 20 34 L 20 22 L 34 22" stroke="#20282E" stroke-width="6"></path>
+<path d="M 80 66 L 80 78 L 66 78" stroke="#20282E" stroke-width="6"></path>
+<rect fill="#20282E" height="18" width="18" x="30" y="30"></rect>
+<circle cx="62" cy="62" fill="#6a5f00" r="6"></circle>
+</svg>
+</div>
+<span class="font-mono text-[9px] text-on-surface-variant">48px Instrument Dock</span>
+</div>
+</div>
+<div class="font-mono text-[10px] text-on-surface-variant pt-2 border-t border-outline-variant/40 text-center">
+<span>RETICLE ALIGNMENT</span>
+</div>
+</div>
+</div>
+<!-- Architectural Rationale Card -->
+<div class="rounded-xl bg-surface-container-low p-6 shadow-sm">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="flex flex-col gap-1 font-mono text-xs">
+<span class="text-on-surface-variant font-medium">GEOMETRY_TYPE</span>
+<span class="font-bold text-primary text-sm">Framed Quadrant Coordinate</span>
+<span class="text-on-surface-variant mt-2">CORNER_BEVEL</span>
+<span class="font-semibold text-primary">3px Exterior / Crisp Core</span>
+</div>
+<div class="flex flex-col gap-1 font-mono text-xs">
+<span class="text-on-surface-variant font-medium">STROKE_WEIGHT</span>
+<span class="font-bold text-primary text-sm">6px Structural Wireframe</span>
+<span class="text-on-surface-variant mt-2">METAPHOR_CLASS</span>
+<span class="font-semibold text-secondary">Ground Station / Index Coordinate</span>
+</div>
+<div class="md:col-span-2 flex flex-col justify-center">
+<h4 class="font-headline font-bold text-xs uppercase tracking-wider text-primary mb-1">Architectural Rationale</h4>
+<p class="font-body text-xs md:text-sm text-on-surface-variant leading-relaxed">
+              Direction B addresses Kairn’s data-indexing and KMS capabilities directly. Rather than organic rock forms, it represents the act of fixing a precise coordinate in multidimensional vector space. 
+              The solid quadrant block grounds the visual weight, while the opposing yellow dot functions as an active status beacon.
+            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- ---------------------------------------- -->
+<!-- DIRECTION C: CONSTRUCTED K              -->
+<!-- ---------------------------------------- -->
+<section class="flex flex-col gap-6 scroll-mt-24" id="direction-c">
+<!-- Concept Header Banner -->
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-outline-variant/70">
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center gap-2.5 font-mono text-xs">
+<span class="px-2 py-0.5 rounded font-bold bg-primary text-on-primary">DIR::C</span>
+<span class="text-on-surface-variant font-medium">ARCHITECTURAL MONOGRAM</span>
+<span class="text-outline-variant">•</span>
+<span class="text-secondary font-semibold">TENSION &amp; CANTILEVER</span>
+</div>
+<h2 class="font-headline font-bold text-2xl md:text-3xl text-primary tracking-tight">
+            Direction C: “The Constructed K”
+          </h2>
+</div>
+<p class="font-mono text-xs text-on-surface-variant max-w-md italic text-left sm:text-right">
+          “A monolithic vertical column and an angled cantilevered chevron wedge separated by a razor-sharp 3px negative space diagonal channel.”
+        </p>
+</div>
+<!-- 4-Column Presentation Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5">
+<!-- Col 1: Large Primary Symbol (lg:col-span-3) -->
+<div class="lg:col-span-3 rounded-xl bg-surface-container-lowest p-6 flex flex-col items-center justify-between min-h-[300px] shadow-sm relative overflow-hidden group">
+<div class="w-full flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>ENGINEERED MONOGRAM</span>
+<span>120×120 REF</span>
+</div>
+<!-- Diagonal Angle Backdrop -->
+<div class="relative w-40 h-40 flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full opacity-20 pointer-events-none" viewbox="0 0 160 160">
+<defs>
+<pattern height="16" id="grid-c" patternunits="userSpaceOnUse" width="16">
+<path d="M 16 0 L 0 0 0 16" fill="none" stroke="#74777b" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid-c)" height="160" width="160"></rect>
+<line stroke="#6a5f00" stroke-dasharray="3 3" stroke-width="0.75" x1="20" x2="140" y1="140" y2="20"></line>
+</svg>
+<!-- SVG MARK C: The Constructed K -->
+<svg class="w-28 h-28 relative z-10 transition-transform duration-300 group-hover:scale-105" fill="none" viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<!-- Left Monolithic Column (Stored Knowledge Anchor) -->
+<rect fill="#20282E" height="68" rx="4" width="18" x="20" y="16"></rect>
+<!-- Upper Cantilever Wedge (Graphite #20282E) -->
+<path d="M 44 48 L 74 18 C 76.5 15.5 80 17.5 80 21 L 80 34 C 80 36 79 38 77.5 39.5 L 56 61 L 44 48 Z" fill="#20282E"></path>
+<!-- Lower Cantilever Wedge (Engineered Support) -->
+<path d="M 52 56 L 77.5 81.5 C 79 83 80 85 80 87 L 80 79 C 80 77 79 75 77.5 73.5 L 61 57 L 52 56 Z" fill="#20282E"></path>
+<polygon fill="#20282E" points="46,51 76,81 64,81 38,55"></polygon>
+<!-- Precision Pivot Coordinate (Mineral Yellow Accent #E4D13A) -->
+<circle cx="43" cy="50" fill="#E4D13A" r="4.5"></circle>
+</svg>
+</div>
+<div class="w-full flex items-center justify-between text-[11px] font-mono text-on-surface-variant pt-2 border-t border-outline-variant/40">
+<span>AXIS: 45° K-GEOMETRY</span>
+<span class="text-secondary font-bold">BRUTALIST MONOGRAM</span>
+</div>
+</div>
+<!-- Col 2: Horizontal Lockup (lg:col-span-4) -->
+<div class="lg:col-span-4 rounded-xl bg-surface-container-lowest p-6 flex flex-col justify-between min-h-[300px] shadow-sm">
+<div class="w-full flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>TYPOGRAPHIC LOCKUP</span>
+<span>STEM HARMONIZED</span>
+</div>
+<!-- Lockup Display Container -->
+<div class="py-8 px-4 flex items-center justify-center bg-surface-container-low/50 rounded-lg">
+<div class="flex items-center gap-4">
+<!-- Inline Mark C -->
+<svg class="w-12 h-12 flex-shrink-0" fill="none" viewbox="0 0 100 100">
+<rect fill="#20282E" height="68" rx="4" width="18" x="20" y="16"></rect>
+<path d="M 44 48 L 74 18 C 76 16 79 17 79 20 L 79 34 L 56 57 Z" fill="#20282E"></path>
+<polygon fill="#20282E" points="46,51 76,81 64,81 38,55"></polygon>
+<circle cx="43" cy="50" fill="#E4D13A" r="4"></circle>
+</svg>
+<!-- Typography Lockup -->
+<div class="flex items-baseline">
+<span class="font-headline font-extrabold text-3xl tracking-tight text-primary">kairn</span>
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-fixed ml-1 translate-y-[-2px] inline-block"></span>
+</div>
+</div>
+</div>
+<div class="font-mono text-[11px] text-on-surface-variant flex items-center justify-between pt-2 border-t border-outline-variant/40">
+<span>MONOGRAM STEM WIDTH: 18PX</span>
+<span>MATCHES 'k' STEM</span>
+</div>
+</div>
+<!-- Col 3: Colorway Duality (lg:col-span-3) -->
+<div class="lg:col-span-3 rounded-xl bg-surface-container-lowest p-6 flex flex-col justify-between min-h-[300px] shadow-sm">
+<div class="w-full flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>MATERIAL EXPRESSIONS</span>
+<span>BRASS &amp; CONCRETE</span>
+</div>
+<div class="flex flex-col gap-3 my-auto">
+<!-- 1. Pure Monochrome -->
+<div class="p-3.5 rounded-lg bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<svg class="w-8 h-8" fill="none" viewbox="0 0 100 100">
+<rect fill="#20282E" height="68" rx="3" width="18" x="20" y="16"></rect>
+<path d="M 44 48 L 74 18 L 74 34 L 56 57 Z" fill="#20282E"></path>
+<polygon fill="#20282E" points="46,51 76,81 64,81 38,55"></polygon>
+<circle cx="43" cy="50" fill="#20282E" r="4"></circle>
+</svg>
+<div class="flex flex-col">
+<span class="font-headline font-bold text-sm text-primary">kairn.</span>
+<span class="font-mono text-[10px] text-on-surface-variant">Cast Graphite Monolith</span>
+</div>
+</div>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-medium">SOLID</span>
+</div>
+<!-- 2. Mineral Pivot -->
+<div class="p-3.5 rounded-lg bg-surface-container-high shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<svg class="w-8 h-8" fill="none" viewbox="0 0 100 100">
+<rect fill="#20282E" height="68" rx="3" width="18" x="20" y="16"></rect>
+<path d="M 44 48 L 74 18 L 74 34 L 56 57 Z" fill="#20282E"></path>
+<polygon fill="#20282E" points="46,51 76,81 64,81 38,55"></polygon>
+<circle cx="43" cy="50" fill="#6a5f00" r="4.5"></circle>
+</svg>
+<div class="flex flex-col">
+<div class="flex items-baseline">
+<span class="font-headline font-bold text-sm text-primary">kairn</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary ml-0.5 inline-block"></span>
+</div>
+<span class="font-mono text-[10px] text-on-surface-variant">Titanium / Mineral Pivot</span>
+</div>
+</div>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-bold">PIVOT</span>
+</div>
+</div>
+<div class="font-mono text-[10px] text-on-surface-variant pt-2 border-t border-outline-variant/40 flex justify-between">
+<span>CHANNEL WIDTH: 3.5PX</span>
+<span>CHEVRON RIGIDITY</span>
+</div>
+</div>
+<!-- Col 4: App Icon Preview (lg:col-span-2) -->
+<div class="lg:col-span-2 rounded-xl bg-surface-container-lowest p-6 flex flex-col justify-between min-h-[300px] shadow-sm">
+<div class="w-full flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>APP ICON</span>
+<span>DEVICE SCALING</span>
+</div>
+<!-- Icons Display -->
+<div class="flex flex-col items-center justify-center gap-4 my-auto">
+<!-- 64px Icon Dark -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-16 h-16 rounded-[18px] bg-primary flex items-center justify-center shadow-md p-2">
+<svg class="w-10 h-10" fill="none" viewbox="0 0 100 100">
+<rect fill="#FFFFFF" height="64" rx="3" width="16" x="22" y="18"></rect>
+<path d="M 44 48 L 72 20 L 72 34 L 54 57 Z" fill="#FFFFFF"></path>
+<polygon fill="#FFFFFF" points="46,51 72,77 62,77 38,55"></polygon>
+<circle cx="43" cy="50" fill="#E4D13A" r="4.5"></circle>
+</svg>
+</div>
+<span class="font-mono text-[9px] text-on-surface-variant">64px Monogram App</span>
+</div>
+<!-- 48px Icon Light -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-12 h-12 rounded-[14px] bg-surface-container-high shadow-sm flex items-center justify-center p-1.5">
+<svg class="w-7 h-7" fill="none" viewbox="0 0 100 100">
+<rect fill="#20282E" height="64" rx="3" width="16" x="22" y="18"></rect>
+<path d="M 44 48 L 72 20 L 72 34 L 54 57 Z" fill="#20282E"></path>
+<polygon fill="#20282E" points="46,51 72,77 62,77 38,55"></polygon>
+<circle cx="43" cy="50" fill="#6a5f00" r="4"></circle>
+</svg>
+</div>
+<span class="font-mono text-[9px] text-on-surface-variant">48px Desktop Dock</span>
+</div>
+</div>
+<div class="font-mono text-[10px] text-on-surface-variant pt-2 border-t border-outline-variant/40 text-center">
+<span>HIGH LEGIBILITY K</span>
+</div>
+</div>
+</div>
+<!-- Architectural Rationale Card -->
+<div class="rounded-xl bg-surface-container-low p-6 shadow-sm">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="flex flex-col gap-1 font-mono text-xs">
+<span class="text-on-surface-variant font-medium">GEOMETRY_TYPE</span>
+<span class="font-bold text-primary text-sm">Engineered Orthogonal 'K'</span>
+<span class="text-on-surface-variant mt-2">SHEAR_ANGLE</span>
+<span class="font-semibold text-primary">45.0° Strict Diagonal</span>
+</div>
+<div class="flex flex-col gap-1 font-mono text-xs">
+<span class="text-on-surface-variant font-medium">NEGATIVE_CANAL</span>
+<span class="font-bold text-primary text-sm">3.5px Continuous Rupture</span>
+<span class="text-on-surface-variant mt-2">METAPHOR_CLASS</span>
+<span class="font-semibold text-secondary">Cantilever Beam &amp; Pivot Point</span>
+</div>
+<div class="md:col-span-2 flex flex-col justify-center">
+<h4 class="font-headline font-bold text-xs uppercase tracking-wider text-primary mb-1">Architectural Rationale</h4>
+<p class="font-body text-xs md:text-sm text-on-surface-variant leading-relaxed">
+              Direction C breaks away from generic tech lettermarks by treating the letter 'K' as an architectural cantilever. 
+              The left vertical pillar communicates archival permanence, while the right branching structures feel engineered like cast titanium components. 
+              The yellow coordinate dot at the intersection acts as an optical hinge.
+            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- ---------------------------------------- -->
+<!-- DIRECTION D: WAYFINDING SYMBOL          -->
+<!-- ---------------------------------------- -->
+<section class="flex flex-col gap-6 scroll-mt-24" id="direction-d">
+<!-- Concept Header Banner -->
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-outline-variant/70">
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center gap-2.5 font-mono text-xs">
+<span class="px-2 py-0.5 rounded font-bold bg-primary text-on-primary">DIR::D</span>
+<span class="text-on-surface-variant font-medium">HORIZON BEACON APERTURE</span>
+<span class="text-outline-variant">•</span>
+<span class="text-secondary font-semibold">DIRECTIONAL ORIENTATION</span>
+</div>
+<h2 class="font-headline font-bold text-2xl md:text-3xl text-primary tracking-tight">
+            Direction D: “The Wayfinding Beacon”
+          </h2>
+</div>
+<p class="font-mono text-xs text-on-surface-variant max-w-md italic text-left sm:text-right">
+          “Two intersecting geometric wedges meeting at an asymmetrical apex, embedding a yellow focal aperture as an optical beacon.”
+        </p>
+</div>
+<!-- 4-Column Presentation Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5">
+<!-- Col 1: Large Primary Symbol (lg:col-span-3) -->
+<div class="lg:col-span-3 rounded-xl bg-surface-container-lowest p-6 flex flex-col items-center justify-between min-h-[300px] shadow-sm relative overflow-hidden group">
+<div class="w-full flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>BEACON GEOMETRY</span>
+<span>120×120 REF</span>
+</div>
+<!-- Radial Horizon Backdrop -->
+<div class="relative w-40 h-40 flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full opacity-20 pointer-events-none" viewbox="0 0 160 160">
+<defs>
+<pattern height="16" id="grid-d" patternunits="userSpaceOnUse" width="16">
+<path d="M 16 0 L 0 0 0 16" fill="none" stroke="#74777b" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid-d)" height="160" width="160"></rect>
+<path d="M 80 20 L 140 140 L 20 140 Z" fill="none" stroke="#74777b" stroke-dasharray="2 2" stroke-width="0.5"></path>
+</svg>
+<!-- SVG MARK D: Wayfinding Beacon Vector -->
+<svg class="w-28 h-28 relative z-10 transition-transform duration-300 group-hover:scale-105" fill="none" viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<!-- Left Structural Wedge (Solid Anchor) -->
+<path d="M 22 82 L 48 18 C 49 16 51 16 52 18 L 62 42 L 38 82 Z" fill="#20282E"></path>
+<!-- Right Dynamic Counter-Wedge -->
+<path d="M 44 82 L 66 48 L 78 82 Z" fill="#20282E" fill-opacity="0.85"></path>
+<!-- Floating Focal Aperture / Beacon (Mineral Yellow #E4D13A) -->
+<circle cx="50" cy="42" fill="#E4D13A" r="7"></circle>
+<circle cx="50" cy="42" fill="#20282E" r="2.5"></circle>
+<!-- Ground Level Horizon Calibration -->
+<line stroke="#20282E" stroke-linecap="round" stroke-width="3" x1="18" x2="82" y1="82" y2="82"></line>
+</svg>
+</div>
+<div class="w-full flex items-center justify-between text-[11px] font-mono text-on-surface-variant pt-2 border-t border-outline-variant/40">
+<span>APEX: 68° INCLINE</span>
+<span class="text-secondary font-bold">HORIZON LANDMARK</span>
+</div>
+</div>
+<!-- Col 2: Horizontal Lockup (lg:col-span-4) -->
+<div class="lg:col-span-4 rounded-xl bg-surface-container-lowest p-6 flex flex-col justify-between min-h-[300px] shadow-sm">
+<div class="w-full flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>ENGINEERED WORDMARK</span>
+<span>BEACON HARMONIZATION</span>
+</div>
+<!-- Lockup Display Container -->
+<div class="py-8 px-4 flex items-center justify-center bg-surface-container-low/50 rounded-lg">
+<div class="flex items-center gap-4">
+<!-- Inline Mark D -->
+<svg class="w-12 h-12 flex-shrink-0" fill="none" viewbox="0 0 100 100">
+<path d="M 22 82 L 48 18 C 49 16 51 16 52 18 L 62 42 L 38 82 Z" fill="#20282E"></path>
+<path d="M 44 82 L 66 48 L 78 82 Z" fill="#20282E" fill-opacity="0.85"></path>
+<circle cx="50" cy="42" fill="#E4D13A" r="6"></circle>
+<line stroke="#20282E" stroke-linecap="round" stroke-width="3" x1="18" x2="82" y1="82" y2="82"></line>
+</svg>
+<!-- Typography Lockup -->
+<div class="flex items-baseline">
+<span class="font-headline font-bold text-3xl tracking-tight text-primary">kairn</span>
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-fixed ml-1 translate-y-[-2px] inline-block shadow-sm"></span>
+</div>
+</div>
+</div>
+<div class="font-mono text-[11px] text-on-surface-variant flex items-center justify-between pt-2 border-t border-outline-variant/40">
+<span>APEX HEIGHT: COINCIDES CAP</span>
+<span>HORIZON BASELINE LOCK</span>
+</div>
+</div>
+<!-- Col 3: Colorway Duality (lg:col-span-3) -->
+<div class="lg:col-span-3 rounded-xl bg-surface-container-lowest p-6 flex flex-col justify-between min-h-[300px] shadow-sm">
+<div class="w-full flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>CHROMATIC SPECTRUM</span>
+<span>HIGH REFLECTANCE</span>
+</div>
+<div class="flex flex-col gap-3 my-auto">
+<!-- 1. Pure Monochrome -->
+<div class="p-3.5 rounded-lg bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<svg class="w-8 h-8" fill="none" viewbox="0 0 100 100">
+<path d="M 22 82 L 48 18 L 62 42 L 38 82 Z" fill="#20282E"></path>
+<path d="M 44 82 L 66 48 L 78 82 Z" fill="#20282E"></path>
+<circle cx="50" cy="42" fill="#20282E" r="6"></circle>
+<line stroke="#20282E" stroke-width="3" x1="18" x2="82" y1="82" y2="82"></line>
+</svg>
+<div class="flex flex-col">
+<span class="font-headline font-bold text-sm text-primary">kairn.</span>
+<span class="font-mono text-[10px] text-on-surface-variant">Precision Graphite</span>
+</div>
+</div>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-medium">100% K</span>
+</div>
+<!-- 2. Mineral Yellow Inversion -->
+<div class="p-3.5 rounded-lg bg-primary text-on-primary shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<svg class="w-8 h-8" fill="none" viewbox="0 0 100 100">
+<path d="M 22 82 L 48 18 L 62 42 L 38 82 Z" fill="#FFFFFF"></path>
+<path d="M 44 82 L 66 48 L 78 82 Z" fill="#FFFFFF" fill-opacity="0.8"></path>
+<circle cx="50" cy="42" fill="#E4D13A" r="6"></circle>
+<line stroke="#FFFFFF" stroke-width="3" x1="18" x2="82" y1="82" y2="82"></line>
+</svg>
+<div class="flex flex-col">
+<div class="flex items-baseline">
+<span class="font-headline font-bold text-sm text-on-primary">kairn</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed ml-0.5 inline-block"></span>
+</div>
+<span class="font-mono text-[10px] text-on-primary-container">Mineral Focal Aperture</span>
+</div>
+</div>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-primary-container text-secondary-fixed font-medium">INVERSE</span>
+</div>
+</div>
+<div class="font-mono text-[10px] text-on-surface-variant pt-2 border-t border-outline-variant/40 flex justify-between">
+<span>NIGHT-MODE CERTIFIED</span>
+<span>BEACON CLARITY</span>
+</div>
+</div>
+<!-- Col 4: App Icon Preview (lg:col-span-2) -->
+<div class="lg:col-span-2 rounded-xl bg-surface-container-lowest p-6 flex flex-col justify-between min-h-[300px] shadow-sm">
+<div class="w-full flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+<span>APP ICON</span>
+<span>SILHOUETTE TEST</span>
+</div>
+<!-- Icons Display -->
+<div class="flex flex-col items-center justify-center gap-4 my-auto">
+<!-- 64px Icon Dark -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-16 h-16 rounded-[18px] bg-primary flex items-center justify-center shadow-md p-2">
+<svg class="w-10 h-10" fill="none" viewbox="0 0 100 100">
+<path d="M 22 80 L 48 20 C 49 18 51 18 52 20 L 62 44 L 38 80 Z" fill="#FFFFFF"></path>
+<path d="M 44 80 L 66 48 L 78 80 Z" fill="#FFFFFF" fill-opacity="0.8"></path>
+<circle cx="50" cy="44" fill="#E4D13A" r="6"></circle>
+<line stroke="#FFFFFF" stroke-width="3" x1="20" x2="80" y1="80" y2="80"></line>
+</svg>
+</div>
+<span class="font-mono text-[9px] text-on-surface-variant">64px Waypoint</span>
+</div>
+<!-- 48px Icon Light -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-12 h-12 rounded-[14px] bg-surface-container-high shadow-sm flex items-center justify-center p-1.5">
+<svg class="w-7 h-7" fill="none" viewbox="0 0 100 100">
+<path d="M 22 80 L 48 20 L 62 44 L 38 80 Z" fill="#20282E"></path>
+<path d="M 44 80 L 66 48 L 78 80 Z" fill="#20282E"></path>
+<circle cx="50" cy="44" fill="#6a5f00" r="5"></circle>
+</svg>
+</div>
+<span class="font-mono text-[9px] text-on-surface-variant">48px Horizon Pin</span>
+</div>
+</div>
+<div class="font-mono text-[10px] text-on-surface-variant pt-2 border-t border-outline-variant/40 text-center">
+<span>HIGH PEAK VECTOR</span>
+</div>
+</div>
+</div>
+<!-- Architectural Rationale Card -->
+<div class="rounded-xl bg-surface-container-low p-6 shadow-sm">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="flex flex-col gap-1 font-mono text-xs">
+<span class="text-on-surface-variant font-medium">GEOMETRY_TYPE</span>
+<span class="font-bold text-primary text-sm">Asymmetric Apex Wedges</span>
+<span class="text-on-surface-variant mt-2">APERTURE_DIAMETER</span>
+<span class="font-semibold text-primary">14.0px Optical Focus</span>
+</div>
+<div class="flex flex-col gap-1 font-mono text-xs">
+<span class="text-on-surface-variant font-medium">HORIZON_BASE</span>
+<span class="font-bold text-primary text-sm">3px Solid Ground Plane</span>
+<span class="text-on-surface-variant mt-2">METAPHOR_CLASS</span>
+<span class="font-semibold text-secondary">High-Alpine Waypoint / Beacon</span>
+</div>
+<div class="md:col-span-2 flex flex-col justify-center">
+<h4 class="font-headline font-bold text-xs uppercase tracking-wider text-primary mb-1">Architectural Rationale</h4>
+<p class="font-body text-xs md:text-sm text-on-surface-variant leading-relaxed">
+              Direction D focuses on orientation within vast information spaces. 
+              The two converging massing planes create an upward vector that avoids clichéd arrows, compass needles, or mountain peaks. 
+              The focal yellow aperture serves as an optical beacon, signaling that Kairn leads users directly to ground-truth answers.
+            </p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- ========================================== -->
+<!-- 3. OPTICAL STRESS TEST & SCALE COMPARISON  -->
+<!-- ========================================== -->
+<section class="w-full bg-surface-container-lowest py-16 px-8 shadow-sm" id="optical-grid">
+<div class="max-w-7xl mx-auto flex flex-col gap-10">
+<!-- Section Title & Meta -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-outline-variant/60">
+<div>
+<div class="flex items-center gap-2 font-mono text-xs text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed"></span>
+<span>SYSTEM AUDIT &amp; VALIDATION</span>
+</div>
+<h2 class="font-headline font-extrabold text-2xl md:text-3xl text-primary tracking-tight mt-1">
+            Optical Stress Test &amp; Scale Comparison Grid
+          </h2>
+</div>
+<p class="font-mono text-xs text-on-surface-variant max-w-md">
+          Evaluation of silhouette integrity across extreme scale reductions from 128px splash down to 16px favicon/system tray raster.
+        </p>
+</div>
+<!-- Comparative Scale Grid Matrix -->
+<div class="overflow-x-auto">
+<table class="w-full text-left font-mono text-xs min-w-[760px]">
+<thead>
+<tr class="border-b border-outline-variant/60 text-on-surface-variant">
+<th class="py-3 px-4 font-semibold uppercase tracking-wider w-48">Direction Concept</th>
+<th class="py-3 px-4 font-semibold uppercase tracking-wider text-center">128px (Hero)</th>
+<th class="py-3 px-4 font-semibold uppercase tracking-wider text-center">48px (Nav)</th>
+<th class="py-3 px-4 font-semibold uppercase tracking-wider text-center">32px (Desktop)</th>
+<th class="py-3 px-4 font-semibold uppercase tracking-wider text-center">24px (Inline)</th>
+<th class="py-3 px-4 font-semibold uppercase tracking-wider text-center">16px (Favicon)</th>
+<th class="py-3 px-4 font-semibold uppercase tracking-wider text-right">Integrity Score</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30 text-primary">
+<!-- Row 1: Direction A -->
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-4 px-4 font-headline font-bold text-sm">
+<div class="flex flex-col">
+<span>DIR_A Cairn</span>
+<span class="font-mono text-[10px] text-on-surface-variant font-normal">Abstract Foundation</span>
+</div>
+</td>
+<!-- 128px -->
+<td class="py-4 px-4">
+<div class="w-24 h-24 mx-auto flex items-center justify-center p-1 bg-surface-container-low rounded-lg">
+<svg class="w-20 h-20" fill="none" viewbox="0 0 100 100">
+<rect fill="#E4D13A" height="12" rx="3" width="28" x="36" y="22"></rect>
+<circle cx="50" cy="28" fill="#20282E" r="2"></circle>
+<rect fill="#20282E" height="16" rx="4" width="56" x="22" y="40"></rect>
+<rect fill="#20282E" height="20" rx="5" width="76" x="12" y="62"></rect>
+</svg>
+</div>
+</td>
+<!-- 48px -->
+<td class="py-4 px-4 text-center">
+<div class="w-12 h-12 mx-auto flex items-center justify-center p-1 bg-surface-container-low rounded">
+<svg class="w-9 h-9" fill="none" viewbox="0 0 100 100">
+<rect fill="#E4D13A" height="12" rx="3" width="28" x="36" y="22"></rect>
+<rect fill="#20282E" height="16" rx="4" width="56" x="22" y="40"></rect>
+<rect fill="#20282E" height="20" rx="5" width="76" x="12" y="62"></rect>
+</svg>
+</div>
+</td>
+<!-- 32px -->
+<td class="py-4 px-4 text-center">
+<div class="w-8 h-8 mx-auto flex items-center justify-center p-0.5 bg-surface-container-low rounded">
+<svg class="w-6 h-6" fill="none" viewbox="0 0 100 100">
+<rect fill="#E4D13A" height="12" rx="3" width="28" x="36" y="22"></rect>
+<rect fill="#20282E" height="16" rx="4" width="56" x="22" y="40"></rect>
+<rect fill="#20282E" height="20" rx="5" width="76" x="12" y="62"></rect>
+</svg>
+</div>
+</td>
+<!-- 24px -->
+<td class="py-4 px-4 text-center">
+<div class="w-6 h-6 mx-auto flex items-center justify-center bg-surface-container-low rounded">
+<svg class="w-4 h-4" fill="none" viewbox="0 0 100 100">
+<rect fill="#E4D13A" height="14" rx="2" width="32" x="34" y="22"></rect>
+<rect fill="#20282E" height="18" rx="2" width="60" x="20" y="40"></rect>
+<rect fill="#20282E" height="22" rx="3" width="80" x="10" y="62"></rect>
+</svg>
+</div>
+</td>
+<!-- 16px -->
+<td class="py-4 px-4 text-center">
+<div class="w-4 h-4 mx-auto flex items-center justify-center bg-surface-container-low rounded-[2px]">
+<svg class="w-3.5 h-3.5" fill="none" viewbox="0 0 100 100">
+<rect fill="#E4D13A" height="18" width="40" x="30" y="18"></rect>
+<rect fill="#20282E" height="22" width="68" x="16" y="40"></rect>
+<rect fill="#20282E" height="26" width="84" x="8" y="66"></rect>
+</svg>
+</div>
+</td>
+<td class="py-4 px-4 text-right">
+<span class="inline-block px-2 py-1 rounded bg-secondary-fixed/30 text-on-surface font-bold text-xs">98 / 100</span>
+</td>
+</tr>
+<!-- Row 2: Direction B -->
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-4 px-4 font-headline font-bold text-sm">
+<div class="flex flex-col">
+<span>DIR_B Marker</span>
+<span class="font-mono text-[10px] text-on-surface-variant font-normal">Cartesian Coordinate</span>
+</div>
+</td>
+<!-- 128px -->
+<td class="py-4 px-4">
+<div class="w-24 h-24 mx-auto flex items-center justify-center p-1 bg-surface-container-low rounded-lg">
+<svg class="w-20 h-20" fill="none" viewbox="0 0 100 100">
+<path d="M 16 36 L 16 18 L 36 16" stroke="#20282E" stroke-width="6"></path>
+<path d="M 64 16 L 82 16 L 84 36" stroke="#20282E" stroke-width="6"></path>
+<path d="M 84 64 L 84 82 L 64 84" stroke="#20282E" stroke-width="6"></path>
+<path d="M 36 84 L 18 84 L 16 64" stroke="#20282E" stroke-width="6"></path>
+<rect fill="#20282E" height="22" rx="3" width="22" x="28" y="28"></rect>
+<circle cx="63" cy="63" fill="#E4D13A" r="8"></circle>
+</svg>
+</div>
+</td>
+<!-- 48px -->
+<td class="py-4 px-4 text-center">
+<div class="w-12 h-12 mx-auto flex items-center justify-center p-1 bg-surface-container-low rounded">
+<svg class="w-9 h-9" fill="none" viewbox="0 0 100 100">
+<path d="M 16 36 L 16 18 L 36 16" stroke="#20282E" stroke-width="6"></path>
+<path d="M 84 64 L 84 82 L 64 84" stroke="#20282E" stroke-width="6"></path>
+<rect fill="#20282E" height="22" rx="2" width="22" x="28" y="28"></rect>
+<circle cx="63" cy="63" fill="#E4D13A" r="8"></circle>
+</svg>
+</div>
+</td>
+<!-- 32px -->
+<td class="py-4 px-4 text-center">
+<div class="w-8 h-8 mx-auto flex items-center justify-center p-0.5 bg-surface-container-low rounded">
+<svg class="w-6 h-6" fill="none" viewbox="0 0 100 100">
+<path d="M 16 36 L 16 18 L 36 16" stroke="#20282E" stroke-width="8"></path>
+<path d="M 84 64 L 84 82 L 64 84" stroke="#20282E" stroke-width="8"></path>
+<rect fill="#20282E" height="24" width="24" x="26" y="26"></rect>
+<circle cx="63" cy="63" fill="#E4D13A" r="9"></circle>
+</svg>
+</div>
+</td>
+<!-- 24px -->
+<td class="py-4 px-4 text-center">
+<div class="w-6 h-6 mx-auto flex items-center justify-center bg-surface-container-low rounded">
+<svg class="w-4 h-4" fill="none" viewbox="0 0 100 100">
+<path d="M 16 36 L 16 16 L 36 16" stroke="#20282E" stroke-width="10"></path>
+<path d="M 84 64 L 84 84 L 64 84" stroke="#20282E" stroke-width="10"></path>
+<rect fill="#20282E" height="26" width="26" x="24" y="24"></rect>
+<circle cx="63" cy="63" fill="#E4D13A" r="10"></circle>
+</svg>
+</div>
+</td>
+<!-- 16px -->
+<td class="py-4 px-4 text-center">
+<div class="w-4 h-4 mx-auto flex items-center justify-center bg-surface-container-low rounded-[2px]">
+<svg class="w-3.5 h-3.5" fill="none" viewbox="0 0 100 100">
+<rect fill="#20282E" height="34" width="34" x="18" y="18"></rect>
+<circle cx="64" cy="64" fill="#E4D13A" r="14"></circle>
+</svg>
+</div>
+</td>
+<td class="py-4 px-4 text-right">
+<span class="inline-block px-2 py-1 rounded bg-secondary-fixed/30 text-on-surface font-bold text-xs">91 / 100</span>
+</td>
+</tr>
+<!-- Row 3: Direction C -->
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-4 px-4 font-headline font-bold text-sm">
+<div class="flex flex-col">
+<span>DIR_C Monogram</span>
+<span class="font-mono text-[10px] text-on-surface-variant font-normal">Constructed 'K'</span>
+</div>
+</td>
+<!-- 128px -->
+<td class="py-4 px-4">
+<div class="w-24 h-24 mx-auto flex items-center justify-center p-1 bg-surface-container-low rounded-lg">
+<svg class="w-20 h-20" fill="none" viewbox="0 0 100 100">
+<rect fill="#20282E" height="68" rx="4" width="18" x="20" y="16"></rect>
+<path d="M 44 48 L 74 18 C 76 16 79 17 79 20 L 79 34 L 56 57 Z" fill="#20282E"></path>
+<polygon fill="#20282E" points="46,51 76,81 64,81 38,55"></polygon>
+<circle cx="43" cy="50" fill="#E4D13A" r="4.5"></circle>
+</svg>
+</div>
+</td>
+<!-- 48px -->
+<td class="py-4 px-4 text-center">
+<div class="w-12 h-12 mx-auto flex items-center justify-center p-1 bg-surface-container-low rounded">
+<svg class="w-9 h-9" fill="none" viewbox="0 0 100 100">
+<rect fill="#20282E" height="68" rx="3" width="18" x="20" y="16"></rect>
+<path d="M 44 48 L 74 18 L 74 34 L 56 57 Z" fill="#20282E"></path>
+<polygon fill="#20282E" points="46,51 76,81 64,81 38,55"></polygon>
+<circle cx="43" cy="50" fill="#E4D13A" r="4.5"></circle>
+</svg>
+</div>
+</td>
+<!-- 32px -->
+<td class="py-4 px-4 text-center">
+<div class="w-8 h-8 mx-auto flex items-center justify-center p-0.5 bg-surface-container-low rounded">
+<svg class="w-6 h-6" fill="none" viewbox="0 0 100 100">
+<rect fill="#20282E" height="68" rx="2" width="20" x="20" y="16"></rect>
+<path d="M 46 48 L 76 18 L 76 36 L 56 57 Z" fill="#20282E"></path>
+<polygon fill="#20282E" points="46,51 76,81 62,81 38,55"></polygon>
+</svg>
+</div>
+</td>
+<!-- 24px -->
+<td class="py-4 px-4 text-center">
+<div class="w-6 h-6 mx-auto flex items-center justify-center bg-surface-container-low rounded">
+<svg class="w-4 h-4" fill="none" viewbox="0 0 100 100">
+<rect fill="#20282E" height="72" width="22" x="18" y="14"></rect>
+<polygon fill="#20282E" points="44,48 76,16 76,34 54,56"></polygon>
+<polygon fill="#20282E" points="44,52 76,84 60,84 38,56"></polygon>
+</svg>
+</div>
+</td>
+<!-- 16px -->
+<td class="py-4 px-4 text-center">
+<div class="w-4 h-4 mx-auto flex items-center justify-center bg-surface-container-low rounded-[2px]">
+<svg class="w-3.5 h-3.5" fill="none" viewbox="0 0 100 100">
+<rect fill="#20282E" height="80" width="26" x="14" y="10"></rect>
+<polygon fill="#20282E" points="44,48 80,12 80,36 56,58"></polygon>
+<polygon fill="#20282E" points="44,52 80,88 60,88 38,56"></polygon>
+</svg>
+</div>
+</td>
+<td class="py-4 px-4 text-right">
+<span class="inline-block px-2 py-1 rounded bg-secondary-fixed/30 text-on-surface font-bold text-xs">96 / 100</span>
+</td>
+</tr>
+<!-- Row 4: Direction D -->
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-4 px-4 font-headline font-bold text-sm">
+<div class="flex flex-col">
+<span>DIR_D Wayfinding</span>
+<span class="font-mono text-[10px] text-on-surface-variant font-normal">Beacon Horizon</span>
+</div>
+</td>
+<!-- 128px -->
+<td class="py-4 px-4">
+<div class="w-24 h-24 mx-auto flex items-center justify-center p-1 bg-surface-container-low rounded-lg">
+<svg class="w-20 h-20" fill="none" viewbox="0 0 100 100">
+<path d="M 22 82 L 48 18 C 49 16 51 16 52 18 L 62 42 L 38 82 Z" fill="#20282E"></path>
+<path d="M 44 82 L 66 48 L 78 82 Z" fill="#20282E" fill-opacity="0.85"></path>
+<circle cx="50" cy="42" fill="#E4D13A" r="7"></circle>
+<line stroke="#20282E" stroke-linecap="round" stroke-width="3" x1="18" x2="82" y1="82" y2="82"></line>
+</svg>
+</div>
+</td>
+<!-- 48px -->
+<td class="py-4 px-4 text-center">
+<div class="w-12 h-12 mx-auto flex items-center justify-center p-1 bg-surface-container-low rounded">
+<svg class="w-9 h-9" fill="none" viewbox="0 0 100 100">
+<path d="M 22 82 L 48 18 L 62 42 L 38 82 Z" fill="#20282E"></path>
+<path d="M 44 82 L 66 48 L 78 82 Z" fill="#20282E"></path>
+<circle cx="50" cy="42" fill="#E4D13A" r="6"></circle>
+<line stroke="#20282E" stroke-width="3" x1="18" x2="82" y1="82" y2="82"></line>
+</svg>
+</div>
+</td>
+<!-- 32px -->
+<td class="py-4 px-4 text-center">
+<div class="w-8 h-8 mx-auto flex items-center justify-center p-0.5 bg-surface-container-low rounded">
+<svg class="w-6 h-6" fill="none" viewbox="0 0 100 100">
+<path d="M 22 82 L 48 18 L 62 42 L 38 82 Z" fill="#20282E"></path>
+<path d="M 44 82 L 66 48 L 78 82 Z" fill="#20282E"></path>
+<circle cx="50" cy="42" fill="#E4D13A" r="6"></circle>
+</svg>
+</div>
+</td>
+<!-- 24px -->
+<td class="py-4 px-4 text-center">
+<div class="w-6 h-6 mx-auto flex items-center justify-center bg-surface-container-low rounded">
+<svg class="w-4 h-4" fill="none" viewbox="0 0 100 100">
+<path d="M 22 82 L 48 18 L 62 42 L 38 82 Z" fill="#20282E"></path>
+<path d="M 44 82 L 66 48 L 78 82 Z" fill="#20282E"></path>
+</svg>
+</div>
+</td>
+<!-- 16px -->
+<td class="py-4 px-4 text-center">
+<div class="w-4 h-4 mx-auto flex items-center justify-center bg-surface-container-low rounded-[2px]">
+<svg class="w-3.5 h-3.5" fill="none" viewbox="0 0 100 100">
+<polygon fill="#20282E" points="50,14 18,86 82,86"></polygon>
+</svg>
+</div>
+</td>
+<td class="py-4 px-4 text-right">
+<span class="inline-block px-2 py-1 rounded bg-secondary-fixed/30 text-on-surface font-bold text-xs">89 / 100</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- ========================================== -->
+<!-- 4. COMPARATIVE MATRIX & EVALUATION CRITERIA-->
+<!-- ========================================== -->
+<section class="w-full px-8 py-16 max-w-7xl mx-auto flex flex-col gap-10">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-outline-variant/60">
+<div>
+<div class="flex items-center gap-2 font-mono text-xs text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span>EXECUTIVE DECISION FRAMEWORK</span>
+</div>
+<h2 class="font-headline font-extrabold text-2xl md:text-3xl text-primary tracking-tight mt-1">
+          Directional Synthesis &amp; Scoring Table
+        </h2>
+</div>
+<span class="font-mono text-xs px-2.5 py-1 rounded bg-surface-container-high text-on-surface font-medium self-start md:self-auto">
+        4 EVALUATION VECTORS
+      </span>
+</div>
+<!-- 4-Card Comparative Evaluation -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Card A -->
+<div class="rounded-xl bg-surface-container-lowest p-6 flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-secondary-fixed"></div>
+<div>
+<div class="flex items-center justify-between font-mono text-xs mb-3">
+<span class="font-bold text-primary">DIR::A CAIRN</span>
+<span class="text-secondary font-bold">SCORE: 9.6/10</span>
+</div>
+<h3 class="font-headline font-bold text-lg text-primary mb-2">Abstract Foundation</h3>
+<p class="font-body text-xs text-on-surface-variant leading-relaxed mb-4">
+            Highest overall thematic alignment to the “Kairn” namesake. Immediately recognizable as an institutional anchor. Exceptional 16px reduction score.
+          </p>
+<div class="flex flex-col gap-2 font-mono text-[11px] py-3 border-t border-outline-variant/40">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Ownability:</span>
+<span class="font-bold text-primary">High (Unique Geometry)</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">16px Clarity:</span>
+<span class="font-bold text-primary">Flawless</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Brand Fit:</span>
+<span class="font-bold text-secondary">Optimal</span>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant/40">
+<span class="font-mono text-[10px] text-on-surface-variant">REC: RECOMMENDED PRIMARY</span>
+</div>
+</div>
+<!-- Card B -->
+<div class="rounded-xl bg-surface-container-lowest p-6 flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div>
+<div class="flex items-center justify-between font-mono text-xs mb-3">
+<span class="font-bold text-primary">DIR::B MARKER</span>
+<span class="text-on-surface-variant font-bold">SCORE: 8.9/10</span>
+</div>
+<h3 class="font-headline font-bold text-lg text-primary mb-2">Reference Coordinate</h3>
+<p class="font-body text-xs text-on-surface-variant leading-relaxed mb-4">
+            Emphasizes instrument-grade precision, knowledge indexing, and data points. Looks sophisticated in engineering, hardware, and developer contexts.
+          </p>
+<div class="flex flex-col gap-2 font-mono text-[11px] py-3 border-t border-outline-variant/40">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Ownability:</span>
+<span class="font-bold text-primary">Moderate (Technical)</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">16px Clarity:</span>
+<span class="font-bold text-primary">Requires Thicken</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Brand Fit:</span>
+<span class="font-bold text-primary">Developer Focus</span>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant/40">
+<span class="font-mono text-[10px] text-on-surface-variant">REC: STRONG SECONDARY</span>
+</div>
+</div>
+<!-- Card C -->
+<div class="rounded-xl bg-surface-container-lowest p-6 flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div>
+<div class="flex items-center justify-between font-mono text-xs mb-3">
+<span class="font-bold text-primary">DIR::C MONOGRAM</span>
+<span class="text-secondary font-bold">SCORE: 9.4/10</span>
+</div>
+<h3 class="font-headline font-bold text-lg text-primary mb-2">Constructed 'K'</h3>
+<p class="font-body text-xs text-on-surface-variant leading-relaxed mb-4">
+            Best typographic integration. Monogram creates an unforgettable corporate icon that stands side-by-side with global architectural and enterprise giants.
+          </p>
+<div class="flex flex-col gap-2 font-mono text-[11px] py-3 border-t border-outline-variant/40">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Ownability:</span>
+<span class="font-bold text-primary">Very High</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">16px Clarity:</span>
+<span class="font-bold text-primary">Sharp</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Brand Fit:</span>
+<span class="font-bold text-secondary">Enterprise Sovereign</span>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant/40">
+<span class="font-mono text-[10px] text-on-surface-variant">REC: ENTERPRISE CO-RUNNER</span>
+</div>
+</div>
+<!-- Card D -->
+<div class="rounded-xl bg-surface-container-lowest p-6 flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div>
+<div class="flex items-center justify-between font-mono text-xs mb-3">
+<span class="font-bold text-primary">DIR::D BEACON</span>
+<span class="text-on-surface-variant font-bold">SCORE: 8.7/10</span>
+</div>
+<h3 class="font-headline font-bold text-lg text-primary mb-2">Wayfinding Apex</h3>
+<p class="font-body text-xs text-on-surface-variant leading-relaxed mb-4">
+            Evokes upward discovery, horizon navigation, and beacon signaling. Dynamic angular energy with high visual velocity across presentation decks.
+          </p>
+<div class="flex flex-col gap-2 font-mono text-[11px] py-3 border-t border-outline-variant/40">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Ownability:</span>
+<span class="font-bold text-primary">Moderate (Apex)</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">16px Clarity:</span>
+<span class="font-bold text-primary">Simplified Solid</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Brand Fit:</span>
+<span class="font-bold text-primary">Exploratory AI</span>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant/40">
+<span class="font-mono text-[10px] text-on-surface-variant">REC: PRODUCT CAMPAIGN SYMBOL</span>
+</div>
+</div>
+</div>
+<!-- Review Questions & Studio Stamp -->
+<div class="p-8 rounded-2xl bg-surface-container-low shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mt-4">
+<div class="flex flex-col gap-2 max-w-2xl">
+<div class="flex items-center gap-2 font-mono text-xs text-secondary font-bold uppercase tracking-wider">
+<span>Review Questions for Architecture Board</span>
+</div>
+<h4 class="font-headline font-bold text-xl text-primary">
+          Strategic Selection Prompt
+        </h4>
+<p class="font-body text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+          Does Kairn's brand authority depend on immediate literal resonance with stone cairns (<strong class="text-primary font-semibold">Direction A</strong>), 
+          or should it prioritize institutional shorthand via an engineered monogram (<strong class="text-primary font-semibold">Direction C</strong>)? 
+          Review the 16px stress grid before confirming final master assets.
+        </p>
+</div>
+<div class="flex flex-col gap-2 p-4 rounded-xl bg-surface-container-lowest shadow-sm font-mono text-xs w-full lg:w-auto">
+<div class="flex items-center justify-between gap-6 pb-2 border-b border-outline-variant/40">
+<span class="text-on-surface-variant">SPECIFICATION</span>
+<span class="font-bold text-primary">KAIRN_ID.04</span>
+</div>
+<div class="flex items-center justify-between gap-6 pb-2 border-b border-outline-variant/40">
+<span class="text-on-surface-variant">STUDIO_SIG</span>
+<span class="font-bold text-secondary">PHASE 01 SYNTHESIS</span>
+</div>
+<div class="flex items-center justify-between gap-6">
+<span class="text-on-surface-variant">COLOR_CODE</span>
+<span class="font-bold text-primary">#E4D13A / #20282E</span>
+</div>
+</div>
+</div>
+</section>
+</div></main><footer class="w-full bg-surface-container-low py-10 shadow-[0_-1px_6px_rgba(15,29,40,0.02)]"><div class="w-full px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono text-on-surface-variant"><div class="flex items-center gap-3"><span class="font-headline font-bold tracking-tight text-on-surface">KAIRN KMS</span><span class="text-outline-variant">—</span><span>SYSTEM SPECIFICATION ID.04</span><span class="text-outline-variant">—</span><span>© 2025 ALL RIGHTS RESERVED</span></div><div class="flex items-center gap-4 text-[11px]"><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed"></span>MINERAL PRECISION GEOMETRY</span><span class="text-outline-variant">|</span><span>CALIBRATION: 4PX GRID / SYNE DISPLAY / TITANIUM TONAL SHIFT</span></div></div></footer></body></html>

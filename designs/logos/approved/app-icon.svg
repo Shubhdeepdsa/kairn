@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" fill="none">
+  <!-- Direction A App Icon with Authentic Micro-Wayfinding Geometry -->
+  <rect width="120" height="120" rx="26" fill="#20282E"/>
+  <g transform="translate(24, 28)">
+    <!-- Top Capstone (Mineral Yellow #E4D13A) with dark centroid dot -->
+    <rect x="23" y="0" width="26" height="13" rx="3.5" fill="#E4D13A"/>
+    <circle cx="36" cy="6.5" r="2.2" fill="#20282E"/>
+    
+    <!-- Middle Tier (White #FFFFFF) with dark/slate center slit line -->
+    <rect x="12" y="19" width="48" height="15" rx="4.5" fill="#FFFFFF"/>
+    <line x1="26" y1="26.5" x2="46" y2="26.5" stroke="#20282E" stroke-width="2" stroke-linecap="round"/>
+    
+    <!-- Base Tier (Cool Gray #ECEEF0) with Mineral Yellow dash on the left -->
+    <rect x="0" y="40" width="72" height="18" rx="5.5" fill="#ECEEF0"/>
+    <rect x="6" y="47" width="13" height="4" rx="2" fill="#E4D13A"/>
+  </g>
+</svg>

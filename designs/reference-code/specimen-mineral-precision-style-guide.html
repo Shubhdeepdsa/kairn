@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Syne:wght@600;700;800&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-error":"#ffffff","surface-bright":"#f7f9ff","on-tertiary":"#ffffff","tertiary-container":"#30251a","on-tertiary-fixed":"#241a0f","secondary-fixed":"#f8e54d","primary":"#0b1319","outline":"#74777b","background":"#f7f9ff","surface-container-highest":"#d5e4f4","on-secondary-container":"#706500","on-background":"#0f1d28","inverse-surface":"#24323e","secondary-fixed-dim":"#dbc831","on-error-container":"#93000a","tertiary":"#1a1107","on-primary-container":"#878f96","surface":"#f7f9ff","on-secondary-fixed-variant":"#4f4700","on-tertiary-fixed-variant":"#514438","on-primary-fixed-variant":"#40484e","secondary-container":"#f8e54d","on-primary":"#ffffff","surface-container-lowest":"#ffffff","on-primary-fixed":"#151d22","inverse-on-surface":"#e6f2ff","on-secondary-fixed":"#201c00","tertiary-fixed":"#f3dfce","on-surface-variant":"#44474a","on-surface":"#0f1d28","error":"#ba1a1a","primary-container":"#20282e","tertiary-fixed-dim":"#d6c3b3","on-tertiary-container":"#9c8b7c","surface-container-low":"#ecf4ff","primary-fixed-dim":"#bfc7cf","outline-variant":"#c4c7ca","inverse-primary":"#bfc7cf","on-secondary":"#ffffff","secondary":"#6a5f00","error-container":"#ffdad6","surface-dim":"#cddceb","primary-fixed":"#dbe3ec","surface-variant":"#d5e4f4","surface-container":"#e1f0ff","surface-container-high":"#dbeaf9","surface-tint":"#575f66"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{},fontFamily:{headline:["Syne"],display:["Syne"],body:["Plus Jakarta Sans"],label:["Plus Jakarta Sans"]},fontSize:{}}}}</script></head><body class="bg-surface font-body text-on-surface antialiased"><header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 w-full px-6 lg:px-8 flex items-center justify-between gap-6"><div class="flex items-center gap-6"><div class="flex items-center gap-3"><div class="w-7 h-7 bg-primary rounded flex flex-col items-center justify-center gap-0.5 p-1"><div class="w-3 h-0.5 bg-secondary-container rounded-full"></div><div class="w-4 h-0.5 bg-surface rounded-full"></div><div class="w-2 h-0.5 bg-surface-container-highest rounded-full"></div></div><div class="flex items-baseline gap-2"><span class="font-headline font-bold text-lg tracking-tight text-primary uppercase">Kairn</span><span class="text-[11px] font-mono tracking-wider text-on-surface-variant uppercase">DS // SPEC</span></div></div><div class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface text-xs font-medium"><span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span><span>v2.4</span><span class="text-on-surface-variant">Mineral Precision</span></div></div><div class="flex-1 max-w-md hidden md:block"><div class="relative flex items-center w-full"><span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-[18px]">search</span><input class="w-full pl-9 pr-4 py-1.5 text-xs bg-surface-container-low rounded-lg text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:bg-surface-container-lowest transition-colors font-body" placeholder="Search tokens, components, props, guidelines..." type="text"/></div></div><div class="flex items-center gap-4"><nav class="hidden lg:flex items-center gap-1 bg-surface-container-low p-1 rounded-lg" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-lg shadow-sm"><a class="text-xs text-on-surface-variant hover:text-on-surface hover:bg-surface-container px-3 py-1.5 transition-colors" data-path="design-tokens-and-palette" href="#">Design Tokens &amp; Palette</a><a class="text-xs text-on-surface-variant hover:text-on-surface hover:bg-surface-container px-3 py-1.5 transition-colors" data-path="typography-specimen" href="#">Typography Specimen</a><a class="text-xs text-on-surface-variant hover:text-on-surface hover:bg-surface-container px-3 py-1.5 transition-colors" data-path="component-kit" href="#">Component Kit</a><a class="text-xs text-on-surface-variant hover:text-on-surface hover:bg-surface-container px-3 py-1.5 transition-colors" data-path="wayfinding-motifs" href="#">Wayfinding Motifs</a></nav><button class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors text-xs font-semibold"><span class="material-symbols-outlined text-[16px]">terminal</span><span>Export / Code</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-surface"><div class="flex flex-col w-full pb-24">
+<!-- SECTION: SPECIFICATION HEADER & SYSTEM METRICS -->
+<section class="w-full bg-surface-container-low px-6 lg:px-12 py-12">
+<div class="max-w-7xl mx-auto flex flex-col gap-8">
+<!-- Top Eyebrow / System Coordinates -->
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-6 h-6 bg-primary flex items-center justify-center rounded">
+<span class="w-2.5 h-2.5 bg-secondary-container rounded-sm"></span>
+</div>
+<span class="text-xs font-mono font-medium tracking-widest text-on-surface-variant uppercase">SYS://SPEC-2.4 // ARCHITECTURAL REPOSITORY</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"></span>
+<span class="text-xs font-mono font-medium text-on-surface-variant">TELEMETRY: STABLE // FIGMA TOKEN RUNTIME V2.40</span>
+</div>
+</div>
+<!-- Title & Subtitle Split -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<div class="lg:col-span-8 flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 text-[11px] font-mono font-semibold tracking-wider bg-secondary-container text-on-secondary-container rounded">DS-SPEC-2025</span>
+<span class="text-xs font-mono text-on-surface-variant">REVISED: 2025-05-18</span>
+</div>
+<h1 class="text-4xl lg:text-5xl font-headline font-extrabold tracking-tight text-primary leading-tight">
+            Kairn Design System Specimen
+          </h1>
+<p class="text-base lg:text-lg text-on-surface-variant max-w-3xl leading-relaxed">
+            Mineral Precision — An engineered instrument for navigating knowledge. Unified tokens, typography scale, component geometry, and disciplined wayfinding motifs built for mission-critical synthesis.
+          </p>
+</div>
+<!-- Telemetry Summary Card -->
+<div class="lg:col-span-4 bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<span class="text-xs font-mono font-semibold tracking-wider uppercase text-on-surface-variant">Engineered Metrics</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">verified</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col bg-surface-container-low p-3 rounded-lg">
+<span class="text-[11px] font-mono text-on-surface-variant">WCAG AAA RATIO</span>
+<span class="text-xl font-headline font-bold text-primary mt-1">9.8 : 1</span>
+<span class="text-[10px] text-on-surface-variant mt-0.5">Graphite on Mineral</span>
+</div>
+<div class="flex flex-col bg-surface-container-low p-3 rounded-lg">
+<span class="text-[11px] font-mono text-on-surface-variant">GRID HARMONIC</span>
+<span class="text-xl font-headline font-bold text-primary mt-1">4px Base</span>
+<span class="text-[10px] text-on-surface-variant mt-0.5">Strict spatial rhythm</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-xs text-on-surface-variant pt-2">
+<span>Runtime Baseline</span>
+<span class="font-mono font-medium text-primary">Light-First High-Lum</span>
+</div>
+</div>
+</div>
+<!-- Metadata Chips & Quick Action Triggers -->
+<div class="flex flex-wrap items-center justify-between gap-4 pt-4">
+<div class="flex flex-wrap items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 bg-surface-container-lowest text-on-surface text-xs font-mono font-medium rounded-md shadow-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+            Version 2.4.0
+          </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 bg-surface-container-lowest text-on-surface text-xs font-mono font-medium rounded-md shadow-sm">
+            Contrast Ratio WCAG AAA (9.2:1)
+          </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 bg-surface-container-lowest text-on-surface text-xs font-mono font-medium rounded-md shadow-sm">
+            Base Grid: 4px Rhythm
+          </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 bg-surface-container-lowest text-on-surface text-xs font-mono font-medium rounded-md shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-secondary">check_circle</span>
+            Figma Sync: Linked
+          </span>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-2 px-3.5 py-1.5 bg-primary text-on-primary text-xs font-medium rounded-md hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm" id="copy-json-btn" onclick="navigator.clipboard.writeText('{ &quot;system&quot;: &quot;Kairn&quot;, &quot;version&quot;: &quot;2.4.0&quot;, &quot;brandAccent&quot;: &quot;#E4D13A&quot;, &quot;baseGrid&quot;: 4 }'); const el = this.querySelector('span:last-child'); el.innerText='Tokens Copied!'; setTimeout(() =&gt; el.innerText='Copy Token JSON', 2000);">
+<span class="material-symbols-outlined text-[16px]">data_object</span>
+<span>Copy Token JSON</span>
+</button>
+<button class="flex items-center gap-2 px-3.5 py-1.5 bg-surface-container-lowest text-on-surface text-xs font-medium rounded-md hover:bg-surface-container-high transition-colors shadow-sm" onclick="navigator.clipboard.writeText(':root { --kairn-accent: #E4D13A; --kairn-graphite: #20282E; --kairn-grid: 4px; }'); const el = this.querySelector('span:last-child'); el.innerText='Variables Copied!'; setTimeout(() =&gt; el.innerText='Export CSS Variables', 2000);">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span>Export CSS Variables</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- MAIN WRAPPER CONTAINER -->
+<div class="w-full max-w-7xl mx-auto px-6 lg:px-12 flex flex-col gap-20 mt-16">
+<!-- SECTION 1: COLOR ARCHITECTURE & SEMANTIC PALETTE -->
+<section class="flex flex-col gap-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono font-bold text-secondary uppercase tracking-widest">LAYER 01</span>
+<span class="text-xs font-mono text-on-surface-variant">// SPECTRAL MAPPING</span>
+</div>
+<h2 class="text-2xl font-headline font-bold text-primary">Color Architecture &amp; Semantic Palette</h2>
+<p class="text-sm text-on-surface-variant max-w-2xl">
+            Strictly categorized chromas calibrated for deep cognitive focus, high contrast reading, and navigational hierarchy.
+          </p>
+</div>
+<div class="flex items-center gap-3 text-xs font-mono text-on-surface-variant">
+<span class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-secondary-container"></span>
+            Mineral Lumens
+          </span>
+<span class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-primary"></span>
+            Graphite Invariants
+          </span>
+</div>
+</div>
+<!-- Color Architecture Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+<!-- CARD 1: Brand Accent Primary -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div class="flex flex-col gap-4">
+<div class="w-full h-24 rounded-lg bg-secondary-container flex items-end justify-between p-3 relative overflow-hidden">
+<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-primary text-on-primary">PROMINENCE-1</span>
+<span class="font-mono text-xs font-bold text-primary">HEX: #E4D13A</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-headline font-bold text-base text-primary">Kairn Mineral</h3>
+<p class="text-xs text-on-surface-variant leading-relaxed">Primary focus rings, active waypoints, and high-visibility node selections.</p>
+</div>
+</div>
+<div class="pt-4 mt-4 flex flex-col gap-1.5 bg-surface-container-low p-3 rounded-lg">
+<div class="flex justify-between text-[11px] font-mono">
+<span class="text-on-surface-variant">Token</span>
+<span class="text-primary font-medium">--color-accent-mineral</span>
+</div>
+<div class="flex justify-between text-[11px] font-mono">
+<span class="text-on-surface-variant">RGB</span>
+<span class="text-primary font-medium">228, 209, 58</span>
+</div>
+<div class="flex justify-between text-[11px] font-mono">
+<span class="text-on-surface-variant">WCAG vs #20282E</span>
+<span class="font-semibold text-secondary">9.8:1 (AAA)</span>
+</div>
+</div>
+</div>
+<!-- CARD 2: Accent Hover -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div class="flex flex-col gap-4">
+<div class="w-full h-24 rounded-lg bg-secondary-fixed-dim flex items-end justify-between p-3 relative overflow-hidden">
+<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-primary text-on-primary">INTERACTION</span>
+<span class="font-mono text-xs font-bold text-primary">HEX: #D1BE2B</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-headline font-bold text-base text-primary">Accent Hover</h3>
+<p class="text-xs text-on-surface-variant leading-relaxed">Depressed states, pressed interactions, and high-energy interactive hovers.</p>
+</div>
+</div>
+<div class="pt-4 mt-4 flex flex-col gap-1.5 bg-surface-container-low p-3 rounded-lg">
+<div class="flex justify-between text-[11px] font-mono">
+<span class="text-on-surface-variant">Token</span>
+<span class="text-primary font-medium">--color-accent-hover</span>
+</div>
+<div class="flex justify-between text-[11px] font-mono">
+<span class="text-on-surface-variant">RGB</span>
+<span class="text-primary font-medium">209, 190, 43</span>
+</div>
+<div class="flex justify-between text-[11px] font-mono">
+<span class="text-on-surface-variant">Role</span>
+<span class="font-semibold text-primary">Micro-Motion Active</span>
+</div>
+</div>
+</div>
+<!-- CARD 3: Content Surface / Canvas Base -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div class="flex flex-col gap-4">
+<div class="w-full h-24 rounded-lg bg-surface flex items-end justify-between p-3 relative overflow-hidden shadow-inner">
+<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-primary text-on-primary">CANVAS</span>
+<span class="font-mono text-xs font-bold text-primary">HEX: #F4F6F7</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-headline font-bold text-base text-primary">Cool Titanium Canvas</h3>
+<p class="text-xs text-on-surface-variant leading-relaxed">Base viewport backdrop engineered to eliminate retinal glare during extended document reading.</p>
+</div>
+</div>
+<div class="pt-4 mt-4 flex flex-col gap-1.5 bg-surface-container-low p-3 rounded-lg">
+<div class="flex justify-between text-[11px] font-mono">
+<span class="text-on-surface-variant">Token</span>
+<span class="text-primary font-medium">--color-canvas-base</span>
+</div>
+<div class="flex justify-between text-[11px] font-mono">
+<span class="text-on-surface-variant">Substrate</span>
+<span class="text-primary font-medium">Pure Viewport Ground</span>
+</div>
+<div class="flex justify-between text-[11px] font-mono">
+<span class="text-on-surface-variant">Reflectance</span>
+<span class="font-semibold text-primary">94.8% Diffuse</span>
+</div>
+</div>
+</div>
+<!-- CARD 4: Content Surface / White -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div class="flex flex-col gap-4">
+<div class="w-full h-24 rounded-lg bg-surface-container-lowest flex items-end justify-between p-3 relative overflow-hidden shadow-sm">
+<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-primary text-on-primary">SURFACE</span>
+<span class="font-mono text-xs font-bold text-primary">HEX: #FFFFFF</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-headline font-bold text-base text-primary">Content Primary</h3>
+<p class="text-xs text-on-surface-variant leading-relaxed">Pure white card substrate, modal dialog surfaces, and active text editor sheets.</p>
+</div>
+</div>
+<div class="pt-4 mt-4 flex flex-col gap-1.5 bg-surface-container-low p-3 rounded-lg">
+<div class="flex justify-between text-[11px] font-mono">
+<span class="text-on-surface-variant">Token</span>
+<span class="text-primary font-medium">--color-surface-primary</span>
+</div>
+<div class="flex justify-between text-[11px] font-mono">
+<span class="text-on-surface-variant">Substrate</span>
+<span class="text-primary font-medium">Floating Panels</span>
+</div>
+<div class="flex justify-between text-[11px] font-mono">
+<span class="text-on-surface-variant">Elevation</span>
+<span class="font-semibold text-primary">Level 0 &amp; Level 1</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Second Row: Neutrals & Status Systems -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+<!-- Typography Neutrals Group (7 cols) -->
+<div class="lg:col-span-7 bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-5">
+<div class="flex items-center justify-between">
+<h3 class="font-headline font-bold text-base text-primary">High-Contrast Typographic Neutrals</h3>
+<span class="text-xs font-mono text-on-surface-variant">3-TIER DENSITY SCALE</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Graphite Primary -->
+<div class="flex flex-col gap-2 p-3 bg-surface-container-low rounded-lg">
+<div class="h-10 w-full rounded bg-primary flex items-center px-3 text-on-primary text-xs font-mono font-bold">#20282E</div>
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-primary">Precision Graphite</span>
+<span class="text-[11px] font-mono text-on-surface-variant">--color-text-primary</span>
+<span class="text-[11px] text-on-surface-variant mt-1">Headers, body copy, key structural bounds.</span>
+</div>
+</div>
+<!-- Slate Secondary -->
+<div class="flex flex-col gap-2 p-3 bg-surface-container-low rounded-lg">
+<div class="h-10 w-full rounded bg-on-surface-variant flex items-center px-3 text-on-primary text-xs font-mono font-bold">#52606D</div>
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-primary">Muted Slate</span>
+<span class="text-[11px] font-mono text-on-surface-variant">--color-text-secondary</span>
+<span class="text-[11px] text-on-surface-variant mt-1">Metadata, secondary tags, helper cues.</span>
+</div>
+</div>
+<!-- Mineral Hairline / Tertiary -->
+<div class="flex flex-col gap-2 p-3 bg-surface-container-low rounded-lg">
+<div class="h-10 w-full rounded bg-surface-container-highest flex items-center px-3 text-on-surface text-xs font-mono font-bold">#8C9BA5</div>
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-primary">Tertiary Neutral</span>
+<span class="text-[11px] font-mono text-on-surface-variant">--color-text-tertiary</span>
+<span class="text-[11px] text-on-surface-variant mt-1">Monospace paths, disabled indicators.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- System Status Group (5 cols) -->
+<div class="lg:col-span-5 bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-5">
+<div class="flex items-center justify-between">
+<h3 class="font-headline font-bold text-base text-primary">Semantic Status Quad</h3>
+<span class="text-xs font-mono text-on-surface-variant">SYSTEM DIAGNOSTICS</span>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div class="p-3 rounded-lg bg-surface-container-low flex flex-col gap-1.5">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#1E8E3E]"></span>
+<span class="text-xs font-semibold text-primary">Sync / Success</span>
+</div>
+<span class="text-[11px] font-mono text-on-surface-variant">#1E8E3E // --status-sync</span>
+<span class="text-[10px] text-on-surface-variant">Live replication verified</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-low flex flex-col gap-1.5">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#D97706]"></span>
+<span class="text-xs font-semibold text-primary">Review / Warning</span>
+</div>
+<span class="text-[11px] font-mono text-on-surface-variant">#D97706 // --status-warn</span>
+<span class="text-[10px] text-on-surface-variant">Pending peer synthesis</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-low flex flex-col gap-1.5">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-error"></span>
+<span class="text-xs font-semibold text-primary">Conflict / Alert</span>
+</div>
+<span class="text-[11px] font-mono text-on-surface-variant">#D93025 // --status-err</span>
+<span class="text-[10px] text-on-surface-variant">Node divergence flagged</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-low flex flex-col gap-1.5">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#1A73E8]"></span>
+<span class="text-xs font-semibold text-primary">Indexing / Info</span>
+</div>
+<span class="text-[11px] font-mono text-on-surface-variant">#1A73E8 // --status-info</span>
+<span class="text-[10px] text-on-surface-variant">Vectorizing embeddings</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2: DISCIPLINED TYPOGRAPHY SPECIMEN -->
+<section class="flex flex-col gap-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono font-bold text-secondary uppercase tracking-widest">LAYER 02</span>
+<span class="text-xs font-mono text-on-surface-variant">// TYPOGRAPHIC PROPORTIONS</span>
+</div>
+<h2 class="text-2xl font-headline font-bold text-primary">Disciplined Typography Specimen</h2>
+<p class="text-sm text-on-surface-variant max-w-2xl">
+            Tension between geometric Swiss display forms, rationalized neo-grotesque interface scales, and monospaced terminal coordinates.
+          </p>
+</div>
+<div class="flex items-center gap-4 text-xs font-mono text-on-surface-variant">
+<span>SYNE // 700-800</span>
+<span>PLUS JAKARTA // 400-600</span>
+<span>IBM PLEX MONO // 400</span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Specimen Table (8 cols) -->
+<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-sm flex flex-col gap-8">
+<!-- Specimen Item 1: Display Large -->
+<div class="flex flex-col gap-2 pb-6">
+<div class="flex flex-wrap items-center justify-between text-xs font-mono text-on-surface-variant mb-1">
+<span class="font-bold text-primary">DISPLAY LARGE // SYNE BOLD 800</span>
+<span>36px / Line Height: 44px / Tracking: -0.02em</span>
+</div>
+<p class="font-headline font-extrabold text-3xl lg:text-4xl text-primary tracking-tight">
+              Deliberately Constructed Knowledge
+            </p>
+<span class="text-[11px] text-on-surface-variant font-mono">Usage: Key structural landings, document repository master banners.</span>
+</div>
+<!-- Specimen Item 2: Heading Section -->
+<div class="flex flex-col gap-2 pb-6">
+<div class="flex flex-wrap items-center justify-between text-xs font-mono text-on-surface-variant mb-1">
+<span class="font-bold text-primary">HEADING SECTION // SYNE BOLD 700</span>
+<span>24px / Line Height: 32px / Tracking: -0.015em</span>
+</div>
+<h3 class="font-headline font-bold text-2xl text-primary tracking-tight">
+              Index Nodes &amp; Navigational Anchors
+            </h3>
+<span class="text-[11px] text-on-surface-variant font-mono">Usage: Primary component sections, bento cluster heads, sheet categories.</span>
+</div>
+<!-- Specimen Item 3: Subheading -->
+<div class="flex flex-col gap-2 pb-6">
+<div class="flex flex-wrap items-center justify-between text-xs font-mono text-on-surface-variant mb-1">
+<span class="font-bold text-primary">SUBHEADING // SYNE SEMIBOLD 600</span>
+<span>18px / Line Height: 24px / Tracking: -0.01em</span>
+</div>
+<h4 class="font-headline font-semibold text-lg text-primary">
+              Reference Points &amp; Multi-Document Synthesis
+            </h4>
+<span class="text-[11px] text-on-surface-variant font-mono">Usage: Nested block titles, modal dialogue subheaders, panel intros.</span>
+</div>
+<!-- Specimen Item 4: Body Regular -->
+<div class="flex flex-col gap-2 pb-6">
+<div class="flex flex-wrap items-center justify-between text-xs font-mono text-on-surface-variant mb-1">
+<span class="font-bold text-primary">BODY REGULAR // PLUS JAKARTA SANS 400</span>
+<span>15px / Line Height: 22px / Tracking: Normal</span>
+</div>
+<p class="font-body text-sm lg:text-[15px] text-on-surface leading-relaxed max-w-2xl">
+              Cairns served as humanity’s earliest non-verbal wayfinding coordinates in featureless mountain passes. In the modern knowledge fabric, fragmented thoughts require an identical mineral anchor: persistent, clear, and impervious to algorithmic noise.
+            </p>
+<span class="text-[11px] text-on-surface-variant font-mono">Usage: Technical publication paragraphs, markdown previews, article syntheses.</span>
+</div>
+<!-- Specimen Item 5: UI Medium & Caption -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+<div class="flex flex-col gap-1.5 p-3 rounded-lg bg-surface-container-low">
+<span class="text-[11px] font-mono text-on-surface-variant">UI MEDIUM // PLUS JAKARTA 500 (14px/20px)</span>
+<span class="text-sm font-body font-medium text-primary">Commit changes to repository node</span>
+<span class="text-[10px] text-on-surface-variant">Action buttons, tab identifiers, form inputs</span>
+</div>
+<div class="flex flex-col gap-1.5 p-3 rounded-lg bg-surface-container-low">
+<span class="text-[11px] font-mono text-on-surface-variant">CAPTION &amp; METADATA // PLUS JAKARTA 500 (12px/16px)</span>
+<span class="text-xs font-body font-medium text-on-surface-variant">MODIFIED BY A. TURING // 4 MINUTES AGO</span>
+<span class="text-[10px] text-on-surface-variant">Audit trails, node coordinates, timestamps</span>
+</div>
+</div>
+<!-- Specimen Item 6: Monospace Utilities -->
+<div class="flex flex-col gap-2 pt-2">
+<div class="flex items-center justify-between text-xs font-mono text-on-surface-variant mb-1">
+<span class="font-bold text-primary">MONOSPACE SYSTEM // IBM PLEX MONO 400</span>
+<span>13px / Line Height: 18px</span>
+</div>
+<div class="bg-primary text-on-primary p-4 rounded-lg font-mono text-xs flex flex-col gap-1.5 overflow-x-auto">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span>01</span>
+<span class="text-secondary-container">const</span>
+<span class="text-surface">nodeReference</span>
+<span>=</span>
+<span class="text-surface-container-highest">'kairn://node/9842a-mineral-v2'</span>;
+              </div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span>02</span>
+<span class="text-secondary-container">await</span>
+<span class="text-surface">KairnMesh</span>.<span class="text-surface-container-high">synchronize</span>({
+              </div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span>03</span>
+<span>  originHash:</span>
+<span class="text-surface-container-highest">'0x7f4b8c91a02'</span>,
+                <span>tolerance:</span>
+<span class="text-secondary-fixed">0.004</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span>04</span>
+                });
+              </div>
+</div>
+</div>
+</div>
+<!-- Typography Principles & Visual Hierarchy Guide (4 cols) -->
+<div class="lg:col-span-4 flex flex-col gap-5">
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-4">
+<span class="text-xs font-mono font-bold tracking-widest text-secondary uppercase">EDITORIAL MANDATES</span>
+<h3 class="font-headline font-bold text-lg text-primary">Architectural Principles</h3>
+<ul class="flex flex-col gap-3 text-xs text-on-surface-variant leading-relaxed">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary mt-0.5">adjust</span>
+<span><strong class="text-primary">Syne Exclusivity:</strong> Never deploy Syne for continuous reading blocks longer than two lines. Reserved exclusively for architectural headlines.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary mt-0.5">adjust</span>
+<span><strong class="text-primary">Line-Length Cap:</strong> Paragraphs are strictly throttled at 65 characters maximum width to prevent eye-drift during dense audits.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary mt-0.5">adjust</span>
+<span><strong class="text-primary">Monospace Precision:</strong> All technical identifiers, timestamps, commit hashes, and file weights must render in IBM Plex Mono.</span>
+</li>
+</ul>
+</div>
+<!-- Editorial Mock Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-4 relative overflow-hidden">
+<div class="w-1.5 h-full bg-secondary-container absolute left-0 top-0"></div>
+<div class="flex items-center justify-between text-[11px] font-mono text-on-surface-variant pl-2">
+<span>DOC REF: #KN-4089</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface">SYNTHESIS</span>
+</div>
+<h4 class="font-headline font-bold text-base text-primary pl-2">
+              Cross-Document Latent Clustering
+            </h4>
+<p class="text-xs text-on-surface-variant pl-2 leading-relaxed">
+              When distinct papers reference identical geometric vectors, Kairn binds their nodes automatically into a shared wayfinding path.
+            </p>
+<div class="flex items-center gap-2 pt-2 pl-2 text-[11px] font-mono text-primary font-semibold">
+<span>INDEX: 48 NODES</span>
+<span>•</span>
+<span>CALIBRATED</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: STANDARDIZED GEOMETRY & SPACING RULES -->
+<section class="flex flex-col gap-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono font-bold text-secondary uppercase tracking-widest">LAYER 03</span>
+<span class="text-xs font-mono text-on-surface-variant">// GEOMETRIC MATRICES</span>
+</div>
+<h2 class="text-2xl font-headline font-bold text-primary">Standardized Geometry &amp; Spacing Rules</h2>
+<p class="text-sm text-on-surface-variant max-w-2xl">
+            Controlled corner radii and four-pixel mathematical increments establishing unwavering optical equilibrium.
+          </p>
+</div>
+<div class="text-xs font-mono text-on-surface-variant">
+          BASE INCREMENT: 4PX
+        </div>
+</div>
+<!-- Geometry Bento Cards -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- 4-Tier Radius Breakdown (7 cols) -->
+<div class="lg:col-span-7 bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<h3 class="font-headline font-bold text-base text-primary">4-Tier Radius Hierarchy</h3>
+<span class="text-xs font-mono text-on-surface-variant">CALIBRATED RADII</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Tier 1: 4px -->
+<div class="p-4 rounded-lg bg-surface-container-low flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-mono font-bold text-primary">4px [ROUND_FOUR]</span>
+<span class="text-[10px] font-mono text-on-surface-variant">MICRO-CONTROLS</span>
+</div>
+<div class="w-full h-16 bg-surface-container-lowest rounded flex items-center justify-center shadow-xs">
+<span class="text-xs font-mono text-on-surface-variant">Badge / Status Pill</span>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                Applied to metadata chips, compact badges, inner code tabs, and micro-counters.
+              </p>
+</div>
+<!-- Tier 2: 6px -->
+<div class="p-4 rounded-lg bg-surface-container-low flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-mono font-bold text-primary">6px [ROUND_SIX]</span>
+<span class="text-[10px] font-mono text-on-surface-variant">INTERACTIVES</span>
+</div>
+<div class="w-full h-16 bg-surface-container-lowest rounded-md flex items-center justify-center shadow-xs">
+<span class="text-xs font-mono text-on-surface-variant">Button / Form Field</span>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                Primary standard for clickable controls, select boxes, interactive chips, and inputs.
+              </p>
+</div>
+<!-- Tier 3: 10px -->
+<div class="p-4 rounded-lg bg-surface-container-low flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-mono font-bold text-primary">10px [ROUND_TEN]</span>
+<span class="text-[10px] font-mono text-on-surface-variant">STRUCTURAL</span>
+</div>
+<div class="w-full h-16 bg-surface-container-lowest rounded-lg flex items-center justify-center shadow-xs">
+<span class="text-xs font-mono text-on-surface-variant">Knowledge Node Card</span>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                Applied to cards, content modules, preview containers, and inspector drawer surfaces.
+              </p>
+</div>
+<!-- Tier 4: 14px -->
+<div class="p-4 rounded-lg bg-surface-container-low flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-mono font-bold text-primary">14px [ROUND_FOURTEEN]</span>
+<span class="text-[10px] font-mono text-on-surface-variant">VIEWPORT LAYER</span>
+</div>
+<div class="w-full h-16 bg-surface-container-lowest rounded-xl flex items-center justify-center shadow-xs">
+<span class="text-xs font-mono text-on-surface-variant">Modal / Palette Float</span>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                High-level overlays, command palettes, global contextual menus, and master sheets.
+              </p>
+</div>
+</div>
+</div>
+<!-- 4px Base Grid Spacing Scale (5 cols) -->
+<div class="lg:col-span-5 bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<h3 class="font-headline font-bold text-base text-primary">4px Base Grid Spacing Scale</h3>
+<span class="text-xs font-mono text-on-surface-variant">RHYTHMIC RULER</span>
+</div>
+<div class="flex flex-col gap-3">
+<!-- 4px -->
+<div class="flex items-center gap-3">
+<span class="w-12 text-xs font-mono text-on-surface-variant">4px</span>
+<div class="h-3 w-1 bg-secondary-container rounded-xs"></div>
+<span class="text-[11px] font-mono text-on-surface-variant">space-1 // Tight micro-gap</span>
+</div>
+<!-- 8px -->
+<div class="flex items-center gap-3">
+<span class="w-12 text-xs font-mono text-on-surface-variant">8px</span>
+<div class="h-3 w-2 bg-secondary-container rounded-xs"></div>
+<span class="text-[11px] font-mono text-on-surface-variant">space-2 // Inner control padding</span>
+</div>
+<!-- 12px -->
+<div class="flex items-center gap-3">
+<span class="w-12 text-xs font-mono text-on-surface-variant">12px</span>
+<div class="h-3 w-3 bg-secondary-container rounded-xs"></div>
+<span class="text-[11px] font-mono text-on-surface-variant">space-3 // Compact vertical rhythms</span>
+</div>
+<!-- 16px -->
+<div class="flex items-center gap-3">
+<span class="w-12 text-xs font-mono text-on-surface-variant">16px</span>
+<div class="h-3 w-4 bg-secondary-container rounded-xs"></div>
+<span class="text-[11px] font-mono text-on-surface-variant">space-4 // Standard container gutter</span>
+</div>
+<!-- 24px -->
+<div class="flex items-center gap-3">
+<span class="w-12 text-xs font-mono text-on-surface-variant">24px</span>
+<div class="h-3 w-6 bg-secondary-container rounded-xs"></div>
+<span class="text-[11px] font-mono text-on-surface-variant">space-6 // Card module separation</span>
+</div>
+<!-- 32px -->
+<div class="flex items-center gap-3">
+<span class="w-12 text-xs font-mono text-on-surface-variant">32px</span>
+<div class="h-3 w-8 bg-secondary-container rounded-xs"></div>
+<span class="text-[11px] font-mono text-on-surface-variant">space-8 // Macro layout section break</span>
+</div>
+<!-- 48px -->
+<div class="flex items-center gap-3">
+<span class="w-12 text-xs font-mono text-on-surface-variant">48px</span>
+<div class="h-3 w-12 bg-secondary-container rounded-xs"></div>
+<span class="text-[11px] font-mono text-on-surface-variant">space-12 // Major architectural divisions</span>
+</div>
+</div>
+<div class="p-4 rounded-lg bg-surface-container-low text-xs text-on-surface-variant flex items-center gap-3 mt-auto">
+<span class="material-symbols-outlined text-primary text-[20px]">straighten</span>
+<span>All spatial paddings are strictly divisible by 4. No arbitrary pixel assignments permitted.</span>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 4: LIVE COMPONENT KIT PREVIEW -->
+<section class="flex flex-col gap-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono font-bold text-secondary uppercase tracking-widest">LAYER 04</span>
+<span class="text-xs font-mono text-on-surface-variant">// LIVE REPERTOIRE</span>
+</div>
+<h2 class="text-2xl font-headline font-bold text-primary">Live Component Kit Preview</h2>
+<p class="text-sm text-on-surface-variant max-w-2xl">
+            Fully functional controls, form inputs, status chips, and knowledge node cards rendering production CSS tokens.
+          </p>
+</div>
+<div class="text-xs font-mono text-on-surface-variant">INTERACTIVE CONTROLS</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Controls & Buttons (7 cols) -->
+<div class="lg:col-span-7 flex flex-col gap-6">
+<!-- Buttons Cluster -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-5">
+<div class="flex items-center justify-between">
+<h3 class="font-headline font-bold text-base text-primary">Engineered Button Hierarchy</h3>
+<span class="text-xs font-mono text-on-surface-variant">INTERACTIVE SPEC</span>
+</div>
+<div class="flex flex-wrap items-center gap-4">
+<!-- Primary Button -->
+<button class="px-4 py-2 bg-primary text-on-primary text-xs font-semibold rounded-md hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">account_tree</span>
+<span>Primary Graphite</span>
+</button>
+<!-- High Prominence Mineral Button -->
+<button class="px-4 py-2 bg-secondary-container text-on-secondary-container text-xs font-bold rounded-md hover:bg-secondary-fixed-dim transition-colors shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">bolt</span>
+<span>Kairn Mineral</span>
+</button>
+<!-- Secondary Button -->
+<button class="px-4 py-2 bg-surface-container-low text-on-surface text-xs font-semibold rounded-md hover:bg-surface-container-high transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span>Surface Secondary</span>
+</button>
+<!-- Ghost Button -->
+<button class="px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low text-xs font-medium rounded-md transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Ghost View</span>
+</button>
+</div>
+</div>
+<!-- Input Fields & Form Controls -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-5">
+<div class="flex items-center justify-between">
+<h3 class="font-headline font-bold text-base text-primary">Input Controls &amp; Search</h3>
+<span class="text-xs font-mono text-on-surface-variant">FOCUS DYNAMICS</span>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Search Bar with Shortcut -->
+<div class="relative flex items-center w-full">
+<span class="material-symbols-outlined absolute left-3.5 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full pl-10 pr-20 py-2.5 text-xs bg-surface-container-low rounded-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#E4D13A] transition-all font-body font-medium" placeholder="Search across graph nodes, formulas, and references..." type="text" value="quantum_superposition_v2"/>
+<div class="absolute right-3 flex items-center gap-1">
+<span class="px-1.5 py-0.5 text-[10px] font-mono font-semibold bg-surface-container text-on-surface rounded shadow-xs">⌘K</span>
+</div>
+</div>
+<!-- Inline Dropdown Selector -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-mono text-on-surface-variant">SYNTHESIS ENGINE</label>
+<div class="relative">
+<select class="w-full px-3 py-2 text-xs bg-surface-container-low rounded-md text-on-surface appearance-none focus:outline-none focus:shadow-[0_0_0_2px_#E4D13A] font-body font-medium">
+<option>Kairn Core Vector Model (L4)</option>
+<option>Graphite Exact Lexical (v1.8)</option>
+<option>Hybrid Cross-Document Mesh</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-2 text-on-surface-variant text-[18px] pointer-events-none">unfold_more</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-mono text-on-surface-variant">REPOSITORIES ACTIVE</label>
+<div class="flex items-center gap-2 h-9 px-3 bg-surface-container-low rounded-md text-xs">
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+<span class="text-primary font-mono">14 Active Clusters</span>
+<span class="ml-auto text-on-surface-variant font-mono">ALL SYNCED</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Live Knowledge Node Card Specimen (5 cols) -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-5">
+<div class="flex items-center justify-between">
+<h3 class="font-headline font-bold text-base text-primary">Live Knowledge Node Card</h3>
+<span class="text-xs font-mono text-on-surface-variant">SPECIMEN-CARD</span>
+</div>
+<!-- Actual Specimen Component Card -->
+<div class="bg-surface-container-low rounded-lg p-5 flex flex-col gap-4 relative overflow-hidden group hover:shadow-md transition-shadow">
+<!-- Wayfinding Indicator Bar (3px active yellow line) -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary-container"></div>
+<div class="flex items-center justify-between pl-2">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-primary text-on-primary">NODE // 7804</span>
+<span class="text-[11px] font-mono text-on-surface-variant">INDEX: #01-A</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-[#1E8E3E]"></span>
+<span class="text-[11px] font-mono text-on-surface-variant">Synced</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 pl-2">
+<h4 class="font-headline font-bold text-base text-primary group-hover:text-secondary-fixed-variant transition-colors">
+                  Topological Memory Anchors in Vector Space
+                </h4>
+<p class="text-xs text-on-surface-variant leading-relaxed line-clamp-2">
+                  Geometric indexing of high-dimensional contextual embeddings using calibrated cairn reference points rather than probabilistic graphs.
+                </p>
+</div>
+<!-- Visual Representation / Graph preview -->
+<div class="w-full bg-surface-container-lowest rounded p-3 pl-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 bg-surface-container-high rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-primary">polyline</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-primary">94 Nodes Connected</span>
+<span class="text-[10px] font-mono text-on-surface-variant">SHA256: 4b91...da01</span>
+</div>
+</div>
+<span class="text-xs font-mono font-bold text-secondary">0.982 ACC</span>
+</div>
+<!-- Metadata Footer -->
+<div class="flex items-center justify-between pt-2 pl-2 text-[11px] font-mono text-on-surface-variant">
+<span>AUTHOR: K. GODEL</span>
+<div class="flex items-center gap-2">
+<button class="hover:text-primary transition-colors flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">share</span>
+<span>Share</span>
+</button>
+<span>•</span>
+<button class="hover:text-primary transition-colors flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">fork_right</span>
+<span>Branch</span>
+</button>
+</div>
+</div>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg text-xs text-on-surface-variant font-mono">
+<span>Token bindings: --radius-panel (10px), --accent-waypoint-3px, --font-syne-bold</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 5: RESTRAINED WAYFINDING & CAIRN MOTIFS -->
+<section class="flex flex-col gap-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono font-bold text-secondary uppercase tracking-widest">LAYER 05</span>
+<span class="text-xs font-mono text-on-surface-variant">// WAYFINDING METHODOLOGY</span>
+</div>
+<h2 class="text-2xl font-headline font-bold text-primary">Restrained Wayfinding &amp; Cairn Motifs</h2>
+<p class="text-sm text-on-surface-variant max-w-2xl">
+            Wayfinding elements engineered exclusively to orient researchers within sprawling, high-dimensional knowledge graphs.
+          </p>
+</div>
+<div class="text-xs font-mono text-on-surface-variant">INSTRUMENT // NOT DECORATION</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- MOTIF 1: Stacked Geometric Reference Marks -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-5">
+<div class="h-28 bg-surface-container-low rounded-lg flex items-center justify-center p-4">
+<!-- Cairn Geometric Stack -->
+<div class="flex flex-col items-center gap-1.5">
+<div class="w-5 h-1.5 bg-secondary-container rounded-xs"></div>
+<div class="w-8 h-2 bg-primary rounded-xs"></div>
+<div class="w-12 h-2.5 bg-on-surface-variant rounded-xs"></div>
+<div class="w-16 h-3 bg-surface-container-highest rounded-xs"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<h3 class="font-headline font-bold text-base text-primary">Stacked Cairn Reference</h3>
+<span class="text-xs font-mono text-secondary font-bold">MOTIF-01</span>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+              Tiered rectangular glyphs symbolizing rock piles positioned at trail junctions. Used to indicate hierarchy depth and nested document ancestry.
+            </p>
+</div>
+<div class="mt-auto pt-3 border-t border-hairline/20 flex justify-between text-[11px] font-mono text-on-surface-variant">
+<span>Element Scale</span>
+<span class="text-primary font-medium">4-Tier Gradient Weight</span>
+</div>
+</div>
+<!-- MOTIF 2: Active Node Wayfinding Bar -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-5">
+<div class="h-28 bg-surface-container-low rounded-lg flex items-center justify-center p-4">
+<div class="w-48 bg-surface-container-lowest rounded-md p-3 relative shadow-xs flex items-center justify-between">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary-container"></div>
+<div class="flex flex-col pl-2">
+<span class="text-xs font-bold text-primary">ACTIVE SECTOR</span>
+<span class="text-[10px] font-mono text-on-surface-variant">FOCUS LOCKED</span>
+</div>
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<h3 class="font-headline font-bold text-base text-primary">Active Wayfinding Bar</h3>
+<span class="text-xs font-mono text-secondary font-bold">MOTIF-02</span>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+              A 3px vertical bar in Kairn Mineral (#E4D13A). Applied exclusively on current viewport nodes, active navigation tabs, and highlighted search results.
+            </p>
+</div>
+<div class="mt-auto pt-3 border-t border-hairline/20 flex justify-between text-[11px] font-mono text-on-surface-variant">
+<span>Indicator Width</span>
+<span class="text-primary font-medium">3px Invariant</span>
+</div>
+</div>
+<!-- MOTIF 3: Technical Coordinate Breadcrumb -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-5">
+<div class="h-28 bg-surface-container-low rounded-lg flex items-center justify-center p-4">
+<div class="bg-primary text-on-primary px-3 py-2 rounded-md font-mono text-xs flex items-center gap-1.5 shadow-sm">
+<span class="text-secondary-container font-bold">kairn</span>
+<span class="text-on-surface-variant">/</span>
+<span class="text-surface">topology</span>
+<span class="text-on-surface-variant">/</span>
+<span class="text-surface-container-highest">node#88a</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<h3 class="font-headline font-bold text-base text-primary">Technical Coordinate Tag</h3>
+<span class="text-xs font-mono text-secondary font-bold">MOTIF-03</span>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+              Monospaced slash-separated URI coordinates that provide spatial precision across thousands of decentralized knowledge branches.
+            </p>
+</div>
+<div class="mt-auto pt-3 border-t border-hairline/20 flex justify-between text-[11px] font-mono text-on-surface-variant">
+<span>Syntax Parser</span>
+<span class="text-primary font-medium">RFC-3986 Canonical</span>
+</div>
+</div>
+</div>
+<!-- Instrument Manifesto Banner -->
+<div class="bg-primary text-on-primary rounded-xl p-8 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+<div class="flex flex-col gap-2 max-w-2xl">
+<span class="text-xs font-mono text-secondary-container font-semibold tracking-widest uppercase">PHILOSOPHICAL DIRECTIVE</span>
+<h3 class="font-headline font-bold text-xl lg:text-2xl text-on-primary">
+            "An engineered instrument, not decorative artwork."
+          </h3>
+<p class="text-xs lg:text-sm text-on-primary-container leading-relaxed">
+            Every token in Kairn exists to reduce cognitive ambiguity during complex multi-document research. Whitespace is a structural divider, typography is a cognitive roadmap, and color is an unequivocal status signal.
+          </p>
+</div>
+<div class="flex flex-col items-center md:items-end gap-3 shrink-0">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-secondary-container"></div>
+<span class="font-mono text-xs font-bold text-on-primary">CALIBRATION PASS: VERIFIED</span>
+</div>
+<span class="text-[11px] font-mono text-on-primary-container">SYS-HASH // 0x4892c900afb2</span>
+</div>
+</div>
+</section>
+</div>
+</div></main><footer class="w-full bg-surface-container-lowest py-10 shadow-[0_-1px_6px_rgba(0,0,0,0.02)]"><div class="w-full px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4"><div class="flex items-center gap-2"><span class="font-headline font-bold text-sm tracking-tight text-primary">KAIRN</span><span class="text-xs text-on-surface-variant">— Precision Instrument &amp; Navigational Knowledge Architecture</span></div><div class="text-xs text-on-surface-variant font-mono">Spec v2.4 // Built for Systems Engineering</div></div></footer></body></html>
