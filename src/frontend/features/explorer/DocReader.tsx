@@ -133,23 +133,17 @@ export function DocReader({
         <h1 id="doc-reader-title" className="doc-reader-title">
           {document.title}
         </h1>
-        <div className="doc-reader-meta">
-          <span>Updated May 2026</span>
-          <span className="doc-reader-meta-dot" aria-hidden="true">
-            ·
-          </span>
-          <div className="doc-reader-author">
-            <span className="doc-reader-author-badge">KB</span>
-            <span>Engineering Core</span>
+        {document.revision && (
+          <div className="doc-reader-meta">
+            <div
+              className="doc-reader-history-link"
+              title={`Content revision: ${document.revision}`}
+            >
+              <Icon name="history" className="icon-sm" />
+              <span>Revision {document.revision.slice(0, 8)}</span>
+            </div>
           </div>
-          <span className="doc-reader-meta-dot" aria-hidden="true">
-            ·
-          </span>
-          <div className="doc-reader-history-link">
-            <Icon name="history" className="icon-sm" />
-            <span>rev: {document.revision.slice(0, 10)}</span>
-          </div>
-        </div>
+        )}
       </header>
 
       {/* Static scan-time diagnostics */}

@@ -80,11 +80,36 @@ export function SearchPaletteDialog({
     }
   }, [controller, onNavigate, onClose]);
 
+  // Global window listener for Escape ensures dismissal works immediately upon opening,
+  // even before focus settles into the input or dialog container.
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const onGlobalKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        controller.escape();
+        if (!controller.state.open) onClose();
+      }
+    };
+
+    window.addEventListener("keydown", onGlobalKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onGlobalKeyDown);
+    };
+  }, [isOpen, controller, onClose]);
+
   // Open/close synchronization with controller
   useEffect(() => {
     if (isOpen) {
       focusBeforeRef.current = document.activeElement as HTMLElement | null;
       controller.open(activeProject);
+
+      // Focus input immediately upon opening, backed by animation frame
+      inputRef.current?.focus();
+      const frame = requestAnimationFrame(() => {
+        inputRef.current?.focus();
+      });
 
       // Fetch projects for project suggestions and chips
       client
@@ -97,8 +122,10 @@ export function SearchPaletteDialog({
           // Controlled degradation when project listing is unavailable
         });
 
-      // Focus input on open
-      setTimeout(() => inputRef.current?.focus(), 0);
+      return () => {
+        cancelAnimationFrame(frame);
+        controller.dispose();
+      };
     } else {
       controller.close();
       if (focusBeforeRef.current) {
@@ -224,6 +251,7 @@ export function SearchPaletteDialog({
 
           <TextInput
             ref={inputRef}
+            autoFocus
             id="search-query"
             label="Search documentation"
             type="text"

@@ -133,6 +133,34 @@ describe("SearchPaletteDialog component", () => {
     expect(screen.getByText("Marketing Backend")).not.toBeNull();
   });
 
+  it("dismisses immediately on window Escape key press right after opening before input focus settles", async () => {
+    const handleClose = vi.fn();
+    const handleNavigate = vi.fn();
+    const client = createMockClient();
+
+    const { ApplicationProvider } =
+      await import("../../src/frontend/app/providers/ApplicationProvider");
+
+    render(
+      <ApplicationProvider client={client}>
+        <SearchPaletteDialog
+          isOpen={true}
+          onClose={handleClose}
+          activeProject={mockProject}
+          onNavigate={handleNavigate}
+        />
+      </ApplicationProvider>,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    // Press Escape immediately on window without waiting for input focus or timers
+    fireEvent.keyDown(window, { key: "Escape" });
+    expect(handleClose).toHaveBeenCalled();
+  });
+
   it("removes project scope when project chip close button is clicked", async () => {
     const handleClose = vi.fn();
     const handleNavigate = vi.fn();
