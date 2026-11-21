@@ -60,10 +60,20 @@ use ordered navigation and aria-current; no false functional product data.
 
 Sidebar remains hide/reveal disclosure; this is not an icon rail. All workspace and
 settings layouts reuse the same primitive. Header remains one component and shows
-only implemented links. Approved SVG originals live in frontend/assets/brand:
+only implemented links. Packaged brand SVGs live in frontend/assets/brand:
 the header uses kairn-with-text.svg, switching to kairn-logo.svg at narrow widths.
 A fixed light backing preserves their original colors in every appearance/accent.
-Brand assets remain distinct from the semantic icon registry.
+The packaged wordmark converts “kairn” to Syne Bold (700) vector outlines using
+our bundled Syne font; it has no font dependency when rendered as an image.
+The editable originals in designs/ remain unchanged. Brand assets remain distinct
+from the semantic icon registry.
+
+Outline provenance: Fontsource Syne 5.3.0 Latin variable WOFF2, instantiated at
+wght=700 with FontTools 4.68.0, shaped with uharfbuzz 0.57.0 (default kerning).
+Glyph paths retain the source text's 28px size, baseline (56, 29), and -0.03em
+tracking. Only the text element changes; the mark, dot, viewBox and colors stay
+intact. Conversion tools are one-off authoring tools, not build/runtime dependencies.
+The existing Syne OFL notice remains packaged with the font.
 
 ## Prose and showcase
 
@@ -128,7 +138,7 @@ Reproduce using `npm run build`, `node scripts/measure-frontend.mjs` and
 The showcase uses provisional runtime preview controls, not saved settings. It
 matches the supplied neutral/surface/typography/wayfinding language; it deliberately
 does not recreate Explorer screens, mock metadata, search bars or settings actions.
-The shared header uses the supplied brand SVGs without redrawing them. Accent foreground/backgrounds switch atomically
+The shared header uses the supplied mark and an outlined Syne wordmark. Accent foreground/backgrounds switch atomically
 (no intermediate contrast loss from color interpolation). Sidebar remains disclosure.
 
 Local automated evidence: all six appearance/accent combinations pass axe A/AA

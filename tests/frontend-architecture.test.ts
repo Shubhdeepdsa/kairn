@@ -172,3 +172,13 @@ it("keeps primitive colors and shared control/layout styles out of feature CSS",
     expect(results[0]?.errorCount).toBeGreaterThan(0);
   }
 });
+
+it("keeps the packaged wordmark font-independent with outlined lettering", async () => {
+  const svg = await readFile(
+    "src/frontend/assets/brand/kairn-with-text.svg",
+    "utf8",
+  );
+  expect(svg).not.toMatch(/<text\b|font-family|@font-face|<image\b|<use\b/i);
+  expect([...svg.matchAll(/<path\s[^>]*d="[^"]+"/g)]).toHaveLength(5);
+  expect(svg).toContain('viewBox="0 0 170 42"');
+});
