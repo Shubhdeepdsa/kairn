@@ -370,6 +370,9 @@ global project rows, arrow/Enter and selector-only navigation intents, preserved
 query-based scoping, and actual DOM reader/project-chip/URL changes. Selecting an
 empty project preserves the prior reader and reports the missing document state.
 
-The empty-palette/project-switch follow-up passes the full 122-test local suite,
+The empty-palette/project-switch follow-up passes the full 123-test local suite,
 including installed-package search/navigation regressions. Real-browser interaction
 is separate from the DOM checks and is not claimed by these results.
+
+Late project metadata clamps selection only while project rows are visible; it
+cannot unexpectedly move the highlighted documentation result.

@@ -231,10 +231,9 @@ export class SearchPalette {
     );
     this.update({
       suggestions,
-      highlighted: Math.min(
-        this.value.highlighted,
-        Math.max(0, suggestions.length - 1),
-      ),
+      highlighted: this.value.projectChoices
+        ? Math.min(this.value.highlighted, Math.max(0, suggestions.length - 1))
+        : this.value.highlighted,
     });
   }
   private invalidate(): void {

@@ -91,3 +91,35 @@ it("closes empty scoped search and emits project navigation for empty global sel
   expect(search).not.toHaveBeenCalled();
   controller.dispose();
 });
+
+it("keeps result selection when project metadata arrives and clamps only visible project rows", async () => {
+  vi.useFakeTimers();
+  const controller = new SearchPalette({
+    changed: () => {},
+    search: async () => ({
+      coverage: [],
+      results: Array.from({ length: 5 }, (_, i) => ({
+        projectId: a.id,
+        documentId: String(i).padStart(64, "0"),
+        projectName: a.name,
+        documentTitle: "Result " + i,
+        sourcePath: "docs/" + i + ".md",
+        heading: "",
+        snippet: "Match",
+        score: 1,
+      })),
+    }),
+  });
+  controller.open(a);
+  controller.setQuery("match");
+  await vi.advanceTimersByTimeAsync(200);
+  controller.move(4);
+  controller.setProjects([a, b]);
+  expect(controller.state.highlighted).toBe(4);
+  controller.setQuery("");
+  controller.removeScope();
+  controller.move(1);
+  controller.setProjects([a]);
+  expect(controller.state.highlighted).toBe(0);
+  controller.dispose();
+});
