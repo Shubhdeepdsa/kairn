@@ -142,6 +142,10 @@ try {
         }
         process.exitCode = await runDocumentation({
           ...(project ? { project } : {}),
+          library,
+          ...(bound
+            ? { currentProject: { id: bound.id, name: bound.name } }
+            : {}),
           projectRoot,
           async reloadProject() {
             const active = bound

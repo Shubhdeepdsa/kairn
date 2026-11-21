@@ -260,3 +260,130 @@ track the integration/latest-head results. No manual browser check is inferred f
 
 A final duplicate-link regression ensures repeated occurrences do not consume the
 unique-link analysis budget and hide later broken targets. Final suite: 96 tests.
+
+## Phase 5 extraction
+
+`search-contracts.test.ts` validates opaque scope identities. Search extraction tests
+exercise repeated Unicode headings, lists/tables/code, technical identifiers,
+raw-HTML omission and exact reader-fragment compatibility without a database.
+
+`search-index.test.ts` uses real temporary SQLite databases: technical tokens,
+persistence, incremental section replacement, pruning, private permissions, schema
+rebuild, offline corruption, competing connections, rollback and a 250-document
+index/query timing sample. The same test runs in the existing three-OS CI matrix.
+
+`search-query.test.ts` fixes title/heading/path/body/code ranking order, long-body
+competition, best-section grouping, duplicate names/IDs across scopes, seven
+technical queries, hostile FTS expressions and query/result bounds.
+
+`search-coordinator.test.ts` uses real registered projects to verify global/current
+scope, duplicate names, live edits/deletions, source/primary/ignore changes,
+unavailable roots, unregister preservation and transient isolation. A compiled-worker
+integration verifies coalescing and clean close independently of HTTP and the UI.
+
+`project-navigation.test.ts` verifies approved cross-project identities, duplicate
+labels, heading validation, old/new bookmarks, real scoped HTTP reads, redaction,
+strict search parameters and removed/invalid project refusal without a palette.
+
+`search-palette.test.ts` uses fake timers to verify contextual/global opening,
+composition-safe Backspace, cursor-aware selector removal, query preservation,
+duplicate names, Escape precedence, debounce, scope changes and stale replies.
+
+`search-palette-dom.test.ts` verifies real DOM keyboard events, contextual/global
+scope, composition, @ completion and query preservation, safe result text, accessible
+selection, focus restoration, partial/error states, refresh and aborted cleanup.
+These are DOM tests; they are not claims of human browser acceptance.
+
+## Phase 5 acceptance
+
+`search-acceptance.test.ts` packs the actual executable, installs offline into a
+clean temporary prefix and starts it with isolated Library/projects. It verifies
+three-project scopes, technical terms, actual API plus DOM palette selection,
+cross-project Back/Forward/deep links, explicit fresh indexing, ignore/source
+changes, unavailable/unregistered projects, offline cache-corruption restart and
+unregistered local search. It preserves original bytes except deliberate fixture
+edits and shuts down all processes. No real Library/project is used.
+
+`search-processes.test.ts` verifies independent process writers and recovery after
+a process exits during an uncommitted transaction. Section/heading and materialized
+query payload bounds are additional acceptance safeguards. Run performance samples
+with `npm run build` then `node scripts/benchmark-search.mjs`; it creates/removes
+its own isolated fixtures. See SEARCH_ACCEPTANCE.md for actual local measurements
+and the separate human-browser checklist.
+
+## Phase 5 local verification — 2026-11-20
+
+Node 26.13.0/macOS: clean npm ci, typecheck, lint/TSDoc, format check, build,
+Markdown lint and 117 tests across 28 files passed. This includes the clean-installed
+package, real process/SQLite rollback/concurrency, actual HTTP and DOM navigation
+acceptance described above. Runtime audit: zero advisories; npm ci still reports
+eight existing development-tool advisories. Dependencies/lockfile were unchanged.
+Real human browser acceptance remains blocked by the browser tool setting. Remote
+Linux/macOS/Windows results are not inferred from the local run; see feature CI.
+
+The first Phase 5 remote run exposed test-harness assumptions: fresh npm-ci caches
+contain tarballs without registry packuments, and Windows FULL-sync benchmark writes
+exceeded Vitest's default five-second timeout. Clean-package acceptance now creates
+a temporary lock from the committed dependency graph plus the actual packed tarball
+and runs offline npm ci; it does not depend on cached registry metadata or alter the
+repository lock. The unchanged 250-document SQLite benchmark has an explicit 30-second
+timeout, not a performance assertion. No product assertions or safety checks were removed.
+
+A partial-coverage regression verifies that a 513-section fixture is omitted and
+reports zero indexed out of one total document, rather than counting attempted
+reads as successful indexing. Final suite includes this additional coverage case.
+
+## Phase 5 remote verification
+
+At `bb0c260`, [PR Quality run](https://github.com/Shubhdeepdsa/kairn/actions/runs/44794623663)
+passed all Linux, macOS and Windows jobs, including clean install, typecheck,
+lint/TSDoc, formatting, real SQLite/process/installed-package tests, build and
+Markdown lint. Final local suite: 118 passed across 28 files. Windows: 115 passed
+and three existing platform-specific permission/symlink skips (no new search skips).
+This verifies built-in FTS5, locking, rollback, recovery and installed navigation
+on all three OS runners. It does not establish identical OS performance or human
+browser acceptance. PR #4 remains open and unmerged.
+
+A repeated CI run exposed bounded-work assumptions: global installed acceptance now
+advances indexing responses for at most 12 requests before requiring the full result
+identity set. A deterministic one-document-budget regression proves three-project
+forced refresh converges over three jobs without restarting completed projects.
+Independent process tests accept only the documented temporary SQLite lock error,
+then explicitly retry after both competing processes exit and require both records
+plus crash rollback. The unchanged 250-document FULL-sync benchmark has a 90-second
+safety timeout because runner storage varied beyond 30 seconds; timings remain
+observations, not latency assertions. No corpus, result, durability or rollback
+assertion was removed.
+
+A two-coordinator regression models a late obsolete writer after an ignore change.
+Schema-v2 approval hashes keep that row out of the newer coordinator's cached results,
+then the older coordinator reconciles current rules. This verifies scope safety
+across processes independently of query freshness and content revision.
+
+After bounded-resume and approval-fence corrections, the final local suite passes
+120 tests across 28 files. Latest-head remote evidence is tracked on
+[PR #4 checks](https://github.com/Shubhdeepdsa/kairn/pull/4/checks); the earlier
+118-test run at bb0c260 above is historical evidence, not a substitute for that check.
+
+Empty-palette regressions cover Enter dismissal without search requests, automatic
+global project rows, arrow/Enter and selector-only navigation intents, preserved
+query-based scoping, and actual DOM reader/project-chip/URL changes. Selecting an
+empty project preserves the prior reader and reports the missing document state.
+
+The empty-palette/project-switch follow-up passes the full 123-test local suite,
+including installed-package search/navigation regressions. Real-browser interaction
+is separate from the DOM checks and is not claimed by these results.
+
+Late project metadata clamps selection only while project rows are visible; it
+cannot unexpectedly move the highlighted documentation result.
+
+Active-project reselection regressions cover both the global project list and a
+selector-only query from a nondefault document, preserving DOM identity, URL,
+history and reading position without another navigation request.
+
+Worker recovery regressions terminate a real worker with an outstanding request
+and inject an error before its later exit. They verify rejection, lazy replacement,
+duplicate-request coalescing and successful subsequent searches with isolated data.
+
+After these review fixes, the full local suite passes 127 tests in 28 files.
+Typecheck, lint/TSDoc, formatting, build and Markdown checks also pass.

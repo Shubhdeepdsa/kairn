@@ -124,3 +124,21 @@ and heading selection. Missing bookmarks show a message instead of guessing a fi
 Local Markdown links are resolved by core against approved, nonexcluded sources;
 missing/unregistered/excluded targets and missing headings show useful diagnostics.
 HTTP/HTTPS/mailto links keep safe external-link behavior; remote URLs are not crawled.
+
+Phase 5 run composition enables a lazy local search worker and project-aware reader
+endpoints. It keeps the same server/flags, never registers an unregistered project,
+and closes search resources with the server. See [search API](SEARCH.md).
+
+Inside `kairn run`, press Cmd+K (macOS) or Ctrl+K to search the active project.
+Remove the chip (or Backspace with empty input) for registered-project global search.
+Type `authentication @mark` in global mode and select a project to retain the query.
+Arrow keys/Enter select; Escape closes suggestions before the palette. Incomplete
+index coverage is explicit; Refresh search continues bounded work. Search never
+edits Markdown or shared settings. See [search behavior](SEARCH.md).
+
+Read-only viewing preserves project files/configuration. Search may lazily create
+derived machine-local cache data; it does not write an index into the viewed project.
+
+With an empty search and project chip, Enter closes the palette. Remove the chip to
+show projects, use arrows to highlight one, and press Enter to switch the reader.
+Selecting a project with existing search terms continues scoped search instead.

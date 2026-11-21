@@ -1,6 +1,6 @@
 # Kairn architecture
 
-**Status: Phase 1 and Phase 2 CLI/core/HTTP/minimal-viewer boundaries IMPLEMENTED.**
+**Status: Phases 1–4 merged; Phase 5 search/navigation/palette boundaries IMPLEMENTED and automatically verified. Human browser acceptance remains separate.**
 
 ## Boundary diagram
 
@@ -34,8 +34,6 @@ Do not create empty layers/packages simply to mirror this diagram. Choose filena
 ## Future, beyond the minimal viewer
 
 - Full React app replacing the minimal vanilla viewer.
-- Local project registry and multiple documentation sources per project.
-- Full source-aware hybrid navigation and richer Markdown features.
 - Local Git commit/diff history, with Git itself as the source of truth.
 
 Those future modules must not be stubbed into the initial implementation just to look comprehensive.
@@ -106,11 +104,13 @@ Loopback restricts network reachability, not other local users/processes.
 
 ### Implemented viewer
 
-Vanilla browser TypeScript is compiled by the existing tsc build. Its only imports
-are types, so `/viewer.js` has no browser package resolution or bundler requirement.
+Vanilla browser TypeScript is compiled by the existing tsc build. It imports the
+packaged browser-safe navigation and palette modules through exact asset routes;
+there is no browser package resolution or bundler requirement.
 The server receives `ViewerPresentation` at composition time; exact asset routes
 serve package content only. Document JSON includes safe `html` alongside source
-Markdown when a presentation is supplied. The core has no rendering dependency.
+Markdown when a presentation is supplied. Core Markdown analysis shares parsing
+with extraction; core has no HTTP or DOM dependency.
 Navigation labels use textContent; only restricted-parser output enters article
 HTML. Remote images are replaced with alt text, external links suppress referrers,
 and unknown local attachments are not fetched. No syntax highlighting or filesystem watcher.
@@ -172,3 +172,13 @@ Path-based IDs survive source reorder/primary changes but change on rename; same
 path recreation regains identity. No title-based identity or browser filesystem logic.
 
 Canonical refresh, identity, link and API details: [reading contracts](READING.md).
+
+## Phase 5 search contracts
+
+Search has independent extraction/index/query/coordinator layers. Navigation and the
+palette compose these contracts; see [search design](SEARCH.md). Implementation is
+phased; contracts do not imply indexed search is already available.
+
+Phase 5 composition adds a lazy search job worker and a project-aware navigator to
+the same loopback server. Scoped reader routes resolve registered IDs and validate
+approvals independently of search. See [search contracts](SEARCH.md).

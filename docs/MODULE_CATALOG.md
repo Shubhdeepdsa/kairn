@@ -134,3 +134,48 @@ The reader presents the reusable `Heading` outline as keyboard-accessible links
 with shareable heading URLs. Code blocks/tables stay horizontally scrollable
 within the article; inline code is visually distinct. No syntax highlighter,
 clipboard dependency, final design system or additional polling lifecycle.
+
+## Phase 5 contracts
+
+- `core/search-contracts.ts`: typed scope, request, destination, result and per-project coverage; opaque project-ID validation. No persistence or UI.
+
+- `core/markdown.ts`: `markdownTokens` exposes the existing safe parser for extraction.
+- `core/search-extraction.ts`: pure section/body/code/title extraction plus technical
+  identifier normalization, independent of storage. Reuses reader heading fragments;
+  conservatively omits raw-HTML paragraphs and images, retains fenced code.
+
+- `core/search-index.ts`: lazy private FTS5 schema, atomic changed-document section
+  replacement, approval pruning, project pruning, schema/corrupt recovery and close.
+  Reads no target files itself; receives approved content/metadata from its caller.
+
+- `core/search-query.ts`: validated literal/prefix MATCH terms, one scoped ranking
+  engine, document grouping and bounded plain snippets; no HTTP/DOM dependencies.
+
+- `core/search-coordinator.ts`: approved Library/session reconciliation, content
+  hashes, source/ignore pruning, bounded progress and honest coverage.
+- `core/search-service.ts` / `search-worker.ts`: lazy worker facade, duplicate-job
+  coalescing, queue bound, redacted failures and bounded resource cleanup. Failed
+  workers reject their jobs and are replaced lazily on the next search; late events
+  from the failed worker cannot invalidate replacement jobs.
+
+- `core/project-navigation.ts`: independent ID-based project/destination resolver,
+  approval validation and bounded service cache.
+- `server/search-routes.ts`: narrow read-only search/context/projects decoder and
+  project-scoped mapping into the existing reader adapter; no filesystem routing.
+
+- `core/search-palette.ts`: framework-independent search/scope/picker/selection state,
+  debounce, request generations, partial/error status and disposal. No DOM or SQLite.
+
+- `viewer/search-palette.ts`: minimal accessible DOM adapter over SearchPalette,
+  abortable HTTP search, focus/keyboard lifecycle and injected destination callback.
+
+SearchIndex.documentCount reports persisted document coverage independently of
+section count and attempted reconciliation reads.
+
+SearchIndexProject supplies the internal current-configuration query fence; schema-v2
+documents retain that hash so late obsolete writers cannot bypass newer ignore rules.
+
+PaletteSelection distinguishes dismissal, project navigation and exact-document
+navigation from a query-only scope change. NavigationDestination permits a project
+without a document ID; viewer/navigation.defaultReaderDocument shares the initial
+reader's approved default choice with direct project switching.

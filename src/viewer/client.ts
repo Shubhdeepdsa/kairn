@@ -1,4 +1,13 @@
-import { parseReaderLocation, readerHash } from "./navigation.js";
+import { mountSearchPalette } from "./search-palette.js";
+import type {
+  SearchProject,
+  NavigationDestination,
+} from "../core/search-contracts.js";
+import {
+  parseReaderLocation,
+  readerHash,
+  defaultReaderDocument,
+} from "./navigation.js";
 import type { Heading } from "../core/markdown.js";
 import type { LinkResolution } from "../core/document-links.js";
 import type { LinkDiagnostic } from "../core/document-links.js";
@@ -16,8 +25,11 @@ export async function mountViewer(
   if (!navigation || !article || !status || !source)
     throw new Error("Viewer shell is incomplete.");
   const files = new Map<string, DocumentEntry>();
-  const byPath = new Map<string, DocumentEntry>();
   let selected: DocumentEntry | undefined;
+  let initialProject: SearchProject | undefined;
+  let activeProject: SearchProject | undefined;
+  let contextVersion = 0;
+  let navigationNumber = 0;
   let requestNumber = 0;
   let linkNumber = 0;
   let activeFragment = "";
@@ -30,8 +42,22 @@ export async function mountViewer(
   let refreshing: Promise<void> | undefined;
   const window = document.defaultView;
   if (!window) throw new Error("Viewer needs a browser window.");
+  function apiPath(path: string): string {
+    return activeProject &&
+      activeProject.id !== initialProject?.id &&
+      /^\/api\/(tree|documents|links)/.test(path)
+      ? `/api/projects/${activeProject.id}${path.slice(4)}`
+      : path;
+  }
+  function hash(id: string, fragment = ""): string {
+    return readerHash(
+      id,
+      fragment,
+      activeProject?.id !== initialProject?.id ? activeProject?.id : undefined,
+    );
+  }
   async function api(path: string): Promise<unknown> {
-    const response = await fetcher(path, {
+    const response = await fetcher(apiPath(path), {
       credentials: "same-origin",
       headers: { Accept: "application/json" },
     });
@@ -92,17 +118,17 @@ export async function mountViewer(
     if (!background) {
       activeFragment = fragment;
       if (history !== "none") {
-        const hash = readerHash(id, fragment);
-        if (window!.location.hash !== hash)
+        const targetHash = hash(id, fragment);
+        if (window!.location.hash !== targetHash)
           window!.history[history === "push" ? "pushState" : "replaceState"](
             null,
             "",
-            hash,
+            targetHash,
           );
       }
     }
     try {
-      const response = await fetcher(`/api/documents/${id}`, {
+      const response = await fetcher(apiPath(`/api/documents/${id}`), {
         credentials: "same-origin",
         headers: {
           Accept: "application/json",
@@ -140,7 +166,7 @@ export async function mountViewer(
           const item = document.createElement("li");
           const link = document.createElement("a");
           link.textContent = heading.title;
-          link.href = readerHash(id, heading.fragment);
+          link.href = hash(id, heading.fragment);
           link.dataset.heading = heading.fragment;
           link.className = `level-${heading.level}`;
           item.append(link);
@@ -194,10 +220,8 @@ export async function mountViewer(
         item.append(details);
       } else {
         files.set(node.id, node);
-        byPath.set(`${node.sourceId ?? ""}:${node.path}`, node);
-        if (node.projectPath) byPath.set(`project:${node.projectPath}`, node);
         const link = document.createElement("a");
-        link.href = `#${node.id}`;
+        link.href = hash(node.id);
         link.dataset.document = node.id;
         link.textContent = node.title;
         link.title = node.path;
@@ -253,7 +277,7 @@ export async function mountViewer(
             window!.history.pushState(
               null,
               "",
-              readerHash(result.id, result.fragment),
+              hash(result.id, result.fragment),
             );
             showFragment(result.fragment);
           } else await show(result.id, result.fragment);
@@ -269,14 +293,18 @@ export async function mountViewer(
   };
   navigation.addEventListener("click", onNavigation);
   article.addEventListener("click", onArticle);
-  function refresh(initial = false): Promise<void> {
+  function refresh(
+    initial = false,
+    destination?: { id: string; fragment: string },
+  ): Promise<void> {
+    const context = contextVersion;
     refreshing ??= (async () => {
       try {
         const data = (await api("/api/tree")) as {
           tree: NavigationEntry[];
           warning?: string;
         };
-        if (disposed) return;
+        if (disposed || context !== contextVersion) return;
         configurationWarning = data.warning;
         if (data.warning) status!.textContent = data.warning;
         else if (status!.textContent?.startsWith("Project configuration"))
@@ -300,7 +328,6 @@ export async function mountViewer(
         const focused = (document.activeElement as HTMLElement | null)?.dataset
           .document;
         files.clear();
-        byPath.clear();
         const list = build(data.tree);
         for (const folder of list.querySelectorAll<HTMLDetailsElement>(
           "details[data-path]",
@@ -335,10 +362,10 @@ export async function mountViewer(
             "No Markdown documents found. Add .md files; the sidebar updates automatically.";
           return;
         }
-        const bookmark = initial
-          ? parseReaderLocation(window!.location.hash)
-          : null;
-        const first = byPath.get(":README.md") ?? files.values().next().value;
+        const bookmark =
+          destination ??
+          (initial ? parseReaderLocation(window!.location.hash) : null);
+        const first = defaultReaderDocument(data.tree);
         await show(
           bookmark?.id ?? first!.id,
           bookmark?.fragment ?? "",
@@ -393,16 +420,106 @@ export async function mountViewer(
       return;
     event.preventDefault();
     activeFragment = link.dataset.heading ?? "";
-    window!.history.pushState(
-      null,
-      "",
-      readerHash(selected.id, activeFragment),
-    );
+    window!.history.pushState(null, "", hash(selected.id, activeFragment));
     showFragment(activeFragment);
   };
   outline?.addEventListener("click", onOutline);
+  async function navigate(
+    destination: NavigationDestination,
+    history: "push" | "none" = "push",
+  ): Promise<void> {
+    if (!initialProject || disposed) return;
+    // Reselecting the open project dismisses the palette without resetting the reader.
+    if (!destination.documentId && destination.projectId === activeProject?.id)
+      return;
+    const number = ++navigationNumber;
+    await refreshing;
+    if (number !== navigationNumber || disposed) return;
+    let projects: { projects: SearchProject[] };
+    try {
+      projects = (await api("/api/projects")) as { projects: SearchProject[] };
+    } catch {
+      if (number === navigationNumber && !disposed)
+        status!.textContent =
+          "Project list is unavailable. Check the Library and retry.";
+      return;
+    }
+    if (number !== navigationNumber || disposed) return;
+    const project =
+      destination.projectId === initialProject.id
+        ? initialProject
+        : projects.projects.find((p) => p.id === destination.projectId);
+    if (!project) {
+      status!.textContent = "Project is no longer registered.";
+      return;
+    }
+    const prior = activeProject;
+    try {
+      // Validate before changing visible context; project routes never accept filesystem paths.
+      const prefix = project.id.startsWith("session-")
+        ? "/api"
+        : `/api/projects/${project.id}`;
+      let documentId = destination.documentId;
+      if (!documentId) {
+        const treeResponse = await fetcher(`${prefix}/tree`, {
+          credentials: "same-origin",
+        });
+        if (!treeResponse.ok)
+          throw new Error(
+            "Project documentation is unavailable. Check its sources.",
+          );
+        const tree = (await treeResponse.json()) as { tree: NavigationEntry[] };
+        documentId = defaultReaderDocument(tree.tree)?.id;
+        if (!documentId)
+          throw new Error("This project has no readable Markdown documents.");
+      }
+      const response = await fetcher(`${prefix}/documents/${documentId}`, {
+        credentials: "same-origin",
+      });
+      if (!response.ok)
+        throw new Error(
+          "Destination is no longer available. Refresh search results.",
+        );
+      if (number !== navigationNumber || disposed) return;
+      activeProject = project;
+      contextVersion++;
+      requestNumber++;
+      linkNumber++;
+      signature = undefined;
+      selected = undefined;
+      contentRevision = undefined;
+      outlineSignature = "";
+      if (history === "push")
+        window!.history.pushState(
+          null,
+          "",
+          hash(documentId, destination.fragment ?? ""),
+        );
+      await refresh(false, {
+        id: documentId,
+        fragment: destination.fragment ?? "",
+      });
+      const label = document.getElementById("project-context");
+      if (label) label.textContent = project.name;
+    } catch (error) {
+      if (number !== navigationNumber || disposed) return;
+      activeProject = prior;
+      status!.textContent =
+        error instanceof Error
+          ? error.message
+          : "Destination could not be opened.";
+    }
+  }
   function restoreLocation(): void {
     const location = parseReaderLocation(window!.location.hash);
+    const projectId = location?.projectId ?? initialProject?.id;
+    if (location && projectId && projectId !== activeProject?.id) {
+      void navigate(
+        { projectId, documentId: location.id, fragment: location.fragment },
+        "none",
+      );
+      return;
+    }
     if (location) {
       if (selected?.id === location.id && article!.childNodes.length) {
         activeFragment = location.fragment;
@@ -412,7 +529,9 @@ export async function mountViewer(
   }
   window.addEventListener("popstate", restoreLocation);
   window.addEventListener("hashchange", restoreLocation);
+  let disposeSearch = (): void => {};
   function dispose(): void {
+    disposeSearch();
     disposed = true;
     linkNumber++;
     requestNumber++;
@@ -428,7 +547,39 @@ export async function mountViewer(
   document.addEventListener("visibilitychange", visibilityChanged);
   window.addEventListener("pagehide", dispose);
   status.textContent = "Loading documentation…";
-  await refresh(true);
+  if (document.documentElement.dataset.kairnApplication === "true") {
+    try {
+      const context = (await api("/api/context")) as SearchProject;
+      if (context.id) {
+        initialProject = context;
+        activeProject = context;
+      }
+    } catch {
+      /* Embedders may supply the original reader-only API. */
+    }
+  }
+  const initialLocation = parseReaderLocation(window.location.hash);
+  if (
+    initialProject &&
+    initialLocation?.projectId &&
+    initialLocation.projectId !== initialProject.id
+  )
+    await navigate(
+      {
+        projectId: initialLocation.projectId,
+        documentId: initialLocation.id,
+        fragment: initialLocation.fragment,
+      },
+      "none",
+    );
+  else await refresh(true);
+  if (!disposed)
+    disposeSearch = mountSearchPalette(
+      document,
+      fetcher,
+      () => activeProject,
+      (destination) => navigate(destination),
+    );
   schedule();
   return dispose;
 }

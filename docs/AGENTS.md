@@ -9,3 +9,5 @@
 - When code changes, update affected documents within the same topical commit. Remove stale claims and broken links rather than adding contradictory notes.
 - Document security/safety limitations honestly, especially write operations and repository publishing. Never include credentials, internal customer/company names, or local personal paths.
 - Maintain ordinary portable Markdown; optional frontmatter is not a requirement for these internal docs.
+
+- Phase 5: separate extraction, index, queries, coordination, navigation and palette. Use isolated derived storage; validate current approvals before releasing search results.

@@ -101,3 +101,12 @@ Future decisions should record meaningful alternatives and trade-offs rather tha
 - **Consequences:** Approximately two-second latency plus scan/read time. Old content
   stays visible on recoverable failures; no remote crawling or settings writes.
   Deep links add an optional encoded heading after the document ID.
+
+## ADR 0011 — Derived local search and separate navigation
+
+Accepted for Phase 5: retain JSON as configuration authority; use rebuildable FTS5
+for derived sections. Global scope includes explicit registrations only; active
+unregistered runs have transient IDs. Navigation owns project loading independently
+of search. SQLite in the browser, a daemon and separate project/global engines were
+rejected. Current approval validation precedes result release; unavailable projects
+produce coverage, never silently current cached results. See SEARCH.md for limits.
