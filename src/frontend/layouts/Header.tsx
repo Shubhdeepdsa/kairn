@@ -4,10 +4,15 @@ import markDark from "../assets/brand/kairn-mark-dark.svg?no-inline";
 import wordmarkLight from "../assets/brand/kairn-wordmark-light.svg?no-inline";
 import wordmarkDark from "../assets/brand/kairn-wordmark-dark.svg?no-inline";
 import { useTheme } from "../app/providers/ThemeProvider";
+import { useSearch } from "../features/search/SearchContext";
+import { SearchTrigger } from "../features/search/SearchTrigger";
+
 /** Application-wide header; feature pages must not recreate global chrome. */
 export function Header() {
   const { appearance } = useTheme();
+  const { openSearch } = useSearch();
   const dark = appearance === "dark";
+
   return (
     <header className="app-header">
       <Link to="/" aria-label="Kairn home" className="app-brand">
@@ -31,7 +36,11 @@ export function Header() {
           <img src={dark ? wordmarkDark : wordmarkLight} alt="Kairn" />
         </picture>
       </Link>
-      <span>Mineral · Component foundation</span>
+
+      <div className="app-header-search">
+        <SearchTrigger onClick={() => openSearch()} />
+      </div>
+
       <nav aria-label="Application">
         <Link to="/design-system">Design system</Link>
         <a href="/">Open documentation reader</a>

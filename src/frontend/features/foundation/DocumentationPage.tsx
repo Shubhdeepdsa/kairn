@@ -9,7 +9,9 @@ import { DocOutline } from "../explorer/DocOutline";
 import {
   findDefaultDocument,
   getPreviousNextDocuments,
+  flattenTree,
 } from "../explorer/navigation-tree";
+import { parseReaderLocation } from "../../../core/reader-location.js";
 import type {
   NavigationEntry,
   DocumentResponse,
@@ -65,6 +67,15 @@ export function DocumentationPage() {
   const [linkDiagnostic, setLinkDiagnostic] = useState<LinkDiagnostic | null>(
     null,
   );
+  const [vanishedStatus, setVanishedStatus] = useState<string | null>(null);
+
+  // Live freshness refs
+  const contentRevisionRef = useRef<string | undefined>(undefined);
+  const treeSignatureRef = useRef<string>("");
+  const refreshingRef = useRef<boolean>(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const currentDocIdRef = useRef<string | undefined>(documentId);
+  currentDocIdRef.current = documentId;
 
   // 1. Fetch project tree on project change
   useEffect(() => {
@@ -76,6 +87,7 @@ export function DocumentationPage() {
       .getTree(project.id, controller.signal)
       .then((res) => {
         if (!controller.signal.aborted) {
+          treeSignatureRef.current = JSON.stringify(res.tree);
           setTreeState({
             status: "ready",
             tree: res.tree,
@@ -95,10 +107,27 @@ export function DocumentationPage() {
     return () => controller.abort();
   }, [client, project.id, isInvalidDocId]);
 
-  // 2. Select default document if no documentId is in URL once tree is ready
+  // 2. Legacy bookmark check & default document selection
   useEffect(() => {
     if (isInvalidDocId) return;
-    if (treeState.status === "ready" && !documentId) {
+    if (treeState.status !== "ready") return;
+
+    // Check for legacy reader bookmark in hash (e.g. #id or #p/project/id)
+    if (location.hash && !documentId) {
+      const bookmark = parseReaderLocation(location.hash);
+      if (bookmark && bookmark.id !== "invalid") {
+        navigate(
+          `/projects/${bookmark.projectId ?? project.id}/docs/${bookmark.id}${
+            bookmark.fragment ? `#${encodeURIComponent(bookmark.fragment)}` : ""
+          }`,
+          { replace: true },
+        );
+        return;
+      }
+    }
+
+    // Otherwise auto-select default document if no documentId is in URL
+    if (!documentId) {
       const defaultDoc = findDefaultDocument(treeState.tree);
       if (defaultDoc) {
         navigate(`/projects/${project.id}/docs/${defaultDoc.id}`, {
@@ -106,12 +135,20 @@ export function DocumentationPage() {
         });
       }
     }
-  }, [treeState, documentId, project.id, navigate, isInvalidDocId]);
+  }, [
+    treeState,
+    documentId,
+    project.id,
+    navigate,
+    isInvalidDocId,
+    location.hash,
+  ]);
 
   // 3. Fetch active document when documentId changes
   useEffect(() => {
     if (!documentId || isInvalidDocId) {
       setDocState({ status: "idle" });
+      contentRevisionRef.current = undefined;
       return;
     }
 
@@ -123,7 +160,10 @@ export function DocumentationPage() {
       .getDocument(documentId, project.id, controller.signal)
       .then((doc) => {
         if (!controller.signal.aborted) {
-          setDocState({ status: "ready", document: doc });
+          if (!("notModified" in doc)) {
+            contentRevisionRef.current = doc.revision;
+            setDocState({ status: "ready", document: doc });
+          }
         }
       })
       .catch((err) => {
@@ -138,7 +178,118 @@ export function DocumentationPage() {
     return () => controller.abort();
   }, [client, project.id, documentId, isInvalidDocId]);
 
-  // 4. Heading selection and scrolling
+  // 4. Live freshness loop: bounded polling (~2s) while tab is visible
+  const scheduleRefresh = useCallback(() => {
+    if (typeof window === "undefined" || typeof document === "undefined")
+      return;
+    if (document.hidden) return;
+
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+
+    timerRef.current = setTimeout(async () => {
+      timerRef.current = null;
+      if (refreshingRef.current || document.hidden) return;
+      refreshingRef.current = true;
+
+      try {
+        // 1. Refresh tree first
+        const treeRes = await client.getTree(project.id);
+        const nextSignature = JSON.stringify(treeRes.tree);
+        const treeChanged = nextSignature !== treeSignatureRef.current;
+
+        if (treeChanged) {
+          treeSignatureRef.current = nextSignature;
+          setTreeState({
+            status: "ready",
+            tree: treeRes.tree,
+            warning: treeRes.warning,
+          });
+
+          // Check if current document vanished
+          const activeDocId = currentDocIdRef.current;
+          if (activeDocId) {
+            const flat = flattenTree(treeRes.tree);
+            const exists = flat.some(
+              (node) => node.kind === "document" && node.id === activeDocId,
+            );
+
+            if (!exists) {
+              const fallback = findDefaultDocument(treeRes.tree);
+              if (fallback) {
+                setVanishedStatus(
+                  "The previous document was removed or excluded; showing another available document.",
+                );
+                navigate(`/projects/${project.id}/docs/${fallback.id}`, {
+                  replace: true,
+                });
+              } else {
+                setDocState({ status: "idle" });
+                setVanishedStatus(
+                  "No Markdown documents found. Add .md files; the sidebar updates automatically.",
+                );
+              }
+              return;
+            }
+          }
+        }
+
+        // 2. Conditionally refresh active document with ETag/304
+        const activeDocId = currentDocIdRef.current;
+        if (activeDocId && contentRevisionRef.current) {
+          const docRes = await client.getDocument(activeDocId, project.id, {
+            ifNoneMatch: contentRevisionRef.current,
+          });
+
+          if ("notModified" in docRes && docRes.notModified) {
+            // 304 Not Modified: leave DOM completely untouched
+            return;
+          }
+
+          if (!("notModified" in docRes)) {
+            contentRevisionRef.current = docRes.revision;
+            setDocState({ status: "ready", document: docRes });
+          }
+        }
+      } catch {
+        // Silently tolerate transient background refresh failures
+      } finally {
+        refreshingRef.current = false;
+        scheduleRefresh();
+      }
+    }, 2000);
+  }, [client, project.id, navigate]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (timerRef.current) {
+          clearTimeout(timerRef.current);
+          timerRef.current = null;
+        }
+      } else {
+        // Resume promptly upon visibility return
+        scheduleRefresh();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    scheduleRefresh();
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [scheduleRefresh]);
+
+  // 5. Heading selection and scrolling
   const handleSelectHeading = useCallback((fragment: string) => {
     setActiveFragment(fragment);
     if (typeof document !== "undefined") {
@@ -157,7 +308,7 @@ export function DocumentationPage() {
     }
   }, []);
 
-  // 5. Hash change and initial fragment scroll
+  // 6. Hash change and initial fragment scroll
   useEffect(() => {
     if (docState.status !== "ready") return;
 
@@ -201,7 +352,7 @@ export function DocumentationPage() {
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, [docState, location.hash]);
 
-  // 6. Scroll spy: observe headings using IntersectionObserver
+  // 7. Scroll spy: observe headings using IntersectionObserver
   useEffect(() => {
     if (docState.status !== "ready") return;
     if (typeof IntersectionObserver === "undefined") return;
@@ -239,7 +390,7 @@ export function DocumentationPage() {
     return () => observer.disconnect();
   }, [docState]);
 
-  // 7. Local link click navigation and resolution
+  // 8. Local link click navigation and resolution
   const handleNavigateLink = async (href: string) => {
     if (!documentId) return;
     setLinkDiagnostic(null);
@@ -296,6 +447,7 @@ export function DocumentationPage() {
     : { previous: undefined, next: undefined };
 
   const handleSelectDoc = (id: string) => {
+    setVanishedStatus(null);
     navigate(`/projects/${project.id}/docs/${id}`);
   };
 
@@ -322,6 +474,16 @@ export function DocumentationPage() {
         ) : undefined
       }
     >
+      {vanishedStatus && (
+        <aside
+          className="doc-reader-status-banner"
+          role="status"
+          aria-live="polite"
+        >
+          <p>{vanishedStatus}</p>
+        </aside>
+      )}
+
       {docState.status === "loading" ? (
         <div className="doc-reader-loading" role="status">
           <p>Loading document…</p>

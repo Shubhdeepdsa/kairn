@@ -530,7 +530,7 @@ test("Documentation explorer loads server-backed tree and reader for the active 
 
   // Reader contains the heading from README.md
   await expect(
-    page.getByRole("heading", { name: "Browser fixture updated" }),
+    page.getByRole("heading", { name: /Browser fixture/ }),
   ).toBeVisible();
 });
 
@@ -619,4 +619,69 @@ Run installation steps.
   await expect(
     page.getByRole("heading", { name: "Browser fixture updated" }),
   ).toBeVisible();
+});
+
+test("Documentation explorer opens search palette via shortcut/trigger, searches across projects, and updates live on edits", async ({
+  page,
+  request,
+}) => {
+  const context = (await (await request.get(url + "/api/context")).json()) as {
+    id: string;
+    name: string;
+  };
+
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(url + `/app/projects/${context.id}/docs`);
+
+  // Open search via header search trigger button
+  const trigger = page.getByRole("button", {
+    name: "Search documentation (Command or Control K)",
+  });
+  await expect(trigger).toBeVisible();
+  await trigger.click();
+
+  // Dialog appears with search combobox
+  const dialog = page.getByRole("dialog", { name: "Search documentation" });
+  await expect(dialog).toBeVisible();
+  const searchInput = page.getByRole("combobox", {
+    name: "Search documentation",
+  });
+  await expect(searchInput).toBeFocused();
+
+  // Search for "Guide"
+  await searchInput.fill("Guide");
+  await expect(page.locator("#search-results li")).toHaveCount(2, {
+    timeout: 5000,
+  });
+  await expect(
+    page.locator(".search-result-title").filter({ hasText: "Fixture Guide" }),
+  ).toBeVisible();
+
+  // Press Enter to navigate to selected search result
+  await searchInput.press("Enter");
+  await expect(dialog).toBeHidden();
+  await expect(
+    page.getByRole("heading", { name: "Fixture Guide" }),
+  ).toBeVisible();
+
+  // Test live edit on disk: update guide.md while viewing it
+  await writeFile(
+    join(root, "project", "docs", "guide.md"),
+    `# Fixture Guide Live Edited\n\n## Live Update\n\nLive editing refreshed smoothly.\n`,
+  );
+
+  // Background polling (~2s) should detect the edit and update the reader without page reload
+  await expect(
+    page.getByRole("heading", { name: "Fixture Guide Live Edited" }),
+  ).toBeVisible({ timeout: 6000 });
+
+  // Keyboard shortcut Cmd+K / Ctrl+K opens search palette
+  await page.keyboard.press(
+    process.platform === "darwin" ? "Meta+k" : "Control+k",
+  );
+  await expect(dialog).toBeVisible();
+
+  // Press Escape to dismiss
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
 });

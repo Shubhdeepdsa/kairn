@@ -36,6 +36,7 @@ const client: ApiClient = {
     html: "<p>Fixture content</p>",
   }),
   resolveLink: async () => ({ kind: "external", href: "https://example.com" }),
+  search: async () => ({ results: [], coverage: [] }),
 };
 
 function mount(path = "/", api = client) {

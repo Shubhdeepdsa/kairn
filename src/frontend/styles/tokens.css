@@ -72,6 +72,7 @@
   --kairn-radius-overlay: 14px;
   --kairn-shadow: 0 1px 3px #20282e0a;
   --kairn-shadow-overlay: 0 12px 32px #00000026;
+  --kairn-overlay-backdrop: light-dark(#20282e70, #000000a0);
   --kairn-sidebar-width: 15rem;
   --kairn-explorer-sidebar-width: 16.75rem;
   --kairn-content-width: 75rem;

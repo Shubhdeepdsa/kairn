@@ -557,3 +557,19 @@ Total tests: 161 Vitest tests in 35 files, 3 Playwright tests, all quality gates
   - Broken relative link shows accessible, non-disruptive `Link Resolution Warning` callout.
   - Browser Back button preserves and restores previous document and heading state.
 - Total tests: 193 Vitest tests in 39 files, 7 Playwright browser tests, all quality gates passing.
+
+## Phase 6C-2C search palette, live reading loop & bookmark parity
+
+- Unit & integration tests in `tests/frontend/search-and-live.test.tsx` (6 tests) verify:
+  - SearchPaletteDialog renders search combobox and query suggestions.
+  - Search query execution across projects with result item selection and keyboard navigation.
+  - Project scope chips (`@project`) with backspace and remove action.
+  - Live freshness loop handling HTTP 304 Not Modified without replacing DOM or flickering.
+  - Vanished document detection rendering graceful warning banner and fallback.
+  - Legacy hash bookmark parsing (`#id` and `#p/projectId/id/fragment`).
+- Browser test in `tests/browser/foundation.spec.ts` verifies:
+  - Header search trigger button opens search dialog with focused combobox.
+  - Search across project documents finds query matches and navigates on Enter.
+  - Live editing on disk (~2s cadence) detects changes and updates active document without full page reload.
+  - Keyboard shortcuts (`Cmd+K` / `Ctrl+K`) open search palette and `Escape` dismisses.
+- Total tests: 199 Vitest tests in 40 files, 8 Playwright browser tests, all quality gates passing.
