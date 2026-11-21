@@ -455,3 +455,8 @@ Clean-export verification caught a test-only dependency on pre-existing dist typ
 declarations. The asset test now dynamically loads compiled presentation code
 with a source contract type, matching the existing worker tests; typecheck can run
 before the first build on a fresh checkout.
+
+A clean archive (without user notes or pre-existing dist) passes npm ci and every
+required quality gate, 149 tests and the real installed-package Chromium smoke.
+Production audit reports zero advisories; eight development-tool advisories remain
+from the baseline. CI evidence is recorded on the Phase 6A PR.

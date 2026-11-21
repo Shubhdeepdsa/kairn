@@ -154,7 +154,7 @@ passed at `bb0c260`. No automatic merge or npm publication.
 approval fences prevent stale cooperating writers from bypassing newer source/ignore
 rules. Final local suite: 120 tests. Human browser acceptance remains outstanding.
 
-## Phase 6A — React foundation (IN PROGRESS)
+## Phase 6A — React foundation (IMPLEMENTED; local checks VERIFIED)
 
 Architecture/migration → React/Vite/Tailwind build → bounded packaged serving →
 routes/shared layouts → Button/icons/tokens → typed API/state/settings contracts →
@@ -162,3 +162,8 @@ architecture enforcement → installed browser acceptance and size baseline.
 See [frontend contracts](FRONTEND.md). Keep the working Phase 5 reader at `/`.
 Phase 6B: Mineral tokens/components; Phase 6C: React Documentation Explorer parity.
 No Git services, settings mutation APIs or final screen designs in Phase 6A.
+
+Clean exported-tree verification passes npm ci, all quality gates, 149 tests in
+34 files and the real installed-package Chromium smoke. Three-OS CI is tracked
+on the Phase 6A PR. Shared shell/API/tokens/layouts and lazy routes are foundations
+for 6B; no canonical reader switch occurs before 6C parity.
