@@ -66,7 +66,7 @@ it("serves exact packaged assets and app routes behind existing security without
     const logos = [...presentation.assets].filter(([name]) =>
       name.endsWith(".svg"),
     );
-    expect(logos).toHaveLength(2);
+    expect(logos).toHaveLength(4);
     for (const [name, asset] of logos) {
       const response = await fetch(server.url + name);
       expect(response.headers.get("content-type")).toContain("image/svg+xml");

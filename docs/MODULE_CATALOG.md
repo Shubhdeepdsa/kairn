@@ -236,4 +236,5 @@ It does not enable rendering or resources; Phase 6C integrates the existing pars
 No new product settings or mutation behavior.
 
 Approved header logos are bundled from src/frontend/assets/brand; responsive
-Header composition keeps brand artwork separate from semantic icons.
+Header composition selects light/dark mark and outlined wordmark assets for explicit
+appearance or live system preference, separate from semantic icons.

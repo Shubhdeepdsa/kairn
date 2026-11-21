@@ -207,11 +207,26 @@ test("Mineral showcase themes, contrast, native keyboard controls and responsive
   await page.evaluate(() => document.fonts.ready);
   const appearance = page.getByRole("combobox", { name: "Appearance" }),
     accent = page.getByRole("combobox", { name: "Accent palette" });
+  async function expectBrand(theme: "light" | "dark", compact = false) {
+    await expect
+      .poll(() =>
+        page
+          .getByRole("img", { name: "Kairn", exact: true })
+          .evaluate((element) => {
+            const image = element as HTMLImageElement;
+            return image.complete && image.naturalWidth > 0
+              ? image.currentSrc
+              : "";
+          }),
+      )
+      .toContain(`kairn-${compact ? "mark" : "wordmark"}-${theme}-`);
+  }
   const { default: AxeBuilder } = await import("@axe-core/playwright");
-  for (const mode of ["light", "dark"])
+  for (const mode of ["light", "dark"] as const)
     for (const palette of ["mineral", "blue", "forest"]) {
       await appearance.selectOption(mode);
       await accent.selectOption(palette);
+      await expectBrand(mode);
       const violations = (
         await new AxeBuilder({ page })
           .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
@@ -260,15 +275,18 @@ test("Mineral showcase themes, contrast, native keyboard controls and responsive
   await appearance.selectOption("system");
   await accent.selectOption("mineral");
   await page.emulateMedia({ colorScheme: "light" });
+  await expectBrand("light");
   const light = await page
     .locator("body")
     .evaluate((e) => getComputedStyle(e).backgroundColor);
   await page.emulateMedia({ colorScheme: "dark" });
+  await expectBrand("dark");
   const dark = await page
     .locator("body")
     .evaluate((e) => getComputedStyle(e).backgroundColor);
   expect(dark).not.toBe(light);
   await appearance.selectOption("light");
+  await expectBrand("light");
   expect(
     await page
       .locator("body")
@@ -319,7 +337,9 @@ test("Mineral showcase themes, contrast, native keyboard controls and responsive
             img.complete &&
             img.naturalWidth > 0 &&
             img.currentSrc.includes(
-              viewportWidth > 768 ? "kairn-with-text-" : "kairn-logo-",
+              viewportWidth > 768
+                ? "kairn-wordmark-light-"
+                : "kairn-mark-light-",
             )
           );
         }, width),
@@ -331,6 +351,10 @@ test("Mineral showcase themes, contrast, native keyboard controls and responsive
       ),
     ).toBe(true);
   }
+  await appearance.selectOption("system");
+  await expectBrand("dark", true);
+  await page.emulateMedia({ colorScheme: "light" });
+  await expectBrand("light", true);
   expect(external).toEqual([]);
   expect(errors).toEqual([]);
 });

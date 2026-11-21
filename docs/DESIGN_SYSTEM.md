@@ -61,8 +61,12 @@ use ordered navigation and aria-current; no false functional product data.
 Sidebar remains hide/reveal disclosure; this is not an icon rail. All workspace and
 settings layouts reuse the same primitive. Header remains one component and shows
 only implemented links. Packaged brand SVGs live in frontend/assets/brand:
-the header uses kairn-with-text.svg, switching to kairn-logo.svg at narrow widths.
-A fixed light backing preserves their original colors in every appearance/accent.
+kairn-wordmark-light.svg and kairn-wordmark-dark.svg are the wide header variants;
+kairn-mark-light.svg and kairn-mark-dark.svg are compact variants at 48rem.
+Explicit appearance selects matching assets; System follows live OS changes through
+picture media queries. Assets sit directly on the header surface, without a backing plate.
+Dark variants use only the existing yellow #E4D13A, slate #20282E and white #FFFFFF:
+top slate/yellow, middle white/slate, bottom yellow/slate; lettering white and dot yellow.
 The packaged wordmark converts “kairn” to Syne Bold (700) vector outlines using
 our bundled Syne font; it has no font dependency when rendered as an image.
 The editable originals in designs/ remain unchanged. Brand assets remain distinct
@@ -71,8 +75,8 @@ from the semantic icon registry.
 Outline provenance: Fontsource Syne 5.3.0 Latin variable WOFF2, instantiated at
 wght=700 with FontTools 4.68.0, shaped with uharfbuzz 0.57.0 (default kerning).
 Glyph paths retain the source text's 28px size, baseline (56, 29), and -0.03em
-tracking. Only the text element changes; the mark, dot, viewBox and colors stay
-intact. Conversion tools are one-off authoring tools, not build/runtime dependencies.
+tracking. Outlining preserves geometry and viewBox; theme variants change only the
+existing fill/stroke color roles. Conversion tools are one-off authoring tools, not build/runtime dependencies.
 The existing Syne OFL notice remains packaged with the font.
 
 ## Prose and showcase

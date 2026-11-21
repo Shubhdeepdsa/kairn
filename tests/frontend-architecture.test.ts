@@ -173,12 +173,42 @@ it("keeps primitive colors and shared control/layout styles out of feature CSS",
   }
 });
 
-it("keeps the packaged wordmark font-independent with outlined lettering", async () => {
-  const svg = await readFile(
-    "src/frontend/assets/brand/kairn-with-text.svg",
-    "utf8",
-  );
-  expect(svg).not.toMatch(/<text\b|font-family|@font-face|<image\b|<use\b/i);
-  expect([...svg.matchAll(/<path\s[^>]*d="[^"]+"/g)]).toHaveLength(5);
-  expect(svg).toContain('viewBox="0 0 170 42"');
-});
+it.each(["light", "dark"])(
+  "keeps the %s wordmark outlined and brand colors unchanged",
+  async (theme) => {
+    const svg = await readFile(
+      `src/frontend/assets/brand/kairn-wordmark-${theme}.svg`,
+      "utf8",
+    );
+    expect(svg).not.toMatch(/<text\b|font-family|@font-face|<image\b|<use\b/i);
+    expect([...svg.matchAll(/<path\s[^>]*d="[^"]+"/g)]).toHaveLength(5);
+    expect(svg).toContain('viewBox="0 0 170 42"');
+    for (const kind of ["mark", "wordmark"]) {
+      const asset = await readFile(
+        `src/frontend/assets/brand/kairn-${kind}-${theme}.svg`,
+        "utf8",
+      );
+      const colors = [...asset.matchAll(/(?:fill|stroke)="(#[^"]+)"/g)].map(
+        (match) => match[1],
+      );
+      expect(new Set(colors)).toEqual(
+        new Set(["#E4D13A", "#20282E", "#FFFFFF"]),
+      );
+      const markColors =
+        theme === "dark"
+          ? ["#20282E", "#E4D13A", "#FFFFFF", "#20282E", "#E4D13A", "#20282E"]
+          : ["#E4D13A", "#20282E", "#20282E", "#FFFFFF", "#20282E", "#E4D13A"];
+      expect(colors).toEqual(
+        kind === "mark"
+          ? markColors
+          : [
+              ...markColors,
+              ...Array<string>(5).fill(
+                theme === "dark" ? "#FFFFFF" : "#20282E",
+              ),
+              "#E4D13A",
+            ],
+      );
+    }
+  },
+);

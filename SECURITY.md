@@ -82,6 +82,6 @@ Phase 6B adds only packaged WOFF2 fonts to the bounded asset allowlist and
 `font-src self` to CSP. Font notices ship with the package but have no HTTP route.
 No remote font/image loading, inline style exception or mutation endpoint is added.
 
-Header branding adds two trusted packaged SVGs to the bounded startup map.
+Header branding adds four trusted packaged SVGs to the bounded startup map.
 SVG requests use image/svg+xml; no user-document image routing or remote images
 are enabled. Source logos contain no scripts, external references or embedded HTML.

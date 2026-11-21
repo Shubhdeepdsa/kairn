@@ -79,7 +79,6 @@ main {
 .app-brand {
   padding: var(--kairn-space-1) var(--kairn-space-2);
   border-radius: var(--kairn-radius);
-  background: var(--kairn-reference-white);
 }
 .app-brand picture,
 .app-brand img {
