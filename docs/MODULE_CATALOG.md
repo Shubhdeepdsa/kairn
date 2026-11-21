@@ -193,7 +193,8 @@ reader's approved default choice with direct project switching.
 - `frontend/components/ui/Button.tsx`: native props/ref, shared variants/sizes and
   disabled/loading contract, independent of features.
 - `frontend/icons/`: semantic, statically imported Lucide registry; decorative or
-  labeled currentColor SVGs, token sizes, custom-provider replacement boundary.
+  labeled currentColor SVGs, token sizes, and explicit `SvgIconProps` /
+  `SvgIconComponent` contracts for custom-provider replacement.
 - `frontend/app/providers/ThemeProvider.tsx`: runtime appearance state and root
   attribute lifecycle; CSS owns system/reduced-motion resolution, no persistence.
 

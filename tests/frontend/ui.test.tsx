@@ -5,6 +5,7 @@ import { afterEach, expect, it, vi } from "vitest";
 import { Button } from "../../src/frontend/components/ui/Button";
 import { Icon } from "../../src/frontend/icons/Icon";
 import { iconRegistry } from "../../src/frontend/icons/registry";
+import type { SvgIconComponent } from "../../src/frontend/icons/registry";
 import {
   ThemeProvider,
   useTheme,
@@ -96,4 +97,50 @@ it("applies theme at one root and restores the prior attribute on cleanup", () =
   view.unmount();
   expect(document.documentElement.dataset.theme).toBe("light");
   document.documentElement.removeAttribute("data-theme");
+});
+
+it("replaces a Lucide registry entry with a custom SVG without changing consumers", () => {
+  const CustomDocumentation: SvgIconComponent = (props) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
+      <path d="M4 4h16v16H4z" />
+    </svg>
+  );
+  const entry = Object.getOwnPropertyDescriptor(iconRegistry, "documentation")!;
+  function Consumers() {
+    return (
+      <>
+        <Icon name="documentation" size="sm" className="custom-consumer" />
+        <Icon
+          name="documentation"
+          decorative={false}
+          label="Documentation"
+          size="lg"
+        />
+      </>
+    );
+  }
+  const view = render(<Consumers />);
+  expect(view.container.querySelector(".lucide-book-open")).not.toBeNull();
+  try {
+    // Simulate changing the static registry entry; no runtime override API is needed.
+    Object.defineProperty(iconRegistry, "documentation", {
+      ...entry,
+      value: CustomDocumentation,
+    });
+    view.rerender(<Consumers />);
+    expect(view.container.querySelector(".lucide-book-open")).toBeNull();
+    const decorative = view.container.querySelector('[aria-hidden="true"]')!;
+    expect(decorative.getAttribute("viewBox")).toBe("0 0 24 24");
+    expect(decorative.getAttribute("focusable")).toBe("false");
+    expect(decorative.getAttribute("stroke")).toBe("currentColor");
+    expect(decorative.classList.contains("icon-sm")).toBe(true);
+    expect(decorative.classList.contains("custom-consumer")).toBe(true);
+    const meaningful = screen.getByRole("img", { name: "Documentation" });
+    expect(meaningful.classList.contains("icon-lg")).toBe(true);
+    expect(meaningful.getAttribute("aria-hidden")).toBeNull();
+    expect(view.container.querySelectorAll("svg path")).toHaveLength(2);
+  } finally {
+    view.unmount();
+    Object.defineProperty(iconRegistry, "documentation", entry);
+  }
 });

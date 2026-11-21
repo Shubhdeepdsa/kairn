@@ -460,3 +460,9 @@ A clean archive (without user notes or pre-existing dist) passes npm ci and ever
 required quality gate, 149 tests and the real installed-package Chromium smoke.
 Production audit reports zero advisories; eight development-tool advisories remain
 from the baseline. CI evidence is recorded on the Phase 6A PR.
+
+The custom-SVG replacement regression swaps a Lucide registry entry for a typed
+custom SVG and verifies unchanged consumer names, token classes, currentColor,
+focus behavior and decorative/meaningful accessibility. The original entry is
+restored during cleanup; no runtime registry override API or empty directory is
+added. The follow-up passes the full 150-test local suite, typecheck, lint and build.

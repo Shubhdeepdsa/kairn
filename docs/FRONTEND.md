@@ -64,8 +64,14 @@ controlled or uncontrolled contracts, associated labels and error descriptions.
 Test IDs are exceptions; prefer role/name queries.
 
 Icon uses a small statically imported Lucide registry keyed by semantic names.
-Consumers never import Lucide directly. Registry entries can become custom SVG
-components without changing callers. Sizes and currentColor consume shared tokens.
+Consumers never import Lucide directly. `SvgIconProps` and `SvgIconComponent` in
+registry.ts define the provider-neutral replacement contract. Custom components
+forward props to their root SVG, supply a viewBox and use currentColor; Icon owns
+sizes, accessible labels and focus behavior. Entries must not add their own title,
+color, inline styles or focus behavior. Registry entries can become custom SVG
+components without changing callers. A regression replaces the Lucide entry and
+checks the same decorative and meaningful Icon consumers. Sizes and currentColor
+consume shared tokens.
 Decorative icons are hidden; meaningful icons require a nonempty accessible label.
 
 Token owners: tokens.css defines semantic surfaces/text/border/accent/status,
