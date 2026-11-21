@@ -76,7 +76,9 @@ it("keeps the entire browser import closure Node-free and acyclic, with safe sha
         continue;
       }
       if (specifier.endsWith(".css")) continue;
-      const base = resolve(dirname(file), specifier.replace(/\.js$/, ""));
+      const base = portable(
+        resolve(dirname(file), specifier.replace(/\.js$/, "")),
+      );
       const target = [base + ".ts", base + ".tsx"].find((p) => known.has(p));
       expect(target, `${file}: ${specifier}`).toBeTruthy();
       if (!target) continue;

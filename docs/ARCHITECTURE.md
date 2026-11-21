@@ -1,6 +1,6 @@
 # Kairn architecture
 
-**Status: Phases 1–4 merged; Phase 5 search/navigation/palette boundaries IMPLEMENTED and automatically verified. Human browser acceptance remains separate.**
+**Status: Phases 1–5 merged; Phase 6A React foundation implemented on a feature branch. Verification is recorded in TESTING.md.**
 
 ## Boundary diagram
 
@@ -22,7 +22,8 @@ src/
   cli/       command parsing, prompts, human-readable output
   core/      safe initialization and bounded read-only document service
   server/    loopback HTTP adapter
-  viewer/    vanilla browser module, static shell and Markdown rendering
+  viewer/    retained vanilla reader and Markdown rendering
+  frontend/  separately bundled browser-only React foundation
   index.ts   CLI executable entrypoint or equivalent
 
 tests/      temporary-filesystem and CLI adapter tests

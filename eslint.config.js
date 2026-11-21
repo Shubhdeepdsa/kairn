@@ -2,7 +2,14 @@ import tseslint from "typescript-eslint";
 import tsdoc from "eslint-plugin-tsdoc";
 import reactHooks from "eslint-plugin-react-hooks";
 export default tseslint.config(
-  { ignores: ["dist/**", "node_modules/**"] },
+  {
+    ignores: [
+      "dist/**",
+      "node_modules/**",
+      "playwright-report/**",
+      "test-results/**",
+    ],
+  },
   ...tseslint.configs.recommended,
   {
     files: ["**/*.{ts,tsx}"],

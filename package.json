@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "build": "npm run build:node && npm run build:frontend",
-    "typecheck": "tsc --noEmit && tsc -p tsconfig.frontend.json",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.frontend.json && tsc -p tsconfig.tools.json",
     "lint": "eslint .",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
@@ -26,7 +26,8 @@
     "docs:lint": "markdownlint-cli2",
     "build:node": "tsc -p tsconfig.build.json",
     "build:frontend": "vite build",
-    "dev:frontend": "vite build --watch"
+    "dev:frontend": "vite build --watch",
+    "test:browser": "playwright test"
   },
   "devDependencies": {
     "@playwright/test": "^1.65.1",

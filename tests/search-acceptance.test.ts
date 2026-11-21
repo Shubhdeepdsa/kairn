@@ -1,4 +1,4 @@
-import { pathToFileURL } from "node:url";
+import { installPackedKairn } from "./helpers/install-package.js";
 import { spawn, spawnSync } from "node:child_process";
 import type { ChildProcess } from "node:child_process";
 import { once } from "node:events";
@@ -12,7 +12,7 @@ import {
   realpath,
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, resolve, dirname } from "node:path";
+import { join } from "node:path";
 import { JSDOM } from "jsdom";
 import { expect, it } from "vitest";
 import { mountViewer } from "../src/viewer/client.js";
@@ -69,81 +69,7 @@ it("accepts the clean-installed package: three-project search, real HTTP palette
     return result.stdout;
   };
   try {
-    const npm = join(dirname(process.env.npm_execpath!), "npm-cli.js");
-    const packed = JSON.parse(
-      command(
-        npm,
-        ["pack", "--json", "--pack-destination", root],
-        resolve("."),
-      ),
-    )[0] as { filename: string; integrity: string };
-    // npm ci warms tarballs but need not cache registry packuments. Preserve the
-    // committed dependency graph so the acceptance install needs no registry metadata.
-    const manifest = JSON.parse(
-      await readFile(resolve("package.json"), "utf8"),
-    ) as {
-      version: string;
-      dependencies: Record<string, string>;
-      bin: Record<string, string>;
-      engines: Record<string, string>;
-      license: string;
-    };
-    const locked = JSON.parse(
-      await readFile(resolve("package-lock.json"), "utf8"),
-    ) as { packages: Record<string, unknown> };
-    const tarball = pathToFileURL(join(root, packed.filename)).href;
-    const install = join(root, "install");
-    await mkdir(install);
-    const fixture = {
-      name: "kairn-installed-acceptance",
-      version: "0.0.0",
-      private: true,
-      dependencies: { kairn: tarball },
-    };
-    const packages = { ...locked.packages };
-    packages[""] = {
-      name: fixture.name,
-      version: fixture.version,
-      dependencies: fixture.dependencies,
-    };
-    packages["node_modules/kairn"] = {
-      version: manifest.version,
-      resolved: tarball,
-      integrity: packed.integrity,
-      dependencies: manifest.dependencies,
-      bin: manifest.bin,
-      engines: manifest.engines,
-      license: manifest.license,
-    };
-    await writeFile(join(install, "package.json"), JSON.stringify(fixture));
-    await writeFile(
-      join(install, "package-lock.json"),
-      JSON.stringify({
-        name: fixture.name,
-        version: fixture.version,
-        lockfileVersion: 3,
-        requires: true,
-        packages,
-      }),
-    );
-    command(npm, [
-      "ci",
-      "--prefix",
-      install,
-      "--omit=dev",
-      "--ignore-scripts",
-      "--no-audit",
-      "--no-fund",
-      "--offline",
-    ]);
-    const binary = join(
-      root,
-      "install",
-      "node_modules",
-      "kairn",
-      "dist",
-      "index.js",
-    );
+    const { binary } = await installPackedKairn(root, env);
     expect(command(binary, ["--help"])).toContain("kairn run");
     expect(command(binary, ["--version"]).trim()).toBe("0.1.0");
     const paths: string[] = [];

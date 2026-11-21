@@ -431,3 +431,22 @@ Node/adapters except the three named pure contracts/controllers, detect cycles,
 check shared token consumption and exercise ESLint rejection fixtures. Lint enforces
 Hooks, shared Button/Icon and no inline styles; architecture checks also reject
 feature color literals and raw fetch outside the API boundary.
+
+## React installed-browser smoke
+
+`npm run test:browser` runs Playwright Chromium against a packed, offline-installed
+CLI in a disposable canonical temporary directory with isolated Library data.
+Install its browser first using `npx playwright install chromium` (CI installs OS
+prerequisites too). It shares the existing deterministic package-install fixture
+with search acceptance. No Vite server or development packages are present in the
+installed prefix. Tests check React initialization, direct nested routes, reload,
+Back/Forward, unknown routes, local-only requests, clean console, token application,
+legacy bookmark/search dismissal and real content refresh. All three CI runners
+execute this smoke suite after the existing gates. Tools/browser tests have their
+own TypeScript no-emit program. Fixtures clean up CLI processes and temp files.
+
+Local Phase 6A acceptance: 149 Vitest tests in 34 files pass, plus the real
+Playwright Chromium installed-package smoke. Existing Phase 1–5 assertions remain.
+The baseline workspace has unrelated untracked designs/ and temp.md that fail
+format/docs checks; clean tracked-tree verification and CI are reported separately.
+Bundle/package/browser measurements are in [frontend architecture](FRONTEND.md).

@@ -1,7 +1,8 @@
 # React frontend foundation
 
-Status: Phase 6A architecture accepted; implementation and verification follow in
-staged commits. Phase 6B supplies Mineral styling; Phase 6C supplies reader parity.
+Status: Phase 6A foundation implemented on a feature branch; local component,
+production/server and installed Chromium checks verified. Cross-platform evidence
+is recorded in TESTING.md and the PR. Phase 6B supplies Mineral styling; Phase 6C supplies reader parity.
 
 ## Ownership and migration
 
@@ -137,3 +138,36 @@ A workspace without an explicit document links to the startup reader; no invalid
 project-only fragment is fabricated. Syntactically invalid and unknown project
 identities show errors. Other app paths show Page not found; missing files/APIs
 remain HTTP errors. No full Library or settings functionality is claimed.
+
+## Measured baseline (Node 26.13.0, local macOS Chromium)
+
+React/DOM 19.3.1, Vite 8.3.8, Tailwind 4.3.5, declarative React Router 8.5.2,
+Lucide 1.77.0; exact graph in package-lock.json. All frontend libraries are bundled
+build-time devDependencies. Runtime Node dependencies are unchanged.
+
+| Production asset              | Raw bytes | gzip bytes |
+| ----------------------------- | --------: | ---------: |
+| Entry JS                      |   240,499 |     75,732 |
+| Shared runtime JS             |    30,352 |     11,154 |
+| Overview lazy JS              |       912 |        465 |
+| Documentation handoff lazy JS |       725 |        457 |
+| Settings contract lazy JS     |       546 |        359 |
+| CSS                           |     8,334 |      2,507 |
+
+Total JS: 273,034 bytes across five chunks. HTML references two initial JS chunks;
+opening the overview loads its third lazy chunk. Settings/documentation chunks
+are not requested on the initial page. gzip is measured offline using Node zlib;
+the server deliberately uses no-store and does not claim HTTP compression.
+Reproduce with `npm run build && node scripts/measure-frontend.mjs`.
+
+`npm pack --dry-run --json`: baseline before React 60,339 compressed / 225,273
+unpacked bytes (73 entries); foundation 152,731 / 512,851 bytes (84 entries).
+Impact: +92,392 compressed / +287,578 unpacked bytes. Metadata/documentation
+changes can move tarball bytes; this is a sample, not a stable size guarantee.
+The installed browser fixture confirms no installed Node React package is needed.
+
+One local headless Chromium navigation observed response end at 7.3 ms and
+DOMContentLoaded at 36.3 ms; the ready-heading observation occurred at 854.7 ms
+including Playwright scheduling/polling. These are fixture observations, not a
+startup benchmark or latency guarantee. The smoke logs these timings on each run.
+No external resource requests or unexpected console errors occurred.

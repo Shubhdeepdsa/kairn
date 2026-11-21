@@ -53,3 +53,12 @@ global scope includes explicitly registered projects. The minimal command palett
 composes search and independent project-aware navigation. Scope chips, @ selection,
 keyboard navigation, best-section results and honest index coverage are provided.
 Derived search data stays machine-local. No telemetry, cloud/AI or final React UI.
+
+## Phase 6A: React foundation
+
+The working vanilla documentation reader remains at `/`. A separate `/app`
+foundation demonstrates React routing, shared layouts/Button/icons, semantic
+light/dark/system tokens and typed read-only application context. It does not
+implement the React Explorer, Library, settings saving or Git history. Phase 6B
+builds Mineral components on these contracts; Phase 6C migrates reader behavior
+before the vanilla implementation can retire. See [frontend architecture](FRONTEND.md).
