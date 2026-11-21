@@ -123,3 +123,10 @@ produce coverage, never silently current cached results. See SEARCH.md for limit
   React boundaries. Build-watch avoids relaxing Origin/CSP for development.
 - **Consequences:** Foundation routes are explicitly incomplete. Vanilla retirement
   requires Phase 6C parity and bookmark tests. No settings writes in this phase.
+
+## ADR-013 — Mineral semantic design system
+
+Accepted for Phase 6B: normalize supplied references into primitive/semantic/component
+layers; keep runtime theme previews on the existing provider, locally licensed fonts,
+native controls and one showcase. No appearance persistence or Explorer integration.
+Contrast can refine semantic roles without discarding source primitives.

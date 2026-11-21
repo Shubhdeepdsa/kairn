@@ -167,3 +167,9 @@ Clean exported-tree verification passes npm ci, all quality gates, 149 tests in
 34 files and the real installed-package Chromium smoke. Three-OS CI is tracked
 on the Phase 6A PR. Shared shell/API/tokens/layouts and lazy routes are foundations
 for 6B; no canonical reader switch occurs before 6C parity.
+
+## Phase 6B — Mineral design system (IN PROGRESS)
+
+Phase 6A merged as `a373192`. Normalize references, implement semantic themes and
+fonts, reusable controls/layouts/icons/prose, then showcase and browser/visual
+acceptance. No Explorer implementation; Phase 6C composes these primitives.

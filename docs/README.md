@@ -24,3 +24,5 @@ Repository policies: [contributing](../CONTRIBUTING.md),
 - [Search acceptance and manual browser checklist](SEARCH_ACCEPTANCE.md)
 
 - [React frontend architecture](FRONTEND.md)
+
+- [Mineral design system](DESIGN_SYSTEM.md)
