@@ -1,3 +1,4 @@
+import { loadFrontendPresentation } from "../server/frontend-assets.js";
 import { readFile } from "node:fs/promises";
 import type { ViewerPresentation } from "../server/http.js";
 import { renderMarkdown } from "./markdown.js";
@@ -24,12 +25,14 @@ export async function loadViewerPresentation(): Promise<ViewerPresentation> {
   for (const [route, path] of [
     ["/search-palette.js", "./search-palette.js"],
     ["/core/search-palette.js", "../core/search-palette.js"],
+    ["/core/reader-location.js", "../core/reader-location.js"],
   ])
     searchScripts[route!] = await readFile(
       new URL(path!, import.meta.url),
       "utf8",
     );
   return {
+    frontend: await loadFrontendPresentation(),
     page,
     style: style + searchStyle,
     script,

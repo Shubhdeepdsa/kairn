@@ -142,3 +142,9 @@ derived machine-local cache data; it does not write an index into the viewed pro
 With an empty search and project chip, Enter closes the palette. Remove the chip to
 show projects, use arrows to highlight one, and press Enter to switch the reader.
 Selecting a project with existing search terms continues scoped search instead.
+
+## Transitional React foundation
+
+`kairn run` keeps the functional reader at the printed root URL. Append `/app`
+to inspect the Phase 6A foundation, served by the same localhost process. It is
+not a replacement reader yet. No extra end-user build server is required.

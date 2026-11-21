@@ -402,3 +402,67 @@ without sleeps or slower-runner timing assumptions. Production budgets are uncha
 Local verification of this correction: all six quality gates pass, with 128 tests
 in 28 files. Windows verification is tracked by the fix PR CI, separately from
 these macOS results.
+
+## Phase 6A build foundation
+
+Browser TSX has a separate strict no-emit TypeScript program. Vitest now includes
+React Testing Library/jsdom tests for initialization and redacted root render
+errors. Node production compilation excludes frontend sources; Vite builds them
+into dist/frontend. Browser smoke tests are added in the acceptance stage.
+
+Packaged-asset/API regression checks pass (20 tests across asset/server/run files).
+They cover direct app routes, unknown assets/APIs, request protections, legacy
+reader serving, file/count bounds and package symlink rejection where supported.
+
+Shared UI tests cover Button defaults/refs/variants/loading/disabled behavior,
+semantic icon resolution and accessible labeling, plus theme root cleanup.
+
+Typed-client tests exercise fixed URLs/options, malformed IDs/payloads, transport
+errors, HTTP redaction and cancellation. Provider tests cover loading/retry and
+obsolete-response cleanup when integrated with the routed shell.
+
+Routed React tests verify one header/main region across pages, shared sidebar
+disclosure in global/workspace/project layouts, identity validation, legacy URL
+handoffs and startup loading/error/retry/abort behavior. Pure bookmark helpers
+are extracted unchanged so the browser program never type-imports Node services.
+
+Architecture tests traverse every browser import (including type imports), reject
+Node/adapters except the three named pure contracts/controllers, detect cycles,
+check shared token consumption and exercise ESLint rejection fixtures. Lint enforces
+Hooks, shared Button/Icon and no inline styles; architecture checks also reject
+feature color literals and raw fetch outside the API boundary.
+
+## React installed-browser smoke
+
+`npm run test:browser` runs Playwright Chromium against a packed, offline-installed
+CLI in a disposable canonical temporary directory with isolated Library data.
+Install its browser first using `npx playwright install chromium` (CI installs OS
+prerequisites too). It shares the existing deterministic package-install fixture
+with search acceptance. No Vite server or development packages are present in the
+installed prefix. Tests check React initialization, direct nested routes, reload,
+Back/Forward, unknown routes, local-only requests, clean console, token application,
+legacy bookmark/search dismissal and real content refresh. All three CI runners
+execute this smoke suite after the existing gates. Tools/browser tests have their
+own TypeScript no-emit program. Fixtures clean up CLI processes and temp files.
+
+Local Phase 6A acceptance: 149 Vitest tests in 34 files pass, plus the real
+Playwright Chromium installed-package smoke. Existing Phase 1–5 assertions remain.
+The baseline workspace has unrelated untracked designs/ and temp.md that fail
+format/docs checks; clean tracked-tree verification and CI are reported separately.
+Bundle/package/browser measurements are in [frontend architecture](FRONTEND.md).
+
+Clean-export verification caught a test-only dependency on pre-existing dist type
+declarations. The asset test now dynamically loads compiled presentation code
+with a source contract type, matching the existing worker tests; typecheck can run
+before the first build on a fresh checkout.
+
+A clean archive (without user notes or pre-existing dist) passes npm ci and every
+required quality gate, 149 tests and the real installed-package Chromium smoke.
+Production audit reports zero advisories; eight development-tool advisories remain
+from the baseline. CI evidence is recorded on the Phase 6A PR.
+
+The custom-SVG replacement regression swaps a Lucide registry entry for a typed
+custom SVG and verifies unchanged consumer names, token classes, currentColor,
+focus behavior and decorative/meaningful accessibility. The original entry is
+restored during cleanup; no runtime registry override API or empty directory is
+added. The follow-up passes the full 150-test local suite, typecheck, lint and build.

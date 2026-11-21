@@ -1,7 +1,7 @@
 # AGENTS.md — Kairn engineering instructions
 
 > **Scope:** entire Kairn repository. More specific `AGENTS.md` files apply in their directories.
-> **Product:** local-first Markdown documentation and Git-history explorer. **Current milestone:** Phase 5: local scoped search, rebuildable SQLite index, project-aware navigation and reusable palette; preserve Phases 1–4.
+> **Product:** local-first Markdown documentation and Git-history explorer. **Current milestone:** Phase 6A: React frontend foundation under `/app`; preserve the complete Phase 1–5 vanilla reader at `/`.
 > **Priority:** small, verifiable, modular work; documentation is maintained with code, not reconstructed afterwards.
 
 ## 1. Preflight and source of truth
@@ -21,7 +21,7 @@
 - `src/server/`: loopback HTTP adapter over document contracts; no filesystem discovery algorithms.
 - `src/viewer/`: minimal browser assets and safe Markdown rendering, no React.
 - Dependency direction: CLI composes server/core; HTTP consumes core contracts; core imports neither adapter. Shared types belong with the owning core module. Avoid circular dependencies.
-- Only loopback HTTP is permitted at runtime. No telemetry, remote services, React, GitHub API integration or AI. Phase 5 permits a derived SQLite search index only.
+- Only loopback HTTP is permitted at runtime. No telemetry, remote services, GitHub API integration or AI. React is confined to `src/frontend/`. Phase 5 permits a derived SQLite search index only.
 - CLI must work with projects written in any language; never assume the target has Node/npm packages or a Git repository.
 
 ## 3. TypeScript and public API quality
@@ -70,9 +70,9 @@ Update the smallest relevant docs **in the same commit as behavior changes**:
 
 ## 7. Scope restraint
 
-**Build now:** local scoped search, incremental SQLite FTS5 indexing, project-aware navigation and a reusable command palette, tests/docs/CI. Preserve help/version/init. Push a phased feature branch to the existing personal remote and open a PR; do not merge automatically.
+**Build now:** React/Vite/Tailwind foundation, shared layouts/components/tokens, typed read-only API client, routing and packaged assets, tests/docs/CI. Preserve help/version/init. Push a phased feature branch to the existing personal remote and open a PR; do not merge automatically.
 
-**Do not build now:** final React UI/design system, Git timeline, editing, agent automation, MCP, AI or cloud services. Do not create another repository or publish to npm.
+**Do not build now:** final Mineral design system, React Documentation Explorer, settings forms/mutation endpoints, Git timeline, editing, agent automation, MCP, AI or cloud services. Do not create another repository or publish to npm.
 
 ## 8. Completion report
 
@@ -81,3 +81,5 @@ Report: phase and commit hashes, what actually works, quality checks (pass/fail/
 - Phase 3 persistence belongs in core services, never scattered CLI JSON writes. Tests must inject an isolated application-data directory. Shared paths are portable; external sources require explicit personal approval.
 
 - Phase 4: distinguish tree/content/configuration refresh; coalesce updates and retain last valid state on recoverable failures. Link identity/security belongs in core, never browser path guessing. No new polling loop, watchers or frontend framework.
+
+- Phase 6A: frontend → browser-safe contracts only; shared UI → no feature imports; pages compose layouts/primitives. No Node implementations in browser bundles. See docs/FRONTEND.md.

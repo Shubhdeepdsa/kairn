@@ -1,6 +1,6 @@
 # Kairn architecture
 
-**Status: Phases 1–4 merged; Phase 5 search/navigation/palette boundaries IMPLEMENTED and automatically verified. Human browser acceptance remains separate.**
+**Status: Phases 1–5 merged; Phase 6A React foundation implemented on a feature branch. Verification is recorded in TESTING.md.**
 
 ## Boundary diagram
 
@@ -22,7 +22,8 @@ src/
   cli/       command parsing, prompts, human-readable output
   core/      safe initialization and bounded read-only document service
   server/    loopback HTTP adapter
-  viewer/    vanilla browser module, static shell and Markdown rendering
+  viewer/    retained vanilla reader and Markdown rendering
+  frontend/  separately bundled browser-only React foundation
   index.ts   CLI executable entrypoint or equivalent
 
 tests/      temporary-filesystem and CLI adapter tests
@@ -182,3 +183,9 @@ phased; contracts do not imply indexed search is already available.
 Phase 5 composition adds a lazy search job worker and a project-aware navigator to
 the same loopback server. Scoped reader routes resolve registered IDs and validate
 approvals independently of search. See [search contracts](SEARCH.md).
+
+## Phase 6A migration boundary
+
+React foundation is scoped to `/app`; the working reader remains at `/`.
+Browser and Node builds remain separate, with one package and secure loopback
+server. Canonical ownership and migration plan: [frontend architecture](FRONTEND.md).

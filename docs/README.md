@@ -1,6 +1,6 @@
 # Kairn documentation index
 
-**Status:** Phases 1–4 merged; Phase 5 local search, project-aware navigation and palette implemented on a feature branch. See testing for verification and limitations.
+**Status:** Phases 1–5 merged; Phase 6A React foundation in progress. See testing for verification and limitations.
 
 - [Product vision and scope](PRODUCT.md)
 - [Architecture](ARCHITECTURE.md)
@@ -22,3 +22,5 @@ Repository policies: [contributing](../CONTRIBUTING.md),
 - [Local scoped search design](SEARCH.md)
 
 - [Search acceptance and manual browser checklist](SEARCH_ACCEPTANCE.md)
+
+- [React frontend architecture](FRONTEND.md)
