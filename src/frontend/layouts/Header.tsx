@@ -5,11 +5,14 @@ export function Header() {
   return (
     <header className="app-header">
       <Link to="/">
-        <Icon name="documentation" />
+        <Icon name="wayfinding" />
         Kairn
       </Link>
-      <span>React foundation · Phase 6A</span>
-      <a href="/">Open documentation reader</a>
+      <span>Mineral · Component foundation</span>
+      <nav aria-label="Application">
+        <Link to="/design-system">Design system</Link>
+        <a href="/">Open documentation reader</a>
+      </nav>
     </header>
   );
 }

@@ -65,6 +65,7 @@ it("resolves semantic icons and distinguishes decorative and meaningful SVGs", (
     "library",
     "settings",
     "sidebar",
+    "wayfinding",
   ]);
   expect(
     view.container

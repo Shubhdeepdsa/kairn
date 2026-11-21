@@ -212,3 +212,17 @@ reader's approved default choice with direct project switching.
 - `core/reader-location.ts`: browser-safe legacy/scoped bookmark parser/serializer,
   extracted unchanged from viewer navigation and re-exported for compatibility.
   React handoffs and the vanilla reader share this contract without Node imports.
+
+## Mineral primitives
+
+`frontend/components/ui`: IconButton, labeled native TextInput/Select/Switch,
+Badge/Card/Divider/SectionHeading, SettingRow/SettingsSection, SidebarItem, native
+Breadcrumbs and manual-activation Tabs. Shared contracts and extension rules:
+[design system](DESIGN_SYSTEM.md). No component owns persistence or feature state.
+
+`icons/custom/Wayfinding` supplies an original non-brand SVG alongside Lucide.
+SidebarItem owns the 3px active marker across all Sidebar configurations. The
+shared Header links only to real foundation/reader routes; no pretend search action.
+
+Icon SVG types are owned by `icons/types.ts` and re-exported by registry for
+compatibility, so custom components do not introduce registry import cycles.
