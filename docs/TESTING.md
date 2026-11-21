@@ -376,3 +376,7 @@ is separate from the DOM checks and is not claimed by these results.
 
 Late project metadata clamps selection only while project rows are visible; it
 cannot unexpectedly move the highlighted documentation result.
+
+Active-project reselection regressions cover both the global project list and a
+selector-only query from a nondefault document, preserving DOM identity, URL,
+history and reading position without another navigation request.

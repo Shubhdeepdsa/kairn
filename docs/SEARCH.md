@@ -192,6 +192,9 @@ the palette open, creates its scope chip and preserves those terms.
 
 Project-only navigation reuses the reader's default selection and approved tree/ID
 routes, then records the chosen document in the existing project-aware URL/history.
-An unavailable or empty project leaves the previous reader intact with a message.
+Reselecting the already-open project only closes the palette, preserving the current
+document, URL, history and reading position. Explicit document destinations still
+navigate within that project. An unavailable or empty project leaves the previous
+reader intact with a message.
 Empty palettes do not issue full-text indexing requests. No new API endpoint or
 filesystem access is introduced.

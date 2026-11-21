@@ -429,6 +429,9 @@ export async function mountViewer(
     history: "push" | "none" = "push",
   ): Promise<void> {
     if (!initialProject || disposed) return;
+    // Reselecting the open project dismisses the palette without resetting the reader.
+    if (!destination.documentId && destination.projectId === activeProject?.id)
+      return;
     const number = ++navigationNumber;
     await refreshing;
     if (number !== navigationNumber || disposed) return;

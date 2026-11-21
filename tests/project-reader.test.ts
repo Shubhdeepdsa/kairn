@@ -1,5 +1,5 @@
 import { JSDOM } from "jsdom";
-import { it, expect } from "vitest";
+import { it, expect, vi } from "vitest";
 import { mountViewer } from "../src/viewer/client.js";
 import { readerHash } from "../src/viewer/navigation.js";
 const a = "11111111-1111-4111-8111-111111111111",
@@ -159,3 +159,84 @@ it("dismisses empty search, switches projects with arrows/Enter, and keeps the r
     dom.window.close();
   }
 });
+
+it.each(["", "@A"])(
+  "preserves a nondefault document when reselecting the active project with %j",
+  async (query) => {
+    const architecture = "c".repeat(64);
+    const dom = new JSDOM(
+      '<html data-kairn-application="true"><body><button id="search-open">Search</button><nav id="navigation"></nav><p id="source"></p><p id="status"></p><article id="document" tabindex="-1"></article></body></html>',
+      {
+        url: "http://127.0.0.1:4173/" + readerHash(architecture, "design"),
+        pretendToBeVisual: true,
+      },
+    );
+    const document = dom.window.document;
+    const fetcher = vi.fn<typeof fetch>(async (input) => {
+      const path = String(input);
+      if (path === "/api/context") return Response.json({ id: a, name: "A" });
+      if (path === "/api/projects")
+        return Response.json({ projects: [{ id: a, name: "A" }] });
+      if (path.endsWith("/tree"))
+        return Response.json({
+          tree: [
+            { kind: "document", id: docA, path: "README.md", title: "A" },
+            {
+              kind: "document",
+              id: architecture,
+              path: "docs/architecture.md",
+              title: "Architecture",
+            },
+          ],
+        });
+      return Response.json({
+        html: path.endsWith(architecture)
+          ? '<h1 id="design">Architecture</h1>'
+          : "<h1>Default</h1>",
+        headings: [],
+        diagnostics: [],
+      });
+    });
+    const cleanup = await mountViewer(document, fetcher);
+    try {
+      const heading = document.querySelector("article h1");
+      expect(heading?.textContent).toBe("Architecture");
+      Object.defineProperty(dom.window, "scrollY", {
+        value: 480,
+        configurable: true,
+      });
+      const scrollTo = vi.fn();
+      dom.window.scrollTo = scrollTo;
+      const beforeHash = dom.window.location.hash;
+      const beforeHistory = dom.window.history.length;
+      document.getElementById("search-open")!.click();
+      (document.querySelector(".search-chip") as HTMLButtonElement).click();
+      await new Promise((resolve) => setImmediate(resolve));
+      const input = document.getElementById("search-query") as HTMLInputElement;
+      input.value = query;
+      input.dispatchEvent(new dom.window.Event("input", { bubbles: true }));
+      expect(document.querySelectorAll("[role=option]")).toHaveLength(1);
+      fetcher.mockClear();
+      input.dispatchEvent(
+        new dom.window.KeyboardEvent("keydown", {
+          key: "Enter",
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
+      await new Promise((resolve) => setImmediate(resolve));
+      expect(
+        (document.querySelector(".search-overlay") as HTMLElement).hidden,
+      ).toBe(true);
+      expect(document.querySelector("article h1")).toBe(heading);
+      expect(dom.window.location.hash).toBe(beforeHash);
+      expect(dom.window.history.length).toBe(beforeHistory);
+      expect(dom.window.scrollY).toBe(480);
+      expect(scrollTo).not.toHaveBeenCalled();
+      expect(fetcher).not.toHaveBeenCalled();
+    } finally {
+      cleanup();
+      dom.window.close();
+    }
+  },
+);
