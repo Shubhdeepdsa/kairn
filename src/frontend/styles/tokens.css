@@ -18,6 +18,8 @@
   --kairn-surface-subtle: light-dark(var(--mineral-subtle), #1e2b35);
   --kairn-surface-hover: light-dark(#f2f4f5, #243440);
   --kairn-surface-selected: var(--kairn-accent-subtle);
+  --kairn-nav-active-bg: light-dark(var(--mineral-graphite), #243440);
+  --kairn-nav-active-text: light-dark(var(--mineral-white), #f1f4f6);
   --kairn-text: light-dark(var(--mineral-graphite), #f1f4f6);
   --kairn-secondary: light-dark(var(--mineral-secondary), #c1ccd4);
   --kairn-muted: light-dark(#596976, #a4b4c0);

@@ -321,10 +321,10 @@
   overflow: hidden;
 }
 .explorer-sidebar-content {
-  padding: var(--kairn-space-4) var(--kairn-space-3);
+  padding: var(--kairn-space-3);
   display: flex;
   flex-direction: column;
-  gap: var(--kairn-space-3);
+  gap: var(--kairn-space-2);
   flex: 1;
   min-height: 0;
   overflow-y: auto;
@@ -333,10 +333,7 @@
   display: flex;
   align-items: center;
   gap: var(--kairn-space-2);
-  padding: var(--kairn-space-2) var(--kairn-space-3);
-  border-radius: var(--kairn-radius);
-  background: var(--kairn-surface-subtle);
-  border: 1px solid var(--kairn-border-subtle);
+  padding: var(--kairn-space-1) var(--kairn-space-2);
   font-family: var(--kairn-font-display);
   font-weight: 700;
   font-size: var(--kairn-text-small);
@@ -376,8 +373,8 @@
 }
 .explorer-nav-item.is-active,
 .explorer-nav-item[aria-current="page"] {
-  background: var(--kairn-text);
-  color: var(--kairn-surface);
+  background: var(--kairn-nav-active-bg);
+  color: var(--kairn-nav-active-text);
   box-shadow: var(--kairn-shadow);
 }
 .explorer-nav-item.is-disabled {
@@ -959,8 +956,12 @@
   border-color: var(--kairn-text);
   color: var(--kairn-text);
 }
+.search-trigger-btn:hover .search-trigger-label {
+  color: var(--kairn-text);
+}
 .search-trigger-label {
   display: inline-block;
+  color: var(--kairn-muted);
 }
 @media (max-width: 47.99rem) {
   .search-trigger-label {
@@ -1045,18 +1046,24 @@
   white-space: nowrap;
   border: 0;
 }
-.search-dialog-header .ui-input {
-  border: 0;
-  box-shadow: none;
+.search-dialog-header .ui-input,
+.search-dialog-header .ui-input:focus,
+.search-dialog-header .ui-input:focus-visible {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
   background: transparent;
   padding: 0;
   height: auto;
 }
-.search-input {
+.search-input,
+.search-input:focus,
+.search-input:focus-visible {
   flex: 1;
   min-width: 0;
-  border: 0;
-  outline: 0;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
   background: transparent;
   font-family: var(--kairn-font-body);
   font-size: var(--kairn-text-body);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
 import markLight from "../assets/brand/kairn-mark-light.svg?no-inline";
 import markDark from "../assets/brand/kairn-mark-dark.svg?no-inline";
@@ -27,7 +27,21 @@ export function Header() {
   const location = useLocation();
   const [projectDropdownOpen, setProjectDropdownOpen] = useState(false);
 
-  const dark = appearance === "dark";
+  const [systemDark, setSystemDark] = useState(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return false;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const listener = (e: MediaQueryListEvent) => setSystemDark(e.matches);
+    media.addEventListener("change", listener);
+    return () => media.removeEventListener("change", listener);
+  }, []);
+
+  const isDark =
+    appearance === "dark" || (appearance === "system" && systemDark);
 
   // Derive active project identity
   const projectMatch = location.pathname.match(/^\/projects\/([^/]+)/);
@@ -52,7 +66,7 @@ export function Header() {
     : "/settings/appearance";
 
   const toggleTheme = () => {
-    setAppearance(dark ? "light" : "dark");
+    setAppearance(isDark ? "light" : "dark");
   };
 
   return (
@@ -69,7 +83,7 @@ export function Header() {
             )}
             <source
               media="(max-width: 48rem)"
-              srcSet={dark ? markDark : markLight}
+              srcSet={isDark ? markDark : markLight}
             />
             {appearance === "system" && (
               <source
@@ -77,7 +91,7 @@ export function Header() {
                 srcSet={wordmarkDark}
               />
             )}
-            <img src={dark ? wordmarkDark : wordmarkLight} alt="Kairn" />
+            <img src={isDark ? wordmarkDark : wordmarkLight} alt="Kairn" />
           </picture>
         </Link>
 
@@ -145,10 +159,10 @@ export function Header() {
           data-size="sm"
           className="app-header-icon-btn"
           onClick={toggleTheme}
-          aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
-          title={dark ? "Switch to light theme" : "Switch to dark theme"}
+          aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+          title={isDark ? "Switch to light theme" : "Switch to dark theme"}
         >
-          <Icon name={dark ? "sun" : "moon"} className="icon-sm" />
+          <Icon name={isDark ? "sun" : "moon"} className="icon-sm" />
         </Button>
         <Link
           to={settingsPath}
