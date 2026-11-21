@@ -6,6 +6,7 @@ import { it, expect } from "vitest";
 import {
   loadFrontendPresentation,
   isFrontendRoute,
+  frontendAssetBudget,
 } from "../src/server/frontend-assets.js";
 import { createDocumentService } from "../src/core/documents.js";
 import { startDocumentationServer } from "../src/server/http.js";
@@ -118,6 +119,63 @@ it("bounds packaged output and rejects maps, nested assets, oversized files and 
       "/app/x.js",
     ])
       expect(isFrontendRoute(path)).toBe(false);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+it("verifies the production frontend build adheres to the configured asset budget", async () => {
+  const presentation = await loadFrontendPresentation(
+    new URL("../dist/frontend/", import.meta.url),
+  );
+  expect(presentation.assets.size).toBeGreaterThan(0);
+  expect(presentation.assets.size).toBeLessThanOrEqual(
+    frontendAssetBudget.maxAssetCount,
+  );
+  const pageBytes = Buffer.byteLength(presentation.page);
+  expect(pageBytes).toBeLessThanOrEqual(frontendAssetBudget.maxIndexHtmlBytes);
+  let totalBytes = pageBytes;
+  for (const [path, asset] of presentation.assets) {
+    expect(
+      asset.body.length,
+      `Asset ${path} must not exceed ${frontendAssetBudget.maxAssetBytes} bytes`,
+    ).toBeLessThanOrEqual(frontendAssetBudget.maxAssetBytes);
+    totalBytes += asset.body.length;
+  }
+  expect(
+    totalBytes,
+    `Total presentation size (${totalBytes} B) must not exceed ${frontendAssetBudget.maxTotalBytes} bytes`,
+  ).toBeLessThanOrEqual(frontendAssetBudget.maxTotalBytes);
+});
+it("provides actionable diagnostics when asset budget limits are exceeded", async () => {
+  const root = await mkdtemp(join(tmpdir(), "kairn-budget-diag-"));
+  const url = pathToFileURL(root + "/");
+  try {
+    await mkdir(join(root, "assets"));
+    await writeFile(join(root, "index.html"), "<html></html>");
+    await writeFile(join(root, "assets", "a1.js"), "x");
+    await writeFile(join(root, "assets", "a2.js"), "y");
+    await expect(
+      loadFrontendPresentation(url, {
+        ...frontendAssetBudget,
+        maxAssetCount: 1,
+      }),
+    ).rejects.toThrow(
+      "Too many frontend assets: 2 files found (budget limit: 1).",
+    );
+    await expect(
+      loadFrontendPresentation(url, {
+        ...frontendAssetBudget,
+        maxAssetBytes: 0,
+      }),
+    ).rejects.toThrow("exceeds 0 bytes limit");
+    await expect(
+      loadFrontendPresentation(url, {
+        ...frontendAssetBudget,
+        maxTotalBytes: 5,
+      }),
+    ).rejects.toThrow(
+      "Frontend presentation is too large: 14 bytes (budget limit: 5 bytes).",
+    );
   } finally {
     await rm(root, { recursive: true, force: true });
   }

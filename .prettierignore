@@ -4,3 +4,7 @@ coverage/
 package-lock.json
 playwright-report/
 test-results/
+
+# Local user-owned design references and scratch files
+designs/
+temp.md

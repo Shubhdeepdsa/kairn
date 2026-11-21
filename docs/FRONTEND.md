@@ -30,6 +30,16 @@ browser paths to arbitrary filesystem reads. Limit file count, per-file and tota
 bytes when loading the packaged presentation. No source maps or CDN resources.
 Use no-store while this transitional route/build-watch workflow is supported.
 
+Frontend asset budget (`frontendAssetBudget` in `server/frontend-assets.ts`):
+
+- Maximum asset count: 32 entries (current actual: 18 generated, 15 served; 14 headroom).
+- Maximum per-asset size: 2 MiB (current largest: ~221 KiB `index-*.js`; ~1.8 MiB headroom).
+- Maximum total presentation size: 8 MiB (current total loaded: ~396 KiB; ~7.6 MiB headroom).
+- Maximum index.html size: 64 KiB (current actual: 581 B).
+  Enforced by automated regression tests in `tests/frontend-assets.test.ts` and
+  reported by `scripts/measure-frontend.mjs`. Phase 6C additions (React Explorer tree
+  and components) remain comfortably within this budget without requiring limit increases.
+
 Existing exact Host/Origin/Fetch Metadata, GET/body/URL/concurrency limits, CSP
 and loopback binding apply to React too. SPA fallback is limited to `/app` and
 its routing namespace; invalid APIs/assets never fall back to HTML. Application

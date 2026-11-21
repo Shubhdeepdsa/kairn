@@ -5,6 +5,8 @@
     "dist/**",
     "playwright-report/**",
     "test-results/**",
+    "designs/**",
+    "temp.md",
   ],
   "config": { "MD013": false, "MD060": false },
 }

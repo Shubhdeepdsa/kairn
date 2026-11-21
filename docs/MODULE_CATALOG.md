@@ -188,6 +188,7 @@ reader's approved default choice with direct project switching.
   not the final Mineral theme. See [frontend contracts](FRONTEND.md).
 
 - `server/frontend-assets.ts`: bounded startup preload of trusted packaged HTML/JS/CSS/WOFF2/SVG;
+  exports `frontendAssetBudget`, `FrontendAssetBudget`, and `loadFrontendPresentation`;
   fixed application namespace, no arbitrary static-file route or source maps.
 
 - `frontend/components/ui/Button.tsx`: native props/ref, shared variants/sizes and
