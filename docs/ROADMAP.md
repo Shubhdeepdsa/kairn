@@ -125,7 +125,8 @@ visible on the PR. Browser verification remains API/DOM-only as documented.
 
 IMPLEMENTED; local checks VERIFIED; three-OS evidence is recorded below and latest
 head checks are tracked on PR #4. Real browser acceptance
-remains unverified; [PR #4](https://github.com/Shubhdeepdsa/kairn/pull/4) is open.
+remains separate; [PR #4](https://github.com/Shubhdeepdsa/kairn/pull/4) merged as `ccdec257`.
+Windows bounded-indexing test correction PR #5 merged as `5c31057`.
 Preserve Phases 1–4.
 See [search design](SEARCH.md) and [manual acceptance](SEARCH_ACCEPTANCE.md).
 
@@ -152,3 +153,12 @@ passed at `bb0c260`. No automatic merge or npm publication.
 `e2c0f14` resumes bounded global jobs without restarting completed projects. Schema-v2
 approval fences prevent stale cooperating writers from bypassing newer source/ignore
 rules. Final local suite: 120 tests. Human browser acceptance remains outstanding.
+
+## Phase 6A — React foundation (IN PROGRESS)
+
+Architecture/migration → React/Vite/Tailwind build → bounded packaged serving →
+routes/shared layouts → Button/icons/tokens → typed API/state/settings contracts →
+architecture enforcement → installed browser acceptance and size baseline.
+See [frontend contracts](FRONTEND.md). Keep the working Phase 5 reader at `/`.
+Phase 6B: Mineral tokens/components; Phase 6C: React Documentation Explorer parity.
+No Git services, settings mutation APIs or final screen designs in Phase 6A.

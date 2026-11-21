@@ -182,3 +182,9 @@ phased; contracts do not imply indexed search is already available.
 Phase 5 composition adds a lazy search job worker and a project-aware navigator to
 the same loopback server. Scoped reader routes resolve registered IDs and validate
 approvals independently of search. See [search contracts](SEARCH.md).
+
+## Phase 6A migration boundary
+
+React foundation is scoped to `/app`; the working reader remains at `/`.
+Browser and Node builds remain separate, with one package and secure loopback
+server. Canonical ownership and migration plan: [frontend architecture](FRONTEND.md).

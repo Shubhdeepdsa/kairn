@@ -110,3 +110,16 @@ unregistered runs have transient IDs. Navigation owns project loading independen
 of search. SQLite in the browser, a daemon and separate project/global engines were
 rejected. Current approval validation precedes result release; unavailable projects
 produce coverage, never silently current cached results. See SEARCH.md for limits.
+
+## ADR-012 — Incremental React migration through packaged static assets
+
+- **Status:** Accepted for Phase 6A; implementation staged.
+- **Decision:** Separate browser build in the existing package, React under `/app`,
+  vanilla reader retained at `/` until parity. Shared UI/layouts/tokens and typed
+  API own consistency; core services remain authoritative.
+- **Alternatives:** Replace the working reader immediately, a second API server,
+  development proxy or permanent dual frontends.
+- **Rationale:** Preserve user capability and security while establishing testable
+  React boundaries. Build-watch avoids relaxing Origin/CSP for development.
+- **Consequences:** Foundation routes are explicitly incomplete. Vanilla retirement
+  requires Phase 6C parity and bookmark tests. No settings writes in this phase.
