@@ -503,3 +503,15 @@ Clean archived-tree acceptance (no existing dist or user reference files) passes
 npm ci, all required quality gates, 157 tests and all three packaged Chromium
 tests with normal screenshot comparison. Cross-platform results belong to the
 Phase 6B PR. The unrelated untracked design references/temp.md remain untouched.
+
+## Post-Phase 6B stabilization
+
+Prettier and Markdownlint ignore rules normalize untracked scratch files (`designs/`,
+`temp.md`) without hiding tracked documentation errors.
+Automated packaged asset budget testing in `tests/frontend-assets.test.ts` validates
+the fresh production build against `frontendAssetBudget` (max 32 files, 2 MiB per file,
+8 MiB total).
+Playwright visual regression policy: behavioral and accessibility tests run across all
+supported platforms (Linux, macOS, Windows); pixel comparison runs exclusively on
+macOS Chromium with pinned bundled fonts (`test.skip(process.platform !== "darwin", ...)`).
+Total tests: 161 Vitest tests in 35 files, 3 Playwright tests, all quality gates passing.
