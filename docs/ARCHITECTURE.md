@@ -197,3 +197,12 @@ Primitive/semantic theme tokens feed shared control/layout/prose CSS. Features
 compose those primitives; no duplicate theme engine, persistence or renderer.
 The showcase is lazy; font assets share the bounded packaged asset mechanism.
 Canonical contracts: [Mineral design system](DESIGN_SYSTEM.md).
+
+## Quality and architectural enforcement
+
+Static analysis and automated architectural tests enforce module boundaries and design-system adoption:
+
+- **Core purity**: `src/core/` domain logic cannot import React, frontend components, or HTTP/CLI/viewer adapters, and cannot invoke `process.exit()`.
+- **Adapter isolation**: `src/server/` and `src/viewer/` cannot import React, frontend components, or CLI commands; `src/cli/` cannot import React or frontend components.
+- **Frontend design-system adoption**: Raw interactive HTML controls (`button`, `input`, `select`, `textarea`) and inline `style` attributes are banned across all frontend layers, with exemptions granted only to the implementing primitive components in `src/frontend/components/ui/`.
+- **Exit safety**: Reusable library code and CLI commands never call `process.exit()`; process exit codes are controlled strictly at the CLI boundary via `process.exitCode`.
