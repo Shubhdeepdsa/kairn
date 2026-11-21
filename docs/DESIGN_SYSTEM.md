@@ -155,12 +155,16 @@ Four reviewed macOS Chromium viewport baselines cover Light/Dark/Blue/mobile.
 Snapshots do not establish full pixel fidelity to Stitch or universal accessibility.
 Human review of initial light/dark/mobile compositions accompanied automated checks.
 
-## Phase 6C readiness
+## Phase 6C Explorer components
 
-Ready: actions, labeled native inputs/select/switch, status/surface/section/settings
-composition, tabs/breadcrumbs/sidebar items, shared header/sidebar disclosure,
-semantic icons and scoped prose for the existing safe renderer. Explorer still
-needs document-tree composition, responsive reader/outline orchestration, search
-controller adaptation and any demonstrated complex overlays. No design-system
-blocker is known; actual reader parity and retirement remain independently tested
-Phase 6C work. No image loading, syntax highlighting or file-type icon resolver yet.
+Phase 6C integrates the Mineral design system into full Documentation Explorer primitives:
+
+- `ExplorerShell`: 3-region responsive layout shell (`.explorer-shell`, `.explorer-sidebar`, `.explorer-main`, `.explorer-outline-pane`, `.explorer-mobile-bar`).
+- `DocTree`: Hierarchical navigation tree with 3px yellow wayfinding active marker, directory collapse disclosure, and status badge.
+- `DocReader`: Full document surface with breadcrumbs, copy path button, scan diagnostics, and server HTML article.
+- `DocOutline`: Sticky on-page TOC with waypoint indicator and scroll spy.
+- `DocPager`: Previous and next footer cards.
+- `DocCallout`: Architectural note/callout box with 3px yellow wayfinding indicator.
+- `SearchPaletteDialog`: Modal search palette with combobox, query input, keyboard selection, and project chips.
+- `SearchTrigger`: Header search button indicating platform shortcut.
+- Visual specimen active at `/app/design-system/explorer`. Three reviewed Darwin Chromium baselines (`explorer-light`, `explorer-dark`, `explorer-mobile`).

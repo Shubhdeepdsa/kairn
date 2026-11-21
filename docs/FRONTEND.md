@@ -188,12 +188,16 @@ including Playwright scheduling/polling. These are fixture observations, not a
 startup benchmark or latency guarantee. The smoke logs these timings on each run.
 No external resource requests or unexpected console errors occurred.
 
-## Phase 6B
+## Phase 6C — React Documentation Explorer
 
-Canonical Mineral tokens/components and normalization decisions are maintained in
-[the design system](DESIGN_SYSTEM.md). Phase 6A architecture and reader migration
-boundaries remain unchanged.
+Phase 6C completes parity with the Phase 1–5 reader at `/app/projects/:projectId/docs[/:documentId]`, composed from Mineral design primitives and the approved Stitch specifications:
 
-Phase 6B extends the SVG contract through icons/types.ts (registry re-exports it),
-adds runtime initialAppearance/initialAccent injection and a lazy showcase. Font
-assets/notices extend the existing build only; the vanilla migration is unchanged.
+- **3-Region Responsive Layout (`ExplorerShell`)**: Collapsible hierarchical navigation sidebar (`DocTree`), full reading pane (`DocReader`), and sticky on-page table of contents (`DocOutline`), responsive down to tablet (1000px, hides outline) and mobile (390px, hides sidebar, discloses via header mobile drawer toggle).
+- **Safe Reading Surface (`SafeHtmlArticle`)**: Audited trust boundary rendering HTML produced strictly by Kairn's server Markdown renderer (`src/core/markdown.ts`), completely isolating `dangerouslySetInnerHTML`.
+- **TOC Outline & Scroll Spy**: Heading outline extracted by server Markdown analysis, supporting Unicode headings, duplicate slug disambiguation, and intersection observer scroll spy highlighting active heading waypoints.
+- **Link Interception & Resolution**: In-article relative Markdown link clicks intercepted and routed through `/api/projects/:projectId/links/...` with scan-time and runtime diagnostic warning callouts.
+- **Search Palette Adapter**: Modal search dialog adapting core `SearchPalette` controller with query parsing, debounce, generation counters, keyboard selection, and `@project` scope chips.
+- **Live Reading Freshness Loop**: Bounded ~2s polling cadence with hidden-tab pause (`document.hidden`), `If-None-Match` HTTP 304 handling without DOM re-render, and vanished document fallback.
+- **Bookmark Parity**: Bridges legacy hash bookmarks (`#id` and `#p/projectId/id/fragment`) via `parseReaderLocation`.
+
+The working vanilla reader at `/` remains completely intact and unaffected. Moving the canonical default route is deferred until post-review user sign-off.

@@ -1,6 +1,6 @@
 # Kairn architecture
 
-**Status: Phases 1–5 merged; Phase 6A React foundation implemented on a feature branch. Verification is recorded in TESTING.md.**
+**Status: Phases 1–5 merged; Phase 6C React Documentation Explorer implemented on a feature branch. Verification is recorded in TESTING.md.**
 
 ## Boundary diagram
 
@@ -8,9 +8,10 @@
 CLI (arguments, prompts, lifecycle) ──┬──> core document service
                                     └──> HTTP adapter ──> core contracts
                                               │
-                                  static viewer + Markdown renderer
-                                              │
-                                     browser same-origin API
+                      ┌───────────────────────┴───────────────────────┐
+                      │                                               │
+             vanilla reader at `/`                           React Explorer at `/app`
+        (static viewer + renderer)                       (Mineral UI + typed API client)
 ```
 
 **Dependency rule:** CLI imports core, never the reverse. Tests may import both. No external services are required.

@@ -85,3 +85,10 @@ No remote font/image loading, inline style exception or mutation endpoint is add
 Header branding adds four trusted packaged SVGs to the bounded startup map.
 SVG requests use image/svg+xml; no user-document image routing or remote images
 are enabled. Source logos contain no scripts, external references or embedded HTML.
+
+## React Documentation Explorer trust boundaries (Phase 6C)
+
+- `SafeHtmlArticle` trust boundary: isolates `dangerouslySetInnerHTML` exclusively to HTML rendered by Kairn's server Markdown engine (`src/core/markdown.ts`). Raw HTML in Markdown is stripped or escaped; script tags and external resource URLs are strictly prohibited under CSP. Raw user inputs, filenames, and link diagnostics are strictly rendered as plain React text nodes.
+- Link resolution: browser clicks on relative links call `/api/projects/:projectId/links/:originId/:href` where core classifies destinations against effective document identities. No filesystem probing or directory traversal occurs from browser link clicks.
+- Search queries: browser search input routes to `/api/search` with typed parameters, respecting project registration boundaries.
+- No Node, database, or filesystem APIs are ever imported into browser bundles (enforced by `tests/frontend-architecture.test.ts`).

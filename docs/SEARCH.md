@@ -198,3 +198,13 @@ navigate within that project. An unavailable or empty project leaves the previou
 reader intact with a message.
 Empty palettes do not issue full-text indexing requests. No new API endpoint or
 filesystem access is introduced.
+
+## React search adapter (Phase 6C)
+
+In Phase 6C, the search palette is integrated into the React frontend at `/app`:
+
+- `SearchPaletteDialog.tsx`: Modal search interface adapting core `SearchPalette` controller (`src/core/search-palette.ts`), preserving query parsing, debounce, generation counters, `@project` scope chips, and full keyboard navigation.
+- `SearchTrigger.tsx`: Header trigger button displaying platform shortcut (`⌘K` on macOS, `Ctrl+K` on Windows/Linux).
+- `SearchContext.tsx`: React Context and hook (`useSearch`) managing open/close state and global keyboard shortcuts across routes.
+- Same-origin transport: Uses typed `client.search(...)` querying `/api/search?query=...&project=...&limit=...`, receiving structured `SearchResponse` results and project coverage status.
+- Results route directly to `/app/projects/:projectId/docs/:documentId[#fragment]`.
