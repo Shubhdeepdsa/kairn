@@ -387,3 +387,18 @@ duplicate-request coalescing and successful subsequent searches with isolated da
 
 After these review fixes, the full local suite passes 127 tests in 28 files.
 Typecheck, lint/TSDoc, formatting, build and Markdown checks also pass.
+
+## Post-merge Windows bounded-indexing regression
+
+The Phase 5 merge run failed a coordinator assertion that expected two projects
+from one cold search request. Windows returned one result before the bounded job
+finished; compilation and the other operating systems passed.
+The reconciliation fixture now explicitly advances at most 12 refresh jobs until
+coverage is no longer indexing, then retains the full result identity, freshness,
+ignore/source, unavailable-project and unregistration assertions. It runs with both
+the production 200-document cap and a one-document cap to force multiple jobs
+without sleeps or slower-runner timing assumptions. Production budgets are unchanged.
+
+Local verification of this correction: all six quality gates pass, with 128 tests
+in 28 files. Windows verification is tracked by the fix PR CI, separately from
+these macOS results.
