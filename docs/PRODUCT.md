@@ -62,3 +62,11 @@ light/dark/system tokens and typed read-only application context. It does not
 implement the React Explorer, Library, settings saving or Git history. Phase 6B
 builds Mineral components on these contracts; Phase 6C migrates reader behavior
 before the vanilla implementation can retire. See [frontend architecture](FRONTEND.md).
+
+## Phase 6B: Mineral design system
+
+`/app/design-system` demonstrates shared Mineral components, locally packaged
+typography, runtime Light/Dark/System and predefined accent previews. It is an
+internal specimen, not appearance persistence or a completed Explorer/settings UI.
+The existing reader stays at `/`; Phase 6C composes these primitives with the
+existing document/search/navigation services. See [design system](DESIGN_SYSTEM.md).

@@ -1,6 +1,10 @@
 @import "tailwindcss" source("../");
+@import "./fonts.css";
 @import "./tokens.css";
 @import "./themes.css";
+@import "./components.css";
+@import "./prose.css";
+@import "./showcase.css";
 @theme inline {
   --color-canvas: var(--kairn-canvas);
   --color-surface: var(--kairn-surface);
@@ -17,11 +21,11 @@ body {
   color: var(--kairn-text);
 }
 :focus-visible {
-  outline: var(--kairn-focus-width) solid var(--kairn-accent);
+  outline: var(--kairn-focus-width) solid var(--kairn-focus);
   outline-offset: var(--kairn-focus-offset);
 }
 a {
-  color: var(--kairn-accent);
+  color: var(--kairn-accent-ink);
   text-decoration: underline;
 }
 h1 {
@@ -36,42 +40,6 @@ main {
   min-width: 0;
 }
 
-.ui-button {
-  display: inline-flex;
-  gap: var(--kairn-space-2);
-  align-items: center;
-  border: 1px solid var(--kairn-border);
-  border-radius: var(--kairn-radius);
-  padding: var(--kairn-space-2) var(--kairn-space-3);
-  background: var(--kairn-surface);
-  color: var(--kairn-text);
-  font: inherit;
-  cursor: pointer;
-  transition: opacity var(--kairn-motion);
-}
-.ui-button[data-variant="primary"] {
-  background: var(--kairn-accent);
-  color: var(--kairn-accent-text);
-}
-.ui-button[data-variant="ghost"] {
-  background: transparent;
-  border-color: transparent;
-}
-.ui-button[data-variant="destructive"] {
-  color: var(--kairn-danger);
-  border-color: var(--kairn-danger);
-}
-.ui-button[data-size="sm"] {
-  padding: var(--kairn-space-1) var(--kairn-space-2);
-  font-size: var(--kairn-text-small);
-}
-.ui-button[data-size="lg"] {
-  padding: var(--kairn-space-3) var(--kairn-space-4);
-}
-.ui-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
 .ui-icon {
   color: currentColor;
   flex-shrink: 0;
@@ -87,45 +55,115 @@ main {
   height: var(--kairn-icon-lg);
 }
 
+/* Shared application layout; disclosure hides nav, not an icon-rail collapse. */
 .app-header {
+  min-height: var(--kairn-header-height);
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: var(--kairn-space-4);
-  padding: var(--kairn-space-3) var(--kairn-space-4);
+  flex-wrap: wrap;
+  gap: var(--kairn-space-6);
+  padding: var(--kairn-space-3) var(--kairn-space-6);
   background: var(--kairn-surface);
   border-bottom: 1px solid var(--kairn-border);
 }
-.app-header a {
+.app-header > a {
+  font-family: var(--kairn-font-display);
+  font-size: var(--kairn-heading-section);
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--kairn-text);
   display: inline-flex;
   align-items: center;
   gap: var(--kairn-space-2);
 }
+.app-brand {
+  padding: var(--kairn-space-1) var(--kairn-space-2);
+  border-radius: var(--kairn-radius);
+}
+.app-brand picture,
+.app-brand img {
+  display: block;
+}
+.app-brand img {
+  height: var(--kairn-control-md);
+  width: auto;
+}
+.app-header > span {
+  color: var(--kairn-muted);
+  font-size: var(--kairn-text-small);
+}
+.app-header nav {
+  margin-inline-start: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--kairn-space-4);
+}
 .workspace-layout {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--kairn-space-3);
+  gap: var(--kairn-space-6);
+  align-items: flex-start;
 }
 .sidebar {
   width: var(--kairn-sidebar-width);
   max-width: 100%;
-  padding: var(--kairn-space-2);
-  border: 1px solid var(--kairn-border);
-  border-radius: var(--kairn-radius);
-  box-shadow: var(--kairn-shadow);
-}
-.sidebar nav a {
-  display: block;
-  padding: var(--kairn-space-2);
-}
-.sidebar nav a[aria-current="page"] {
+  flex-shrink: 0;
   background: var(--kairn-surface);
-  font-weight: 700;
+  border: 1px solid var(--kairn-border);
+  border-radius: var(--kairn-radius-panel);
+  padding: var(--kairn-space-2);
+}
+.sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sidebar .ui-sidebar-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--kairn-space-2);
+  min-height: var(--kairn-control-md);
+  padding: var(--kairn-space-2) var(--kairn-space-4);
+  color: var(--kairn-secondary);
+  text-decoration: none;
+  border-radius: var(--kairn-radius);
+}
+.sidebar .ui-sidebar-item:hover {
+  background: var(--kairn-surface-hover);
+}
+.sidebar .ui-sidebar-item[aria-current="page"] {
+  background: var(--kairn-surface-selected);
+  color: var(--kairn-text);
+  font-weight: 600;
+}
+.sidebar .ui-sidebar-item[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: var(--kairn-space-2);
+  bottom: var(--kairn-space-2);
+  width: var(--kairn-wayfinding-width);
+  background: var(--kairn-accent);
 }
 .content-panel {
   flex: 1;
   min-width: 0;
-  padding: var(--kairn-space-3);
+  padding: var(--kairn-space-4);
+}
+@media (max-width: 48rem) {
+  .workspace-layout {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+  }
+  .app-header {
+    gap: var(--kairn-space-3);
+  }
+  .app-header nav {
+    margin: 0;
+  }
 }
 .skip-link {
   position: absolute;
@@ -138,4 +176,69 @@ main {
 }
 [hidden] {
   display: none !important;
+}
+
+/* Typography roles, shared across layouts, controls and reading specimens. */
+.type-display {
+  font-family: var(--kairn-font-display);
+  font-size: var(--kairn-display-large);
+  line-height: var(--kairn-line-heading);
+  font-weight: 700;
+  letter-spacing: var(--kairn-tracking-heading);
+}
+.type-display-medium,
+h1 {
+  font-family: var(--kairn-font-display);
+  font-size: var(--kairn-display-medium);
+  line-height: var(--kairn-line-heading);
+  font-weight: 700;
+  letter-spacing: var(--kairn-tracking-heading);
+}
+.type-section,
+h2 {
+  font-family: var(--kairn-font-display);
+  font-size: var(--kairn-heading-section);
+  line-height: 1.4;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.type-card,
+h3 {
+  font-size: var(--kairn-heading-card);
+  font-weight: 600;
+  line-height: 1.4;
+}
+.type-body {
+  font-size: var(--kairn-text-body);
+  line-height: var(--kairn-line-body);
+}
+.type-medium {
+  font-size: var(--kairn-text-body);
+  line-height: 1.5;
+  font-weight: 500;
+}
+.type-dense {
+  font-size: var(--kairn-text-small);
+  line-height: 1.5;
+}
+.type-caption {
+  font-size: var(--kairn-caption);
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  color: var(--kairn-muted);
+}
+.type-code,
+code,
+pre {
+  font-family: var(--kairn-font-code);
+  font-size: var(--kairn-text-small);
+  line-height: 1.5;
+}
+.type-technical {
+  font-family: var(--kairn-font-code);
+  font-size: var(--kairn-caption);
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--kairn-muted);
 }

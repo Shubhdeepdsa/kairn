@@ -1,7 +1,7 @@
 # AGENTS.md — Kairn engineering instructions
 
 > **Scope:** entire Kairn repository. More specific `AGENTS.md` files apply in their directories.
-> **Product:** local-first Markdown documentation and Git-history explorer. **Current milestone:** Phase 6A: React frontend foundation under `/app`; preserve the complete Phase 1–5 vanilla reader at `/`.
+> **Product:** local-first Markdown documentation and Git-history explorer. **Current milestone:** Phase 6B: Mineral design system and showcase under `/app`; preserve the complete Phase 1–5 vanilla reader at `/`.
 > **Priority:** small, verifiable, modular work; documentation is maintained with code, not reconstructed afterwards.
 
 ## 1. Preflight and source of truth
@@ -70,9 +70,9 @@ Update the smallest relevant docs **in the same commit as behavior changes**:
 
 ## 7. Scope restraint
 
-**Build now:** React/Vite/Tailwind foundation, shared layouts/components/tokens, typed read-only API client, routing and packaged assets, tests/docs/CI. Preserve help/version/init. Push a phased feature branch to the existing personal remote and open a PR; do not merge automatically.
+**Build now:** Mineral tokens/themes/accents, shared components/layouts/icons, scoped prose, showcase and visual/accessibility tests. Preserve help/version/init. Push a phased feature branch to the existing personal remote and open a PR; do not merge automatically.
 
-**Do not build now:** final Mineral design system, React Documentation Explorer, settings forms/mutation endpoints, Git timeline, editing, agent automation, MCP, AI or cloud services. Do not create another repository or publish to npm.
+**Do not build now:** React Documentation Explorer, settings forms/mutation endpoints, Git timeline, editing, agent automation, MCP, AI or cloud services. Do not create another repository or publish to npm.
 
 ## 8. Completion report
 

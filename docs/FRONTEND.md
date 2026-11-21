@@ -177,3 +177,13 @@ DOMContentLoaded at 36.3 ms; the ready-heading observation occurred at 854.7 ms
 including Playwright scheduling/polling. These are fixture observations, not a
 startup benchmark or latency guarantee. The smoke logs these timings on each run.
 No external resource requests or unexpected console errors occurred.
+
+## Phase 6B
+
+Canonical Mineral tokens/components and normalization decisions are maintained in
+[the design system](DESIGN_SYSTEM.md). Phase 6A architecture and reader migration
+boundaries remain unchanged.
+
+Phase 6B extends the SVG contract through icons/types.ts (registry re-exports it),
+adds runtime initialAppearance/initialAccent injection and a lazy showcase. Font
+assets/notices extend the existing build only; the vanilla migration is unchanged.

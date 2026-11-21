@@ -19,6 +19,16 @@ console.log(
       totalCssBytes: files
         .filter((f) => f.name.endsWith(".css"))
         .reduce((n, f) => n + f.bytes, 0),
+      totalFontBytes: files
+        .filter((f) => f.name.endsWith(".woff2"))
+        .reduce((n, f) => n + f.bytes, 0),
+      initialJavaScriptBytes: files
+        .filter((f) =>
+          [...html.matchAll(/(?:src|href)="([^\"]+\.js)"/g)].some((m) =>
+            m[1].endsWith(f.name),
+          ),
+        )
+        .reduce((n, f) => n + f.bytes, 0),
       files,
     },
     null,

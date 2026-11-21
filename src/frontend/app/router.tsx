@@ -19,12 +19,18 @@ const Settings = lazy(() =>
     default: m.SettingsPage,
   })),
 );
+const Showcase = lazy(() =>
+  import("../features/design-system/ShowcasePage").then((m) => ({
+    default: m.ShowcasePage,
+  })),
+);
 /** Sole route owner; basename is supplied by the browser entry, and tests can supply MemoryRouter. */
 export function ApplicationRoutes() {
   return (
     <Routes>
       <Route element={<AppShell />}>
         <Route index element={<Overview />} />
+        <Route path="design-system" element={<Showcase />} />
         <Route path="projects/:projectId" element={<WorkspaceLayout />}>
           <Route path="docs" element={<Documentation />} />
           <Route path="docs/:documentId" element={<Documentation />} />

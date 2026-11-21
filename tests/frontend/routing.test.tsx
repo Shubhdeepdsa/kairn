@@ -31,6 +31,16 @@ it("initializes from real-shaped API data and reuses one shell across routes", a
   await screen.findByRole("heading", { name: "React foundation" });
   expect(screen.getByText("Active project: Fixture project")).toBeTruthy();
   const header = screen.getByRole("banner");
+  const brand = screen.getByRole("link", { name: "Kairn home" });
+  expect(brand.getAttribute("href")).toBe("/");
+  expect(
+    screen.getByRole("img", { name: "Kairn" }).getAttribute("src"),
+  ).toContain("kairn-wordmark-light.svg");
+  expect(
+    brand
+      .querySelector('source[media="(max-width: 48rem)"]')
+      ?.getAttribute("srcset"),
+  ).toContain("kairn-mark-light.svg");
   fireEvent.click(
     screen.getByRole("link", { name: "Global settings contract" }),
   );

@@ -1,5 +1,5 @@
 import { useId, useState } from "react";
-import { NavLink } from "react-router";
+import { SidebarItem } from "../components/ui/SidebarItem";
 import { Button } from "../components/ui/Button";
 import { Icon } from "../icons/Icon";
 /** One local disclosure implementation for all configured navigation regions. */
@@ -27,9 +27,9 @@ export function Sidebar({
         <ul>
           {items.map((item) => (
             <li key={item.to}>
-              <NavLink end to={item.to}>
+              <SidebarItem end to={item.to}>
                 {item.label}
-              </NavLink>
+              </SidebarItem>
             </li>
           ))}
         </ul>

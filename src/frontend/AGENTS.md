@@ -11,3 +11,8 @@ Inherits root instructions. This is the browser-only React boundary.
 - Native fetch belongs in lib/api; effects abort on cleanup. Preferences in this
   phase are runtime only, never authoritative localStorage or new write endpoints.
 - Tests use disposable fixtures and real packaged assets for browser acceptance.
+
+- Phase 6B: raw primitives live only in token/theme files. Components consume
+  semantic roles; features never override shared layout/control CSS. Native
+  input/select/switch semantics and shared navigation primitives are required.
+  Theme previews are runtime-only; use locally packaged licensed fonts.

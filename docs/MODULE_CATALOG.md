@@ -187,7 +187,7 @@ reader's approved default choice with direct project switching.
 - `frontend/styles/`: provisional semantic tokens and light/dark/system mechanism;
   not the final Mineral theme. See [frontend contracts](FRONTEND.md).
 
-- `server/frontend-assets.ts`: bounded startup preload of trusted packaged HTML/JS/CSS;
+- `server/frontend-assets.ts`: bounded startup preload of trusted packaged HTML/JS/CSS/WOFF2/SVG;
   fixed application namespace, no arbitrary static-file route or source maps.
 
 - `frontend/components/ui/Button.tsx`: native props/ref, shared variants/sizes and
@@ -212,3 +212,29 @@ reader's approved default choice with direct project switching.
 - `core/reader-location.ts`: browser-safe legacy/scoped bookmark parser/serializer,
   extracted unchanged from viewer navigation and re-exported for compatibility.
   React handoffs and the vanilla reader share this contract without Node imports.
+
+## Mineral primitives
+
+`frontend/components/ui`: IconButton, labeled native TextInput/Select/Switch,
+Badge/Card/Divider/SectionHeading, SettingRow/SettingsSection, SidebarItem, native
+Breadcrumbs and manual-activation Tabs. Shared contracts and extension rules:
+[design system](DESIGN_SYSTEM.md). No component owns persistence or feature state.
+
+`icons/custom/Wayfinding` supplies an original non-brand SVG alongside Lucide.
+SidebarItem owns the 3px active marker across all Sidebar configurations. The
+shared Header links only to real foundation/reader routes; no pretend search action.
+
+Icon SVG types are owned by `icons/types.ts` and re-exported by registry for
+compatibility, so custom components do not introduce registry import cycles.
+
+`styles/prose.css` scopes static reading foundations to `.kairn-prose`, including
+headings/lists/tables/code/quotes/callouts and image-placeholder/caption patterns.
+It does not enable rendering or resources; Phase 6C integrates the existing parser.
+
+`features/design-system/ShowcasePage` lazily composes all Mineral primitives at
+`/app/design-system`, with real runtime theme/accent previews and static prose.
+No new product settings or mutation behavior.
+
+Approved header logos are bundled from src/frontend/assets/brand; responsive
+Header composition selects light/dark mark and outlined wordmark assets for explicit
+appearance or live system preference, separate from semantic icons.

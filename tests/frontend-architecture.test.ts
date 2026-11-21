@@ -76,6 +76,16 @@ it("keeps the entire browser import closure Node-free and acyclic, with safe sha
         continue;
       }
       if (specifier.endsWith(".css")) continue;
+      if (specifier.endsWith(".svg?no-inline")) {
+        const asset = portable(
+          resolve(dirname(file), specifier.split("?")[0]!),
+        );
+        expect(asset.startsWith(frontend + "/assets/brand/")).toBe(true);
+        expect(known.has(asset)).toBe(true);
+        const svg = await readFile(asset, "utf8");
+        expect(svg).not.toMatch(/<script|<foreignObject|(?:href|src)=/i);
+        continue;
+      }
       const base = portable(
         resolve(dirname(file), specifier.replace(/\.js$/, "")),
       );
@@ -128,7 +138,9 @@ it("rejects Node imports, page-level buttons, inline styles, direct icons and Re
   }
 });
 it("connects semantic Tailwind aliases and shared component styles to the same token owners", async () => {
-  const css = await readFile("src/frontend/styles/index.css", "utf8");
+  const css =
+    (await readFile("src/frontend/styles/index.css", "utf8")) +
+    (await readFile("src/frontend/styles/components.css", "utf8"));
   const tokens = await readFile("src/frontend/styles/tokens.css", "utf8");
   const themes = await readFile("src/frontend/styles/themes.css", "utf8");
   expect(css).toContain('@import "tailwindcss"');
@@ -140,3 +152,74 @@ it("connects semantic Tailwind aliases and shared component styles to the same t
   expect(themes).toContain("prefers-reduced-motion");
   expect(themes).toContain("prefers-color-scheme");
 });
+
+it("keeps primitive colors and shared control/layout styles out of feature CSS", async () => {
+  const all = await files(resolve("src/frontend"));
+  for (const file of all.filter((path) => path.endsWith(".css"))) {
+    const source = await readFile(file, "utf8");
+    if (!file.endsWith("/tokens.css") && !file.endsWith("/themes.css")) {
+      expect(source, file).not.toMatch(/#[0-9a-f]{3,8}\b|\b(?:rgb|hsl)a?\(/i);
+      expect(source, file).not.toContain("var(--mineral-");
+    }
+    expect(file).not.toContain("/features/");
+  }
+  const lint = new ESLint();
+  for (const element of ["input", "select"]) {
+    const results = await lint.lintText(
+      `export const Bad=()=> <${element} aria-label="Bad"/>;`,
+      { filePath: "src/frontend/features/Probe.tsx" },
+    );
+    expect(results[0]?.errorCount).toBeGreaterThan(0);
+  }
+});
+
+it.each(["light", "dark"])(
+  "keeps the %s wordmark outlined with consistent brand hierarchy",
+  async (theme) => {
+    const svg = await readFile(
+      `src/frontend/assets/brand/kairn-wordmark-${theme}.svg`,
+      "utf8",
+    );
+    expect(svg).not.toMatch(/<text\b|font-family|@font-face|<image\b|<use\b/i);
+    expect([...svg.matchAll(/<path\s[^>]*d="[^"]+"/g)]).toHaveLength(5);
+    expect(svg).toContain('viewBox="0 0 170 42"');
+    for (const kind of ["mark", "wordmark"]) {
+      const asset = await readFile(
+        `src/frontend/assets/brand/kairn-${kind}-${theme}.svg`,
+        "utf8",
+      );
+      const light = await readFile(
+        `src/frontend/assets/brand/kairn-${kind}-light.svg`,
+        "utf8",
+      );
+      expect(asset.replace(/#[0-9A-F]{6}/g, "COLOR")).toBe(
+        light.replace(/#[0-9A-F]{6}/g, "COLOR"),
+      );
+      const colors = [...asset.matchAll(/(?:fill|stroke)="(#[^"]+)"/g)].map(
+        (match) => match[1],
+      );
+      expect(new Set(colors)).toEqual(
+        new Set(
+          theme === "dark"
+            ? ["#E4D13A", "#52606D", "#F1F4F6"]
+            : ["#E4D13A", "#20282E", "#FFFFFF"],
+        ),
+      );
+      const markColors =
+        theme === "dark"
+          ? ["#E4D13A", "#52606D", "#52606D", "#F1F4F6", "#52606D", "#E4D13A"]
+          : ["#E4D13A", "#20282E", "#20282E", "#FFFFFF", "#20282E", "#E4D13A"];
+      expect(colors).toEqual(
+        kind === "mark"
+          ? markColors
+          : [
+              ...markColors,
+              ...Array<string>(5).fill(
+                theme === "dark" ? "#F1F4F6" : "#20282E",
+              ),
+              "#E4D13A",
+            ],
+      );
+    }
+  },
+);

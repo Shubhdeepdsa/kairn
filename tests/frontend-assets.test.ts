@@ -28,6 +28,9 @@ it("serves exact packaged assets and app routes behind existing security without
       expect(response.headers.get("content-security-policy")).toContain(
         "script-src 'self'",
       );
+      expect(response.headers.get("content-security-policy")).toContain(
+        "img-src 'self'",
+      );
       expect(response.headers.get("cache-control")).toBe("no-store");
     }
     const html = await (await fetch(server.url + "/app")).text();
@@ -53,6 +56,22 @@ it("serves exact packaged assets and app routes behind existing security without
     expect((await fetch(server.url + "/app", { method: "POST" })).status).toBe(
       405,
     );
+    const reader = await fetch(server.url);
+    expect(reader.headers.get("content-security-policy")).toContain(
+      "img-src 'none'",
+    );
+    const presentation = await loadFrontendPresentation(
+      new URL("../dist/frontend/", import.meta.url),
+    );
+    const logos = [...presentation.assets].filter(([name]) =>
+      name.endsWith(".svg"),
+    );
+    expect(logos).toHaveLength(4);
+    for (const [name, asset] of logos) {
+      const response = await fetch(server.url + name);
+      expect(response.headers.get("content-type")).toContain("image/svg+xml");
+      expect(await response.text()).toBe(asset.body.toString());
+    }
     expect(await (await fetch(server.url)).text()).toContain('id="document"');
   } finally {
     await server.close();
@@ -68,6 +87,13 @@ it("bounds packaged output and rejects maps, nested assets, oversized files and 
     const asset = join(root, "assets", "entry-123.js");
     await writeFile(asset, "export {};");
     expect((await loadFrontendPresentation(url)).assets.size).toBe(1);
+    await writeFile(join(root, "assets", "local-123.woff2"), "font fixture");
+    expect(
+      (await loadFrontendPresentation(url)).assets.get(
+        "/app/assets/local-123.woff2",
+      )?.contentType,
+    ).toBe("font/woff2");
+    await rm(join(root, "assets", "local-123.woff2"));
     for (const name of ["entry.map", "nested"]) {
       await writeFile(join(root, "assets", name), "x");
       await expect(loadFrontendPresentation(url)).rejects.toThrow("type");

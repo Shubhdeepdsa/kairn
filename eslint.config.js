@@ -100,6 +100,25 @@ export default tseslint.config(
     },
   },
   {
+    files: [
+      "src/frontend/features/**/*.{ts,tsx}",
+      "src/frontend/layouts/**/*.{ts,tsx}",
+    ],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "JSXOpeningElement[name.name=/^(button|input|select)$/]",
+          message: "Use adopted shared controls.",
+        },
+        {
+          selector: "JSXAttribute[name.name='style']",
+          message: "Use semantic token styles.",
+        },
+      ],
+    },
+  },
+  {
     files: ["src/core/**/*.ts"],
     rules: {
       "no-restricted-imports": [

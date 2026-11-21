@@ -41,7 +41,7 @@ export interface RunningServer {
 }
 
 const csp =
-  "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
+  "default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; connect-src 'self'; img-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
 function json(response: ServerResponse, status: number, data: unknown): void {
   response.writeHead(status, {
     "Content-Type": "application/json; charset=utf-8",
@@ -177,6 +177,10 @@ export async function startDocumentationServer(
           const frontend = options.viewer?.frontend;
           const asset = frontend?.assets.get(target);
           if (asset || (frontend && isFrontendRoute(target))) {
+            response.setHeader(
+              "Content-Security-Policy",
+              csp.replace("img-src 'none'", "img-src 'self'"),
+            );
             response.writeHead(200, {
               "Content-Type": `${asset?.contentType ?? "text/html"}; charset=utf-8`,
             });
