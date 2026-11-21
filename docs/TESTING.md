@@ -466,3 +466,7 @@ custom SVG and verifies unchanged consumer names, token classes, currentColor,
 focus behavior and decorative/meaningful accessibility. The original entry is
 restored during cleanup; no runtime registry override API or empty directory is
 added. The follow-up passes the full 150-test local suite, typecheck, lint and build.
+
+Phase 6B theme contract tests verify injected initial appearance/accent, runtime
+accent propagation and root cleanup. Browser tests verify resolved CSS values,
+contrast, system media changes and explicit overrides independently of DOM tests.

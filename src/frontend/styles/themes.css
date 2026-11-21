@@ -1,40 +1,33 @@
-/* Runtime theme attributes override system preference. No persistence in 6A. */
 :root {
+  color-scheme: light;
+}
+:root[data-theme="light"] {
   color-scheme: light;
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --kairn-canvas: #14231e;
-  --kairn-surface: #1d3028;
-  --kairn-text: #edf4ee;
-  --kairn-secondary: #d3dfd5;
-  --kairn-muted: #b4c7ba;
-  --kairn-border: #5e7867;
-  --kairn-accent: #96d8b6;
-  --kairn-accent-text: #14231e;
-  --kairn-danger: #ffaaaa;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]):not([data-theme="dark"]) {
     color-scheme: dark;
-    --kairn-canvas: #14231e;
-    --kairn-surface: #1d3028;
-    --kairn-text: #edf4ee;
-    --kairn-secondary: #d3dfd5;
-    --kairn-muted: #b4c7ba;
-    --kairn-border: #5e7867;
-    --kairn-accent: #96d8b6;
-    --kairn-accent-text: #14231e;
-    --kairn-danger: #ffaaaa;
   }
+}
+:root[data-accent="blue"] {
+  --kairn-accent: light-dark(#235ea5, #92c8ff);
+  --kairn-accent-hover: light-dark(#194b89, #b0d8ff);
+  --kairn-accent-subtle: light-dark(#eaf2fc, #18334f);
+  --kairn-accent-text: light-dark(#ffffff, #102438);
+  --kairn-accent-ink: light-dark(#23558e, #a8d3ff);
+}
+:root[data-accent="forest"] {
+  --kairn-accent: light-dark(#236746, #91d6b0);
+  --kairn-accent-hover: light-dark(#195036, #ade6c6);
+  --kairn-accent-subtle: light-dark(#e9f5ed, #173b2c);
+  --kairn-accent-text: light-dark(#ffffff, #122b1f);
+  --kairn-accent-ink: light-dark(#235e40, #a4e0bf);
 }
 @media (prefers-reduced-motion: reduce) {
   :root {
     --kairn-motion: 0ms;
   }
-}
-
-:root[data-accent="blue"] {
-  --kairn-accent: #2259b5;
-  --kairn-accent-text: #ffffff;
 }

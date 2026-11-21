@@ -17,7 +17,7 @@ body {
   color: var(--kairn-text);
 }
 :focus-visible {
-  outline: var(--kairn-focus-width) solid var(--kairn-accent);
+  outline: var(--kairn-focus-width) solid var(--kairn-focus);
   outline-offset: var(--kairn-focus-offset);
 }
 a {
@@ -138,4 +138,11 @@ main {
 }
 [hidden] {
   display: none !important;
+}
+
+.ui-button:hover:not(:disabled) {
+  background: var(--kairn-surface-hover);
+}
+.ui-button[data-variant="primary"]:hover:not(:disabled) {
+  background: var(--kairn-accent-hover);
 }

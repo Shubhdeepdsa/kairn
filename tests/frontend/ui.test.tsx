@@ -144,3 +144,27 @@ it("replaces a Lucide registry entry with a custom SVG without changing consumer
     Object.defineProperty(iconRegistry, "documentation", entry);
   }
 });
+
+it("accepts initial preferences and propagates runtime accents with root cleanup", () => {
+  document.documentElement.setAttribute("data-accent", "blue");
+  function Preview() {
+    const theme = useTheme();
+    return (
+      <Button onClick={() => theme.setAccent("forest")}>
+        {theme.appearance} {theme.accent}
+      </Button>
+    );
+  }
+  const view = render(
+    <ThemeProvider initialAppearance="dark" initialAccent="mineral">
+      <Preview />
+    </ThemeProvider>,
+  );
+  expect(document.documentElement.dataset.theme).toBe("dark");
+  expect(document.documentElement.dataset.accent).toBe("mineral");
+  fireEvent.click(screen.getByRole("button", { name: "dark mineral" }));
+  expect(document.documentElement.dataset.accent).toBe("forest");
+  view.unmount();
+  expect(document.documentElement.dataset.accent).toBe("blue");
+  document.documentElement.removeAttribute("data-accent");
+});
