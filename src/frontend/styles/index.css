@@ -3,6 +3,7 @@
 @import "./tokens.css";
 @import "./themes.css";
 @import "./components.css";
+@import "./prose.css";
 @theme inline {
   --color-canvas: var(--kairn-canvas);
   --color-surface: var(--kairn-surface);

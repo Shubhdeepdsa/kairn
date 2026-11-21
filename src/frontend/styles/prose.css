@@ -1,0 +1,109 @@
+/* Static reading presentation only. No parser, raw HTML or image loading is added. */
+.kairn-prose {
+  max-width: var(--kairn-reading-width);
+  color: var(--kairn-text);
+  line-height: var(--kairn-line-body);
+  overflow-wrap: anywhere;
+}
+.kairn-prose :is(h1, h2, h3, h4, h5, h6) {
+  margin-block: var(--kairn-space-8) var(--kairn-space-4);
+  color: var(--kairn-text);
+  scroll-margin-top: var(--kairn-space-6);
+}
+.kairn-prose h1 {
+  font-size: var(--kairn-display-large);
+}
+.kairn-prose h2 {
+  font-size: var(--kairn-display-medium);
+}
+.kairn-prose h3 {
+  font-size: var(--kairn-heading-section);
+}
+.kairn-prose :is(h4, h5, h6) {
+  font-size: var(--kairn-heading-card);
+  font-weight: 600;
+}
+.kairn-prose :is(p, ul, ol, blockquote, pre, figure) {
+  margin-block: var(--kairn-space-4);
+}
+.kairn-prose :is(ul, ol) {
+  padding-inline-start: var(--kairn-space-6);
+}
+.kairn-prose ul {
+  list-style: disc;
+}
+.kairn-prose ol {
+  list-style: decimal;
+}
+.kairn-prose li {
+  margin-block: var(--kairn-space-2);
+}
+.kairn-prose a {
+  color: var(--kairn-accent-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.kairn-prose blockquote {
+  padding: var(--kairn-space-4);
+  border-inline-start: var(--kairn-wayfinding-width) solid var(--kairn-accent);
+  background: var(--kairn-surface-subtle);
+  color: var(--kairn-secondary);
+}
+.kairn-prose hr {
+  border: 0;
+  border-top: 1px solid var(--kairn-border);
+  margin-block: var(--kairn-space-8);
+}
+.kairn-prose :not(pre) > code {
+  background: var(--kairn-surface-subtle);
+  border-radius: var(--kairn-radius-small);
+  padding: var(--kairn-space-1);
+}
+.kairn-prose pre {
+  background: var(--kairn-code-surface);
+  color: var(--kairn-code-text);
+  border: 1px solid var(--kairn-control-border);
+  border-radius: var(--kairn-radius-panel);
+  padding: var(--kairn-space-4);
+  max-width: 100%;
+  overflow: auto;
+  tab-size: 2;
+}
+.kairn-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--kairn-text-small);
+}
+.kairn-prose :is(th, td) {
+  border: 1px solid var(--kairn-border);
+  padding: var(--kairn-space-3);
+  text-align: start;
+}
+.kairn-prose th {
+  background: var(--kairn-surface-subtle);
+  font-weight: 600;
+}
+.kairn-prose .table-container {
+  overflow-x: auto;
+}
+.kairn-prose :is(img, .image-placeholder) {
+  max-width: 100%;
+  border-radius: var(--kairn-radius-panel);
+}
+.kairn-prose .image-placeholder {
+  background: var(--kairn-surface-subtle);
+  padding: var(--kairn-space-6);
+  color: var(--kairn-muted);
+}
+.kairn-prose figcaption {
+  font-size: var(--kairn-caption);
+  color: var(--kairn-muted);
+  margin-top: var(--kairn-space-2);
+}
+.kairn-prose .callout {
+  border: 1px solid var(--kairn-border);
+  border-inline-start: var(--kairn-wayfinding-width) solid var(--kairn-accent);
+  border-radius: var(--kairn-radius);
+  padding: var(--kairn-space-4);
+  background: var(--kairn-accent-subtle);
+}

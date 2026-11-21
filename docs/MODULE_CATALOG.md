@@ -226,3 +226,7 @@ shared Header links only to real foundation/reader routes; no pretend search act
 
 Icon SVG types are owned by `icons/types.ts` and re-exported by registry for
 compatibility, so custom components do not introduce registry import cycles.
+
+`styles/prose.css` scopes static reading foundations to `.kairn-prose`, including
+headings/lists/tables/code/quotes/callouts and image-placeholder/caption patterns.
+It does not enable rendering or resources; Phase 6C integrates the existing parser.
