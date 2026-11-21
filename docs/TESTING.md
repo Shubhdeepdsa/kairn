@@ -425,3 +425,9 @@ Routed React tests verify one header/main region across pages, shared sidebar
 disclosure in global/workspace/project layouts, identity validation, legacy URL
 handoffs and startup loading/error/retry/abort behavior. Pure bookmark helpers
 are extracted unchanged so the browser program never type-imports Node services.
+
+Architecture tests traverse every browser import (including type imports), reject
+Node/adapters except the three named pure contracts/controllers, detect cycles,
+check shared token consumption and exercise ESLint rejection fixtures. Lint enforces
+Hooks, shared Button/Icon and no inline styles; architecture checks also reject
+feature color literals and raw fetch outside the API boundary.
