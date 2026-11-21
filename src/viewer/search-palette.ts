@@ -2,7 +2,7 @@ import { SearchPalette } from "../core/search-palette.js";
 import type { PaletteState } from "../core/search-palette.js";
 import type {
   SearchProject,
-  DocumentDestination,
+  NavigationDestination,
   SearchResponse,
 } from "../core/search-contracts.js";
 /** Minimal DOM adapter over the reusable controller and independently supplied destination navigator. */
@@ -10,7 +10,7 @@ export function mountSearchPalette(
   document: Document,
   fetcher: typeof fetch,
   current: () => SearchProject | undefined,
-  navigate: (destination: DocumentDestination) => Promise<void>,
+  navigate: (destination: NavigationDestination) => Promise<void>,
 ): () => void {
   const trigger = document.getElementById("search-open");
   if (!trigger) return () => {};
@@ -120,18 +120,19 @@ export function mountSearchPalette(
       scope.type === "global"
         ? "Search all registered projects; @ selects a project"
         : "Search this project";
+    help.textContent = `${state.projectChoices ? "↑↓ Projects · Enter Switch project" : state.query.trim() ? "↑↓ Results · Enter Open" : "Enter Return to reader"} · Escape Close · Empty Backspace removes project · @ selects project`;
     status.textContent = state.message;
     results.setAttribute("aria-busy", String(state.phase === "loading"));
     results.setAttribute(
       "aria-label",
-      state.picker ? "Registered projects" : "Documentation results",
+      state.projectChoices ? "Registered projects" : "Documentation results",
     );
     input.setAttribute(
       "aria-expanded",
-      String(Boolean(state.picker) || state.results.length > 0),
+      String(state.projectChoices || state.results.length > 0),
     );
     results.replaceChildren();
-    const choices = state.picker ? state.suggestions : state.results;
+    const choices = state.projectChoices ? state.suggestions : state.results;
     choices.forEach((choice, index) => {
       const item = document.createElement("li");
       item.id = `search-option-${index}`;
@@ -140,7 +141,7 @@ export function mountSearchPalette(
       const button = document.createElement("button");
       button.type = "button";
       button.tabIndex = -1;
-      if (state.picker) {
+      if (state.projectChoices) {
         const project = choice as SearchProject;
         button.textContent = `${project.name} · ${project.id}`;
       } else {
@@ -168,8 +169,10 @@ export function mountSearchPalette(
         `search-option-${state.highlighted}`,
       );
     else input.removeAttribute("aria-activedescendant");
-    if (state.picker && !choices.length)
-      status.textContent = "No registered projects match this selector.";
+    if (state.projectChoices && !choices.length)
+      status.textContent = state.picker
+        ? "No registered projects match this selector."
+        : "No registered projects.";
     coverage.replaceChildren();
     for (const p of state.coverage) {
       if (p.status === "ready") continue;
@@ -201,12 +204,12 @@ export function mountSearchPalette(
     },
   });
   function choose(): void {
-    const result = controller.choose();
-    input.focus();
-    if (result) {
-      controller.close();
-      void navigate(result);
-    }
+    const selection = controller.choose();
+    if (controller.state.open) input.focus();
+    if (selection?.kind === "project")
+      void navigate({ projectId: selection.projectId });
+    else if (selection?.kind === "document")
+      void navigate(selection.destination);
   }
   function open(): void {
     if (controller.state.open) {

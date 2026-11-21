@@ -9,6 +9,8 @@ import type {
 /** Framework-independent immutable view state; query and project scope are distinct fields. */
 export interface PaletteState {
   readonly open: boolean;
+  /** Project rows appear for an explicit selector or an empty global palette. */
+  readonly projectChoices: boolean;
   readonly scope: SearchScope;
   readonly query: string;
   readonly picker: {
@@ -23,6 +25,11 @@ export interface PaletteState {
   readonly coverage: readonly ProjectCoverage[];
   readonly suggestions: readonly SearchProject[];
 }
+/** Navigation intents are separate from scope changes and are executed by the reader adapter. */
+export type PaletteSelection =
+  | { readonly kind: "close" }
+  | { readonly kind: "project"; readonly projectId: string }
+  | { readonly kind: "document"; readonly destination: SearchResult };
 /** Injectable search boundary; no DOM, React, SQLite or filesystem ownership. */
 export interface PaletteCapabilities {
   search(request: SearchRequest): Promise<SearchResponse>;
@@ -36,6 +43,7 @@ export class SearchPalette {
   private force = false;
   private value: PaletteState = {
     open: false,
+    projectChoices: false,
     scope: { type: "global" },
     query: "",
     picker: null,
@@ -54,7 +62,14 @@ export class SearchPalette {
     return this.value;
   }
   private update(patch: Partial<PaletteState>): void {
-    this.value = { ...this.value, ...patch };
+    const next = { ...this.value, ...patch };
+    this.value = {
+      ...next,
+      projectChoices:
+        next.open &&
+        (Boolean(next.picker) ||
+          (next.scope.type === "global" && !next.query.trim())),
+    };
     this.capabilities.changed(this.value);
   }
   setProjects(projects: readonly SearchProject[]): void {
@@ -79,6 +94,7 @@ export class SearchPalette {
       phase: "idle",
       message: "",
     });
+    this.suggest();
     this.schedule();
   }
   close(): void {
@@ -118,6 +134,7 @@ export class SearchPalette {
       coverage: [],
       highlighted: 0,
     });
+    this.suggest();
     this.schedule();
   }
   /** Return true only when the adapter should consume Backspace; IME/text selection always edits normally. */
@@ -163,7 +180,7 @@ export class SearchPalette {
     } else this.close();
   }
   move(delta: number): void {
-    const count = this.value.picker
+    const count = this.value.projectChoices
       ? this.value.suggestions.length
       : this.value.results.length;
     if (count)
@@ -171,13 +188,34 @@ export class SearchPalette {
         highlighted: (this.value.highlighted + delta + count) % count,
       });
   }
-  choose(): SearchResult | undefined {
-    if (this.value.picker) {
-      const project = this.value.suggestions[this.value.highlighted];
-      if (project) this.selectProject(project.id);
+  /** Empty scoped Enter dismisses; empty project selection navigates; selectors with terms only change scope. */
+  choose(): PaletteSelection | undefined {
+    const state = this.value;
+    if (state.projectChoices) {
+      const project = state.suggestions[state.highlighted];
+      if (!project) return;
+      const terms = state.picker
+        ? (
+            state.query.slice(0, state.picker.start) +
+            state.query.slice(state.picker.end)
+          ).trim()
+        : state.query.trim();
+      if (!terms) {
+        this.close();
+        return { kind: "project", projectId: project.id };
+      }
+      this.selectProject(project.id);
       return;
     }
-    return this.value.results[this.value.highlighted];
+    if (!state.query.trim()) {
+      this.close();
+      return { kind: "close" };
+    }
+    const result = state.results[state.highlighted];
+    if (result) {
+      this.close();
+      return { kind: "document", destination: result };
+    }
   }
   /** Explicit refresh continues bounded indexing without a second polling loop. */
   refresh(): void {
@@ -188,9 +226,14 @@ export class SearchPalette {
   private suggest(): void {
     const filter =
       this.value.picker?.filter.normalize("NFKC").toLowerCase() ?? "";
+    const suggestions = this.projects.filter((p) =>
+      p.name.normalize("NFKC").toLowerCase().includes(filter),
+    );
     this.update({
-      suggestions: this.projects.filter((p) =>
-        p.name.normalize("NFKC").toLowerCase().includes(filter),
+      suggestions,
+      highlighted: Math.min(
+        this.value.highlighted,
+        Math.max(0, suggestions.length - 1),
       ),
     });
   }
@@ -201,6 +244,17 @@ export class SearchPalette {
   }
   private schedule(): void {
     if (!this.value.open || this.value.picker) return;
+    if (!this.value.query.trim()) {
+      this.force = false;
+      this.update({
+        phase: "idle",
+        message:
+          this.value.scope.type === "project"
+            ? "Press Enter to return to the reader, or remove the project to switch."
+            : "Choose a project with arrow keys and Enter, or type to search.",
+      });
+      return;
+    }
     const generation = this.generation;
     this.update({
       phase: "loading",
@@ -246,6 +300,6 @@ export class SearchPalette {
   /** Cancel timers and invalidate replies; the owner closes its transport separately. */
   dispose(): void {
     this.invalidate();
-    this.value = { ...this.value, open: false };
+    this.value = { ...this.value, open: false, projectChoices: false };
   }
 }

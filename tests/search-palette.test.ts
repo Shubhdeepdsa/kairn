@@ -67,3 +67,27 @@ it("debounces, discards replies after query/scope changes and close, and reports
   expect(search).toHaveBeenCalledTimes(2);
   controller.dispose();
 });
+
+it("closes empty scoped search and emits project navigation for empty global selections", async () => {
+  vi.useFakeTimers();
+  const search = vi.fn(async () => ({ results: [], coverage: [] }));
+  const controller = new SearchPalette({ search, changed: () => {} });
+  controller.setProjects([b, a]);
+  controller.open(a);
+  expect(controller.choose()).toEqual({ kind: "close" });
+  expect(controller.state.open).toBe(false);
+  controller.open(a);
+  controller.removeScope();
+  expect(controller.state.projectChoices).toBe(true);
+  controller.move(1);
+  expect(controller.choose()).toEqual({ kind: "project", projectId: b.id });
+  expect(controller.state.open).toBe(false);
+  controller.open(a);
+  controller.removeScope();
+  controller.setQuery("@mark");
+  controller.move(1);
+  expect(controller.choose()).toEqual({ kind: "project", projectId: b.id });
+  await vi.advanceTimersByTimeAsync(1000);
+  expect(search).not.toHaveBeenCalled();
+  controller.dispose();
+});

@@ -364,3 +364,12 @@ After bounded-resume and approval-fence corrections, the final local suite passe
 120 tests across 28 files. Latest-head remote evidence is tracked on
 [PR #4 checks](https://github.com/Shubhdeepdsa/kairn/pull/4/checks); the earlier
 118-test run at bb0c260 above is historical evidence, not a substitute for that check.
+
+Empty-palette regressions cover Enter dismissal without search requests, automatic
+global project rows, arrow/Enter and selector-only navigation intents, preserved
+query-based scoping, and actual DOM reader/project-chip/URL changes. Selecting an
+empty project preserves the prior reader and reports the missing document state.
+
+The empty-palette/project-switch follow-up passes the full 122-test local suite,
+including installed-package search/navigation regressions. Real-browser interaction
+is separate from the DOM checks and is not claimed by these results.

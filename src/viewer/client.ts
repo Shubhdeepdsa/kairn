@@ -1,9 +1,13 @@
 import { mountSearchPalette } from "./search-palette.js";
 import type {
   SearchProject,
-  DocumentDestination,
+  NavigationDestination,
 } from "../core/search-contracts.js";
-import { parseReaderLocation, readerHash } from "./navigation.js";
+import {
+  parseReaderLocation,
+  readerHash,
+  defaultReaderDocument,
+} from "./navigation.js";
 import type { Heading } from "../core/markdown.js";
 import type { LinkResolution } from "../core/document-links.js";
 import type { LinkDiagnostic } from "../core/document-links.js";
@@ -21,7 +25,6 @@ export async function mountViewer(
   if (!navigation || !article || !status || !source)
     throw new Error("Viewer shell is incomplete.");
   const files = new Map<string, DocumentEntry>();
-  const byPath = new Map<string, DocumentEntry>();
   let selected: DocumentEntry | undefined;
   let initialProject: SearchProject | undefined;
   let activeProject: SearchProject | undefined;
@@ -217,8 +220,6 @@ export async function mountViewer(
         item.append(details);
       } else {
         files.set(node.id, node);
-        byPath.set(`${node.sourceId ?? ""}:${node.path}`, node);
-        if (node.projectPath) byPath.set(`project:${node.projectPath}`, node);
         const link = document.createElement("a");
         link.href = hash(node.id);
         link.dataset.document = node.id;
@@ -327,7 +328,6 @@ export async function mountViewer(
         const focused = (document.activeElement as HTMLElement | null)?.dataset
           .document;
         files.clear();
-        byPath.clear();
         const list = build(data.tree);
         for (const folder of list.querySelectorAll<HTMLDetailsElement>(
           "details[data-path]",
@@ -365,7 +365,7 @@ export async function mountViewer(
         const bookmark =
           destination ??
           (initial ? parseReaderLocation(window!.location.hash) : null);
-        const first = byPath.get(":README.md") ?? files.values().next().value;
+        const first = defaultReaderDocument(data.tree);
         await show(
           bookmark?.id ?? first!.id,
           bookmark?.fragment ?? "",
@@ -425,7 +425,7 @@ export async function mountViewer(
   };
   outline?.addEventListener("click", onOutline);
   async function navigate(
-    destination: DocumentDestination,
+    destination: NavigationDestination,
     history: "push" | "none" = "push",
   ): Promise<void> {
     if (!initialProject || disposed) return;
@@ -456,10 +456,23 @@ export async function mountViewer(
       const prefix = project.id.startsWith("session-")
         ? "/api"
         : `/api/projects/${project.id}`;
-      const response = await fetcher(
-        `${prefix}/documents/${destination.documentId}`,
-        { credentials: "same-origin" },
-      );
+      let documentId = destination.documentId;
+      if (!documentId) {
+        const treeResponse = await fetcher(`${prefix}/tree`, {
+          credentials: "same-origin",
+        });
+        if (!treeResponse.ok)
+          throw new Error(
+            "Project documentation is unavailable. Check its sources.",
+          );
+        const tree = (await treeResponse.json()) as { tree: NavigationEntry[] };
+        documentId = defaultReaderDocument(tree.tree)?.id;
+        if (!documentId)
+          throw new Error("This project has no readable Markdown documents.");
+      }
+      const response = await fetcher(`${prefix}/documents/${documentId}`, {
+        credentials: "same-origin",
+      });
       if (!response.ok)
         throw new Error(
           "Destination is no longer available. Refresh search results.",
@@ -477,10 +490,10 @@ export async function mountViewer(
         window!.history.pushState(
           null,
           "",
-          hash(destination.documentId, destination.fragment ?? ""),
+          hash(documentId, destination.fragment ?? ""),
         );
       await refresh(false, {
-        id: destination.documentId,
+        id: documentId,
         fragment: destination.fragment ?? "",
       });
       const label = document.getElementById("project-context");

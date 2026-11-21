@@ -3,10 +3,15 @@ export type SearchScope =
   | { readonly type: "global" }
   | { readonly type: "project"; readonly projectId: string };
 /** Project/document IDs are opaque; fragments use the reader's shared Markdown heading algorithm. */
-export interface DocumentDestination {
+export interface NavigationDestination {
   readonly projectId: string;
-  readonly documentId: string;
+  /** Omit to open the approved project's default readable document. */
+  readonly documentId?: string;
   readonly fragment?: string;
+}
+/** An exact search/document destination always retains its stable document identity. */
+export interface DocumentDestination extends NavigationDestination {
+  readonly documentId: string;
 }
 /** Plain user text, never raw FTS syntax. Limit is an integer in 1..50. */
 export interface SearchRequest {

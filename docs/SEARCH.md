@@ -180,3 +180,18 @@ are untouched. Unregistered project scheduling caches are also released.
 
 Coverage reuse also checks the persisted current-scope document count, so a competing
 writer that evicts a newer-scope row triggers reconciliation instead of false emptiness.
+
+## Empty palette and project switching
+
+Enter with an empty/whitespace query and an active project chip closes the palette
+and returns focus to the reader without navigation. Removing the chip with an empty
+query shows registered projects immediately; arrows and Enter (or a project click)
+open the selected project's default approved document. A selector with no remaining
+search terms also switches projects. Selecting a project while terms remain keeps
+the palette open, creates its scope chip and preserves those terms.
+
+Project-only navigation reuses the reader's default selection and approved tree/ID
+routes, then records the chosen document in the existing project-aware URL/history.
+An unavailable or empty project leaves the previous reader intact with a message.
+Empty palettes do not issue full-text indexing requests. No new API endpoint or
+filesystem access is introduced.

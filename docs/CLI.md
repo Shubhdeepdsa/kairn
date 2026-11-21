@@ -138,3 +138,7 @@ edits Markdown or shared settings. See [search behavior](SEARCH.md).
 
 Read-only viewing preserves project files/configuration. Search may lazily create
 derived machine-local cache data; it does not write an index into the viewed project.
+
+With an empty search and project chip, Enter closes the palette. Remove the chip to
+show projects, use arrows to highlight one, and press Enter to switch the reader.
+Selecting a project with existing search terms continues scoped search instead.

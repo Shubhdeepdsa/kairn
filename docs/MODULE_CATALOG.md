@@ -172,3 +172,8 @@ section count and attempted reconciliation reads.
 
 SearchIndexProject supplies the internal current-configuration query fence; schema-v2
 documents retain that hash so late obsolete writers cannot bypass newer ignore rules.
+
+PaletteSelection distinguishes dismissal, project navigation and exact-document
+navigation from a query-only scope change. NavigationDestination permits a project
+without a document ID; viewer/navigation.defaultReaderDocument shares the initial
+reader's approved default choice with direct project switching.

@@ -89,3 +89,6 @@ see [search contracts](docs/SEARCH.md) for phased implementation and limits.
 Press Cmd/Ctrl+K in the viewer to search. Remove the project chip for global search;
 use `@project` to select a scope while preserving your query. Results open their
 project/document/section through the same local reader.
+
+An empty project search closes on Enter. Remove its chip to browse projects, then
+use arrows and Enter to switch directly to the selected project's documentation.

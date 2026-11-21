@@ -155,6 +155,9 @@ it("shows partial coverage/errors, supports explicit refresh, and cancels pendin
   );
   try {
     document.getElementById("search-open")!.click();
+    const input = document.getElementById("search-query") as HTMLInputElement;
+    input.value = "missing";
+    input.dispatchEvent(new dom.window.Event("input", { bubbles: true }));
     await vi.advanceTimersByTimeAsync(220);
     expect(document.querySelector("[role=status]")!.textContent).toContain(
       "incomplete",
