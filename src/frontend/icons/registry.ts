@@ -19,6 +19,10 @@ import {
   Search,
   ExternalLink,
   Check,
+  Sun,
+  Moon,
+  GitBranch,
+  GitCommit,
 } from "lucide-react";
 
 export type IconName =
@@ -39,7 +43,11 @@ export type IconName =
   | "arrowRight"
   | "search"
   | "external"
-  | "check";
+  | "check"
+  | "sun"
+  | "moon"
+  | "gitBranch"
+  | "gitCommit";
 
 /** Semantic keys isolate consumers from the SVG provider; swap entries here without changing Icon callers. */
 export const iconRegistry: Readonly<Record<IconName, SvgIconComponent>> = {
@@ -61,4 +69,8 @@ export const iconRegistry: Readonly<Record<IconName, SvgIconComponent>> = {
   search: Search,
   external: ExternalLink,
   check: Check,
+  sun: Sun,
+  moon: Moon,
+  gitBranch: GitBranch,
+  gitCommit: GitCommit,
 };

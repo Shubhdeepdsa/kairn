@@ -128,6 +128,7 @@ export function ExplorerShowcasePage() {
       {/* 3-Region Explorer Shell */}
       <ExplorerShell
         projectName={marketingBackendProject.name}
+        projectId="marketing-backend"
         navigation={
           <DocTree
             nodes={marketingBackendTree}
