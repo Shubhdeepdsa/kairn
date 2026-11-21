@@ -124,3 +124,16 @@ The official [Vite build guide](https://vite.dev/guide/build.html),
 [Tailwind Vite integration](https://tailwindcss.com/docs/installation/using-vite)
 and [declarative router](https://reactrouter.com/start/declarative/installation)
 are the integration references. Node 26.13.0 satisfies the installed manifests.
+
+## Implemented demonstration routes
+
+- `/app`: startup project identity and runtime-only token preview.
+- `/app/projects/:projectId/docs[/:documentId]`: workspace structure; valid explicit
+  document IDs hand off to the existing reader's scoped fragment URL.
+- `/app/settings/appearance` and `/app/settings/reading`: global contract views.
+- `/app/projects/:projectId/settings/general` and `/sources`: project contract views.
+
+A workspace without an explicit document links to the startup reader; no invalid
+project-only fragment is fabricated. Syntactically invalid and unknown project
+identities show errors. Other app paths show Page not found; missing files/APIs
+remain HTTP errors. No full Library or settings functionality is claimed.

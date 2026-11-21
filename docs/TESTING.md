@@ -420,3 +420,8 @@ semantic icon resolution and accessible labeling, plus theme root cleanup.
 Typed-client tests exercise fixed URLs/options, malformed IDs/payloads, transport
 errors, HTTP redaction and cancellation. Provider tests cover loading/retry and
 obsolete-response cleanup when integrated with the routed shell.
+
+Routed React tests verify one header/main region across pages, shared sidebar
+disclosure in global/workspace/project layouts, identity validation, legacy URL
+handoffs and startup loading/error/retry/abort behavior. Pure bookmark helpers
+are extracted unchanged so the browser program never type-imports Node services.

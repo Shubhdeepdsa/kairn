@@ -201,3 +201,13 @@ reader's approved default choice with direct project switching.
   response validation and redacted transport errors; no settings mutation methods.
 - `frontend/app/providers/ApplicationProvider.tsx`: one abortable startup-data owner
   with loading/error/retry; route context derives from approved project identities.
+
+- `frontend/app/router.tsx`: centralized nested declarative routes and lazy views;
+  existing reader bookmarks stay on `/`, no duplicate history state store.
+- `frontend/layouts/`: AppShell/Header own global chrome; Workspace validates
+  project context; global/project settings layouts configure the same Sidebar
+  disclosure primitive. Features compose these boundaries, without persistence.
+
+- `core/reader-location.ts`: browser-safe legacy/scoped bookmark parser/serializer,
+  extracted unchanged from viewer navigation and re-exported for compatibility.
+  React handoffs and the vanilla reader share this contract without Node imports.

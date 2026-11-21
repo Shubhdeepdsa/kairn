@@ -1,18 +1,21 @@
+import { Suspense } from "react";
 import { ThemeProvider } from "./providers/ThemeProvider";
+import { ApplicationProvider } from "./providers/ApplicationProvider";
 import { ErrorBoundary } from "./ErrorBoundary";
-/** Browser foundation; the working documentation reader remains a separate route until parity. */
-export function App() {
+import { ApplicationRoutes } from "./router";
+import { createApiClient } from "../lib/api/client";
+import type { ApiClient } from "../lib/api/client";
+const defaultClient = createApiClient();
+/** Minimal application composition. Router ownership stays with the browser entry. */
+export function App({ client = defaultClient }: { client?: ApiClient }) {
   return (
     <ErrorBoundary>
       <ThemeProvider>
-        <main>
-          <h1>React foundation</h1>
-          <p>
-            Foundation only. Documentation reading remains in the existing
-            viewer.
-          </p>
-          <a href="/">Open documentation reader</a>
-        </main>
+        <ApplicationProvider client={client}>
+          <Suspense fallback={<p role="status">Loading foundation view…</p>}>
+            <ApplicationRoutes />
+          </Suspense>
+        </ApplicationProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );
