@@ -1,5 +1,8 @@
 import { expect, it } from "vitest";
-import { parseReaderLocation, readerHash } from "../src/viewer/navigation.js";
+import {
+  parseReaderLocation,
+  readerHash,
+} from "../src/core/reader-location.js";
 it("round-trips document/heading state and legacy IDs without guessing paths", () => {
   const id = "a".repeat(64);
   expect(parseReaderLocation("#" + id)).toEqual({ id, fragment: "" });

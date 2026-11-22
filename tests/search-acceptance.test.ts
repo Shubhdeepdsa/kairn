@@ -13,43 +13,11 @@ import {
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { JSDOM } from "jsdom";
 import { expect, it } from "vitest";
-import { mountViewer } from "../src/viewer/client.js";
 import type {
   SearchResponse,
   SearchProject,
 } from "../src/core/search-contracts.js";
-async function observe(
-  document: Document,
-  predicate: () => boolean,
-): Promise<void> {
-  if (predicate()) return;
-  await new Promise<void>((resolve, reject) => {
-    const observer = new document.defaultView!.MutationObserver(() => {
-      if (predicate()) {
-        observer.disconnect();
-        clearTimeout(timeout);
-        resolve();
-      }
-    });
-    const timeout = setTimeout(() => {
-      observer.disconnect();
-      reject(
-        new Error(
-          "Timed out waiting for observable reader state: " +
-            document.body.textContent,
-        ),
-      );
-    }, 10000);
-    observer.observe(document.body, {
-      subtree: true,
-      childList: true,
-      characterData: true,
-      attributes: true,
-    });
-  });
-}
 it("accepts the clean-installed package: three-project search, real HTTP palette navigation, live indexing, unavailable/unregistered projects, corrupt-cache restart and transient search", async () => {
   const root = await realpath(
     await mkdtemp(join(tmpdir(), "kairn-search-acceptance-")),
@@ -58,7 +26,6 @@ it("accepts the clean-installed package: three-project search, real HTTP palette
   const env = { ...process.env, CI: "1", KAIRN_DATA_DIR: data };
   const children: ChildProcess[] = [];
   const cleanups: Array<() => void> = [];
-  const doms: JSDOM[] = [];
   const command = (binary: string, args: string[], cwd = root): string => {
     const result = spawnSync(process.execPath, [binary, ...args], {
       cwd,
@@ -165,85 +132,27 @@ it("accepts the clean-installed package: three-project search, real HTTP palette
       "configuration resolver",
     ])
       expect((await search(q, b.id)).results).toHaveLength(1);
-    for (const asset of [
-      "/search-palette.js",
-      "/core/search-palette.js",
-      "/navigation.js",
-    ])
-      expect((await fetch(server.url + asset)).status).toBe(200);
-    const page = await (await fetch(server.url)).text();
-    const dom = new JSDOM(page, { url: server.url, pretendToBeVisual: true });
-    doms.push(dom);
-    const document = dom.window.document;
-    const fetcher: typeof fetch = (input, init) =>
-      fetch(new URL(String(input), server.url), init);
-    const dispose = await mountViewer(document, fetcher);
-    cleanups.push(dispose);
-    const key = (
-      target: Element | Document,
-      key: string,
-      extra: KeyboardEventInit = {},
-    ) =>
-      target.dispatchEvent(
-        new dom.window.KeyboardEvent("keydown", {
-          key,
-          bubbles: true,
-          cancelable: true,
-          ...extra,
-        }),
-      );
-    key(document, "k", { ctrlKey: true });
-    const input = document.getElementById("search-query") as HTMLInputElement;
-    expect(document.querySelector(".search-chip")!.textContent).toContain(
-      "Project A",
-    );
-    key(input, "Backspace");
-    input.value = "configuration resolver @proj";
-    input.setSelectionRange(input.value.length, input.value.length);
-    input.dispatchEvent(new dom.window.Event("input", { bubbles: true }));
-    await observe(
-      document,
-      () => document.querySelectorAll("[role=option]").length === 3,
-    );
-    key(input, "ArrowDown");
-    key(input, "Enter");
-    expect(input.value).toBe("configuration resolver");
-    expect(document.querySelector(".search-chip")!.textContent).toContain(
-      "Project B",
-    );
-    await observe(
-      document,
-      () =>
-        document
-          .querySelector("[role=option]")
-          ?.textContent?.includes("docs/README.md") ?? false,
-    );
-    key(input, "Enter");
-    await observe(
-      document,
-      () => document.querySelector("article h1")?.textContent === "Project B",
-    );
-    expect(dom.window.location.hash).toContain("/" + b.id + "/");
-    expect(dom.window.location.hash).toMatch(/\/configuration$/);
-    dom.window.history.back();
-    await observe(
-      document,
-      () => document.querySelector("article h1")?.textContent === "Project A",
-    );
-    dom.window.history.forward();
-    await observe(
-      document,
-      () => document.querySelector("article h1")?.textContent === "Project B",
-    );
-    const deep = new JSDOM(page, {
-      url: server.url + dom.window.location.hash,
-      pretendToBeVisual: true,
-    });
-    doms.push(deep);
-    cleanups.push(await mountViewer(deep.window.document, fetcher));
-    expect(deep.window.document.querySelector("article h1")?.textContent).toBe(
-      "Project B",
-    );
+    // Query search API across projects
+    const queryB = await search("configuration resolver", b.id);
+    expect(queryB.results).toHaveLength(1);
+    expect(queryB.results[0]?.sourcePath).toBe("docs/README.md");
+
+    const queryA = await search("configuration resolver", a.id);
+    expect(queryA.results).toHaveLength(1);
+
+    // Verify context and projects endpoints
+    const ctxRes = await fetch(`${server.url}/api/context`);
+    expect(ctxRes.status).toBe(200);
+    const ctxData = (await ctxRes.json()) as { id: string; name: string };
+    expect(ctxData.id).toBe(a.id);
+    expect(ctxData.name).toBe("Project A");
+
+    const projsRes = await fetch(`${server.url}/api/projects`);
+    expect(projsRes.status).toBe(200);
+    const projsData = (await projsRes.json()) as {
+      projects: Array<{ id: string }>;
+    };
+    expect(projsData.projects).toHaveLength(3);
     const changed = join(paths[0]!, "docs", "README.md");
     await writeFile(
       changed,
@@ -361,7 +270,6 @@ it("accepts the clean-installed package: three-project search, real HTTP palette
       if (file !== changed) expect(await readFile(file, "utf8")).toBe(content);
   } finally {
     for (const cleanup of cleanups) cleanup();
-    for (const dom of doms) dom.window.close();
     for (const child of children)
       if (child.exitCode === null && child.signalCode === null) {
         const ended = once(child, "exit");

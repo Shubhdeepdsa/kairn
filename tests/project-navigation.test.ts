@@ -5,7 +5,10 @@ import { it, expect } from "vitest";
 import { ProjectLibrary } from "../src/core/library.js";
 import { createDocumentService } from "../src/core/documents.js";
 import { ProjectNavigator } from "../src/core/project-navigation.js";
-import { parseReaderLocation, readerHash } from "../src/viewer/navigation.js";
+import {
+  parseReaderLocation,
+  readerHash,
+} from "../src/core/reader-location.js";
 import { startDocumentationServer } from "../src/server/http.js";
 import { SearchService } from "../src/core/search-service.js";
 it("opens approved cross-project destinations, preserves legacy URLs, and rejects removed/invalid/excluded destinations", async () => {
