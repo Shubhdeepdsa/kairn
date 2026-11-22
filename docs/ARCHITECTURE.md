@@ -1,17 +1,17 @@
 # Kairn architecture
 
-**Status: Phases 1–5 merged; Phase 6C React Documentation Explorer implemented on a feature branch. Verification is recorded in TESTING.md.**
+**Status: Phases 1–5 merged; Phase 6C Documentation Explorer merged; Phase 6D Canonical React Reader Migration implemented and verified.**
 
 ## Boundary diagram
 
 ```text
-CLI (arguments, prompts, lifecycle) ──┬──> core document service
+CLI (arguments, prompts, lifecycle) ──┬──> core document service & search
                                     └──> HTTP adapter ──> core contracts
                                               │
-                      ┌───────────────────────┴───────────────────────┐
-                      │                                               │
-             vanilla reader at `/`                           React Explorer at `/app`
-        (static viewer + renderer)                       (Mineral UI + typed API client)
+                                              ▼
+                                   React Explorer at `/app`
+                              (Mineral UI + typed API client)
+                              (GET `/` redirects 302 to `/app`)
 ```
 
 **Dependency rule:** CLI imports core, never the reverse. Tests may import both. No external services are required.
@@ -21,21 +21,19 @@ CLI (arguments, prompts, lifecycle) ──┬──> core document service
 ```text
 src/
   cli/       command parsing, prompts, human-readable output
-  core/      safe initialization and bounded read-only document service
-  server/    loopback HTTP adapter
-  viewer/    retained vanilla reader and Markdown rendering
-  frontend/  separately bundled browser-only React foundation
-  index.ts   CLI executable entrypoint or equivalent
+  core/      safe initialization, document service and search
+  server/    loopback HTTP adapter and frontend assets
+  frontend/  separately bundled browser-only React 19 application
+  index.ts   CLI executable entrypoint
 
-tests/      temporary-filesystem and CLI adapter tests
+tests/      temporary-filesystem, browser and CLI adapter tests
 docs/       living project documentation
 ```
 
 Do not create empty layers/packages simply to mirror this diagram. Choose filenames according to real responsibilities when building. Keep types next to their owners; avoid dependency injection frameworks for one small CLI.
 
-## Future, beyond the minimal viewer
+## Future, beyond Phase 6D
 
-- Full React app replacing the minimal vanilla viewer.
 - Local Git commit/diff history, with Git itself as the source of truth.
 
 Those future modules must not be stubbed into the initial implementation just to look comprehensive.

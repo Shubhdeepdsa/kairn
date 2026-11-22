@@ -52,9 +52,9 @@ window.scrollTo = vi.fn();
 
 it("initializes from real-shaped API data and reuses one shell across routes", async () => {
   mount();
-  await screen.findByRole("heading", { name: "React foundation" });
-  expect(screen.getByText("Active project: Fixture project")).toBeTruthy();
-  const header = screen.getByRole("banner");
+  await screen.findByRole("heading", { name: "Fixture Readme" });
+  expect(screen.getAllByText("Fixture project").length).toBeGreaterThan(0);
+  const header = document.querySelector(".app-header");
   const brand = screen.getByRole("link", { name: "Kairn home" });
   expect(brand.getAttribute("href")).toBe("/");
   expect(
@@ -65,27 +65,27 @@ it("initializes from real-shaped API data and reuses one shell across routes", a
       .querySelector('source[media="(max-width: 48rem)"]')
       ?.getAttribute("srcset"),
   ).toContain("kairn-mark-light.svg");
-  fireEvent.click(
-    screen.getByRole("link", { name: "Global settings contract" }),
-  );
+  fireEvent.click(screen.getByRole("link", { name: /Project Settings/i }));
   await screen.findByRole("heading", {
     name: "Settings architecture contract",
   });
-  expect(screen.getByRole("banner")).toBe(header);
+  expect(document.querySelector(".app-header")).toBe(header);
   expect(screen.getAllByRole("main")).toHaveLength(1);
   fireEvent.click(
-    screen.getByRole("button", { name: "Collapse Global settings navigation" }),
+    screen.getByRole("button", {
+      name: "Collapse Project settings navigation",
+    }),
   );
   expect(
-    screen.queryByRole("navigation", { name: "Global settings navigation" }),
+    screen.queryByRole("navigation", { name: "Project settings navigation" }),
   ).toBeNull();
   fireEvent.click(
-    screen.getByRole("button", { name: "Expand Global settings navigation" }),
+    screen.getByRole("button", { name: "Expand Project settings navigation" }),
   );
-  fireEvent.click(screen.getByRole("link", { name: "Reading contract" }));
+  fireEvent.click(screen.getByRole("link", { name: "Sources contract" }));
   expect(
     screen
-      .getByRole("button", { name: "Collapse Global settings navigation" })
+      .getByRole("button", { name: "Collapse Project settings navigation" })
       .getAttribute("aria-expanded"),
   ).toBe("true");
 });
@@ -198,7 +198,7 @@ it("shows loading and retry errors, then recovers through the same provider", as
   await screen.findByRole("alert");
   expect(screen.getByRole("alert").textContent).not.toContain("private path");
   fireEvent.click(screen.getByRole("button", { name: "Retry connection" }));
-  await screen.findByRole("heading", { name: "React foundation" });
+  await screen.findByRole("heading", { name: "Fixture Readme" });
 });
 
 it("aborts pending startup reads on unmount and ignores their late completion", async () => {

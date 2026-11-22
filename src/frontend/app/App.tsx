@@ -12,7 +12,7 @@ export function App({ client = defaultClient }: { client?: ApiClient }) {
     <ErrorBoundary>
       <ThemeProvider>
         <ApplicationProvider client={client}>
-          <Suspense fallback={<p role="status">Loading foundation view…</p>}>
+          <Suspense fallback={<p role="status">Loading documentation view…</p>}>
             <ApplicationRoutes />
           </Suspense>
         </ApplicationProvider>

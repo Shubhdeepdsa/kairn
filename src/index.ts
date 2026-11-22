@@ -5,7 +5,7 @@ import { intro, log, outro, text, isCancel } from "@clack/prompts";
 import { runInit } from "./cli/init.js";
 import { clackPrompts } from "./cli/prompts.js";
 import { runDocumentation } from "./cli/run.js";
-import { loadViewerPresentation } from "./viewer/assets.js";
+import { loadFrontendPresentation } from "./server/frontend-assets.js";
 import open from "open";
 import { ProjectLibrary } from "./core/library.js";
 import {
@@ -162,7 +162,7 @@ try {
           interactive,
           canOpenBrowser,
           signal: controller.signal,
-          viewer: await loadViewerPresentation(),
+          frontend: await loadFrontendPresentation(),
           async chooseRoot() {
             const answer = await text({
               message: "Existing documentation directory (blank cancels)",

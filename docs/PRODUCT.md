@@ -68,5 +68,16 @@ before the vanilla implementation can retire. See [frontend architecture](FRONTE
 `/app/design-system` demonstrates shared Mineral components, locally packaged
 typography, runtime Light/Dark/System and predefined accent previews. It is an
 internal specimen, not appearance persistence or a completed Explorer/settings UI.
-The existing reader stays at `/`; Phase 6C composes these primitives with the
-existing document/search/navigation services. See [design system](DESIGN_SYSTEM.md).
+See [design system](DESIGN_SYSTEM.md).
+
+## Phase 6C: React Documentation Explorer
+
+The 3-region responsive Documentation Explorer at `/app/projects/:projectId/docs`
+provides server-backed hierarchical tree navigation, safe Markdown reading, outline TOC,
+instant search palette, and live disk refresh aligned with the approved Stitch specification.
+
+## Phase 6D: Canonical React reader migration
+
+The React Documentation Explorer becomes the canonical reader for `kairn run`.
+Root `/` redirects 302 to `/app`, preserving legacy bookmarks with full backward
+compatibility. The legacy vanilla presentation in `src/viewer/` is cleanly retired.

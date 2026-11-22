@@ -12,7 +12,7 @@ import {
   createProjectDocumentService,
 } from "../core/documents.js";
 import { startDocumentationServer } from "../server/http.js";
-import type { ViewerPresentation } from "../server/http.js";
+import type { FrontendPresentation } from "../server/frontend-assets.js";
 
 import type { ResolvedProject } from "../core/config/project.js";
 
@@ -29,7 +29,7 @@ export interface RunContext {
   readonly interactive: boolean;
   readonly canOpenBrowser: boolean;
   readonly signal: AbortSignal;
-  readonly viewer: ViewerPresentation;
+  readonly frontend?: FrontendPresentation;
   chooseRoot(): Promise<string | null>;
   openBrowser(url: string): Promise<void>;
   message(text: string): void;
@@ -103,7 +103,7 @@ export async function runDocumentation(context: RunContext): Promise<number> {
   const server = await startDocumentationServer(documents, {
     ...(application ? { application } : {}),
     port: context.port,
-    viewer: context.viewer,
+    ...(context.frontend ? { frontend: context.frontend } : {}),
   });
   let onAbort: (() => void) | undefined;
   try {
@@ -112,15 +112,16 @@ export async function runDocumentation(context: RunContext): Promise<number> {
       if (context.signal.aborted) resolve();
       else context.signal.addEventListener("abort", onAbort, { once: true });
     });
+    const targetUrl = `${server.url}/app/projects/${current.id}/docs`;
     context.message(`Documentation: ${documents.root}`);
-    context.message(`Kairn is reading at ${server.url}`);
+    context.message(`Kairn is reading at ${targetUrl}`);
     context.message("Press Ctrl+C to stop.");
     if (!context.noOpen && context.canOpenBrowser && !context.signal.aborted) {
       try {
-        await context.openBrowser(server.url);
+        await context.openBrowser(targetUrl);
       } catch {
         context.message(
-          `Could not open a browser. Open ${server.url} manually.`,
+          `Could not open a browser. Open ${targetUrl} manually.`,
         );
       }
     } else if (!context.noOpen && !context.canOpenBrowser)

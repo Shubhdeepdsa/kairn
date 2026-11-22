@@ -39,21 +39,14 @@ fresh reads, paths, symlinks, permissions and limits.
 assets/rendering. It never resolves request paths against the filesystem.
 `tests/server.test.ts` covers protocol, isolation, lifecycle and port conflicts.
 
-## Minimal viewer
+## Documentation Explorer & Frontend Presentation (Phase 6C/6D)
 
-- `src/viewer/markdown.ts`: `renderMarkdown` uses markdown-it (native types),
-  escapes raw HTML, permits only relative/http/https/mailto links, and replaces
-  images with text. Headings receive deterministic fragment IDs.
-- `src/viewer/client.ts`: `mountViewer` renders navigation from the API, selects
-  documents by opaque ID, handles relative Markdown links within the root and
-  shows loading/error/empty states. Navigation polls every two seconds while
-  visible; the returned cleanup function stops timers/listeners. Fetch is
-  injectable for DOM tests.
-- `src/viewer/assets.ts`: `loadViewerPresentation` loads the packaged compiled
-  client and provides the shell, responsive CSS and renderer for HTTP composition.
+The minimal vanilla viewer (`src/viewer/`) was retired in Phase 6D. Production reading is provided by the React Documentation Explorer:
 
-`tests/viewer.test.ts` covers parser safety/features, DOM navigation/state and
-actual served assets/API HTML. No framework or browser build pipeline is needed.
+- `src/core/markdown.ts`: `analyzeMarkdown` and `renderMarkdown` parse Markdown safely via markdown-it, escape raw HTML, permit only safe links, replace images with text, and generate deterministic heading fragment IDs and outline trees.
+- `src/core/reader-location.ts`: `parseReaderLocation` and `readerHash` handle shareable document/heading hash locations (`#<id>`, `#<id>/<heading>`, `#p/<projectId>/<id>/<heading>`) without throwing.
+- `src/server/frontend-assets.ts`: `loadFrontendPresentation` securely loads bundled production frontend assets from `dist/frontend/` with strict content-security bounds, resource limits, and asset budgets.
+- `src/frontend/`: React 19 single-page application with Kairn Mineral Precision design, 3-region responsive Explorer (`DocTree`, `DocReader`, `DocOutline`), modal `SearchPaletteDialog`, and theme switching.
 
 ## Run workflow
 
@@ -124,8 +117,8 @@ links for the active document, with an explicit cap diagnostic and no remote
 requests. `server/contracts.ts` defines browser-safe `DocumentResponse` including
 revision, headings and diagnostics. The POC shows concise current-document warnings.
 
-`viewer/navigation.ts`: `ReaderLocation`, `parseReaderLocation`, and `readerHash`
-implement `#id[/encoded-heading]` URL state. User actions push history, initial/
+`core/reader-location.ts`: `ReaderLocation`, `parseReaderLocation`, and `readerHash`
+implement `#id[/encoded-heading]` and `#p/projectId/id/fragment` URL state. User actions push history, initial/
 fallback choices replace it, and popstate/hashchange restore without pushing.
 Local link clicks call core resolution; no browser filesystem-path inference.
 Default docs entries retain legacy relative-path bookmark aliases when unambiguous.
@@ -166,8 +159,8 @@ clipboard dependency, final design system or additional polling lifecycle.
 - `core/search-palette.ts`: framework-independent search/scope/picker/selection state,
   debounce, request generations, partial/error status and disposal. No DOM or SQLite.
 
-- `viewer/search-palette.ts`: minimal accessible DOM adapter over SearchPalette,
-  abortable HTTP search, focus/keyboard lifecycle and injected destination callback.
+- `src/frontend/features/search/SearchPaletteDialog.tsx`: accessible React modal dialog adapting `SearchPalette`,
+  abortable HTTP search, focus/keyboard lifecycle and destination navigation.
 
 SearchIndex.documentCount reports persisted document coverage independently of
 section count and attempted reconciliation reads.
@@ -177,7 +170,7 @@ documents retain that hash so late obsolete writers cannot bypass newer ignore r
 
 PaletteSelection distinguishes dismissal, project navigation and exact-document
 navigation from a query-only scope change. NavigationDestination permits a project
-without a document ID; viewer/navigation.defaultReaderDocument shares the initial
+without a document ID; `src/frontend/features/explorer/navigation-tree.ts` (`findDefaultDocument`) shares the initial
 reader's approved default choice with direct project switching.
 
 ## Phase 6A browser foundation

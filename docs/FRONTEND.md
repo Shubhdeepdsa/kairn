@@ -6,12 +6,11 @@ is recorded in TESTING.md and the PR. Phase 6B supplies Mineral styling; Phase 6
 
 ## Ownership and migration
 
-Keep one package, npm lockfile, CLI and localhost server. The working vanilla reader
-remains at `/`, including legacy fragment bookmarks, search, live refresh and
-cross-project history. React lives at `/app` with BrowserRouter basename `/app`.
-It is a clearly labeled foundation, not a working replacement reader. Only after
-Phase 6C parity and bookmark migration tests may the canonical entry move and the
-vanilla implementation retire. Do not maintain two permanent reader engines.
+Keep one package, npm lockfile, CLI and localhost server. Phase 6D makes the React Documentation
+Explorer at `/app` canonical for `kairn run`. Root `/` redirects to `/app` with full backward
+compatibility for legacy fragment bookmarks (`#<id>`, `#<id>/<fragment>`, `#p/<projectId>/<id>/<fragment>`),
+search, live refresh and cross-project navigation. With feature parity and backward compatibility verified,
+the legacy vanilla viewer presentation (`src/viewer/`) has been cleanly retired.
 
 Browser imports flow app/pages → features/layouts → UI/icons/styles and typed API.
 Core retains discovery, config, document/link/search and navigation authority.
@@ -200,4 +199,11 @@ Phase 6C completes parity with the Phase 1–5 reader at `/app/projects/:project
 - **Live Reading Freshness Loop**: Bounded ~2s polling cadence with hidden-tab pause (`document.hidden`), `If-None-Match` HTTP 304 handling without DOM re-render, and vanished document fallback.
 - **Bookmark Parity**: Bridges legacy hash bookmarks (`#id` and `#p/projectId/id/fragment`) via `parseReaderLocation`.
 
-The working vanilla reader at `/` remains completely intact and unaffected. Moving the canonical default route is deferred until post-review user sign-off.
+## Phase 6D — Canonical React Reader Migration
+
+Phase 6D migrates Kairn's presentation layer to make the React Documentation Explorer the canonical reader:
+
+- **Canonical CLI Entry**: `kairn run` opens the React Documentation Explorer by default (`${server.url}/app/projects/${current.id}/docs`). `--no-open` prints this canonical URL.
+- **Root 302 Redirection**: Root `/` issues an HTTP 302 redirect to `/app`. Under RFC 9110, URL hash fragments are preserved by the browser.
+- **Client-Side Bookmark Dispatch**: `AppIndexRedirect` at `/app` reads `location.hash` via `parseReaderLocation()` and routes directly to `/projects/${targetId}/docs/${documentId}#heading`. Unregistered projects display a safe alert without switching to the wrong project.
+- **Presentation Retirement**: `src/viewer/` has been safely retired. The HTTP server serves document HTML from `analysis.html` in `src/core/markdown.ts`, and frontend assets through `src/server/frontend-assets.ts`. All 8 browser integration tests, 38 Vitest test suites, and installed-package smoke tests pass cleanly.

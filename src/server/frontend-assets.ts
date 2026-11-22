@@ -32,7 +32,12 @@ export interface FrontendPresentation {
  * @throws If output is absent, malformed or exceeds the fixed presentation limits.
  */
 export async function loadFrontendPresentation(
-  root = new URL("../frontend/", import.meta.url),
+  root = new URL(
+    import.meta.url.includes("/src/server/")
+      ? "../../dist/frontend/"
+      : "../frontend/",
+    import.meta.url,
+  ),
   budget: FrontendAssetBudget = frontendAssetBudget,
 ): Promise<FrontendPresentation> {
   if (

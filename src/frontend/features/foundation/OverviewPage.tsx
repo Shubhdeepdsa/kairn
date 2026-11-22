@@ -8,23 +8,20 @@ export function OverviewPage() {
   const theme = useTheme();
   return (
     <section>
-      <h1>React foundation</h1>
-      <p>
-        Foundation only. Documentation, search and live refresh remain in the
-        existing reader.
-      </p>
+      <h1>Overview</h1>
+      <p>Documentation explorer for local-first knowledge.</p>
       <p>Active project: {current.name}</p>
       <ul>
         <li>
           <Link to={`/projects/${current.id}/docs`}>
             <Icon name="documentation" />
-            Workspace foundation
+            Documentation
           </Link>
         </li>
         <li>
           <Link to="/settings/appearance">
             <Icon name="settings" />
-            Global settings contract
+            Global settings
           </Link>
         </li>
       </ul>

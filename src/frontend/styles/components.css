@@ -941,6 +941,7 @@
   padding: 0 var(--kairn-space-2) 0 var(--kairn-space-3);
   font-family: var(--kairn-font-body);
   font-size: var(--kairn-text-small);
+  font-weight: 400;
   color: var(--kairn-text);
   background: var(--kairn-surface-subtle);
   border: 1px solid var(--kairn-border);
@@ -959,9 +960,14 @@
 .search-trigger-btn:hover .search-trigger-label {
   color: var(--kairn-text);
 }
+.search-trigger-btn:hover .search-trigger-kbd {
+  color: var(--kairn-text);
+  border-color: var(--kairn-text);
+}
 .search-trigger-label {
   display: inline-block;
   color: var(--kairn-muted);
+  font-weight: 400;
 }
 @media (max-width: 47.99rem) {
   .search-trigger-label {
@@ -971,6 +977,7 @@
 .search-trigger-kbd {
   font-family: var(--kairn-font-code);
   font-size: var(--kairn-caption);
+  font-weight: 400;
   padding: 1px var(--kairn-space-1);
   background: var(--kairn-surface);
   border: 1px solid var(--kairn-border);
@@ -1046,9 +1053,20 @@
   white-space: nowrap;
   border: 0;
 }
+.search-dialog-header .ui-field,
+.search-dialog-header .ui-field:focus,
+.search-dialog-header .ui-field:focus-visible,
+.search-dialog-header .ui-field:focus-within {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
 .search-dialog-header .ui-input,
 .search-dialog-header .ui-input:focus,
-.search-dialog-header .ui-input:focus-visible {
+.search-dialog-header .ui-input:focus-visible,
+.search-dialog-header input,
+.search-dialog-header input:focus,
+.search-dialog-header input:focus-visible {
   border: 0 !important;
   outline: 0 !important;
   box-shadow: none !important;
