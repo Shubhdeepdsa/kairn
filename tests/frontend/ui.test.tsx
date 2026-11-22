@@ -79,6 +79,10 @@ it("resolves semantic icons and distinguishes decorative and meaningful SVGs", (
     "search",
     "external",
     "check",
+    "sun",
+    "moon",
+    "gitBranch",
+    "gitCommit",
   ]);
   expect(
     view.container

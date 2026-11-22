@@ -325,11 +325,18 @@ export function DocumentationPage() {
       } catch {
         // Ignore malformed URL hashes
       }
-    } else if (
-      typeof window !== "undefined" &&
-      typeof window.scrollTo === "function"
-    ) {
-      window.scrollTo(0, 0);
+    } else {
+      if (
+        typeof window !== "undefined" &&
+        typeof window.scrollTo === "function"
+      ) {
+        window.scrollTo(0, 0);
+      }
+      const scroller =
+        articleRef.current?.closest<HTMLElement>(".explorer-main");
+      if (scroller && typeof scroller.scrollTo === "function") {
+        scroller.scrollTo(0, 0);
+      }
     }
 
     const handleHashChange = () => {
@@ -364,6 +371,7 @@ export function DocumentationPage() {
     );
     if (headingElements.length === 0) return;
 
+    const scroller = article.closest<HTMLElement>(".explorer-main");
     const observer = new IntersectionObserver(
       (entries) => {
         const intersecting = entries.filter((e) => e.isIntersecting);
@@ -381,6 +389,7 @@ export function DocumentationPage() {
         }
       },
       {
+        root: scroller ?? null,
         rootMargin: "0px 0px -70% 0px",
         threshold: 0,
       },
@@ -454,6 +463,7 @@ export function DocumentationPage() {
   return (
     <ExplorerShell
       projectName={project.name}
+      projectId={project.id}
       navigation={
         <DocTree
           nodes={tree}
