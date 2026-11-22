@@ -81,7 +81,7 @@ test("installed production app loads locally, routes/history work, shared tokens
   });
   await page.goto(url + "/app");
   await expect(
-    page.getByRole("heading", { name: "React foundation", exact: true }),
+    page.getByRole("heading", { name: "Browser fixture", exact: true }),
   ).toBeVisible();
   const load = await page.evaluate(() => {
     const navigation = performance.getEntriesByType(
@@ -98,14 +98,12 @@ test("installed production app loads locally, routes/history work, shared tokens
       scripts,
     };
   });
-  expect(
-    load.scripts.some((path) => /SettingsPage|DocumentationPage/.test(path)),
-  ).toBe(false);
+  expect(load.scripts.some((path) => /SettingsPage/.test(path))).toBe(false);
   console.log("Initial installed-browser load:", JSON.stringify(load));
   const context = (await (await request.get(url + "/api/context")).json()) as {
     id: string;
   };
-  await page.getByRole("link", { name: "Global settings contract" }).click();
+  await page.goto(url + "/app/settings/appearance");
   await expect(page).toHaveURL(url + "/app/settings/appearance");
   await expect(
     page.getByRole("heading", { name: "Settings architecture contract" }),
@@ -121,7 +119,7 @@ test("installed production app loads locally, routes/history work, shared tokens
     .click();
   await page.goBack();
   await expect(
-    page.getByRole("heading", { name: "React foundation", exact: true }),
+    page.getByRole("heading", { name: "Browser fixture", exact: true }),
   ).toBeVisible();
   await page.goForward();
   await expect(page).toHaveURL(url + "/app/settings/appearance");
@@ -137,7 +135,7 @@ test("installed production app loads locally, routes/history work, shared tokens
   await expect(
     page.getByRole("heading", { name: "Page not found" }),
   ).toBeVisible();
-  await page.goto(url + "/app");
+  await page.goto(url + "/app/overview");
   const preview = page.getByRole("button", {
     name: "Preview dark tokens (temporary)",
   });
@@ -154,27 +152,33 @@ test("installed production app loads locally, routes/history work, shared tokens
     )
     .not.toBe(before);
   await page.goto(url + "/");
-  await expect(page.locator("article h1")).toHaveText("Browser fixture");
+  await expect(
+    page.getByRole("heading", { name: "Browser fixture", exact: true }),
+  ).toBeVisible();
   const bookmark = page.url();
   await page
     .getByRole("button", {
       name: "Search documentation (Command or Control K)",
     })
     .click();
-  await page.locator("#search-query").press("Enter");
-  await expect(page.locator(".search-overlay")).toBeHidden();
+  const searchDialog = page.getByRole("dialog", {
+    name: "Search documentation",
+  });
+  await expect(searchDialog).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(searchDialog).toBeHidden();
   expect(page.url()).toBe(bookmark);
   await writeFile(
     join(root, "project", "docs", "README.md"),
     "# Browser fixture updated\n",
   );
-  await expect(page.locator("article h1")).toHaveText(
-    "Browser fixture updated",
-  );
+  await expect(
+    page.getByRole("heading", { name: "Browser fixture updated" }),
+  ).toBeVisible({ timeout: 6000 });
   await page.goto(bookmark);
-  await expect(page.locator("article h1")).toHaveText(
-    "Browser fixture updated",
-  );
+  await expect(
+    page.getByRole("heading", { name: "Browser fixture updated" }),
+  ).toBeVisible();
   expect(external).toEqual([]);
   expect(errors).toEqual([]);
   for (const route of [

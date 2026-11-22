@@ -14,7 +14,6 @@ import { join, resolve } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { runDocumentation } from "../src/cli/run.js";
 import type { RunContext } from "../src/cli/run.js";
-import { renderMarkdown } from "../src/viewer/markdown.js";
 const roots: string[] = [];
 const children: ChildProcess[] = [];
 async function fixture(docs = true): Promise<string> {
@@ -49,7 +48,6 @@ function context(
     interactive: false,
     canOpenBrowser: false,
     signal: controller.signal,
-    viewer: { page: "<h1>Kairn</h1>", script: "", style: "", renderMarkdown },
     chooseRoot: async () => null,
     openBrowser: async () => {},
     message: () => {},
@@ -87,8 +85,10 @@ describe("run workflow", () => {
     const controller = new AbortController();
     const messages: string[] = [];
     const openBrowser = vi.fn(async (url) => {
-      expect(url).toMatch(/^http:\/\/127\.0\.0\.1:\d+$/);
-      expect((await fetch(url + "/api/health")).status).toBe(200);
+      expect(url).toMatch(
+        /^http:\/\/127\.0\.0\.1:\d+\/app\/projects\/[A-Za-z0-9-]+\/docs$/,
+      );
+      expect((await fetch(new URL("/api/health", url).href)).status).toBe(200);
       controller.abort();
       throw new Error("no browser");
     });

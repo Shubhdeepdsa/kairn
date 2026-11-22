@@ -16,22 +16,11 @@ import type { ServerResponse } from "node:http";
 import { DocumentError } from "../core/documents.js";
 import type { DocumentService } from "../core/documents.js";
 
-/** Static viewer boundary, supplied at composition time; no filesystem routing. */
-export interface ViewerPresentation {
-  readonly frontend?: FrontendPresentation;
-  readonly page: string;
-  readonly script: string;
-  readonly style: string;
-  readonly navigationScript?: string;
-  readonly searchScripts?: Readonly<Record<string, string>>;
-  renderMarkdown(markdown: string): string;
-}
-
 /** IPv4 loopback only. Port 0 requests an ephemeral port for tests. */
 export interface ServerOptions {
   readonly port?: number;
   readonly application?: SearchApplication;
-  readonly viewer?: ViewerPresentation;
+  readonly frontend?: FrontendPresentation;
 }
 
 /** A listening instance; close is idempotent and bounds shutdown to one second. */
@@ -174,7 +163,7 @@ export async function startDocumentationServer(
       active++;
       void (async () => {
         try {
-          const frontend = options.viewer?.frontend;
+          const frontend = options.frontend;
           const asset = frontend?.assets.get(target);
           if (asset || (frontend && isFrontendRoute(target))) {
             response.setHeader(
@@ -185,6 +174,14 @@ export async function startDocumentationServer(
               "Content-Type": `${asset?.contentType ?? "text/html"}; charset=utf-8`,
             });
             response.end(asset?.body ?? frontend!.page);
+            return;
+          }
+          if (target === "/" && frontend) {
+            response.writeHead(302, {
+              Location: "/app",
+              "Content-Type": "text/plain; charset=utf-8",
+            });
+            response.end("Redirecting to /app");
             return;
           }
           if (
@@ -270,40 +267,9 @@ export async function startDocumentationServer(
               title,
               markdown,
               revision,
-              html: options.viewer
-                ? options.viewer.renderMarkdown(markdown)
-                : analysis.html,
+              html: analysis.html,
             };
             json(response, 200, body);
-          } else if (
-            options.viewer?.searchScripts &&
-            Object.hasOwn(options.viewer.searchScripts, route)
-          ) {
-            response.writeHead(200, {
-              "Content-Type": "text/javascript; charset=utf-8",
-            });
-            response.end(options.viewer.searchScripts[route]);
-          } else if (
-            options.viewer &&
-            [
-              "/",
-              "/viewer.js",
-              "/viewer.css",
-              ...(options.viewer.navigationScript ? ["/navigation.js"] : []),
-            ].includes(route)
-          ) {
-            const [body, contentType] =
-              route === "/"
-                ? [options.viewer.page, "text/html"]
-                : route === "/navigation.js"
-                  ? [options.viewer.navigationScript!, "text/javascript"]
-                  : route === "/viewer.js"
-                    ? [options.viewer.script, "text/javascript"]
-                    : [options.viewer.style, "text/css"];
-            response.writeHead(200, {
-              "Content-Type": `${contentType}; charset=utf-8`,
-            });
-            response.end(body);
           } else failure(response, 404, "NOT_FOUND", "Route was not found.");
         } catch (error) {
           if (error instanceof SearchUnavailableError)

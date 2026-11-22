@@ -18,7 +18,7 @@ export function WorkspaceLayout() {
   if (!project)
     return (
       <p role="alert">
-        Project is unavailable. Reopen the foundation to refresh the Library.
+        Project is unavailable. Reopen Kairn to refresh the Library.
       </p>
     );
 

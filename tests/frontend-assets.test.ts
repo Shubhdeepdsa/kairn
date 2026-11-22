@@ -11,14 +11,12 @@ import {
 import { createDocumentService } from "../src/core/documents.js";
 import { startDocumentationServer } from "../src/server/http.js";
 it("serves exact packaged assets and app routes behind existing security without swallowing API/file errors", async () => {
-  const { loadViewerPresentation } = (await import(
-    new URL("../dist/viewer/assets.js", import.meta.url).href
-  )) as typeof import("../src/viewer/assets.js");
+  const frontend = await loadFrontendPresentation();
   const root = await mkdtemp(join(tmpdir(), "kairn-app-"));
   await writeFile(join(root, "README.md"), "# Existing reader");
   const server = await startDocumentationServer(
     await createDocumentService(root),
-    { port: 0, viewer: await loadViewerPresentation() },
+    { port: 0, frontend },
   );
   try {
     for (const route of ["/app", "/app/settings/appearance", "/app/unknown"]) {
@@ -57,8 +55,10 @@ it("serves exact packaged assets and app routes behind existing security without
     expect((await fetch(server.url + "/app", { method: "POST" })).status).toBe(
       405,
     );
-    const reader = await fetch(server.url);
-    expect(reader.headers.get("content-security-policy")).toContain(
+    const redirect = await fetch(server.url, { redirect: "manual" });
+    expect(redirect.status).toBe(302);
+    expect(redirect.headers.get("location")).toBe("/app");
+    expect(redirect.headers.get("content-security-policy")).toContain(
       "img-src 'none'",
     );
     const presentation = await loadFrontendPresentation(
@@ -73,7 +73,7 @@ it("serves exact packaged assets and app routes behind existing security without
       expect(response.headers.get("content-type")).toContain("image/svg+xml");
       expect(await response.text()).toBe(asset.body.toString());
     }
-    expect(await (await fetch(server.url)).text()).toContain('id="document"');
+    expect(await (await fetch(server.url)).text()).toContain('id="root"');
   } finally {
     await server.close();
     await rm(root, { recursive: true, force: true });
