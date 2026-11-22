@@ -130,3 +130,16 @@ Accepted for Phase 6B: normalize supplied references into primitive/semantic/com
 layers; keep runtime theme previews on the existing provider, locally licensed fonts,
 native controls and one showcase. No appearance persistence or Explorer integration.
 Contrast can refine semantic roles without discarding source primitives.
+
+## ADR-014 — React Documentation Explorer and Stitch design alignment
+
+- **Status:** Accepted and merged for Phase 6C.
+- **Decision:** Build the 3-region responsive Documentation Explorer at `/app/projects/:projectId/docs[/:documentId]` with server-backed hierarchical navigation (`DocTree`), safe Markdown reading pane (`DocReader`), and sticky outline TOC (`DocOutline`). Align chrome geometry, flush sidebar positioning, search modal, and typography with approved Stitch specifications.
+- **Rationale:** Delivers visual and functional parity with the prototype while establishing accessible React-first UI patterns and maintaining existing core/server boundaries.
+
+## ADR-015 — Canonical React reader migration and legacy presentation retirement
+
+- **Status:** Accepted for Phase 6D.
+- **Decision:** Make the React Documentation Explorer the canonical reader for `kairn run`. Root `/` issues an HTTP 302 redirect to `/app`. Client-side `AppIndexRedirect` at `/app` preserves and bridges legacy bookmarks (`#<id>`, `#<id>/<fragment>`, `#p/<projectId>/<id>/<fragment>`) via `parseReaderLocation()`. The legacy vanilla presentation in `src/viewer/` is cleanly retired, leaving the server to supply rendered HTML directly from core `analyzeMarkdown()`.
+- **Alternatives:** Permanent dual presentation engines, client-side guessing of file paths, or breaking legacy bookmark URLs.
+- **Rationale:** Consolidates on a single maintainable presentation layer without disrupting user bookmarks, CLI scripts, or security boundaries.

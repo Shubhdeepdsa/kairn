@@ -1,6 +1,6 @@
 # Local search design
 
-Status: Phase 5 core indexing, queries, navigation, controller and vanilla palette IMPLEMENTED; final acceptance in progress.
+Status: Phase 5 core indexing, queries, navigation, and controller IMPLEMENTED. Phase 6C/6D canonical React SearchPaletteDialog implemented and verified.
 
 ## Identity and ownership
 

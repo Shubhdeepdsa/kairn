@@ -190,5 +190,14 @@ CI is reported on the Phase 6B PR; no merge or npm publication is automatic.
   Audited `SafeHtmlArticle` trust boundary consuming server-rendered safe Markdown HTML (`DocumentResponse.html`). Heading outline TOC with scroll spy intersection observer, waypoint dot indicator, Unicode headings, and duplicate slug handling. Local Markdown link interception with core link resolution (`client.resolveLink`), scan-time diagnostics rendering, and runtime link failure callouts. 193 Vitest unit tests in 39 files and 7 Playwright browser tests passing.
 - **Phase 6C-2C: Search palette, live reading & bookmarks (IMPLEMENTED; VERIFIED)**
   Adapted framework-independent `SearchPalette` controller into modal search palette dialog with query debounce, generation counters, keyboard navigation, and `@project` selector chips. Integrated header search trigger button and `Cmd+K` / `Ctrl+K` shortcuts. Implemented live reading freshness loop with ~2s cadence, hidden-tab pausing, `If-None-Match` HTTP 304 handling without DOM re-render, vanished document fallback with warning banner, and legacy reader bookmark navigation parity. 199 Vitest unit tests in 40 files and 8 Playwright browser tests passing.
-- **Phase 6C-2D: Documentation Explorer acceptance & second PR (NEXT)**
-  Run complete acceptance verification matrix, test packed installation offline smoke test, verify vanilla reader and `/app` parity, push stacked feature branch `feat/6c-documentation-explorer` and open PR #2 against `feat/6c-visual-foundation`.
+- **Phase 6C-2D: Documentation Explorer acceptance & PRs (IMPLEMENTED; VERIFIED)**
+  Completed visual foundation (PR #10), functional Explorer (PR #11), architectural quality enforcement (PR #12), and visual alignment (PR #13) merged into `main`.
+
+## Phase 6D — Canonical React Reader Migration (IMPLEMENTED; VERIFIED)
+
+- **Phase 6D-A: Canonical run launcher & backward compatibility (IMPLEMENTED; VERIFIED)**
+  `kairn run` opens the React Documentation Explorer by default (`${server.url}/app/projects/${current.id}/docs`). `--no-open` prints the canonical URL. HTTP GET `/` issues a 302 redirect to `/app`. `AppIndexRedirect` at `/app` preserves and routes legacy fragment bookmarks (`#<id>`, `#<id>/<heading>`, `#p/<projectId>/<id>/<heading>`) via `parseReaderLocation()`. Safe error alert rendered for unregistered projects without opening wrong project.
+- **Phase 6D-B: Legacy presentation retirement (IMPLEMENTED; VERIFIED)**
+  Legacy vanilla viewer presentation in `src/viewer/` safely retired. Server serves document HTML from core `analyzeMarkdown` directly. Obsolete DOM tests retired. Real acceptance tests updated to verify against live compiled CLI and HTTP APIs directly.
+- **Phase 6D-C: Quality gates & packaging smoke test (IMPLEMENTED; VERIFIED)**
+  38 Vitest test suites (185 tests), 8 Playwright browser tests, typecheck across 3 tsconfigs, ESLint, Prettier, markdownlint, frontend asset measurement, and installed-package smoke test in disposable directory all passing. Clean PR `feat/6d-canonical-react-reader` prepared targeting `main`.

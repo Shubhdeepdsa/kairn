@@ -1,7 +1,6 @@
 # Kairn
 
-Local-first Markdown documentation CLI. Includes safe interactive initialization and a read-only localhost Markdown
-viewer. Git history and the final React interface remain planned.
+Local-first Markdown documentation CLI. Includes safe interactive initialization and a read-only localhost React Documentation Explorer. Git history remains planned.
 
 ## Install from source
 
@@ -93,5 +92,5 @@ project/document/section through the same local reader.
 An empty project search closes on Enter. Remove its chip to browse projects, then
 use arrows and Enter to switch directly to the selected project's documentation.
 
-The transitional React foundation is available at `/app` on the same `kairn run`
-server. The working reader remains at `/`. See [frontend development](docs/FRONTEND.md).
+The canonical React Documentation Explorer is served at `/app` on `kairn run`,
+and root `/` redirects to `/app` with full backward compatibility for legacy bookmarks. See [frontend development](docs/FRONTEND.md).

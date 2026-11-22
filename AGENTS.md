@@ -1,7 +1,7 @@
 # AGENTS.md — Kairn engineering instructions
 
 > **Scope:** entire Kairn repository. More specific `AGENTS.md` files apply in their directories.
-> **Product:** local-first Markdown documentation and Git-history explorer. **Current milestone:** Phase 6C: React Documentation Explorer at `/app`; preserve the complete Phase 1–5 vanilla reader at `/`.
+> **Product:** local-first Markdown documentation and Git-history explorer. **Current milestone:** Phase 6D: Canonical React Reader Migration completed; React Documentation Explorer canonical at `/app`, root `/` redirects to `/app`, legacy vanilla viewer presentation retired.
 > **Priority:** small, verifiable, modular work; documentation is maintained with code, not reconstructed afterwards.
 
 ## 1. Preflight and source of truth
@@ -19,7 +19,7 @@
 - `tests/`: focused unit and integration tests with temporary fixture directories.
 - `docs/`: reader-friendly behavior, architecture, decisions and change documentation.
 - `src/server/`: loopback HTTP adapter over document contracts; no filesystem discovery algorithms.
-- `src/viewer/`: minimal browser assets and safe Markdown rendering, no React.
+- `src/frontend/`: React 19 single-page application and Kairn Mineral design system served at `/app`.
 - Dependency direction: CLI composes server/core; HTTP consumes core contracts; core imports neither adapter. Shared types belong with the owning core module. Avoid circular dependencies.
 - Only loopback HTTP is permitted at runtime. No telemetry, remote services, GitHub API integration or AI. React is confined to `src/frontend/`. Phase 5 permits a derived SQLite search index only.
 - CLI must work with projects written in any language; never assume the target has Node/npm packages or a Git repository.
@@ -70,9 +70,9 @@ Update the smallest relevant docs **in the same commit as behavior changes**:
 
 ## 7. Scope restraint
 
-**Build now:** Mineral tokens/themes/accents, shared components/layouts/icons, scoped prose, showcase and visual/accessibility tests. Preserve help/version/init. Push a phased feature branch to the existing personal remote and open a PR; do not merge automatically.
+**Build now:** Canonical React reader migration, backward-compatible bookmark routing, legacy presentation retirement, and full quality gates. Preserve help/version/init. Push a phased feature branch to the existing personal remote and open a PR; do not merge automatically.
 
-**Do not build now:** React Documentation Explorer, settings forms/mutation endpoints, Git timeline, editing, agent automation, MCP, AI or cloud services. Do not create another repository or publish to npm.
+**Do not build now:** settings forms/mutation endpoints, Git timeline, editing, agent automation, MCP, AI or cloud services. Do not create another repository or publish to npm.
 
 ## 8. Completion report
 

@@ -56,8 +56,8 @@ The server binds only `127.0.0.1`, default port 4173. `--port` accepts integers
 port. `--port`/`--no-open` are run-only; `--yes` is init-only. Help/version remain
 available. Errors exit 1; clean SIGINT/SIGTERM shutdown exits 0.
 
-The URL is always printed. Interactive desktop sessions open the default browser
-unless `--no-open` is set. CI/non-TTY and Linux sessions without DISPLAY or
+The canonical URL (`http://127.0.0.1:<port>/app/projects/<id>/docs`) is always printed. Interactive desktop sessions open the default browser
+unless `--no-open` is set. Root `/` redirects to `/app` with legacy bookmark compatibility. CI/non-TTY and Linux sessions without DISPLAY or
 WAYLAND_DISPLAY skip browser launch with guidance. Browser-open failure leaves
 the viewer available and prints a manual-open instruction. Ctrl+C stops the server.
 

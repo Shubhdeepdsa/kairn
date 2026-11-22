@@ -99,4 +99,4 @@ In Phase 6C, the React Documentation Explorer at `/app/projects/:projectId/docs[
 - **Live Refresh Loop**: Runs the identical ~2s bounded cadence while visible, pausing on hidden tabs (`document.hidden`), checking for tree changes, sending `If-None-Match` on document reads to handle HTTP 304 without DOM destruction, and gracefully displaying warning banners on vanished files with fallback to `README.md`.
 - **Link Resolution**: Intercepts relative Markdown link clicks inside `SafeHtmlArticle` and resolves them via server-backed link categorization, displaying accessible `DocCallout` warning dialogs for broken or unresolvable targets.
 - **Legacy Bookmark Bridging**: Translates `#id` and `#p/projectId/id/fragment` locations into `/app/projects/:projectId/docs/:documentId[#fragment]` via `parseReaderLocation`.
-- The vanilla reader at `/` remains intact and unaffected until post-review user sign-off.
+- In Phase 6D, the React Documentation Explorer becomes the canonical reader on `kairn run`. Root `/` redirects to `/app` with full backward compatibility, and the legacy vanilla viewer presentation is retired.
