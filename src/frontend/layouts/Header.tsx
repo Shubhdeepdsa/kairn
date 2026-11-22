@@ -74,23 +74,11 @@ export function Header() {
       {/* 1. Left Region: Brand + Divider + Project Identity */}
       <div className="app-header-left">
         <Link to="/" aria-label="Kairn home" className="app-brand">
-          <picture>
-            {appearance === "system" && (
-              <source
-                media="(max-width: 48rem) and (prefers-color-scheme: dark)"
-                srcSet={markDark}
-              />
-            )}
+          <picture key={isDark ? "dark" : "light"}>
             <source
               media="(max-width: 48rem)"
               srcSet={isDark ? markDark : markLight}
             />
-            {appearance === "system" && (
-              <source
-                media="(prefers-color-scheme: dark)"
-                srcSet={wordmarkDark}
-              />
-            )}
             <img src={isDark ? wordmarkDark : wordmarkLight} alt="Kairn" />
           </picture>
         </Link>

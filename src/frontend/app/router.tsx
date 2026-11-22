@@ -48,7 +48,10 @@ export function AppIndexRedirect() {
         ? `#${encodeURIComponent(bookmark.fragment)}`
         : "";
       if (bookmark.projectId) {
-        const target = projects.find((p) => p.id === bookmark.projectId);
+        const target =
+          current.id === bookmark.projectId
+            ? current
+            : projects.find((p) => p.id === bookmark.projectId);
         if (target) {
           return (
             <Navigate

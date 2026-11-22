@@ -66,7 +66,7 @@ test.afterAll(async () => {
   }
   if (root) await rm(root, { recursive: true, force: true });
 });
-test("installed production app loads locally, routes/history work, shared tokens propagate, and the vanilla reader stays functional", async ({
+test("installed production app loads locally, routes/history work, shared tokens propagate, and React reader is canonical", async ({
   page,
   request,
 }) => {
@@ -167,7 +167,9 @@ test("installed production app loads locally, routes/history work, shared tokens
   await expect(searchDialog).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(searchDialog).toBeHidden();
-  expect(page.url()).toBe(bookmark);
+  expect(page.url()).toMatch(
+    new RegExp(`^${bookmark.replace(/#[^#]*$/, "")}(?:#[a-zA-Z0-9_-]+)?$`),
+  );
   await writeFile(
     join(root, "project", "docs", "README.md"),
     "# Browser fixture updated\n",
@@ -179,6 +181,27 @@ test("installed production app loads locally, routes/history work, shared tokens
   await expect(
     page.getByRole("heading", { name: "Browser fixture updated" }),
   ).toBeVisible();
+
+  // Verify real-browser legacy bookmark handling across HTTP 302 redirects
+  const docMatch = bookmark.match(/\/docs\/([a-f0-9]{64})/);
+  if (docMatch) {
+    const docId = docMatch[1];
+    // Legacy bookmark format #<documentId>
+    await page.goto(url + "/#" + docId);
+    await expect(
+      page.getByRole("heading", { name: "Browser fixture updated" }),
+    ).toBeVisible();
+    expect(page.url()).toContain(`/app/projects/${context.id}/docs/${docId}`);
+
+    // Project-scoped legacy bookmark with heading fragment #p/<projectId>/<documentId>/<fragment>
+    await page.goto(
+      url + "/#p/" + context.id + "/" + docId + "/browser-fixture-updated",
+    );
+    await expect(
+      page.getByRole("heading", { name: "Browser fixture updated" }),
+    ).toBeVisible();
+    expect(page.url()).toContain(`/app/projects/${context.id}/docs/${docId}`);
+  }
   expect(external).toEqual([]);
   expect(errors).toEqual([]);
   for (const route of [
